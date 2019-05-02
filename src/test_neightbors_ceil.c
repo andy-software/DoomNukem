@@ -62,7 +62,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].num_vert = 4;
 	map.sectors[0].num = 0;
 
-	map.sectors[0].ceil_plane.a = 0;
+	map.sectors[0].ceil_plane.a = 1;
 	map.sectors[0].ceil_plane.b = 0;
 	map.sectors[0].ceil_plane.c = 1;
 	map.sectors[0].ceil_plane.h = -40;
@@ -73,7 +73,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].floor_plane.h = 0;
 
 	map.sectors[0].floor_z = 0;
-	map.sectors[0].ceil_z = 20;
+	map.sectors[0].ceil_z = 40;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
@@ -94,7 +94,7 @@ int		main(int argc, char **argv)
 	map.sectors[1].num_vert = 4;
 	map.sectors[1].num = 1;
 
-	map.sectors[1].ceil_plane.a = 0;
+	map.sectors[1].ceil_plane.a = -1;
 	map.sectors[1].ceil_plane.b = 0;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
@@ -102,10 +102,10 @@ int		main(int argc, char **argv)
 	map.sectors[1].floor_plane.a = 0;
 	map.sectors[1].floor_plane.b = 0;
 	map.sectors[1].floor_plane.c = 1;
-	map.sectors[1].floor_plane.h = 0;
+	map.sectors[1].floor_plane.h = -20;
 
-	map.sectors[1].floor_z = 0;
-	map.sectors[1].ceil_z = 20;
+	map.sectors[1].floor_z = 20;
+	map.sectors[1].ceil_z = 40;
 
 	map.sectors[1].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[1].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);

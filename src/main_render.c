@@ -14,20 +14,10 @@
 //apavlov test commit
 void	vertical_line(int x, int y1, int y2, t_render *r, int top, int mid, int bot)
 {
-	int		y;
-
 	y1 = clamp(y1, 0, WIN_HEIGHT - 1);
 	y2 = clamp(y2, 0, WIN_HEIGHT - 1);
-	if (y2 == y1)
-		r->pix[y1 * WIN_WIDTH + x] = mid;
-	else if (y2 > y1)
-	{
-		r->pix[y1 * WIN_WIDTH + x] = top;
-		y = y1;
-		while (++y < y2)
-			r->pix[y * WIN_WIDTH + x] = mid;
-		r->pix[y2 * WIN_WIDTH + x] = bot;
-	}
+	while (y1 < y2)
+		r->pix[y1++ * WIN_WIDTH + x] = mid;
 }
 
 void	prepare_to_rendering(t_render *r, t_doom d)
@@ -149,13 +139,12 @@ void	render_sector(t_render r, t_doom d)
 			vertical_line(x, r.zb + 1, r.zbottom[x], &r, 0x0000FF,0x0000AA,0x0000FF);
 			if(r.sect->neighbors[i] >= 0)
 			{
-				//vertical_line(x, r.za, r.zb, &r, 0, 0xCCBB00, 0);
-				r.nzceil = /*get_z(ncplane, lp_x, lp_y)*/d.map.sectors[(int)r.sect->neighbors[i]].ceil_z - d.player.coord.z;
-				r.nzfloor = /*get_z(nfplane, lp_x, lp_y)*/d.map.sectors[(int)r.sect->neighbors[i]].floor_z - d.player.coord.z;
-				r.nz1a = WIN_HEIGHT / 2 - (int)((r.nzceil + r.ty1 * d.player.angle_z) * r.zscale1);
-				r.nz1b = WIN_HEIGHT / 2 - (int)((r.nzfloor + r.ty1 * d.player.angle_z) * r.zscale1);
-				r.nz2a = WIN_HEIGHT / 2 - (int)((r.nzceil + r.ty2 * d.player.angle_z) * r.zscale2);
-				r.nz2b = WIN_HEIGHT / 2 - (int)((r.nzfloor + r.ty2 * d.player.angle_z) * r.zscale2);
+				r.nzceil = get_z(ncplane, lp_x, lp_y) - d.player.coord.z;
+				r.nzfloor = get_z(nfplane, lp_x, lp_y) - d.player.coord.z;
+				r.nz1a = WIN_HEIGHT / 2 - (int)((r.nzceil + r.t1.y * d.player.angle_z) * r.zscale1);
+				r.nz1b = WIN_HEIGHT / 2 - (int)((r.nzfloor + r.t1.y * d.player.angle_z) * r.zscale1);
+				r.nz2a = WIN_HEIGHT / 2 - (int)((r.nzceil + r.t2.y * d.player.angle_z) * r.zscale2);
+				r.nz2b = WIN_HEIGHT / 2 - (int)((r.nzfloor + r.t2.y * d.player.angle_z) * r.zscale2);
 
 				r.nza = (x - r.x1) * (r.nz2a - r.nz1a) / (r.x2 - r.x1) + r.nz1a;
 				r.nza = clamp(r.nza, r.ztop[x], r.zbottom[x]);
