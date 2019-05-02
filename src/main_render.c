@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
-
+//apavlov test commit
 void	vertical_line(int x, int y1, int y2, t_render *r, int top, int mid, int bot)
 {
 	int		y;
