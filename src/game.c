@@ -12,22 +12,25 @@
 
 #include "../includes/doom.h"
 
-static int	init_game_params(t_game *game, t_player	*player)
+static int	init_game_params(t_doom *d)
 {
-	game->quit = 0;
-	game->ducking = 0;
-	game->moving = 0;
-	game->ground = 0;
-	game->falling = 1;
-	game->acceleration = 0.2f;
-	player->anglecos = sinf(player->angle);
-	player->anglesin = cosf(player->angle);
+	d->game.quit = 0;
+	d->game.ducking = 0;
+	d->game.moving = 0;
+	d->game.ground = 0;
+	d->game.falling = 1;
+	d->game.acceleration = 0.2f;
+	d->player.anglecos = sinf(d->player.angle);
+	d->player.anglesin = cosf(d->player.angle);
+	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
+	d->render.max_sector_rendered = min(MAX_SECTORS_RENDERED, d->map.num_sect);
 	return (1);
 }
 
 int			game_loop(t_doom doom)
 {
-	init_game_params(&doom.game, &doom.player);
+	init_game_params(&doom);
+
 	while (doom.game.quit != 1)
 	{
 		game_events(&doom);

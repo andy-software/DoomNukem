@@ -68,6 +68,7 @@ int			read_file(t_doom *doom, char *file_name)
 		read(fd, &map->sectors[i].num_vert, sizeof(Uint32));
 		map->sectors[i].vert = (t_vertex*)malloc(sizeof(t_vertex) * (map->sectors[i].num_vert + 1));
 		read(fd, map->sectors[i].vert, sizeof(t_vertex) * map->sectors[i].num_vert);
+		//read(fd, tex->pix, sizeof(Uint32) * tex->width * tex->height);
 		map->sectors[i].vert[map->sectors[i].num_vert].x = map->sectors[i].vert[0].x; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		map->sectors[i].vert[map->sectors[i].num_vert].y = map->sectors[i].vert[0].y; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		map->sectors[i].neighbors = (char*)malloc(sizeof(char) * map->sectors[i].num_vert);

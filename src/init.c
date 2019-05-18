@@ -16,7 +16,7 @@ int		init_sdl(t_sdl *sdl, t_option *options)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return (error_message((char *)SDL_GetError()));
-	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+	if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) != (IMG_INIT_PNG | IMG_INIT_JPG))
 		return (error_message((char *)SDL_GetError()));
 	if (!(sdl->window = SDL_CreateWindow("DOOM", SDL_WINDOWPOS_CENTERED, \
 		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, \

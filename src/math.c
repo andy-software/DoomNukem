@@ -67,3 +67,18 @@ int		rotate_vertex_xy(t_vertex *a, float psin, float pcos)
 	a->y = buff.x * pcos + buff.y * psin;
 	return (0);
 }
+
+float	fpercent(float start, float end, float current)
+{
+	float	placement;
+	float	distance;
+
+	placement = current - start;
+	distance = end - start;
+	return ((distance == 0) ? 1.0 : (placement / distance));
+}
+
+float	v2dlenght(float vx, float vy)
+{
+	return (sqrt(vx * vx + vy * vy));
+}

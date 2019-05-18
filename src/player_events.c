@@ -80,9 +80,10 @@ void		player_events(t_doom *d)
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE)
 			{
-				if (d->game.ground)
+				printf("velocity z %f\n", d->game.velocity.z);
+				if (d->game.ground || (d->game.velocity.z > -0.4 && d->game.velocity.z < 0))
 				{
-					d->game.velocity.z += 0.5;
+					d->game.velocity.z += 0.6;
 					d->game.falling = 1;
 				}
 			}

@@ -18,39 +18,43 @@
 
 void		move_player(t_doom *d, float dx, float dy)
 {
-	float px;
-	float py;
-	t_sector *sect;
-	t_vertex *vert;
+	float px = d->player.coord.x;
+	float py = d->player.coord.y;
+	t_sector *sect = d->map.sectors + d->player.sector;
+	t_vertex *vert = sect->vert;
+	float hole_high = get_z(sect->ceil_plane, px + dx, py + dy);
+	float hole_low = get_z(sect->floor_plane, px + dx, py + dy);
 
-	py = d->player.coord.y;
-	px = d->player.coord.x;
-	sect = &d->map.sectors[d->player.sector];
-	vert = sect->vert;
-	for(unsigned s = 0; s < sect->num_vert; s++)
-		if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
-			vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
-		{
-			d->player.sector = sect->neighbors[s];
-		}
-	d->player.coord.x += dx;
-	d->player.coord.y += dy;
+	if (hole_high > d->player.coord.z + HEAD_HEIGHT && hole_low < d->player.coord.z - EYE_HEIGHT + KNEE_HEIGHT)
+	{
+		for(unsigned s = 0; s < sect->num_vert; s++)
+			if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
+				vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
+			{
+				d->player.sector = sect->neighbors[s];
+			}
+		d->player.coord.x += dx;
+		d->player.coord.y += dy;
+	}
 }
 
 static void	fall(t_player *p, t_map	m, t_game *g)
 {
 	const float nextz = p->coord.z + g->velocity.z;
+	t_plane		ceil_p = m.sectors[p->sector].ceil_plane;
+	t_plane		floor_p = m.sectors[p->sector].floor_plane;
+	float floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 
 	g->velocity.z -= 0.02f;
 	if (g->velocity.z < 0 && \
-		nextz <= m.sectors[p->sector].floor_z + g->eye_height)
+		nextz <= floor_z + g->eye_height)
 	{
-		p->coord.z = m.sectors[p->sector].floor_z + g->eye_height;
+		p->coord.z = floor_z + g->eye_height;
 		g->velocity.z = 0;
 		g->falling = 0;
 		g->ground = 1;
 	}
-	else if(g->velocity.z > 0 && nextz > m.sectors[p->sector].ceil_z)
+	else if(g->velocity.z > 0 && nextz > get_z(ceil_p, p->coord.x, p->coord.y))
 	{
 		g->velocity.z = 0;
 		g->falling = 1;
@@ -58,7 +62,7 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	if (g->falling)
 	{
 		p->coord.z += g->velocity.z;
-		p->angle_z -= 0.3 * g->velocity.z; //optional
+		//p->angle_z -= 0.3 * g->velocity.z; //optional
 		g->moving = 1;
 	}
 }
@@ -70,30 +74,35 @@ static void	move(t_player *p, t_map	m, t_game *g)
 	int		i;
 	float 	hole_low;
 	float	hole_high;
-	static int a = 0;
+	t_plane	ceil_p = m.sectors[p->sector].ceil_plane;
+	t_plane	floor_p = m.sectors[p->sector].floor_plane;
+	t_plane	nceil_p;
+	t_plane	nfloor_p;
+	float	next_x = p->coord.x + g->velocity.x;
+	float	next_y = p->coord.y + g->velocity.y;
 
 	i = -1;
 	while (++i < sect->num_vert)
-		if (CTL(p->coord.x, p->coord.y, p->coord.x + g->velocity.x, \
-			p->coord.y + g->velocity.y, vert[i].x, vert[i].y, \
-			vert[i + 1].x, vert[i + 1].y))
+		if (CTL(p->coord.x, p->coord.y, next_x, next_y, vert[i].x, vert[i].y, vert[i + 1].x, vert[i + 1].y))
 		{
+			nceil_p = m.sectors[(int)sect->neighbors[i]].ceil_plane;
+			nfloor_p = m.sectors[(int)sect->neighbors[i]].floor_plane;
 			hole_low  = sect->neighbors[i] < 0 ? BIG_VALUE : \
-				max(sect->floor_z, m.sectors[(int)sect->neighbors[i]].floor_z);
+				max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
 			hole_high = sect->neighbors[i] < 0 ? -BIG_VALUE : \
-				min(sect->ceil_z,  m.sectors[(int)sect->neighbors[i]].ceil_z);
-			if (hole_high < p->coord.z + HEAD_HEIGHT && \
-				hole_low > p->coord.z - EYE_HEIGHT + KNEE_HEIGHT)
+				min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+			if (hole_high > p->coord.z + HEAD_HEIGHT && \
+				hole_low < p->coord.z - EYE_HEIGHT + KNEE_HEIGHT)
+			{
+				printf("neightbor to player sector : %i\n", sect->neighbors[i]);
+				//printf("{%f, %f}\n", p->coord.x, p->coord.y);
+				fflush(stdout);
+			}
+			else
 			{
 				project_vector2d(&g->velocity.x, &g->velocity.y, \
 					vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y);
 				g->moving = 0;
-			}
-			else
-			{
-				printf("neightbor to player sector : %i kappa int %i\n", sect->neighbors[i], a++);
-				printf("{%f, %f}\n", p->coord.x, p->coord.y);
-				fflush(stdout);
 			}
 		}
 	g->dx = g->velocity.x;

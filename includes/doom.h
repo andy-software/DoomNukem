@@ -36,15 +36,15 @@
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
 
-# define MINIMAP_WIDTH 240
-# define MINIMAP_HEIGHT	160
+# define MINIMAP_WIDTH 5120
+# define MINIMAP_HEIGHT	2880
 
-# define NEAR_Y	1e-3f
-# define FAR_Y	5
-# define NEAR_X 1e-4f
-# define FAR_X	20
+# define MAX_SECTORS_RENDERED 32  //must be the power of 2
+
 # define HFOV (0.5 * WIN_WIDTH)	//horizontal field of view (radians?)
 # define VFOV (0.2 * WIN_HEIGHT)	//vertical field of view (radians?)
+# define WALL_TEXT_WIDTH 256	
+# define WALL_TEXT_HEIGHT 512
 
 # define STRAIGHT 1
 # define STRAFE 2
@@ -79,6 +79,8 @@ typedef struct s_vector	t_vector;
 typedef struct s_render	t_render;
 typedef struct s_plane	t_plane;
 typedef struct s_ui		t_ui;
+
+typedef struct s_texture t_texture;
 
 struct	s_plane
 {
@@ -179,6 +181,10 @@ typedef struct	s_rend_sector
 struct	s_render
 {
 	t_rend_sector	now;
+	t_rend_sector	queue[MAX_SECTORS_RENDERED];
+	t_rend_sector	*tail;
+	t_rend_sector	*head;
+	int				*rendered_sectors;
 	int				ztop[WIN_WIDTH];
 	int				zbottom[WIN_WIDTH];
 	t_sector		*sect;
@@ -187,6 +193,7 @@ struct	s_render
 	t_vertex		v1;
 	t_vertex		v2;
 
+	int				max_sector_rendered;
 	float			vx1;
 	float			pcos;
 	float			psin;
@@ -224,10 +231,23 @@ struct	s_render
 	int				nz1b;
 	int				nz2a;
 	int				nz2b;
+	//added after merge
+	int				c_za;
+ 	int				c_zb;
+	int				win_x; // new == x;
+ 	int				win_y; // new == y;
+	int				fog_distance;
+ 	double			fog_perc;
+	//till this
 	Uint32			*pix;
 	t_line			line;
 	Uint32		last_frame;
 	Uint32		this_frame;
+	t_plane		cplane;
+	t_plane		fplane;
+	t_plane		ncplane;
+	t_plane		nfplane;
+	char		neighbor;
 };
 
 struct	s_ui
@@ -236,14 +256,30 @@ struct	s_ui
 	SDL_Surface	*minimap_surf;
 };
 
+struct s_texture
+{
+	SDL_Surface		**wall_tex;
+	int				x_text;
+	int				y_text;
+	double			x_point;
+	double			y_point;
+	int				color;
+	int				wall_end;
+	int				x_split;
+	int				y_split;
+};
+
+
 struct	s_doom
 {
+	t_render	render;
 	t_ui		ui;
 	t_sdl		sdl;
 	t_option	options;
 	t_map		map;
 	t_game		game;
 	t_player	player;
+	t_texture	texture;
 	
 };
 
@@ -280,5 +316,22 @@ t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4);
 int			project_vector2d(float *ax, float *ay, float bx, float by);
 int			rotate_vertex_xy(t_vertex *a, float psin, float pcos);
 t_plane		rotate_plane_xy(t_plane *plane, float psin, float pcos);
+float		fpercent(float start, float end, float current);
+float		v2dlenght(float vx, float vy);
 
+/*
+**texturelaod.c
+*/
+void	wall_tex(t_texture *texture, t_sdl *sdl);
+SDL_Surface	*load_tex(char *path, t_sdl *sdl);
+void	pix_to_surf(t_render *r, int x, int y, int color);
+Uint32	pix_from_text(SDL_Surface *texture, int x, int y);
+int		stop(char *str); // for testing
+int		color_mix(Uint32 start, Uint32 end, float per);
+
+/*
+**main_render.c
+*/
+
+void	textline_draw(int y1, int y2, t_render *r, t_texture *t);
 #endif
