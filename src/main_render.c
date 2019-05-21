@@ -127,9 +127,8 @@ void	render_sector(t_render *r, t_doom d)
 			r->c_za = clamp(r->za, r->ztop[r->win_x], r->zbottom[r->win_x]);
 			r->zb = (r->win_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
 			r->c_zb = clamp(r->zb, r->ztop[r->win_x], r->zbottom[r->win_x]);
-
 			vertical_line(r->win_x, r->c_zb + 1, r->zbottom[r->win_x], r, 0xFFFF00); //floor
-			vertical_line(r->win_x, r->ztop[r->win_x], r->c_za - 1, r, 0x222222); // cell
+			//vertical_line(r->win_x, r->ztop[r->win_x], r->c_za - 1, r, 0x222222); // cell
 
 			if(r->neighbor >= 0)
 			{
@@ -153,10 +152,7 @@ void	render_sector(t_render *r, t_doom d)
 				r->zbottom[r->win_x] = clamp(min(r->c_zb, r->nzb), 0, r->zbottom[r->win_x]);
 			}
 			else
-			{
-				//vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
 				textline_draw(r->c_za, r->c_zb, r, &d.texture);
-			}
 		}
 		if(r->neighbor >= 0 && r->x2 >= r->x1 && (r->head + MAX_SECTORS_RENDERED + 1 - r->tail) % MAX_SECTORS_RENDERED)
 		{
@@ -171,30 +167,29 @@ void	render_sector(t_render *r, t_doom d)
 
 void	textline_draw(int y1, int y2, t_render *r, t_texture *t)
 {
-	t->x_split = 4;
+	t->x_split = 2;
 	t->y_split = 2;
-	r->fog_distance = 80;
+	r->fog_distance = 30;
 	t->x_point = ((double)((r->win_x - r->x1) / (double)(r->x2 - r->x1))) * t->x_split;
 	t->x_text = (int)((t->x_point - (int)t->x_point) * (double)WALL_TEXT_WIDTH);
 	r->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = min(y2, WIN_HEIGHT - 1);
 	r->fog_perc = (r->y / r->fog_distance);
-	//printf("x1:%d\nx2:%d\n", r->x1, r->x2);
-	//SDL_Delay(50);
 	while(++r->win_y < t->wall_end)
 	{
 		t->y_point = ((double)(r->win_y - r->za) / (double)(r->zb - r->za)) * t->y_split;
 		t->y_text = (int)((t->y_point - (int)t->y_point) * (double)WALL_TEXT_HEIGHT);
-		t->color = pix_from_text(t->wall_tex[0], t->x_text, t->y_text);
-		t->color = color_mix(t->color, 0x000000, (r->fog_perc > 1 ? 1 : r->fog_perc));
-		r->pix[r->win_y * WIN_WIDTH + r->win_x] = t->color;
+		t->color = pix_from_text(t->wall_tex[1], t->x_text, t->y_text);
+		if (t->color != 0x000000)
+		{
+			t->color = color_mix(t->color, 0x000000, (r->fog_perc > 1 ? 1 : r->fog_perc));
+			r->pix[r->win_y * WIN_WIDTH + r->win_x] = t->color;
+		}
 	}
 }
 
 int		draw_screen(t_doom doom)
 {
-	prepare_to_rendering(&doom.render, doom);
-
 	*doom.render.head = (t_rend_sector) {doom.player.sector, 0, WIN_WIDTH - 1};
 	if (++doom.render.head == doom.render.queue + MAX_SECTORS_RENDERED)
 	 	doom.render.head = doom.render.queue;
@@ -207,9 +202,7 @@ int		draw_screen(t_doom doom)
 			continue ;
 		render_sector(&doom.render, doom);
 	}
-
 	SDL_UpdateWindowSurface(doom.sdl.window);
 	SDL_Delay(10);
 	return (0);
 }
-

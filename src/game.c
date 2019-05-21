@@ -30,10 +30,11 @@ static int	init_game_params(t_doom *d)
 int			game_loop(t_doom doom)
 {
 	init_game_params(&doom);
-
 	while (doom.game.quit != 1)
 	{
 		game_events(&doom);
+		prepare_to_rendering(&doom.render, doom);
+		draw_skybox(&doom.render, doom);
 		draw_screen(doom);
 		//draw_sprites();
 		//draw_ui();

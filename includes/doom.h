@@ -39,12 +39,15 @@
 # define MINIMAP_WIDTH 5120
 # define MINIMAP_HEIGHT	2880
 
+# define SKYBOX_HEIGHT 2048
+# define SKYBOX_WIDTH 4096
+
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
 
 # define HFOV (0.5 * WIN_WIDTH)	//horizontal field of view (radians?)
 # define VFOV (0.2 * WIN_HEIGHT)	//vertical field of view (radians?)
 # define WALL_TEXT_WIDTH 256	
-# define WALL_TEXT_HEIGHT 512
+# define WALL_TEXT_HEIGHT 256
 
 # define STRAIGHT 1
 # define STRAFE 2
@@ -238,6 +241,8 @@ struct	s_render
  	int				win_y; // new == y;
 	int				fog_distance;
  	double			fog_perc;
+	double			floor_x;
+	double			floor_y;
 	//till this
 	Uint32			*pix;
 	t_line			line;
@@ -259,6 +264,7 @@ struct	s_ui
 struct s_texture
 {
 	SDL_Surface		**wall_tex;
+	SDL_Surface		*sky_box;
 	int				x_text;
 	int				y_text;
 	double			x_point;
@@ -328,10 +334,15 @@ void	pix_to_surf(t_render *r, int x, int y, int color);
 Uint32	pix_from_text(SDL_Surface *texture, int x, int y);
 int		stop(char *str); // for testing
 int		color_mix(Uint32 start, Uint32 end, float per);
-
 /*
 **main_render.c
 */
-
 void	textline_draw(int y1, int y2, t_render *r, t_texture *t);
+void	wall_side(t_render *r, t_doom d);
+/*
+**main_render.c
+*/
+void	skyline_draw(t_doom d, t_render *r, int win_x, int text_x);
+void	draw_skybox(t_render *r, t_doom d);
+void	prepare_to_rendering(t_render *r, t_doom d);
 #endif
