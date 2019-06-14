@@ -72,8 +72,8 @@ int			read_file(t_doom *doom, char *file_name)
 		map->sectors[i].vert[map->sectors[i].num_vert].x = map->sectors[i].vert[0].x; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		map->sectors[i].vert[map->sectors[i].num_vert].y = map->sectors[i].vert[0].y; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		map->sectors[i].neighbors = (char*)malloc(sizeof(char) * map->sectors[i].num_vert);
-		//map->sectors[i].lines = (t_line*)malloc(sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
-		//read(fd, map->sectors[i].lines, sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
+		map->sectors[i].lines = (t_line*)malloc(sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
+		read(fd, map->sectors[i].lines, sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
 		read(fd, map->sectors[i].neighbors, sizeof(char) * map->sectors[i].num_vert);
 		read(fd, &map->sectors[i].floor_z, sizeof(Uint32));
 		read(fd, &map->sectors[i].ceil_z, sizeof(Uint32));

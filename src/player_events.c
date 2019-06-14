@@ -76,16 +76,26 @@ void		player_events(t_doom *d)
 	{
 		if (ev.type == SDL_KEYDOWN || ev.type == SDL_KEYUP)
 		{
-			if (ev.key.keysym.sym == SDLK_ESCAPE)
+			if (ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE)
 			{
-				printf("velocity z %f\n", d->game.velocity.z);
+				//printf("velocity z %f\n", d->game.velocity.z);
 				if (d->game.ground || (d->game.velocity.z > -0.4 && d->game.velocity.z < 0))
 				{
 					d->game.velocity.z += 0.6;
 					d->game.falling = 1;
 				}
+			}
+		}
+		if (ev.type == SDL_KEYDOWN)
+		{
+			if (ev.key.keysym.sym == SDLK_k)
+			{
+				if (d->game.pause == 0)
+					d->game.pause = 1;
+				else
+					d->game.pause = 0;
 			}
 		}
 		else if (ev.type == SDL_QUIT)

@@ -16,36 +16,31 @@
 //y = const * tan(b)
 void	draw_skybox(t_render *r, t_doom d)
 {
-	int win_x;
-	int text_x;
-	int win_y;
-	int text_y;
-	double pos_angle;
-	double pos_max;
-
-	win_x = 0;
-	pos_angle = d.player.anglesin / 0.005556;
-	pos_max = SKYBOX_WIDTH / 2 / 360;
+	d.sky.win_x = 0;
+	d.sky.pos_angle = (FixDiv(Fix(d.player.anglesin), Fix(0.005556)));
+	d.sky.pos_max = 5;
+	d.sky.pos_max = SKY_W / 2 / 360;
 	if (d.player.anglecos >= 0)
-		text_x = (int)(pos_angle * pos_max);
+		d.sky.text_x = (int)UnFix(d.sky.pos_angle * d.sky.pos_max);
 	else
-		text_x = (int)(SKYBOX_WIDTH / 2 - (pos_angle * pos_max));
-	if (text_x < 0)
-		text_x = 4096 + text_x;
-	while (win_x < WIN_WIDTH)
+		d.sky.text_x = (int)(SKY_W / 2 - UnFix(d.sky.pos_angle * d.sky.pos_max));
+	if (d.sky.text_x < 0)
+		d.sky.text_x = 4096 + d.sky.text_x;
+	while (d.sky.win_x < WIN_WIDTH && d.sky.text_x <= SKY_W)
 	{
-		text_x++;
-		if (text_x < 0)
-			text_x = SKYBOX_WIDTH;
-		if (text_x > SKYBOX_WIDTH)
-			text_x = 0;
-		win_y = 0;
-		text_y = 900 + (d.player.angle_z * 160);
-		while (win_y < WIN_HEIGHT && text_y < SKYBOX_HEIGHT - 1 && text_x <= SKYBOX_WIDTH)
+		d.sky.text_x++;
+		if (d.sky.text_x < 0)
+			d.sky.text_x = SKY_W;
+		if (d.sky.text_x > SKY_W)
+			d.sky.text_x = 0;
+		d.sky.win_y = 0;
+		d.sky.text_y = 900 + UnFix(Fix(d.player.angle_z) * 160);
+		while (d.sky.win_y < WIN_HEIGHT && d.sky.text_y < SKY_H - 1)
 		{
-			r->pix[win_y++ * WIN_WIDTH + win_x] = pix_from_text(d.texture.sky_box, text_x, text_y);
-			text_y++;
+			r->pix[d.sky.win_y++ * WIN_WIDTH + d.sky.win_x] =
+				pix_from_text(d.texture.sky_box[0], d.sky.text_x, d.sky.text_y);
+			d.sky.text_y++;
 		}
-		win_x++;
+		d.sky.win_x++;
 	}
 }

@@ -36,6 +36,7 @@ int		game_mod(char *file_name)
 
 int		main(int argc, char **argv)
 {
+	srand(time(NULL));
 	if (argc == 3)
 	{
 		if (ft_strcmp(argv[1], "play") == 0)

@@ -26,6 +26,10 @@
 
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 800
+# define SKY_W 4096
+# define SKY_H 2048
+# define WALL_TEXT_W 256	
+# define WALL_TEXT_H 512
 # define SPEED_ROTATION 0.03f
 # define SPEED_ROTATION_Z 0.05f
 # define MAX_Z_ANGLE 5
@@ -35,29 +39,16 @@
 # define HEAD_HEIGHT 1
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
-
-# define MINIMAP_WIDTH 5120
-# define MINIMAP_HEIGHT	2880
-
-# define SKYBOX_HEIGHT 2048
-# define SKYBOX_WIDTH 4096
-
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
-
 # define HFOV (0.5 * WIN_WIDTH)	//horizontal field of view (radians?)
 # define VFOV (0.2 * WIN_HEIGHT)	//vertical field of view (radians?)
-# define WALL_TEXT_WIDTH 256	
-# define WALL_TEXT_HEIGHT 256
-
 # define STRAIGHT 1
 # define STRAFE 2
-
 # define min(a,b)				(((a) < (b)) ? (a) : (b))
 # define max(a,b)				(((a) > (b)) ? (a) : (b))
 # define clamp(a, mi,ma)		min(max(a,mi),ma) //put a between min and max
 # define vxs(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0)) //cross vector product
 # define dvp(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1)) //dot vector product
-
 # define Overlap(a0,a1,b0,b1)	\
 	(min(a0,a1) <= max(b0,b1) && min(b0,b1) <= max(a0,a1))
 
@@ -67,118 +58,126 @@
 # define PointSide(px,py, x0,y0, x1,y1) \
 	(vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
 
-typedef struct s_doom	t_doom;
+# define Fix(a)  				((a) * (1LL<<8))
+# define UnFix(a) 				((a) / (float)(1LL<<8))
+# define FixMult(a, b) 			((int32_t)(((int64_t)(a) * (b)) >> 8))
+# define FixDiv(a, b) 			((int32_t)(((int64_t)(a) << 8) / (b)))
 
-typedef struct s_sdl	t_sdl;
-typedef struct s_option	t_option;
+typedef struct s_doom		t_doom;
 
-typedef struct s_map	t_map;
-typedef struct s_vertex	t_vertex;
-typedef struct s_sector	t_sector;
-typedef struct s_player	t_player;
-typedef struct s_line	t_line;
-typedef struct s_game	t_game;
-typedef struct s_vector	t_vector;
-typedef struct s_render	t_render;
-typedef struct s_plane	t_plane;
-typedef struct s_ui		t_ui;
+typedef struct s_sdl		t_sdl;
+typedef struct s_option		t_option;
 
-typedef struct s_texture t_texture;
+typedef struct s_map		t_map;
+typedef struct s_vertex		t_vertex;
+typedef struct s_sector		t_sector;
+typedef struct s_player		t_player;
+typedef struct s_line		t_line;
+typedef struct s_game		t_game;
+typedef struct s_vector		t_vector;
+typedef struct s_render		t_render;
+typedef struct s_plane		t_plane;
+typedef struct s_ui			t_ui;
+
+typedef struct s_texture	t_texture;
+typedef struct s_skybox		t_skybox;
 
 struct	s_plane
 {
-	float a;
-	float b;
-	float c;
-	float h;
+	float			a;
+	float			b;
+	float			c;
+	float			h;
 };
 
 struct	s_vector
 {
-	float		x;
-	float		y;
-	float		z;
+	float			x;
+	float			y;
+	float			z;
 };
 
 struct	s_vertex
 {
-	float		x;
-	float		y;
+	float			x;
+	float			y;
 };
 
 struct	s_player
 {
-	t_vector	coord; //earlier was t_vertex could cause some troubles
-	Uint32		sector;
-	float		angle;
-	float		anglesin; 
-	float		anglecos;
-	float		angle_z; // angle of player z view
+	t_vector		coord; //earlier was t_vertex could cause some troubles
+	Uint32			sector;
+	float			angle;
+	float			anglesin; 
+	float			anglecos;
+	float			angle_z; // angle of player z view
 };
 
 struct	s_line
 {
-	t_vertex	vert[2];
-	SDL_Surface	*bot;
-	SDL_Surface	*mid;
-	SDL_Surface	*top;
+	int 			full;
+	int				bot;
+	int				top;
 };
 
 struct	s_sector
 {	
-	Uint32		num;
-	Uint32		num_vert;
-	t_line		*lines; //same numeration as vert
-	t_vertex	*vert;
-	char		*neighbors;
-	Uint32		floor_z; //should be replaced with equation of surface
-	Uint32		ceil_z; //should be replaced with equation of surface
-	t_plane		ceil_plane;
-	t_plane		floor_plane;
+	Uint32			num;
+	Uint32			num_vert;
+	t_line			*lines; //same numeration as vert
+	t_vertex		*vert;
+	char			*neighbors;
+	Uint32			floor_z; //should be replaced with equation of surface
+	Uint32			ceil_z; //should be replaced with equation of surface
+	t_plane			ceil_plane;
+	t_plane			floor_plane;
 };
 
 struct	s_map
 {
-	Uint32		num_vert;
-	t_vertex	*vertex; //delete this doesnt useful
-	Uint32		num_sect;
-	t_sector	*sectors;
+	Uint32			num_vert;
+	t_vertex		*vertex; //delete this doesnt useful
+	Uint32			num_sect;
+	t_sector		*sectors;
 };
 
 
 struct	s_sdl
 {
-	SDL_Window	*window;
-	SDL_Surface	*surface;
+	SDL_Window		*window;
+	SDL_Surface		*surface;
+	SDL_Renderer	*render;
+	SDL_Texture		*texture;
 };
 
 struct	s_game
 {
-	float		dx;
-	float		dy;
-	t_vector	velocity;
-	float		acceleration;
-	int			ground;
-	int			falling;
-	int			moving;
-	int			ducking;
-	int			quit;
-	SDL_Event	event;
-	float		eye_height;
+	float			dx;
+	float			dy;
+	t_vector		velocity;
+	float			acceleration;
+	int				ground;
+	int				falling;
+	int				moving;
+	int				ducking;
+	int				quit;
+	int				pause;
+	SDL_Event		event;
+	float			eye_height;
 };
 
 struct	s_option
 {
-	int			difficult;
-	int			music_volume_level;
-	int			effects_volume_level;
+	int				difficult;
+	int				music_volume_level;
+	int				effects_volume_level;
 };
 
 typedef struct	s_rend_sector
 {
-	Uint32	num;
-	int		sx1;
-	int		sx2;
+	Uint32			num;
+	int				sx1;
+	int				sx2;
 }				t_rend_sector;
 
 struct	s_render
@@ -203,10 +202,8 @@ struct	s_render
 	float			vy1;
 	float			vx2;
 	float			vy2;
-	float			tx1;
-	float			ty1;
-	float			tx2;
-	float			ty2;
+	// float			tx2;
+	// float			ty2;
 	int				begin_x;
 	int				end_x;
 	float			y;
@@ -214,8 +211,8 @@ struct	s_render
 	int				zb;
 	int				nza;
 	int				nzb;
-	int				x1;
-	int				x2;
+	float				x1;
+	float				x2;
 	int				z1;
 	int				z2;
 	float			xscale1;
@@ -239,6 +236,12 @@ struct	s_render
  	int				c_zb;
 	int				win_x; // new == x;
  	int				win_y; // new == y;
+	int				wall_num; // new uses to give 
+	float tx1;
+    float tx2;
+	float tz1;
+    float tz2;
+	float lp_x;
 	int				fog_distance;
  	double			fog_perc;
 	double			floor_x;
@@ -246,26 +249,27 @@ struct	s_render
 	//till this
 	Uint32			*pix;
 	t_line			line;
-	Uint32		last_frame;
-	Uint32		this_frame;
-	t_plane		cplane;
-	t_plane		fplane;
-	t_plane		ncplane;
-	t_plane		nfplane;
-	char		neighbor;
+	Uint32			last_frame;
+	Uint32			this_frame;
+	t_plane			cplane;
+	t_plane			fplane;
+	t_plane			ncplane;
+	t_plane			nfplane;
+	char			neighbor;
 };
 
 struct	s_ui
 {
-	SDL_Rect	*minimap_rect;
-	SDL_Surface	*minimap_surf;
+	SDL_Rect		*minimap_rect;
+	SDL_Surface		*minimap_surf;
 };
 
 struct s_texture
 {
 	SDL_Surface		**wall_tex;
-	SDL_Surface		*sky_box;
-	int				x_text;
+	SDL_Surface		**sky_box;
+	SDL_Surface		*pause;
+	unsigned int	x_text;
 	int				y_text;
 	double			x_point;
 	double			y_point;
@@ -275,18 +279,28 @@ struct s_texture
 	int				y_split;
 };
 
+struct s_skybox
+{
+	int				win_x;
+	int				text_x;
+	int				win_y;
+	int				text_y;
+	int				pos_angle;
+	int				pos_max;
+};
 
 struct	s_doom
 {
-	t_render	render;
-	t_ui		ui;
-	t_sdl		sdl;
-	t_option	options;
-	t_map		map;
-	t_game		game;
-	t_player	player;
-	t_texture	texture;
-	
+	t_render		render;
+	t_ui			ui;
+	t_sdl			sdl;
+	t_option		options;
+	t_map			map;
+	t_game			game;
+	t_player		player;
+	t_texture		texture;
+	t_skybox		sky;
+	SDL_DisplayMode win_size;
 };
 
 //friendly user stuff
@@ -294,7 +308,7 @@ int			print_usage(void);
 int			error_message(char *message);
 
 //UI
-int		prepare_to_draw_ui(t_doom *doom);
+int			prepare_to_draw_ui(t_doom *doom);
 
 
 //parser & initial
@@ -328,21 +342,24 @@ float		v2dlenght(float vx, float vy);
 /*
 **texturelaod.c
 */
-void	wall_tex(t_texture *texture, t_sdl *sdl);
+void		wall_tex(t_texture *texture, t_sdl *sdl);
 SDL_Surface	*load_tex(char *path, t_sdl *sdl);
-void	pix_to_surf(t_render *r, int x, int y, int color);
-Uint32	pix_from_text(SDL_Surface *texture, int x, int y);
-int		stop(char *str); // for testing
-int		color_mix(Uint32 start, Uint32 end, float per);
+void		pix_to_surf(t_render *r, int x, int y, int color);
+Uint32		pix_from_text(SDL_Surface *texture, int x, int y);
+int			stop(char *str); // for testing
+int			color_mix(Uint32 start, Uint32 end, float per);
 /*
 **main_render.c
 */
-void	textline_draw(int y1, int y2, t_render *r, t_texture *t);
-void	wall_side(t_render *r, t_doom d);
+void		textline_draw(int y1, int y2, t_render *r, t_texture *t, t_doom d,float lp_x);
+void		wall_side(t_render *r, t_doom d);
+void		prepare_to_rendering(t_render *r, t_doom d);
+void		display_core(SDL_Renderer *render, SDL_Texture *texture, SDL_Surface *surface);
+void		floorline_draw(int x, int y, int new_col, int old_col, t_doom d);
 /*
-**main_render.c
+**skybox.c
 */
-void	skyline_draw(t_doom d, t_render *r, int win_x, int text_x);
-void	draw_skybox(t_render *r, t_doom d);
-void	prepare_to_rendering(t_render *r, t_doom d);
+void		draw_skybox(t_render *r, t_doom d);
+void		draw_sky_line(t_render *r, t_doom d);
+
 #endif

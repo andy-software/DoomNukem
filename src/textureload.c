@@ -14,14 +14,19 @@
 
 void	wall_tex(t_texture *texture, t_sdl *sdl)
 {
-	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface) * 3)))
+	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface) * 4)))
 		stop("\033[22;31mERROR: failed to malloc textures");
-	texture->wall_tex[0] = load_tex("./textures/walls/WALL0.png", sdl);
-	texture->wall_tex[1] = load_tex("./textures/walls/WALL.png", sdl);
+	texture->wall_tex[0] = load_tex("./textures/walls/WALL3.png", sdl);
+	texture->wall_tex[1] = load_tex("./textures/walls/WALL0.png", sdl);
 	texture->wall_tex[2] = load_tex("./textures/walls/WALL-1.png", sdl);
-	if (!(texture->sky_box = ft_memalloc(sizeof(SDL_Surface))))
+	texture->wall_tex[3] = load_tex("./textures/walls/WALL1.png", sdl);
+	if (!(texture->sky_box = ft_memalloc(sizeof(SDL_Surface) * 2)))
 		stop("\033[22;31mERROR: failed to malloc textures");
-	texture->sky_box = load_tex("./textures/sky0.jpg", sdl);
+	texture->sky_box[0] = load_tex("./textures/sky/sky0.jpg", sdl);
+	texture->sky_box[1] = load_tex("./textures/sky/sky1.png", sdl);
+	if (!(texture->pause = ft_memalloc(sizeof(SDL_Surface) * 2)))
+		stop("\033[22;31mERROR: failed to malloc textures");
+	texture->pause = load_tex("./textures/pause.png", sdl);
 }
 
 SDL_Surface	*load_tex(char *path, t_sdl *sdl)
