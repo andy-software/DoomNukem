@@ -40,8 +40,8 @@
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
-# define HFOV (0.5 * WIN_WIDTH)	//horizontal field of view (radians?)
-# define VFOV (0.2 * WIN_HEIGHT)	//vertical field of view (radians?)
+# define HFOV (WIN_WIDTH / 2)
+# define VFOV (0.2 * WIN_HEIGHT)
 # define STRAIGHT 1
 # define STRAFE 2
 # define min(a,b)				(((a) < (b)) ? (a) : (b))
@@ -196,12 +196,12 @@ struct	s_render
 	t_vertex		v2;
 
 	int				max_sector_rendered;
-	float			vx1;
+	// float			vx1;
 	float			pcos;
 	float			psin;
-	float			vy1;
-	float			vx2;
-	float			vy2;
+	// float			vy1;
+	// float			vx2;
+	// float			vy2;
 	// float			tx2;
 	// float			ty2;
 	int				begin_x;
@@ -231,6 +231,13 @@ struct	s_render
 	int				nz1b;
 	int				nz2a;
 	int				nz2b;
+
+
+	//new things
+	float			p_x;
+	float			p_y;
+	float			p_z;
+	float			exact_begin;
 	//added after merge
 	int				c_za;
  	int				c_zb;
@@ -338,6 +345,8 @@ int			rotate_vertex_xy(t_vertex *a, float psin, float pcos);
 t_plane		rotate_plane_xy(t_plane *plane, float psin, float pcos);
 float		fpercent(float start, float end, float current);
 float		v2dlenght(float vx, float vy);
+t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r);
+t_vertex	get_line_param(float x1, float y1, float x2, float y2);
 
 /*
 **texturelaod.c

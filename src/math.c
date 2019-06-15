@@ -82,3 +82,38 @@ float	v2dlenght(float vx, float vy)
 {
 	return (sqrt(vx * vx + vy * vy));
 }
+
+t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r)
+{
+	t_vertex	res;
+	double		a;
+	double		b;
+
+	xw -= (WIN_WIDTH / 2);
+	if (comp_real(end.x, start.x, 0.001)) //in case of parallel rays //could be more precisely
+	{
+		// res = (t_vertex){start.x ,(start.x * HFOV * start.y / \
+		// 	(start.y * (r->exact_begin - xw) + start.x * HFOV))}; // some old version idr how i calculate this so i will leave it
+		res = (t_vertex){start.x, -start.x * HFOV / xw};
+	}
+	else
+	{	
+		a = (end.y - start.y) / (end.x - start.x);
+		b = start.y - a * start.x;
+		res.x = -b * xw / (double)(HFOV + a * xw);
+		res.y = a * res.x + b;
+	}
+	rotate_vertex_xy(&res, r->psin, -r->pcos); //rotate and translate back
+	res.x += r->p_x;
+	res.y += r->p_y;
+	return (res);
+}
+
+t_vertex	get_line_param(float x1, float y1, float x2, float y2)
+{
+	t_vertex	res;
+
+	res.x = (y2 - y1) / (x2 - x1); // k param
+	res.y = y2 - res.x * x2; // b param
+	return (res);
+}
