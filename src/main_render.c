@@ -69,29 +69,28 @@ int i;
 		r->v2.x = r->t2.x;
 		r->v2.y = r->t2.y;
 		
-		int bool_t1 = r->t1.y < fabs(r->t1.x) / 4; //few same calculation
-		int bool_t2 = r->t2.y < fabs(r->t2.x) / 4; //few same calculation
-		// if (bool_t1 && bool_t2)
-		// 	continue ; 
-		if (bool_t1 || bool_t2)
+		int t1_1_line = r->t1.y < r->t1.x / 4; //is dot 1 lower then line y = x / 4
+		int t1_2_line = r->t1.y < -r->t1.x / 4; //is dot 1 lower then line y = -x / 4
+		int t2_1_line = r->t2.y < r->t2.x / 4; //is dot 2 lower then line y = x / 4
+		int t2_2_line = r->t2.y < -r->t2.x / 4; //is dot 2 lower then line y = -x / 4
+		if (r->t1.y < 0 && r->t2.y < 0)
+			continue ;
+		if ((t1_1_line && t2_1_line) || (t1_2_line && t2_2_line))
+			continue ;
+		if (t1_1_line || t1_2_line || t2_1_line || t2_2_line)
 		{
-			t_vertex i1 = intersect(r->t1, r->t2, (t_vertex){0, 0}, (t_vertex){-4, 1});
-			t_vertex i2 = intersect(r->t1, r->t2, (t_vertex){0, 0}, (t_vertex){4, 1});	
-			if (bool_t1)
-			{
-				if(i1.y > 0)
-					r->t1 = i1;
-				else
-					r->t1 = i2;
-			}
-			if (bool_t2)
-			{
-				if (i1.y > 0)
-					r->t2 = i1;
-				else
-					r->t2 = i2;
-			}
+			t_vertex i1 = intersect(r->t1, r->t2, (t_vertex){0, 0}, (t_vertex){4, 1});	
+			t_vertex i2 = intersect(r->t1, r->t2, (t_vertex){0, 0}, (t_vertex){-4, 1});
+			if (t1_1_line && i1.y >= 0)
+				r->t1 = i1;
+			if (t1_2_line && i2.y >= 0)
+				r->t1 = i2;
+			if (t2_1_line && i1.y >= 0)
+				r->t2 = i1;
+			if (t2_2_line && i2.y >= 0)
+				r->t2 = i2;
 		}
+		
 		r->xscale1 = HFOV / r->t1.y;
 		r->xscale2 = HFOV / r->t2.y;
 		r->zscale1 = VFOV / r->t1.y;
@@ -99,7 +98,7 @@ int i;
 
 		r->x1 = WIN_WIDTH / 2 - (r->t1.x * r->xscale1);
 		r->x2 = WIN_WIDTH / 2 - (r->t2.x * r->xscale2);
-		if((int)r->x1 >= (int)r->x2 || r->x2 < r->now.sx1 || r->x1 > r->now.sx2)
+		if(r->x1 >= r->x2 || r->x2 < r->now.sx1 || r->x1 > r->now.sx2)
 			continue ;
 		r->neighbor = r->sect->neighbors[i];
 		if (r->neighbor >= 0)
@@ -107,12 +106,11 @@ int i;
 			r->ncplane = d.map.sectors[(int)r->neighbor].ceil_plane;
 			r->nfplane = d.map.sectors[(int)r->neighbor].floor_plane;
 		}
-		float begin = max(r->x1, r->now.sx1) - 1;
 		r->begin_x = max(r->x1, r->now.sx1);
 		r->end_x = min(r->x2, r->now.sx2);
 		r->win_x = r->begin_x - 1;
 		t_vertex mc;
-		while (++r->win_x <= r->end_x && ++begin < r->end_x) // in wall 
+		while (++r->win_x <= r->end_x) // in wall 
 		{
 			// float perc = percent(r->x1 , r->x2 , r->win_x);
 			mc = find_x_from_screen_coords(r->win_x, r->t1, r->t2, r); //could exist some little trouble with parallel case rays
@@ -254,11 +252,11 @@ int		draw_screen(t_doom doom)
 		doom.render.now = *doom.render.tail;
 		if (++doom.render.tail == (doom.render.queue + MAX_SECTORS_RENDERED))
 			doom.render.tail = doom.render.queue;
-		if (doom.render.rendered_sectors[doom.render.now.num] & (MAX_SECTORS_RENDERED + 1))
+		if (doom.render.rendered_sectors[doom.render.now.num] & (MAX_SECTORS_RENDERED +  + 1))
 			continue ;
 		render_sector(&doom.render, doom);
 	}
 	// SDL_UpdateWindowSurface(doom.sdl.window);
-	// SDL_Delay(10);
+	//SDL_Delay(10);
 	return (0);
 }

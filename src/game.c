@@ -43,7 +43,7 @@ int			game_loop(t_doom doom)
 		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
-			draw_skybox(&doom.render, doom);
+			//draw_skybox(&doom.render, doom);
 			draw_screen(doom);
 			display_core(doom.sdl.render, doom.sdl.texture, doom.sdl.surface);
 			SDL_ShowCursor(SDL_DISABLE);
