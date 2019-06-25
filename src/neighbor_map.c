@@ -45,6 +45,8 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 	}
 
 	write(fd, &mplayer, sizeof(t_player));
+	write(fd, &map.num_sprites, sizeof(Uint32));
+	write(fd, map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
 	close(fd);
 	return (1);
 }
@@ -234,6 +236,20 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
+	for (int i = 0; i < 1; i++)
+	{
+		map.sprites[i].text_no = i % 12;
+		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, -5+0.3*i, -5+0.3*i)};
+		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+	}
+
+	for (int i = 1; i < 2; i++)
+	{
+		map.sprites[i].text_no = i % 12;
+		map.sprites[i].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, 5+0.3*i, -5+0.3*i)};
+		map.sprites[i].sector_no = -10+0.3*i < 0 ? 0 : -2;
+	}
+	map.num_sprites = 2;
 	write_to_file(map, argv[1], player);
 	return (0);
 }

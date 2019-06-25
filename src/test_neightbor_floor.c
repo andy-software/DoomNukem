@@ -42,9 +42,14 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		write(fd, &map.sectors[i].ceil_z, sizeof(Uint32));
 		write(fd, &map.sectors[i].floor_plane, sizeof(t_plane));
 		write(fd, &map.sectors[i].ceil_plane, sizeof(t_plane));
+		
 	}
 
 	write(fd, &mplayer, sizeof(t_player));
+	write(fd, &map.num_sprites, sizeof(Uint32));
+	write(fd, map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	write(fd, &map.num_paint, sizeof(Uint32));
+	write(fd, map.paint, sizeof(t_painting) * map.num_paint);
 	close(fd);
 	return (1);
 }
@@ -94,13 +99,13 @@ int		main(int argc, char **argv)
 	map.sectors[1].num_vert = 4;
 	map.sectors[1].num = 1;
 
-	map.sectors[1].ceil_plane.a = -1;
+	map.sectors[1].ceil_plane.a = 0;
 	map.sectors[1].ceil_plane.b = 0;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
 
-	map.sectors[1].floor_plane.a = 0.6;
-	map.sectors[1].floor_plane.b = -0.6;
+	map.sectors[1].floor_plane.a = 0;
+	map.sectors[1].floor_plane.b = 0;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
 
@@ -132,6 +137,33 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
+
+	for (int i = 0; i < 1; i++)
+	{
+		map.sprites[i].text_no = i % 12;
+		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, -5+0.3*i, -5+0.3*i)};
+		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+	}
+
+	for (int i = 1; i < 2; i++)
+	{
+		map.sprites[i].text_no = i % 12;
+		map.sprites[i].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, 5+0.3*i, -5+0.3*i)};
+		map.sprites[i].sector_no = -10+0.3*i < 0 ? 0 : -2;
+	}
+
+	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
+	map.num_paint = 1;
+	map.paint->sector_no = 1;
+	map.paint->v1.x = -6;
+	map.paint->v1.y = -10;
+	map.paint->v1.z = 35;
+	map.paint->v2.x = -3;
+	map.paint->v2.y = -10;
+	map.paint->v2.z = 25;
+	map.paint->text_no = 0;
+
+	map.num_sprites = 2;
 	write_to_file(map, argv[1], player);
 	return (0);
 }
