@@ -155,36 +155,45 @@ void	render_sector(t_render *r, t_doom d)
 				r->nzb = (r->win_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
 				r->nzb = clamp(r->nzb, r->ztop[r->win_x], r->zbottom[r->win_x]);
 
-				//vertical_line(r->win_x, r->c_za, r->nza - 1, r, 0x0F0F0F); // down to sector
-				textline_draw(r->za, r->nza - 1, r, &d.texture, d, r->mc.x);
+				vertical_line(r->win_x, r->c_za, r->nza - 1, r, 0x0F0F0F); // down to sector
+				//textline_draw(r->za, r->nza - 1, r, &d.texture, d, r->mc.x);
 				r->ztop[r->win_x] = clamp(max(r->c_za, r->nza), r->ztop[r->win_x], WIN_HEIGHT - 1);
-				//vertical_line(r->win_x, r->nzb + 1, r->c_zb, r, 0xFF0000); // up to sector
-				textline_draw(r->nzb + 1, r->zb, r, &d.texture, d, r->mc.x); // Yo u dont need doom.texture if u have doom already
+				vertical_line(r->win_x, r->nzb + 1, r->c_zb, r, 0xFF0000); // up to sector
+				//textline_draw(r->nzb + 1, r->zb, r, &d.texture, d, r->mc.x); // Yo u dont need doom.texture if u have doom already
 				r->zbottom[r->win_x] = clamp(min(r->c_zb, r->nzb), 0, r->zbottom[r->win_x]);
 			}
 			else
 			{
-				//vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
-				textline_draw(r->c_za, r->c_zb, r, &d.texture, d, r->mc.x);
+				vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
+				//textline_draw(r->c_za, r->c_zb, r, &d.texture, d, r->mc.x);
 			}		
 		}
 
 		if (r->neighbor >= 0 && r->end_x >= r->begin_x && (r->head + MAX_SECTORS_RENDERED + 1 - r->tail) % MAX_SECTORS_RENDERED)
 		{
-			r->z1a = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, lol_1.x, lol_1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z1b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, lol_1.x, lol_1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z2a  = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, lol_2.x, lol_2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-			r->z2b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, lol_2.x, lol_2.y) - r->p_z + r->t2.y  * d.player.angle_z) * r->zscale2);
+			r->z1a = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, r->t1.x, r->t1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->z1b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, r->t1.x, r->t1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->z2a  = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, r->t2.x, r->t2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
+			r->z2b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, r->t2.x, r->t2.y) - r->p_z + r->t2.y  * d.player.angle_z) * r->zscale2);
 
-			r->nz1a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, lol_1.x, lol_1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->nz1b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, lol_1.x, lol_1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->nz2a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, lol_2.x, lol_2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-			r->nz2b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, lol_2.x, lol_2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-			// printf("%i %i %i %i\n", max(r->z1a, r->nz1a), max(r->z2a, r->nz2a), min(r->z1b, r->nz1b), min(r->z2b, r->nz2b));
-			// printf("%i %i %i %i\n", r->ztop[r->begin_x], r->ztop[r->end_x], r->zbottom[r->begin_x], r->zbottom[r->end_x]);
+			r->nz1a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, r->t1.x, r->t1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->nz1b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, r->t1.x, r->t1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->nz2a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, r->t2.x, r->t2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
+			r->nz2b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, r->t2.x, r->t2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
+
+			int za1 = (r->begin_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
+			int zb1 = (r->begin_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
+			int nza1 = (r->begin_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
+			int nzb1 = (r->begin_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
+
+			int za2 = (r->end_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
+			int	zb2 = (r->end_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
+			int	nza2 = (r->end_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
+			int	nzb2 =  (r->end_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b; //pls recode this in something better
+
 			*r->head = (t_rend_sector) {r->neighbor, r->begin_x, r->end_x, \
-				max(r->z1a, r->nz1a), max(r->z2a, r->nz2a), min(r->z1b, r->nz1b), min(r->z2b, r->nz2b)};
-			//printf("New window\n %i %i %i\n", r->neighbor, r->begin_x, r->end_x);
+				max(za1, nza1), max(za2, nza2), min(zb1, nzb1), min(zb2, nzb2)};
+
 			if(++r->head == (r->queue + MAX_SECTORS_RENDERED))
 				r->head = r->queue;
 		}
@@ -214,7 +223,7 @@ void	textline_draw(int y1, int y2, t_render *r, t_texture *t, t_doom d, float lp
 		t->y_text = (int)UnFix(Fix(t->y_point - (int)t->y_point) * WALL_TEXT_H);
 		// t->y_text = (0 * ((r->zb - r->win_y)) + ((WALL_TEXT_H) *
 		// ((r->win_y - r->za)))) / ((r->zb - r->win_y) + (r->win_y - r->za));
-		t->color = pix_from_text(t->wall_tex[2], x_text, t->y_text);
+		t->color = pix_from_text(t->wall_tex[3], x_text, t->y_text);
 		if (t->color != 0)
 			r->pix[r->win_y * WIN_WIDTH + r->win_x] = color_mix(t->color, \
 				0x000000, (r->fog_perc > 1 ? 1 : r->fog_perc));
@@ -273,9 +282,19 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 	float	y_point;
 	int		y_text;
 	Uint32	color;
+	float	x1;
+	float	x2;
+	float	percent;
+	float	xscale1;
+	float	xscale2;
 
-	x_text = (((sprtext->w - 1) *
-		(((sr->win_x - sr->x1) * sr->t1.y)) / ((sr->x2 - sr->win_x) * sr->t2.y + (sr->win_x - sr->x1) * sr->t1.y)));
+	xscale1 = HFOV / sr->v1.y;
+	xscale2 = HFOV / sr->v2.y;
+
+	x1 = WIN_WIDTH / 2 - (sr->v1.x * xscale1);
+	x2 = WIN_WIDTH / 2 - (sr->v2.x * xscale2);
+	percent = (sr->win_x - x1) / (x2 - x1);
+	x_text = (sprtext->w * percent / sr->v2.y) / ((1 - percent) / sr->v1.y + percent / sr->v2.y);
 
 	sr->win_y = clamp(sr->za, sr->clmp_top, sr->clmp_bot);
 	wall_end = clamp(sr->zb, sr->clmp_top, sr->clmp_bot);
@@ -322,7 +341,7 @@ int		draw_screen(t_doom doom)
 
 
 	//drawing painting before sprites. A little difference between sprites and painting
-	/*sr.paint = doom.map.paint; // i think this shouldnt be sorted
+	sr.paint = doom.map.paint; // i think this shouldnt be sorted
 	sr.c_paint = doom.map.num_paint;
 	sr.i = -1;
 	while (++sr.i < sr.c_paint)
@@ -335,7 +354,8 @@ int		draw_screen(t_doom doom)
 
 		rotate_vector_xy(&sr.t1, doom.player.anglesin, doom.player.anglecos);
 		rotate_vector_xy(&sr.t2, doom.player.anglesin, doom.player.anglecos);
-
+		sr.v1 = sr.t1;
+		sr.v2 = sr.t2;
 		sr.t1_1_line = sr.t1.y < sr.t1.x / 4;
 		sr.t1_2_line = sr.t1.y < -sr.t1.x / 4;
 		sr.t2_1_line = sr.t2.y < sr.t2.x / 4;
@@ -380,8 +400,8 @@ int		draw_screen(t_doom doom)
 				
 				sr.begin_x = max(sr.x1, sr.tmp->sx1);
 				sr.end_x = min(sr.x2, sr.tmp->sx2);
-				vertical_line(sr.begin_x, 0, WIN_HEIGHT - 1, &doom.render, 0);
-				vertical_line(sr.end_x, 0, WIN_HEIGHT - 1, &doom.render, 0);
+				// vertical_line(sr.begin_x, 0, WIN_HEIGHT - 1, &doom.render, 0);
+				// vertical_line(sr.end_x, 0, WIN_HEIGHT - 1, &doom.render, 0);
 				sr.win_x = sr.begin_x - 1;
 				
 				while (++sr.win_x <= sr.end_x) // in wall 
@@ -406,18 +426,18 @@ int		draw_screen(t_doom doom)
 					//printf("%i %i %i %i\n", sr.za, sr.zb, sr.clmp_top, sr.clmp_bot);
 					
 					draw_line_of_sprite(&sr, doom.texture.sprites->next->sprites[0], &doom.render);
-					vertical_line(sr.win_x, sr.clmp_top, sr.clmp_top + 1, &doom.render, 0xFFFF);
-					vertical_line(sr.win_x, sr.clmp_bot - 1, sr.clmp_bot, &doom.render, 0x44FFFF);
+					// vertical_line(sr.win_x, sr.clmp_top, sr.clmp_top + 1, &doom.render, 0xFFFF);
+					// vertical_line(sr.win_x, sr.clmp_bot - 1, sr.clmp_bot, &doom.render, 0x44FFFF);
 				}
-				for (int i = sr.tmp->sx1; i <= sr.tmp->sx2; i++)
-				{
-					sr.clmp_bot = line_point(sr.tmp->zbot1, sr.tmp->zbot2, fpercent(sr.tmp->sx1, sr.tmp->sx2, i));
-						sr.clmp_bot = min(sr.clmp_bot, WIN_HEIGHT - 1);
-					sr.clmp_top = line_point(sr.tmp->ztop1, sr.tmp->ztop2, fpercent(sr.tmp->sx1, sr.tmp->sx2, i));
-						sr.clmp_top = max(sr.clmp_top, 0);
-					vertical_line(sr.win_x, sr.clmp_top, sr.clmp_top + 1, &doom.render, 0xFFFF);
-					vertical_line(i, sr.clmp_bot - 1, sr.clmp_bot, &doom.render, 0x44FFFF);
-				}
+				// for (int i = sr.tmp->sx1; i <= sr.tmp->sx2; i++) // draw whole line that cut the sector
+				// {
+				// 	sr.clmp_bot = line_point(sr.tmp->zbot1, sr.tmp->zbot2, fpercent(sr.tmp->sx1, sr.tmp->sx2, i));
+				// 		sr.clmp_bot = min(sr.clmp_bot, WIN_HEIGHT - 1);
+				// 	sr.clmp_top = line_point(sr.tmp->ztop1, sr.tmp->ztop2, fpercent(sr.tmp->sx1, sr.tmp->sx2, i));
+				// 		sr.clmp_top = max(sr.clmp_top, 0);
+				// 	// vertical_line(sr.win_x, sr.clmp_top, sr.clmp_top + 1, &doom.render, 0xFFFF);
+				// 	// vertical_line(i, sr.clmp_bot - 1, sr.clmp_bot, &doom.render, 0x44FFFF);
+				// }
 			}
 			if (++sr.tmp == (doom.render.queue + MAX_SECTORS_RENDERED))
 				sr.tmp = doom.render.queue;
@@ -443,6 +463,9 @@ int		draw_screen(t_doom doom)
 		sr.t2.y = sr.sprites[sr.i].coord.y;
 		sr.t1.z = sr.sprites[sr.i].coord.z + 2; //2 - sprite height right now
 		sr.t2.z = sr.sprites[sr.i].coord.z;
+
+		sr.v1 = sr.t1;
+		sr.v2 = sr.t2;
 
 		sr.t1_1_line = sr.t1.y < sr.t1.x / 4;
 		sr.t1_2_line = sr.t1.y < -sr.t1.x / 4;
@@ -528,6 +551,6 @@ int		draw_screen(t_doom doom)
 		}
 	}
 
-	free(sr.sprites);*/
+	free(sr.sprites);
 	return (0);
 }
