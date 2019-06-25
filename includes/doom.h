@@ -205,8 +205,8 @@ struct	s_sprite_render
 	int				nzb;
 	float			x1;
 	float			x2;
-	int				z1;
-	int				z2;
+	float			z1;
+	float			z2;
 	int				z1a;
 	int				z1b;
 	int				z2a;

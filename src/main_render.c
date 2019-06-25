@@ -53,7 +53,6 @@ void	prepare_to_rendering(t_render *r, t_doom d)
 void	render_sector(t_render *r, t_doom d)
 {
 	int i;
-	static int a = 0;
 
 	++r->rendered_sectors[r->now.num];
 	r->sect = d.map.sectors + r->now.num; //&d.map.sectors[r->now.num];
@@ -97,9 +96,6 @@ void	render_sector(t_render *r, t_doom d)
 			if (r->t2_2_line && r->i2.y >= 0)
 				r->t2 = r->i2;
 		}
-		
-		t_vertex lol_1 = r->t1;
-		t_vertex lol_2 = r->t2;
 
 		r->xscale1 = HFOV / r->t1.y;
 		r->xscale2 = HFOV / r->t2.y;
@@ -155,17 +151,17 @@ void	render_sector(t_render *r, t_doom d)
 				r->nzb = (r->win_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
 				r->nzb = clamp(r->nzb, r->ztop[r->win_x], r->zbottom[r->win_x]);
 
-				vertical_line(r->win_x, r->c_za, r->nza - 1, r, 0x0F0F0F); // down to sector
-				//textline_draw(r->za, r->nza - 1, r, &d.texture, d, r->mc.x);
+				//vertical_line(r->win_x, r->c_za, r->nza - 1, r, 0x0F0F0F); // down to sector
+				textline_draw(r->za, r->nza - 1, r, &d.texture, d, r->mc.x);
 				r->ztop[r->win_x] = clamp(max(r->c_za, r->nza), r->ztop[r->win_x], WIN_HEIGHT - 1);
-				vertical_line(r->win_x, r->nzb + 1, r->c_zb, r, 0xFF0000); // up to sector
-				//textline_draw(r->nzb + 1, r->zb, r, &d.texture, d, r->mc.x); // Yo u dont need doom.texture if u have doom already
+				//vertical_line(r->win_x, r->nzb + 1, r->c_zb, r, 0xFF0000); // up to sector
+				textline_draw(r->nzb + 1, r->zb, r, &d.texture, d, r->mc.x); // Yo u dont need doom.texture if u have doom already
 				r->zbottom[r->win_x] = clamp(min(r->c_zb, r->nzb), 0, r->zbottom[r->win_x]);
 			}
 			else
 			{
-				vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
-				//textline_draw(r->c_za, r->c_zb, r, &d.texture, d, r->mc.x);
+				//vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
+				textline_draw(r->c_za, r->c_zb, r, &d.texture, d, r->mc.x);
 			}		
 		}
 
@@ -315,7 +311,6 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 int		draw_screen(t_doom doom)
 {
 	t_sprite_render		sr;
-	static int			a = 0;
 
 	*doom.render.head = (t_rend_sector) {doom.player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
 	sr.begin = doom.render.head;
@@ -344,6 +339,7 @@ int		draw_screen(t_doom doom)
 	sr.paint = doom.map.paint; // i think this shouldnt be sorted
 	sr.c_paint = doom.map.num_paint;
 	sr.i = -1;
+
 	while (++sr.i < sr.c_paint)
 	{
 		//missed with v1 and v2 in map edit probably change below and v1.z v2.z far below
@@ -351,6 +347,8 @@ int		draw_screen(t_doom doom)
 		sr.t1.y = sr.paint[sr.i].v1.y - doom.player.coord.y;
 		sr.t2.x = sr.paint[sr.i].v2.x - doom.player.coord.x; //this 1 could be replaced with sprite width
 		sr.t2.y = sr.paint[sr.i].v2.y - doom.player.coord.y;
+		sr.z1 = sr.paint[sr.i].v1.z - doom.player.coord.z; //top
+		sr.z2 = sr.paint[sr.i].v2.z - doom.player.coord.z; //bot
 
 		rotate_vector_xy(&sr.t1, doom.player.anglesin, doom.player.anglecos);
 		rotate_vector_xy(&sr.t2, doom.player.anglesin, doom.player.anglecos);
@@ -410,8 +408,6 @@ int		draw_screen(t_doom doom)
 					sr.clmp_top = max(sr.clmp_top, 0);
 					sr.clmp_bot = line_point(sr.tmp->zbot1, sr.tmp->zbot2, fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.win_x));
 					sr.clmp_bot = min(sr.clmp_bot, WIN_HEIGHT - 1);
-					sr.z1 = sr.paint[sr.i].v1.z - doom.player.coord.z; //top
-					sr.z2 = sr.paint[sr.i].v2.z - doom.player.coord.z; //bot
 
 					sr.z1a = WIN_HEIGHT / 2 - (int)((sr.z1 + sr.t1.y * doom.player.angle_z) * sr.zscale1);
 					sr.z1b = WIN_HEIGHT / 2 - (int)((sr.z2 + sr.t1.y * doom.player.angle_z) * sr.zscale1);
@@ -463,6 +459,8 @@ int		draw_screen(t_doom doom)
 		sr.t2.y = sr.sprites[sr.i].coord.y;
 		sr.t1.z = sr.sprites[sr.i].coord.z + 2; //2 - sprite height right now
 		sr.t2.z = sr.sprites[sr.i].coord.z;
+		sr.z1 = sr.t1.z - doom.player.coord.z; //top
+		sr.z2 = sr.t2.z - doom.player.coord.z; //bot
 
 		sr.v1 = sr.t1;
 		sr.v2 = sr.t2;
@@ -527,8 +525,6 @@ int		draw_screen(t_doom doom)
 					sr.clmp_top = max(sr.clmp_top, 0);
 					sr.clmp_bot = line_point(sr.tmp->zbot1, sr.tmp->zbot2, fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.win_x));
 					sr.clmp_bot = min(sr.clmp_bot, WIN_HEIGHT - 1);
-					sr.z1 = sr.t1.z - doom.player.coord.z; //top
-					sr.z2 = sr.t2.z - doom.player.coord.z; //bot
 
 					sr.z1a = WIN_HEIGHT / 2 - (int)((sr.z1 + sr.t1.y * doom.player.angle_z) * sr.zscale1);
 					sr.z1b = WIN_HEIGHT / 2 - (int)((sr.z2 + sr.t1.y * doom.player.angle_z) * sr.zscale1);
