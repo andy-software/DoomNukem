@@ -16,7 +16,7 @@ FLAGS =  -Wall -g -O3 #-fsanitize=address #-Wextra -Werror
 
 NAME = doom-nukem
 
-SRC = main.c output.c init.c parser.c game_events.c player_events.c game.c math.c main_render.c plane_functions.c textureload.c skybox.c
+SRC = main.c output.c init.c parser.c game_events.c player_events.c game.c math.c main_render.c plane_functions.c textureload.c skybox.c sprites.c sorting.c
 
 INC = includes/doom.h
 
@@ -84,14 +84,14 @@ clean_map_5:
 	rm -rf map
 
 map_5: clean_map_5
-	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/neighbor_map.c  $(LINKS) -o map
+	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/neighbor_map.c src/plane_functions.c src/math.c  $(LINKS) -o map
 
 
 clean_map_6:
 	rm -rf map
 
 map_6: clean_map_6
-	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/test_neightbor_floor.c  $(LINKS) -o map
+	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/test_neightbor_floor.c src/plane_functions.c src/math.c $(LINKS) -o map
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(FRAMEWORKS) $(OBJ) $(LINKS) -o $(NAME)

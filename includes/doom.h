@@ -40,6 +40,9 @@
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
+
+# define MAX_SPRITES_COUNT	128
+
 # define HFOV (WIN_WIDTH / 2)
 # define VFOV (0.2 * WIN_HEIGHT)
 # define STRAIGHT 1
@@ -78,9 +81,14 @@ typedef struct s_vector		t_vector;
 typedef struct s_render		t_render;
 typedef struct s_plane		t_plane;
 typedef struct s_ui			t_ui;
+typedef struct	s_rend_sector	t_rend_sector;
 
 typedef struct s_texture	t_texture;
 typedef struct s_skybox		t_skybox;
+typedef struct s_sprite		t_sprite;
+typedef struct	s_sprite_render	t_sprite_render;
+typedef struct	s_sprite_list	t_sprite_list;
+typedef	struct	s_painting		t_painting;
 
 struct	s_plane
 {
@@ -133,14 +141,99 @@ struct	s_sector
 	t_plane			floor_plane;
 };
 
+struct	s_sprite
+{
+	int		text_no;
+	t_vector	coord;
+	int		w;
+	int		h;
+	int		sector_no;
+};
+
+struct	s_painting
+{
+	int		text_no;
+	t_vector	v1;
+	t_vector	v2;
+	int		w;
+	int		h;
+	int		sector_no;
+};
+
+struct	s_sprite_list
+{
+	SDL_Surface	**sprites;
+	int			c_sprt;
+	int			w;
+	int			h;
+	struct	s_sprite_list	*next;
+};
+
+struct	s_sprite_render
+{
+	t_rend_sector	*begin;
+	t_rend_sector	*tmp;
+	t_sprite		*sprites; //to sort by y-distance //all sprites thats need to be rendered
+	int				c_paint;
+	t_painting		*paint;
+	t_map			*map;
+	t_vector		t1;
+	t_vector		t2;
+	t_vector		v1;
+	t_vector		v2;
+
+	int				clmp_top;
+	int				clmp_bot;
+
+	int				t1_1_line;
+	int				t1_2_line;
+	int				t2_1_line;
+	int				t2_2_line;
+
+	t_vertex		i1;
+	t_vertex		i2;
+
+	int				i;
+	t_rend_sector	*now;
+	int				c_sprt;
+	int				begin_x;
+	int				end_x;
+	float			y;
+	int				za;
+	int				zb;
+	int				nza;
+	int				nzb;
+	float			x1;
+	float			x2;
+	int				z1;
+	int				z2;
+	int				z1a;
+	int				z1b;
+	int				z2a;
+	int				z2b;
+	int				c_za;
+	int				c_zb;
+	int				win_x;
+	float			zscale1;
+	float			zscale2;
+	float			xscale1;
+	float			xscale2;
+
+	int				win_y;
+};
+
 struct	s_map
 {
 	Uint32			num_vert;
 	t_vertex		*vertex; //delete this doesnt useful
 	Uint32			num_sect;
 	t_sector		*sectors;
+	Uint32			num_sprites;
+	t_sprite		sprites[MAX_SPRITES_COUNT]; //it will be a little bigger then real count of sprites to add things like grenade or projectiles
+												// but still static
+	Uint32			num_paint;
+	t_painting		*paint; //always same count
 };
-
 
 struct	s_sdl
 {
@@ -173,12 +266,16 @@ struct	s_option
 	int				effects_volume_level;
 };
 
-typedef struct	s_rend_sector
+struct	s_rend_sector
 {
 	Uint32			num;
 	int				sx1;
 	int				sx2;
-}				t_rend_sector;
+	int				ztop1;
+	int				ztop2;
+	int				zbot1;
+	int				zbot2;
+};
 
 struct	s_render
 {
@@ -195,6 +292,14 @@ struct	s_render
 	t_vertex		v1;
 	t_vertex		v2;
 
+	t_vertex		mc;
+	t_vertex		i1;
+	t_vertex		i2;
+
+	int				t1_1_line;
+	int				t1_2_line;
+	int				t2_1_line;
+	int				t2_2_line;
 	int				max_sector_rendered;
 	// float			vx1;
 	float			pcos;
@@ -211,8 +316,8 @@ struct	s_render
 	int				zb;
 	int				nza;
 	int				nzb;
-	float				x1;
-	float				x2;
+	float			x1;
+	float			x2;
 	int				z1;
 	int				z2;
 	float			xscale1;
@@ -276,6 +381,8 @@ struct s_texture
 	SDL_Surface		**wall_tex;
 	SDL_Surface		**sky_box;
 	SDL_Surface		*pause;
+	t_sprite_list	*sprites;
+	int				c_sprt;
 	unsigned int	x_text;
 	int				y_text;
 	double			x_point;
@@ -308,6 +415,7 @@ struct	s_doom
 	t_texture		texture;
 	t_skybox		sky;
 	SDL_DisplayMode win_size;
+	t_sprite_render	spriter; //draw all things
 };
 
 //friendly user stuff
@@ -370,5 +478,14 @@ void		floorline_draw(int x, int y, int new_col, int old_col, t_doom d);
 */
 void		draw_skybox(t_render *r, t_doom d);
 void		draw_sky_line(t_render *r, t_doom d);
+
+/*
+**sprites.c && load.c
+*/
+int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p);
+int			sprite_sort(t_sprite *arr_spr, int len);
+void	load_sprites(t_texture *texture, t_sdl *sdl, char *path);
+t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
+int			*copy_static_arr(int *arr, const int len);
 
 #endif
