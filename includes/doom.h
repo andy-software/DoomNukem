@@ -40,6 +40,7 @@
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
+# define COUNT_FPS_NUMBERS 4
 
 # define MAX_SPRITES_COUNT	128
 
@@ -89,6 +90,7 @@ typedef struct s_sprite		t_sprite;
 typedef struct	s_sprite_render	t_sprite_render;
 typedef struct	s_sprite_list	t_sprite_list;
 typedef	struct	s_painting		t_painting;
+typedef	struct	s_font			t_font;
 
 struct	s_plane
 {
@@ -280,18 +282,20 @@ struct	s_rend_sector
 struct	s_render
 {
 	t_rend_sector	now;
-	t_rend_sector	queue[MAX_SECTORS_RENDERED];
+	t_rend_sector	*queue;
 	t_rend_sector	*tail;
 	t_rend_sector	*head;
 	int				*rendered_sectors;
-	int				ztop[WIN_WIDTH];
-	int				zbottom[WIN_WIDTH];
+	int				*ztop;
+	int				*zbottom;
 	t_sector		*sect;
 	t_vertex		t1;
 	t_vertex		t2;
 	t_vertex		v1;
 	t_vertex		v2;
 
+	t_vertex		mc1;
+	t_vertex		mc2;
 	t_vertex		mc;
 	t_vertex		i1;
 	t_vertex		i2;
@@ -374,10 +378,21 @@ struct	s_ui
 {
 	SDL_Rect		*minimap_rect;
 	SDL_Surface		*minimap_surf;
+	Uint32			prevTime;
+	Uint32			currTime;
+	float			fps;
+};
+
+struct	s_font
+{
+	SDL_Rect		text_rect;
+	SDL_Color		text_color;
+	TTF_Font		*text_font;
 };
 
 struct s_texture
 {
+	t_font			*fonts;
 	SDL_Surface		**wall_tex;
 	SDL_Surface		**sky_box;
 	SDL_Surface		*pause;
@@ -405,6 +420,7 @@ struct s_skybox
 
 struct	s_doom
 {
+	t_sprite_render		sr;
 	t_render		render;
 	t_ui			ui;
 	t_sdl			sdl;
@@ -424,6 +440,7 @@ int			error_message(char *message);
 
 //UI
 int			prepare_to_draw_ui(t_doom *doom);
+void		draw_fps(t_doom *d, int fps);
 
 
 //parser & initial

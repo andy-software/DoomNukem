@@ -36,9 +36,10 @@ int		game_mod(char *file_name)
 
 int		main(int argc, char **argv)
 {
-	srand(time(NULL));
+	// srand(time(NULL));
 	if (argc == 3)
 	{
+		//system("leaks doom-nukem");
 		if (ft_strcmp(argv[1], "play") == 0)
 			return (game_mod(argv[2]));
 		else if (ft_strcmp(argv[1], "new") == 0)

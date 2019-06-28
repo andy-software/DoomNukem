@@ -70,7 +70,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].ceil_plane.a = 1;
 	map.sectors[0].ceil_plane.b = 0;
 	map.sectors[0].ceil_plane.c = 1;
-	map.sectors[0].ceil_plane.h = -40;
+	map.sectors[0].ceil_plane.h = -60;
 
 	map.sectors[0].floor_plane.a = -0.6;
 	map.sectors[0].floor_plane.b = 0.6;
@@ -100,11 +100,11 @@ int		main(int argc, char **argv)
 	map.sectors[1].num = 1;
 
 	map.sectors[1].ceil_plane.a = 0;
-	map.sectors[1].ceil_plane.b = 0;
+	map.sectors[1].ceil_plane.b = 1;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
 
-	map.sectors[1].floor_plane.a = 0;
+	map.sectors[1].floor_plane.a = 1;
 	map.sectors[1].floor_plane.b = 0;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;

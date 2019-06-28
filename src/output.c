@@ -25,3 +25,21 @@ int			error_message(char *message)
 	ft_putchar('\n');
 	return (0);
 }
+
+void		draw_fps(t_doom *d, int fps)
+{
+	char	str[4];
+	int			i;
+	SDL_Surface	*message;
+
+	i = -1;
+	while (++i < 3)
+	{
+		str[2 - i] = fps % 10 + 48;
+		fps /= 10;
+	}
+	str[3] = 0;
+	message = TTF_RenderText_Solid(d->texture.fonts[0].text_font, str, d->texture.fonts[0].text_color);
+	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[0].text_rect);
+	SDL_FreeSurface(message);
+}

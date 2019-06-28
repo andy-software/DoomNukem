@@ -93,9 +93,19 @@ void		player_events(t_doom *d)
 			if (ev.key.keysym.sym == SDLK_k)
 			{
 				if (d->game.pause == 0)
+				{
 					d->game.pause = 1;
+					SDL_ShowCursor(SDL_ENABLE);
+					SDL_SetRelativeMouseMode(SDL_DISABLE);
+					SDL_SetWindowGrab(d->sdl.window, 0);
+				}
 				else
+				{
 					d->game.pause = 0;
+					SDL_ShowCursor(SDL_DISABLE);
+					SDL_SetWindowGrab(d->sdl.window, 1);
+					SDL_SetRelativeMouseMode(SDL_ENABLE);
+				}
 			}
 		}
 		else if (ev.type == SDL_QUIT)
