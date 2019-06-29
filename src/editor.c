@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/06/29 17:05:38 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/06/29 17:50:21 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int		ft_create_window(t_doom *doom, char *name)
 		return (error_message((char *)SDL_GetError()));
 	while (++i < NB_BUTTONS) // download buttons
 	{
-		str = ft_strjoin("photo", ft_itoa(i));
+		str = ft_strjoin("./textures/editor/photo", ft_itoa(i));
 		str = ft_strjoin(str, ".png");
 		doom->editor.images[i].image = load_tex(str, &doom->sdl);
 		if (!doom->editor.images[i].image)
@@ -120,7 +120,7 @@ int		ft_create_window(t_doom *doom, char *name)
 	i = 0;
 	while (++i < NB_IMAGES)
 	{
-		str = ft_strjoin("sector", ft_itoa(i));
+		str = ft_strjoin("./textures/editor/sector", ft_itoa(i));
 		str = ft_strjoin(str, ".png");
 		doom->editor.sector[i].image = load_tex(str, &doom->sdl);
 		if (!doom->editor.sector[i].image)
