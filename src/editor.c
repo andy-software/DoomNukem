@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/06/29 17:50:21 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/06/29 18:56:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	i = -1;
 	while (++i < doom->map.num_sect)
 	{
-		write(fd, doom->map.sectors[i].vert, sizeof(t_vertex) * doom->map.sectors[i].num_vert);
 		write(fd, &doom->map.sectors[i].num, sizeof(Uint32));
 		write(fd, &doom->map.sectors[i].num_vert, sizeof(Uint32));
-		//write(fd, map.sectors[i].lines, sizeof(t_line) * map.sectors[i].num_vert); //this one is unusable here
+		write(fd, doom->map.sectors[i].vert, sizeof(t_vertex) * doom->map.sectors[i].num_vert);
+		//write(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert); //this one is unusable here
 		write(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
 		write(fd, &doom->map.sectors[i].floor_z, sizeof(Uint32));
 		write(fd, &doom->map.sectors[i].ceil_z, sizeof(Uint32));
@@ -51,13 +51,17 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	}
 
 	write(fd, &doom->player, sizeof(t_player));
-	return (0);
+	write(fd, &doom->map.num_sprites, sizeof(Uint32));
+	write(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	write(fd, &doom->map.num_paint, sizeof(Uint32));
+	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
+	return (1);
 }
 
 int		ft_map_editor(t_doom *doom, char *name)
 {
 	int		fd;
-
+	
 	if (open(name, O_EXCL) > 0) //if exist
 	{
 		fd = open(name, O_RDONLY);
@@ -67,9 +71,12 @@ int		ft_map_editor(t_doom *doom, char *name)
 		printf("doom->map.num_sect: %d\n", doom->map.num_sect);
 		printf("doom->player.coord.x: %f\n", doom->player.coord.x);
 		printf("doom->player.coord.y: %f\n", doom->player.coord.y);
+		
 		int i = -1;
 		while (++i < doom->map.num_vert)
-			printf("doom->map.vertex[%d].x: %f\n", i, doom->map.vertex[i].x);
+		printf("doom->map.sectors[0].vert[j].y: %f\n", doom->map.sectors[0].vert[i].y);
+			// printf("doom->map.vertex[%d].x: %f\n", i, doom->map.vertex[i].y);
+
 		printf("READ MAP---------------\n\n");
 		// printf("doom->map.sectors[0].num_vert: %d\n", doom->map.sectors[0].num_vert);
 		// printf("doom->map.sectors[0].num: %d\n", doom->map.sectors[0].num);
@@ -89,6 +96,7 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_start_edit(doom);
 	ft_prepare_to_write(doom);
 	ft_write_changes_to_file(doom, fd);
+	// write_changes_to_file(doom->map, fd, t_player mplayer)
 	close(fd);
 	return (0);
 }
@@ -248,11 +256,50 @@ int		ft_example(t_doom *doom)
 
 void	ft_prepare_to_write(t_doom *doom)
 {
+	int		i;
+	int		j;
+
+	i = -1;
 	doom->map.num_vert = NUM_VER;
 	doom->map.num_sect = NUM_SECT;
-	// doom->map.sectors[0].num_vert = NUM_VER;
-	// doom->map.sectors[0].num = 0;
+	doom->map.sectors[0].num_vert = NUM_VER; // change it
+	doom->map.sectors[0].vert = (t_vertex *)malloc(sizeof(t_vertex) * 100);
+	while (++i < doom->map.num_sect)
+	{
+		j = -1;
+		while (++j < doom->map.num_vert)
+		{
+			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].y;
+			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].x;
+		}
+	}
+	doom->map.sectors[0].ceil_plane.a = 1;
+	doom->map.sectors[0].ceil_plane.b = 0;
+	doom->map.sectors[0].ceil_plane.c = 1;
+	doom->map.sectors[0].ceil_plane.h = -60;
 
+	doom->map.sectors[0].floor_plane.a = -0.6;
+	doom->map.sectors[0].floor_plane.b = 0.6;
+	doom->map.sectors[0].floor_plane.c = 1;
+	doom->map.sectors[0].floor_plane.h = 0;
+
+	doom->map.sectors[0].floor_z = 0;
+	doom->map.sectors[0].ceil_z = 40;
+	
+	doom->map.sectors[0].neighbors = (char*)malloc(sizeof(char) * doom->map.sectors->num_vert);
+	for (int i = 0; i < doom->map.sectors->num_vert; i++)
+		doom->map.sectors[0].neighbors[i] = -1;
+	// doom->player.coord.x = 0;
+	// doom->player.coord.y = 0;
+	doom->player.coord.z = 10;
+	doom->player.sector = 0;
+	doom->player.angle = 0;
+	doom->player.angle_z = 0;
+	doom->player.anglecos = cosf(doom->player.angle);
+	doom->player.anglesin = sinf(doom->player.angle);
+
+	doom->map.num_sprites = 0;
+	doom->map.num_paint = 0;
 }
 
 void	ft_prepare_editor(t_doom *doom)
