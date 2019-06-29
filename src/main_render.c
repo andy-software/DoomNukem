@@ -110,45 +110,44 @@ void	render_sector(t_render *r, t_doom d)
 		r->end_x = min(r->x2, r->now.sx2);
 		r->win_x = r->begin_x - 1;
 
-		// r->mc1 = find_x_from_screen_coords(r->begin_x, r->t1, r->t2, r);
-		// r->mc2 = find_x_from_screen_coords(r->end_x, r->t1, r->t2, r);
+		r->mc1 = r->t1;
+		rotate_vertex_xy(&r->mc1, r->psin, -r->pcos); //rotate and translate back
+		r->mc2 = r->t2;
+		rotate_vertex_xy(&r->mc2, r->psin, -r->pcos);
+		r->mc1.x += r->p_x;
+		r->mc2.x += r->p_x;
+		r->mc1.y += r->p_y;
+		r->mc2.y += r->p_y;
+
 		if (r->neighbor >= 0)
 		{
 			r->ncplane = d.map.sectors[(int)r->neighbor].ceil_plane;
 			r->nfplane = d.map.sectors[(int)r->neighbor].floor_plane;
 
-			// r->nzceil = get_z(r->ncplane, r->mc1.x, r->mc1.y) - d.player.coord.z;
-			// r->nzfloor = get_z(r->nfplane, r->mc1.x, r->mc1.y) - d.player.coord.z;
-			// r->nz1a = WIN_HEIGHT / 2 - (int)((r->nzceil + r->t1.y * d.player.angle_z) * r->zscale1); //seems like right but have some issues
-			// r->nz1b = WIN_HEIGHT / 2 - (int)((r->nzfloor + r->t1.y * d.player.angle_z) * r->zscale1);
-
-			// r->nzceil = get_z(r->ncplane, r->mc2.x, r->mc2.y) - d.player.coord.z;
-			// r->nzfloor = get_z(r->nfplane, r->mc2.x, r->mc2.y) - d.player.coord.z;
-			// r->nz2a = WIN_HEIGHT / 2 - (int)((r->nzceil + r->t2.y * d.player.angle_z) * r->zscale2);
-			// r->nz2b = WIN_HEIGHT / 2 - (int)((r->nzfloor + r->t2.y * d.player.angle_z) * r->zscale2);
+			r->nzceil1 = get_z(r->ncplane, r->mc1.x, r->mc1.y) - r->p_z;
+			r->nzfloor1 = get_z(r->nfplane, r->mc1.x, r->mc1.y) - r->p_z;
+			r->nzceil2 = get_z(r->ncplane, r->mc2.x, r->mc2.y) - r->p_z;
+			r->nzfloor2 = get_z(r->nfplane, r->mc2.x, r->mc2.y) - r->p_z;
+			r->nz1a = WIN_HEIGHT / 2 - (int)((r->nzceil1 + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->nz1b = WIN_HEIGHT / 2 - (int)((r->nzfloor1 + r->t1.y * d.player.angle_z) * r->zscale1);
+			r->nz2a = WIN_HEIGHT / 2 - (int)((r->nzceil2 + r->t2.y * d.player.angle_z) * r->zscale2);
+			r->nz2b = WIN_HEIGHT / 2 - (int)((r->nzfloor2 + r->t2.y * d.player.angle_z) * r->zscale2);
 		}
 		
-		// r->zceil  = get_z(r->cplane, r->mc1.x, r->mc1.y) - r->p_z;
-		// r->zfloor = get_z(r->fplane, r->mc1.x, r->mc1.y) - r->p_z;
-		// r->z1a  = WIN_HEIGHT / 2 - (int)((r->zceil + r->t1.y * d.player.angle_z) * r->zscale1);
-		// r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor + r->t1.y * d.player.angle_z) * r->zscale1);
-		
-		// r->zceil  = get_z(r->cplane, r->mc2.x, r->mc2.y) - r->p_z;
-		// r->zfloor = get_z(r->fplane, r->mc2.x, r->mc2.y) - r->p_z;
-		// r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil + r->t2.y * d.player.angle_z) * r->zscale2);
-		// r->z2b = WIN_HEIGHT / 2 - (int)((r->zfloor + r->t2.y  * d.player.angle_z) * r->zscale2);
+		r->zceil1  = get_z(r->cplane, r->mc1.x, r->mc1.y) - r->p_z;
+		r->zfloor1 = get_z(r->fplane, r->mc1.x, r->mc1.y) - r->p_z;
+		r->zceil2  = get_z(r->cplane, r->mc2.x, r->mc2.y) - r->p_z;
+		r->zfloor2 = get_z(r->fplane, r->mc2.x, r->mc2.y) - r->p_z;
 
+		r->z1a = WIN_HEIGHT / 2 - (int)((r->zceil1 + r->t1.y * d.player.angle_z) * r->zscale1);
+		r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor1 + r->t1.y * d.player.angle_z) * r->zscale1);
+		r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil2 + r->t2.y * d.player.angle_z) * r->zscale2);
+		r->z2b = WIN_HEIGHT / 2 - (int)((r->zfloor2 + r->t2.y  * d.player.angle_z) * r->zscale2);
+		// float	kt = (r->t2.y - r->t1.y) / (r->x2 - r->x1);
+		// float	kza = (r->z2a - r->z1a) / (r->x2 - r->x1);
+		// float	kzb = (r->z2b - r->z1b) / (r->x2 - r->x1);
 		while (++r->win_x <= r->end_x) // in wall 
 		{
-			r->mc = find_x_from_screen_coords(r->win_x, r->t1, r->t2, r); //could exist some little trouble with parallel case rays
-			r->zceil  = get_z(r->cplane, r->mc.x, r->mc.y) - r->p_z;
-			r->zfloor = get_z(r->fplane, r->mc.x, r->mc.y) - r->p_z;
-
-			r->z1a  = WIN_HEIGHT / 2 - (int)((r->zceil + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil + r->t2.y * d.player.angle_z) * r->zscale2);
-			r->z2b = WIN_HEIGHT / 2 - (int)((r->zfloor + r->t2.y  * d.player.angle_z) * r->zscale2);
-
 			r->y = (r->win_x - r->x1) * (r->t2.y - r->t1.y) / (r->x2 - r->x1) + r->t1.y;
 			r->za = (r->win_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
 			r->zb = (r->win_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
@@ -160,13 +159,6 @@ void	render_sector(t_render *r, t_doom d)
 
 			if(r->neighbor >= 0)
 			{
-				r->nzceil = get_z(r->ncplane, r->mc.x, r->mc.y) - d.player.coord.z;
-				r->nzfloor = get_z(r->nfplane, r->mc.x, r->mc.y) - d.player.coord.z;
-				r->nz1a = WIN_HEIGHT / 2 - (int)((r->nzceil + r->t1.y * d.player.angle_z) * r->zscale1);
-				r->nz1b = WIN_HEIGHT / 2 - (int)((r->nzfloor + r->t1.y * d.player.angle_z) * r->zscale1);
-				r->nz2a = WIN_HEIGHT / 2 - (int)((r->nzceil + r->t2.y * d.player.angle_z) * r->zscale2);
-				r->nz2b = WIN_HEIGHT / 2 - (int)((r->nzfloor + r->t2.y * d.player.angle_z) * r->zscale2);
-
 				r->nza = (r->win_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
 				r->nza = clamp(r->nza, r->ztop[r->win_x], r->zbottom[r->win_x]);
 				r->nzb = (r->win_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
@@ -188,19 +180,6 @@ void	render_sector(t_render *r, t_doom d)
 		
 		if (r->neighbor >= 0 && r->end_x >= r->begin_x && (r->head + MAX_SECTORS_RENDERED + 1 - r->tail) % MAX_SECTORS_RENDERED)
 		{
-
-			r->mc1 = find_x_from_screen_coords(r->begin_x, r->t1, r->t2, r);
-			r->mc2 = find_x_from_screen_coords(r->end_x, r->t1, r->t2, r);
-			r->z1a = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, r->mc1.x, r->mc1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z1b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, r->mc1.x, r->mc1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->z2a  = WIN_HEIGHT / 2 - (int)((get_z(r->cplane, r->mc2.x, r->mc2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-			r->z2b = WIN_HEIGHT / 2 - (int)((get_z(r->fplane, r->mc2.x, r->mc2.y) - r->p_z + r->t2.y  * d.player.angle_z) * r->zscale2);
-
-			r->nz1a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, r->mc1.x, r->mc1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->nz1b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, r->mc1.x, r->mc1.y) - r->p_z + r->t1.y * d.player.angle_z) * r->zscale1);
-			r->nz2a = WIN_HEIGHT / 2 - (int)((get_z(r->ncplane, r->mc2.x, r->mc2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-			r->nz2b = WIN_HEIGHT / 2 - (int)((get_z(r->nfplane, r->mc2.x, r->mc2.y) - r->p_z + r->t2.y * d.player.angle_z) * r->zscale2);
-
 			int za1 = (r->begin_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
 			int zb1 = (r->begin_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
 			int nza1 = (r->begin_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
@@ -213,16 +192,6 @@ void	render_sector(t_render *r, t_doom d)
 
 			*r->head = (t_rend_sector) {r->neighbor, r->begin_x, r->end_x, \
 				max(za1, nza1), max(za2, nza2), min(zb1, nzb1), min(zb2, nzb2)};
-			// r->head->num = ;
-			// r->head->sx1 = ;
-			// r->head->sx2 = ;
-			// r->head->ztop1 = ;
-			// r->head->ztop2 = ;
-			// r->head->zbot1 = ;
-			// r->head->zbot2 = ;
-			//printf("%i %i %i %i\t compare to\t %i %i %i %i\n", max(za1, nza1), max(za2, nza2), min(zb1, nzb1), min(zb2, nzb2), r->ztop[r->begin_x], r->ztop[r->end_x], r->zbottom[r->begin_x], r->zbottom[r->end_x]);
-			// printf("%i\n", r->nz2b);
-			// fflush(stdout);
 			if(++r->head == (r->queue + MAX_SECTORS_RENDERED))
 				r->head = r->queue;
 		}
@@ -340,39 +309,8 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 	}
 }
 
-int		draw_screen(t_doom d)
+void	render_painting(t_sprite_render sr, t_doom d)
 {
-	d.render.head->num = d.player.sector;
-	d.render.head->sx1 = 0;
-	d.render.head->sx2 = WIN_WIDTH - 1;
-	d.render.head->ztop1 = 0;
-	d.render.head->zbot2 = 0;
-	d.render.head->zbot2 = WIN_HEIGHT - 1;
-	d.render.head->zbot1 = WIN_HEIGHT - 1;
-	
-	d.sr.begin = d.render.head;
-	//remember the first sector rendered
-	//render all wall
-	//rotate and translate all the sprites
-	//after rendering wall go from back sector to start sector and draw sprites that fits in sectors rend_sectors
-		//sort the sprites by y-coord in each sector
-		//display from last to first sprite in each sector
-	if (++d.render.head == d.render.queue + MAX_SECTORS_RENDERED)
-	 	d.render.head = d.render.queue;
-	while (d.render.head != d.render.tail)
-	{
-		d.render.now = *d.render.tail;
-		if (++d.render.tail == (d.render.queue + MAX_SECTORS_RENDERED))
-			d.render.tail = d.render.queue;
-		if (d.render.rendered_sectors[d.render.now.num] & (MAX_SECTORS_RENDERED + 1))
-			continue ;
-		render_sector(&d.render, d);
-	}
-	// render_painting(sr, doom);
-	// render_sprites(sr, );
-
-
-	//drawing painting before sprites. A little difference between sprites and painting
 	d.sr.paint = d.map.paint; // i think this shouldnt be sorted
 	d.sr.c_paint = d.map.num_paint;
 	d.sr.i = -1;
@@ -429,14 +367,11 @@ int		draw_screen(t_doom d)
 				{
 					if (++d.sr.tmp == (d.render.queue + MAX_SECTORS_RENDERED))
 						d.sr.tmp = d.render.queue;
-					
 					continue ;
 				}
 				
 				d.sr.begin_x = max(d.sr.x1, d.sr.tmp->sx1);
 				d.sr.end_x = min(d.sr.x2, d.sr.tmp->sx2);
-				// vertical_line(d.sr.begin_x, 0, WIN_HEIGHT - 1, &d.render, 0);
-				// vertical_line(d.sr.end_x, 0, WIN_HEIGHT - 1, &d.render, 0);
 				d.sr.win_x = d.sr.begin_x - 1;
 				
 				d.sr.z1a = WIN_HEIGHT / 2 - (int)((d.sr.z1 + d.sr.t1.y * d.player.angle_z) * d.sr.zscale1);
@@ -476,9 +411,10 @@ int		draw_screen(t_doom d)
 				d.sr.tmp = d.render.queue;
 		}
 	}
-	//till this
+}
 
-	
+void	render_sprites(t_sprite_render sr, t_doom d)
+{
 	d.sr.c_sprt = d.map.num_sprites;
 	d.sr.i = -1;
 	while (++d.sr.i < d.sr.c_sprt)
@@ -575,5 +511,25 @@ int		draw_screen(t_doom d)
 				d.sr.tmp = d.render.queue;
 		}
 	}
+}
+
+int		draw_screen(t_doom d)
+{
+	*d.render.head = (t_rend_sector){d.player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
+	
+	d.sr.begin = d.render.head;
+	if (++d.render.head == d.render.queue + MAX_SECTORS_RENDERED)
+	 	d.render.head = d.render.queue;
+	while (d.render.head != d.render.tail)
+	{
+		d.render.now = *d.render.tail;
+		if (++d.render.tail == (d.render.queue + MAX_SECTORS_RENDERED))
+			d.render.tail = d.render.queue;
+		if (d.render.rendered_sectors[d.render.now.num] & (MAX_SECTORS_RENDERED + 1))
+			continue ;
+		render_sector(&d.render, d);
+	}
+	render_painting(d.sr, d);
+	render_sprites(d.sr, d);
 	return (0);
 }

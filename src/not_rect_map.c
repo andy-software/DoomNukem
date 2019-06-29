@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_neightbors_ceil.c                             :+:      :+:    :+:   */
+/*   not_rect_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/27 15:39:11 by apavlov           #+#    #+#             */
-/*   Updated: 2019/04/27 15:39:14 by apavlov          ###   ########.fr       */
+/*   Created: 2019/06/29 14:13:17 by apavlov           #+#    #+#             */
+/*   Updated: 2019/06/29 14:13:17 by apavlov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int		main(int argc, char **argv)
 	t_map	map;
 	t_player	player;
 
-	map.num_vert = 6;
+	map.num_vert = 4;
 	map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * map.num_vert);
 
-	map.num_sect = 2;
+	map.num_sect = 1;
 	map.sectors = (t_sector*)malloc(sizeof(t_sector) * map.num_sect);
 	map.sectors[0].num_vert = 4;
 	map.sectors[0].num = 0;
@@ -83,96 +83,29 @@ int		main(int argc, char **argv)
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
 
-	map.sectors[0].vert[0].x = 0;
-	map.sectors[0].vert[0].y = 0;
+	map.sectors[0].vert[0].x = -5;
+	map.sectors[0].vert[0].y = 10;
 	map.sectors[0].vert[3].x = 10;
-	map.sectors[0].vert[3].y = 0;
-	map.sectors[0].vert[2].x = 10;
-	map.sectors[0].vert[2].y = -10;
-	map.sectors[0].vert[1].x = 0;
+	map.sectors[0].vert[3].y = 15;
+	map.sectors[0].vert[2].x = 5;
+	map.sectors[0].vert[2].y = -5;
+	map.sectors[0].vert[1].x = -10;
 	map.sectors[0].vert[1].y = -10;
 
 	for (int i = 0; i < map.sectors->num_vert; i++)
 		map.sectors[0].neighbors[i] = -1;
-	map.sectors[0].neighbors[0] = 1;
 
-	map.sectors[1].num_vert = 4;
-	map.sectors[1].num = 1;
-
-	map.sectors[1].ceil_plane.a = 0;
-	map.sectors[1].ceil_plane.b = 1;
-	map.sectors[1].ceil_plane.c = 1;
-	map.sectors[1].ceil_plane.h = -40;
-
-	map.sectors[1].floor_plane.a = 1;
-	map.sectors[1].floor_plane.b = 0;
-	map.sectors[1].floor_plane.c = 1;
-	map.sectors[1].floor_plane.h = -20;
-
-	map.sectors[1].floor_z = 20;
-	map.sectors[1].ceil_z = 40;
-
-	map.sectors[1].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
-	map.sectors[1].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
-
-	map.sectors[1].vert[0].x = 0;
-	map.sectors[1].vert[0].y = 0;
-	map.sectors[1].vert[3].x = 0;
-	map.sectors[1].vert[3].y = -10;
-	map.sectors[1].vert[2].x = -10;
-	map.sectors[1].vert[2].y = -10;
-	map.sectors[1].vert[1].x = -10;
-	map.sectors[1].vert[1].y = 0;
-
-	for (int i = 0; i < map.sectors[1].num_vert; i++)
-		map.sectors[1].neighbors[i] = -1;
-	map.sectors[1].neighbors[3] = 0;
-
-	player.coord.x = -5;
-	player.coord.y = -5;
-	player.coord.z = 0;
-	player.sector = 1;
+	player.coord.x = 0;
+	player.coord.y = 0;
+	player.coord.z = 10;
+	player.sector = 0;
 	player.angle = 0;
 	player.angle_z = 0;
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-
-	for (int i = 0; i < 1; i++)
-	{
-		map.sprites[i].text_no = i % 12;
-		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, -5+0.3*i, -5+0.3*i)};
-		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
-	}
-
-	for (int i = 1; i < 2; i++)
-	{
-		map.sprites[i].text_no = i % 12;
-		map.sprites[i].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, 5+0.3*i, -5+0.3*i)};
-		map.sprites[i].sector_no = -10+0.3*i < 0 ? 0 : -2;
-	}
-
-	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 2);
-	map.num_paint = 2;
-	map.paint[0].sector_no = 1;
-	map.paint[0].v1.x = -6;
-	map.paint[0].v1.y = -10;
-	map.paint[0].v1.z = 35;
-	map.paint[0].v2.x = -3;
-	map.paint[0].v2.y = -10;
-	map.paint[0].v2.z = 25;
-	map.paint[0].text_no = 0;
-
-	map.paint[1].sector_no = 0;
-	map.paint[1].v1.x = 0;
-	map.paint[1].v1.y = -3.5;
-	map.paint[1].v1.z = 30;
-	map.paint[1].v2.x = 0;
-	map.paint[1].v2.y = -5;
-	map.paint[1].v2.z = 20;
-	map.paint[1].text_no = 0;
-
-	map.num_sprites = 2;
+	map.num_sprites = 0;
+	map.num_paint = 0;
 	write_to_file(map, argv[1], player);
 	return (0);
 }

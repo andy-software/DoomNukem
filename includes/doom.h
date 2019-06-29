@@ -328,10 +328,14 @@ struct	s_render
 	float			xscale2;
 	float			zscale1;
 	float			zscale2;
-	float			zceil;
-	float			zfloor;
-	float			nzceil;
-	float			nzfloor;
+	float			zceil1;
+	float			zfloor1;
+	float			nzceil1;
+	float			nzfloor1;
+	float			zceil2;
+	float			zfloor2;
+	float			nzceil2;
+	float			nzfloor2;
 	int				z1a;
 	int				z1b;
 	int				z2a;

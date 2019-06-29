@@ -56,9 +56,10 @@ int			game_loop(t_doom doom)
 		}
 		else
 		{
-			//pause the game
-			//SDL_UpdateWindowSurface(doom.sdl.window);
+			//game is paused
 		}
+
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6); // lock fps to 60
 		doom.ui.currTime = SDL_GetTicks();
 		doom.ui.fps = (doom.ui.currTime - doom.ui.prevTime) / 1000.0;
 		draw_fps(&doom, (int)(1.0 / doom.ui.fps));

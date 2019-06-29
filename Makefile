@@ -93,6 +93,13 @@ clean_map_6:
 map_6: clean_map_6
 	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/test_neightbor_floor.c src/plane_functions.c src/math.c $(LINKS) -o map
 
+
+clean_map_7:
+	rm -rf map
+
+map_7: clean_map_7
+	$(CC) $(FLAGS) $(INCLUDES) $(FRAMEWORKS) src/not_rect_map.c src/plane_functions.c src/math.c $(LINKS) -o map	
+
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(FRAMEWORKS) $(OBJ) $(LINKS) -o $(NAME)
 
