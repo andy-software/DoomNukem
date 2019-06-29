@@ -605,7 +605,26 @@ t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int			*copy_static_arr(int *arr, const int len);
 
 /* EDITOR */
-
+int			ft_map_editor(t_doom *doom, char *name);
+int			ft_create_window(t_doom *doom, char *name);
+int			ft_read_map_edit(t_doom *doom, int fd);
+int			ft_start_edit(t_doom *doom);
+int			ft_write_changes_to_file(t_doom *doom, int fd);
+void		ft_check_key(t_doom *doom, SDL_Event *event);
+void		ft_render_editor(t_doom *doom);
+void		ft_render_interface(t_doom *doom);
+void		ft_draw_pixel(t_doom *doom, int x, int y, int color);
+void		ft_render_other(t_doom *doom);
+void		ft_mouse_move_edit(t_doom *doom, SDL_Event *event);
+void		ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
+void		ft_render_previous(t_doom *doom);
+void		ft_draw_axis(t_doom *doom);
+void		ft_prepare_editor(t_doom *doom);
+void		ft_prepare_to_write(t_doom *doom);
+int			ft_specify_coor(int nbr);
+void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
+// brezen in editor
+void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
 
 #endif
