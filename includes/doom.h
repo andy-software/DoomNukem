@@ -354,6 +354,8 @@ struct	s_render
 	//added after merge
 	int				c_za;
  	int				c_zb;
+	int				c_nza;
+	int				c_nzb;
 	int				win_x; // new == x;
  	int				win_y; // new == y;
 	int				wall_num; // new uses to give 
@@ -410,6 +412,12 @@ struct s_texture
 	int				wall_end;
 	int				x_split;
 	int				y_split;
+	float			x1;
+	float			x2;
+	float			percent;
+	float			xscale1;
+	float			xscale2;
+	float 			dy_point;
 };
 
 struct s_skybox
@@ -489,7 +497,7 @@ int			color_mix(Uint32 start, Uint32 end, float per);
 /*
 **main_render.c
 */
-void		textline_draw(int y1, int y2, t_render *r, t_texture *t, t_doom d,float lp_x);
+void		textline_draw(int y1, int y2, t_render *r, t_texture *t);
 void		wall_side(t_render *r, t_doom d);
 void		prepare_to_rendering(t_render *r, t_doom d);
 void		display_core(SDL_Renderer *render, SDL_Texture *texture, SDL_Surface *surface);

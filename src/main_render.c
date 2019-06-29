@@ -143,14 +143,16 @@ void	render_sector(t_render *r, t_doom d)
 		r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor1 + r->t1.y * d.player.angle_z) * r->zscale1);
 		r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil2 + r->t2.y * d.player.angle_z) * r->zscale2);
 		r->z2b = WIN_HEIGHT / 2 - (int)((r->zfloor2 + r->t2.y  * d.player.angle_z) * r->zscale2);
-		// float	kt = (r->t2.y - r->t1.y) / (r->x2 - r->x1);
-		// float	kza = (r->z2a - r->z1a) / (r->x2 - r->x1);
-		// float	kzb = (r->z2b - r->z1b) / (r->x2 - r->x1);
+		float	kt = (r->t2.y - r->t1.y) / (r->x2 - r->x1);
+		float	kza = (r->z2a - r->z1a) / (r->x2 - r->x1);
+		float	kzb = (r->z2b - r->z1b) / (r->x2 - r->x1);
+		float	nkza = (r->nz2a - r->nz1a) / (r->x2 - r->x1);
+		float	nkzb = (r->nz2b - r->nz1b) / (r->x2 - r->x1);
 		while (++r->win_x <= r->end_x) // in wall 
 		{
-			r->y = (r->win_x - r->x1) * (r->t2.y - r->t1.y) / (r->x2 - r->x1) + r->t1.y;
-			r->za = (r->win_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
-			r->zb = (r->win_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
+			r->y = (r->win_x - r->x1) * kt + r->t1.y;
+			r->za = (r->win_x - r->x1) * kza + r->z1a;
+			r->zb = (r->win_x - r->x1) * kzb + r->z1b;
 			r->c_za = clamp(r->za, r->ztop[r->win_x], r->zbottom[r->win_x]);
 			r->c_zb = clamp(r->zb, r->ztop[r->win_x], r->zbottom[r->win_x]);
 			vertical_line(r->win_x, r->c_zb + 1, r->zbottom[r->win_x], r, 0xFFFF00); //floor
@@ -159,36 +161,36 @@ void	render_sector(t_render *r, t_doom d)
 
 			if(r->neighbor >= 0)
 			{
-				r->nza = (r->win_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
-				r->nza = clamp(r->nza, r->ztop[r->win_x], r->zbottom[r->win_x]);
-				r->nzb = (r->win_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
-				r->nzb = clamp(r->nzb, r->ztop[r->win_x], r->zbottom[r->win_x]);
+				r->nza = (r->win_x - r->x1) * nkza + r->nz1a;
+				r->c_nza = clamp(r->nza, r->ztop[r->win_x], r->zbottom[r->win_x]);
+				r->nzb = (r->win_x - r->x1) * nkzb + r->nz1b;
+				r->c_nzb = clamp(r->nzb, r->ztop[r->win_x], r->zbottom[r->win_x]);
 
 				//vertical_line(r->win_x, r->c_za, r->nza - 1, r, 0x0F0F0F); // down to sector
-				textline_draw(r->za, r->nza - 1, r, &d.texture, d, r->mc.x);
-				r->ztop[r->win_x] = clamp(max(r->c_za, r->nza), r->ztop[r->win_x], WIN_HEIGHT - 1);
+				textline_draw(r->za, r->nza - 1, r, &d.texture);
+				r->ztop[r->win_x] = clamp(max(r->c_za, r->c_nza), r->ztop[r->win_x], WIN_HEIGHT - 1);
 				//vertical_line(r->win_x, r->nzb + 1, r->c_zb, r, 0xFF0000); // up to sector
-				textline_draw(r->nzb + 1, r->zb, r, &d.texture, d, r->mc.x); // Yo u dont need doom.texture if u have doom already
-				r->zbottom[r->win_x] = clamp(min(r->c_zb, r->nzb), 0, r->zbottom[r->win_x]);
+				textline_draw(r->nzb + 1, r->zb, r, &d.texture); // Yo u dont need doom.texture if u have doom already
+				r->zbottom[r->win_x] = clamp(min(r->c_zb, r->c_nzb), 0, r->zbottom[r->win_x]);
 			}
 			else
 			{
 				//vertical_line(r->win_x, r->c_za, r->c_zb, r, 0xAAAAAA);
-				textline_draw(r->c_za, r->c_zb, r, &d.texture, d, r->mc.x);
+				textline_draw(r->c_za, r->c_zb, r, &d.texture);
 			}		
 		}
 		
 		if (r->neighbor >= 0 && r->end_x >= r->begin_x && (r->head + MAX_SECTORS_RENDERED + 1 - r->tail) % MAX_SECTORS_RENDERED)
 		{
-			int za1 = (r->begin_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
-			int zb1 = (r->begin_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
-			int nza1 = (r->begin_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
-			int nzb1 = (r->begin_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b;
+			int za1 = (r->begin_x - r->x1) * kza + r->z1a;
+			int zb1 = (r->begin_x - r->x1) * kzb + r->z1b;
+			int nza1 = (r->begin_x - r->x1) * nkza + r->nz1a;
+			int nzb1 = (r->begin_x - r->x1) * nkzb + r->nz1b;
 
-			int za2 = (r->end_x - r->x1) * (r->z2a - r->z1a) / (r->x2 - r->x1) + r->z1a;
-			int	zb2 = (r->end_x - r->x1) * (r->z2b - r->z1b) / (r->x2 - r->x1) + r->z1b;
-			int	nza2 = (r->end_x - r->x1) * (r->nz2a - r->nz1a) / (r->x2 - r->x1) + r->nz1a;
-			int	nzb2 =  (r->end_x - r->x1) * (r->nz2b - r->nz1b) / (r->x2 - r->x1) + r->nz1b; //pls recode this in something better
+			int za2 = (r->end_x - r->x1) * kza + r->z1a;
+			int	zb2 = (r->end_x - r->x1) * kzb + r->z1b;
+			int	nza2 = (r->end_x - r->x1) * nkza + r->nz1a;
+			int	nzb2 =  (r->end_x - r->x1) * nkzb + r->nz1b; //pls recode this in something better
 
 			*r->head = (t_rend_sector) {r->neighbor, r->begin_x, r->end_x, \
 				max(za1, nza1), max(za2, nza2), min(zb1, nzb1), min(zb2, nzb2)};
@@ -200,32 +202,27 @@ void	render_sector(t_render *r, t_doom d)
 	//printf("Rendered %i now in %i\n", r->now.num, d.player.sector);
 }
 
-void	textline_draw(int y1, int y2, t_render *r, t_texture *t, t_doom d, float lp_x)
+void	textline_draw(int y1, int y2, t_render *r, t_texture *t)
 {
-	// t->x_point = UnFix(Fix((double)((r->win_x - r->x1)) / (r->x2 - r->x1)) * t->x_split);
-	// t->x_text = (int)UnFix(Fix(t->x_point - (int)t->x_point) * WALL_TEXT_W);
-	float xscale1 = HFOV / r->v1.y;
-	float xscale2 = HFOV / r->v2.y;
+	t->xscale1 = HFOV / r->v1.y;
+	t->xscale2 = HFOV / r->v2.y;
+	t->x1 = WIN_WIDTH / 2 - (r->v1.x * t->xscale1);
+	t->x2 = WIN_WIDTH / 2 - (r->v2.x * t->xscale2);
 
-	float x1 = WIN_WIDTH / 2 - (r->v1.x * xscale1);
-	float x2 = WIN_WIDTH / 2 - (r->v2.x * xscale2);
-	float	percent = (r->win_x - x1) / (x2 - x1);
-	int		x_text = (WALL_TEXT_W * percent / r->v2.y) / ((1 - percent) / r->v1.y + percent / r->v2.y);
-	t->x_text = (( (WALL_TEXT_W) * ((r->win_x - r->x1) * r->t1.y)) / ((r->x2 - r->win_x) * r->t2.y + (r->win_x - r->x1) * r->t1.y));
+	t->percent = (r->win_x - t->x1) / (t->x2 - t->x1);
+	t->x_text = (t->wall_tex[3]->w * t->percent) / ((1 - t->percent) * r->v2.y / r->v1.y + t->percent); // x_tex = a * w / ((1 - a) * z2 / z1 + a)
 	r->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = min(y2, WIN_HEIGHT - 1);
-	r->fog_perc = UnFix(Fix(r->y) / r->fog_distance);
+	t->y_point = (r->zb == r->za) ? 0 : (double)(r->win_y - r->za) / (r->zb - r->za);
+	t->dy_point = (r->zb == r->za) ? 0 : 1.0 / (r->zb - r->za); // derivation of y_point
 	while(r->win_y < t->wall_end)
 	{
-		t->y_point = UnFix(Fix((double)(r->win_y - r->za) / (r->zb - r->za)) * t->y_split / 2);
-		t->y_text = (int)UnFix(Fix(t->y_point - (int)t->y_point) * WALL_TEXT_H);
-		// t->y_text = (0 * ((r->zb - r->win_y)) + ((WALL_TEXT_H) *
-		// ((r->win_y - r->za)))) / ((r->zb - r->win_y) + (r->win_y - r->za));
-		t->color = pix_from_text(t->wall_tex[3], x_text, t->y_text);
+		t->y_text = t->y_point * t->wall_tex[3]->h;
+		t->color = pix_from_text(t->wall_tex[3], t->x_text, t->y_text);
 		if (t->color != 0)
-			r->pix[r->win_y * WIN_WIDTH + r->win_x] = color_mix(t->color, \
-				0x000000, (r->fog_perc > 1 ? 1 : r->fog_perc));
+			r->pix[r->win_y * WIN_WIDTH + r->win_x] = t->color;
 		r->win_y++;
+		t->y_point += t->dy_point;
 	}
 }
 
@@ -285,27 +282,28 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 	float	percent;
 	float	xscale1;
 	float	xscale2;
+	float	dy_point;
 
 	xscale1 = HFOV / sr->v1.y;
 	xscale2 = HFOV / sr->v2.y;
-
 	x1 = WIN_WIDTH / 2 - (sr->v1.x * xscale1);
 	x2 = WIN_WIDTH / 2 - (sr->v2.x * xscale2);
+
 	percent = (sr->win_x - x1) / (x2 - x1);
-	x_text = (sprtext->w * percent / sr->v2.y) / ((1 - percent) / sr->v1.y + percent / sr->v2.y);
+	x_text = (sprtext->w * percent) / ((1 - percent) * sr->v2.y / sr->v1.y + percent); // a * w / ((1 - a) * z2 / z1 + a)
 
 	sr->win_y = clamp(sr->za, sr->clmp_top, sr->clmp_bot);
 	wall_end = clamp(sr->zb, sr->clmp_top, sr->clmp_bot);
+	y_point = (sr->zb == sr->za) ? 0 : (double)(sr->win_y - sr->za) / (sr->zb - sr->za);
+	dy_point = (sr->zb == sr->za) ? (0) : (1.0 / (sr->zb - sr->za)); // derivation of y_point
 	while(sr->win_y < wall_end)
 	{
-		y_point = (sr->zb == sr->za) ? 0 : (double)(sr->win_y - sr->za) / (sr->zb - sr->za);
 		y_text = y_point * sprtext->h;
 		color = pix_from_text(sprtext, x_text, y_text);
 		if (color != 0)
 			render->pix[sr->win_y * WIN_WIDTH + sr->win_x] = color;
-		// else
-		// 	render->pix[sr->win_y * WIN_WIDTH + sr->win_x] = 0x00FF00;
 		sr->win_y++;
+		y_point += dy_point;
 	}
 }
 
@@ -389,22 +387,9 @@ void	render_painting(t_sprite_render sr, t_doom d)
 					d.sr.y = (d.sr.win_x - d.sr.x1) * (d.sr.t2.y - d.sr.t1.y) / (d.sr.x2 - d.sr.x1) + d.sr.t1.y; //dunno if it need
 					d.sr.za = (d.sr.win_x - d.sr.x1) * (d.sr.z2a - d.sr.z1a) / (d.sr.x2 - d.sr.x1) + d.sr.z1a;
 					d.sr.zb = (d.sr.win_x - d.sr.x1) * (d.sr.z2b - d.sr.z1b) / (d.sr.x2 - d.sr.x1) + d.sr.z1b;
-					d.sr.c_za = max(d.sr.za, d.sr.clmp_top);
-					d.sr.c_zb = min(d.sr.zb, d.sr.clmp_bot);
-					//printf("%i %i %i %i\n", d.sr.za, d.sr.zb, d.sr.clmp_top, d.sr.clmp_bot);
-					
+					// d.sr.c_za = max(d.sr.za, d.sr.clmp_top); // i bet i never use this
+					// d.sr.c_zb = min(d.sr.zb, d.sr.clmp_bot);
 					draw_line_of_sprite(&d.sr, d.texture.sprites->next->sprites[0], &d.render);
-					// vertical_line(d.sr.win_x, d.sr.clmp_top, d.sr.clmp_top + 1, &d.render, 0xFFFF);
-					// vertical_line(d.sr.win_x, d.sr.clmp_bot - 1, d.sr.clmp_bot, &d.render, 0x44FFFF);
-				}
-				for (int i = d.sr.tmp->sx1; i <= d.sr.tmp->sx2; i++) // draw whole line that cut the sector
-				{
-					d.sr.clmp_bot = line_point(d.sr.tmp->zbot1, d.sr.tmp->zbot2, fpercent(d.sr.tmp->sx1, d.sr.tmp->sx2, i));
-						d.sr.clmp_bot = min(d.sr.clmp_bot, WIN_HEIGHT - 1);
-					d.sr.clmp_top = line_point(d.sr.tmp->ztop1, d.sr.tmp->ztop2, fpercent(d.sr.tmp->sx1, d.sr.tmp->sx2, i));
-						d.sr.clmp_top = max(d.sr.clmp_top, 0);
-					vertical_line(d.sr.win_x, d.sr.clmp_top, d.sr.clmp_top + 1, &d.render, 0xFFFF);
-					vertical_line(i, d.sr.clmp_bot - 1, d.sr.clmp_bot, &d.render, 0x44FFFF);
 				}
 			}
 			if (++d.sr.tmp == (d.render.queue + MAX_SECTORS_RENDERED))
@@ -480,8 +465,6 @@ void	render_sprites(t_sprite_render sr, t_doom d)
 				}
 				d.sr.begin_x = max(d.sr.x1, d.sr.tmp->sx1);
 				d.sr.end_x = min(d.sr.x2, d.sr.tmp->sx2);		
-				//vertical_line(d.sr.begin_x, 0, WIN_HEIGHT - 1, &d.render, 0xFF0000);
-				//vertical_line(d.sr.end_x, 0, WIN_HEIGHT - 1, &d.render, 0xFF0000);
 				d.sr.win_x = d.sr.begin_x - 1;
 				
 				d.sr.z1a = WIN_HEIGHT / 2 - (int)((d.sr.z1 + d.sr.t1.y * d.player.angle_z) * d.sr.zscale1);
@@ -499,11 +482,8 @@ void	render_sprites(t_sprite_render sr, t_doom d)
 					d.sr.y = d.sr.t1.y;
 					d.sr.za = (d.sr.win_x - d.sr.x1) * (d.sr.z2a - d.sr.z1a) / (d.sr.x2 - d.sr.x1) + d.sr.z1a;
 					d.sr.zb = (d.sr.win_x - d.sr.x1) * (d.sr.z2b - d.sr.z1b) / (d.sr.x2 - d.sr.x1) + d.sr.z1b;
-					d.sr.c_za = max(d.sr.za, d.sr.clmp_top);
-					d.sr.c_zb = min(d.sr.zb, d.sr.clmp_bot);
-					//printf("%i %i %i %i\n", d.sr.za, d.sr.zb, d.sr.clmp_top, d.sr.clmp_bot);
-					//vertical_line(d.sr.win_x, d.sr.clmp_top, d.sr.clmp_top + 1, &d.render, 0x00FF);
-					//vertical_line(d.sr.win_x, d.sr.clmp_bot - 1, d.sr.clmp_bot + 1, &d.render, 0x00FF);
+					// d.sr.c_za = max(d.sr.za, d.sr.clmp_top); // i bet i never use this
+					// d.sr.c_zb = min(d.sr.zb, d.sr.clmp_bot);
 					draw_line_of_sprite(&d.sr, d.texture.sprites->sprites[1], &d.render);
 				}
 			}
