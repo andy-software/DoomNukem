@@ -74,6 +74,7 @@
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
+# define ESC (key == SDLK_ESCAPE)
 /***/
 
 typedef struct s_doom		t_doom;
@@ -440,23 +441,6 @@ struct s_skybox
 	int				pos_max;
 };
 
-struct	s_doom
-{
-	t_sprite_render		sr;
-	t_render		render;
-	t_ui			ui;
-	t_sdl			sdl;
-	t_option		options;
-	t_map			map;
-	t_game			game;
-	t_player		player;
-	t_texture		texture;
-	t_skybox		sky;
-	SDL_DisplayMode win_size;
-	t_sprite_render	spriter; //draw all things
-	t_editor		editor;
-};
-
 /* EDITOR */
 struct s_vertex_int
 {
@@ -480,22 +464,6 @@ struct	s_interface
 	int start_new_sector;
 };
 
-struct	s_editor
-{
-	t_brezen		brezen;
-	t_interface		interface;
-	// t_sector 	saver[9999999];
-	t_images		images[9999]; // consist of different images for editor
-	t_images		sector[9999];
-	int				ind_img; // number of image
-	int				img_press; // press on image
-	int 			is_drawing;
-	int				zoom;
-	int				but1_press;
-	int				is_sector;
-	int				ind_text; // started from 5 
-	t_buttons		press;
-};
 
 struct	s_images
 {
@@ -529,9 +497,41 @@ struct s_brezen
 	int dx;
 	int color;
 };
+
+struct	s_editor
+{
+	t_brezen		brezen;
+	t_interface		interface;
+	// t_sector 	saver[9999999];
+	t_images		images[9999]; // consist of different images for editor
+	t_images		sector[9999];
+	int				ind_img; // number of image
+	int				img_press; // press on image
+	int 			is_drawing;
+	int				zoom;
+	int				but1_press;
+	int				is_sector;
+	int				ind_text; // started from 5 
+	t_buttons		press;
+};
 /****/
 
-
+struct	s_doom
+{
+	t_sprite_render		sr;
+	t_render		render;
+	t_ui			ui;
+	t_sdl			sdl;
+	t_option		options;
+	t_map			map;
+	t_game			game;
+	t_player		player;
+	t_texture		texture;
+	t_skybox		sky;
+	SDL_DisplayMode win_size;
+	t_sprite_render	spriter; //draw all things
+	t_editor		editor;
+};
 
 //friendly user stuff
 int			print_usage(void);
