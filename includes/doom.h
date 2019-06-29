@@ -67,6 +67,15 @@
 # define FixMult(a, b) 			((int32_t)(((int64_t)(a) * (b)) >> 8))
 # define FixDiv(a, b) 			((int32_t)(((int64_t)(a) << 8) / (b)))
 
+/* EDITOR */
+# define NUM_VER doom->editor.interface.iterator_num_vertex
+# define NUM_SECT doom->editor.interface.nbr_sectors
+# define NB_BUTTONS 9
+# define NB_IMAGES 8
+# define EXIST doom->editor.images[doom->editor.ind_img].exist
+# define NUM_WALL 7 // 3
+/***/
+
 typedef struct s_doom		t_doom;
 
 typedef struct s_sdl		t_sdl;
@@ -91,6 +100,15 @@ typedef struct	s_sprite_render	t_sprite_render;
 typedef struct	s_sprite_list	t_sprite_list;
 typedef	struct	s_painting		t_painting;
 typedef	struct	s_font			t_font;
+
+/* EDITOR */
+typedef struct s_editor	t_editor;
+typedef struct s_brezen	t_brezen;
+typedef struct s_interface	t_interface;
+typedef struct s_vertex_int	t_vertex_int;
+typedef struct s_images t_images;
+typedef	struct s_buttons t_buttons;
+/***/
 
 struct	s_plane
 {
@@ -436,7 +454,84 @@ struct	s_doom
 	t_skybox		sky;
 	SDL_DisplayMode win_size;
 	t_sprite_render	spriter; //draw all things
+	t_editor		editor;
 };
+
+/* EDITOR */
+struct s_vertex_int
+{
+	int x;
+	int y;
+};
+
+struct	s_interface
+{
+	int tmp_x1;
+	int tmp_y1;
+	int tmp_x2;
+	int tmp_y2;
+	t_vertex_int	arr_vertex_map_coor[9999];
+	t_vertex 		arr_vertex_real_coor[9999];
+	t_sector		sectors[2000];
+	int nbr_vertex;
+	int nbr_sectors;
+	int iterator_num_vertex;
+	int is_drawing_interface;
+	int start_new_sector;
+};
+
+struct	s_editor
+{
+	t_brezen		brezen;
+	t_interface		interface;
+	// t_sector 	saver[9999999];
+	t_images		images[9999]; // consist of different images for editor
+	t_images		sector[9999];
+	int				ind_img; // number of image
+	int				img_press; // press on image
+	int 			is_drawing;
+	int				zoom;
+	int				but1_press;
+	int				is_sector;
+	int				ind_text; // started from 5 
+	t_buttons		press;
+};
+
+struct	s_images
+{
+	SDL_Surface		*image;
+	double			*im_x;
+	double			*im_y;
+	int				exist;
+};
+
+struct	s_buttons
+{
+	int				sec_draw;
+	int				add_buttons;
+	int				chng_text;
+	int				ind_action;
+};
+
+struct s_brezen
+{
+	int		x1;
+	int		x2;
+	int		y1;
+	int		y2;
+	double d;
+	double starty;
+	double startx;
+	double d1;
+	double d2;
+	double iterator;
+	int dy;
+	int dx;
+	int color;
+};
+/****/
+
+
 
 //friendly user stuff
 int			print_usage(void);
@@ -508,5 +603,9 @@ int			sprite_sort(t_sprite *arr_spr, int len);
 void	load_sprites(t_texture *texture, t_sdl *sdl, char *path);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int			*copy_static_arr(int *arr, const int len);
+
+/* EDITOR */
+
+/***/
 
 #endif
