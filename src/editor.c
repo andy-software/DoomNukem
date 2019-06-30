@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/06/29 18:56:44 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/06/30 18:14:42 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ int		ft_map_editor(t_doom *doom, char *name)
 		printf("doom->player.coord.y: %f\n", doom->player.coord.y);
 		
 		int i = -1;
-		while (++i < doom->map.num_vert)
-		printf("doom->map.sectors[0].vert[j].y: %f\n", doom->map.sectors[0].vert[i].y);
+		if (doom->map.num_vert != -1) // FIX (before saving)
+			while (++i < doom->map.num_vert)
+				printf("doom->map.sectors[0].vert[j].y: %f\n", doom->map.sectors[0].vert[i].y);
 			// printf("doom->map.vertex[%d].x: %f\n", i, doom->map.vertex[i].y);
 
 		printf("READ MAP---------------\n\n");
@@ -86,17 +87,18 @@ int		ft_map_editor(t_doom *doom, char *name)
 	else
 		fd = open(name, O_CREAT | O_WRONLY);
 	if (fd < 0)
+		return (error_message("fd is bad :(\n") + 1);
+	if (doom->editor.save_del != 2) // при удалении не создавать новое окно
 	{
-		printf("fd is bad :(\n");
-		return (0);
+		if (ft_create_window(doom, name) != 1)
+			exit(0);
 	}
-	if (ft_create_window(doom, name) != 1)
-		exit(0);
+	else
+		doom->editor.save_del = 0;
 	ft_prepare_editor(doom);
-	ft_start_edit(doom);
-	ft_prepare_to_write(doom);
-	ft_write_changes_to_file(doom, fd);
-	// write_changes_to_file(doom->map, fd, t_player mplayer)
+	ft_start_edit(doom, fd, name);
+	if (doom->editor.save_del == 2)
+		ft_map_editor(doom, name);
 	close(fd);
 	return (0);
 }
@@ -117,6 +119,10 @@ int		ft_create_window(t_doom *doom, char *name)
 		return (error_message((char *)SDL_GetError()));
 	if (!(doom->sdl.surface = SDL_GetWindowSurface(doom->sdl.window)))
 		return (error_message((char *)SDL_GetError()));
+	if (TTF_Init() < 0)
+		return (error_message((char *)SDL_GetError()));
+	doom->editor.font.text_color.b = 200; // init font
+	doom->editor.font.text_font = TTF_OpenFont("./textures/editor/font.ttf", 30);
 	while (++i < NB_BUTTONS) // download buttons
 	{
 		str = ft_strjoin("./textures/editor/photo", ft_itoa(i));
@@ -260,9 +266,9 @@ void	ft_prepare_to_write(t_doom *doom)
 	int		j;
 
 	i = -1;
-	doom->map.num_vert = NUM_VER;
+	doom->map.num_vert = NUM_VER - 1;
 	doom->map.num_sect = NUM_SECT;
-	doom->map.sectors[0].num_vert = NUM_VER; // change it
+	doom->map.sectors[0].num_vert = NUM_VER - 1; // change it
 	doom->map.sectors[0].vert = (t_vertex *)malloc(sizeof(t_vertex) * 100);
 	while (++i < doom->map.num_sect)
 	{
@@ -270,16 +276,16 @@ void	ft_prepare_to_write(t_doom *doom)
 		while (++j < doom->map.num_vert)
 		{
 			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].y;
-			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].x;
+			doom->map.sectors[0].vert[j].x = doom->map.vertex[j].x;
 		}
 	}
-	doom->map.sectors[0].ceil_plane.a = 1;
+	doom->map.sectors[0].ceil_plane.a = 0;
 	doom->map.sectors[0].ceil_plane.b = 0;
 	doom->map.sectors[0].ceil_plane.c = 1;
 	doom->map.sectors[0].ceil_plane.h = -60;
 
-	doom->map.sectors[0].floor_plane.a = -0.6;
-	doom->map.sectors[0].floor_plane.b = 0.6;
+	doom->map.sectors[0].floor_plane.a = 0;
+	doom->map.sectors[0].floor_plane.b = 0;
 	doom->map.sectors[0].floor_plane.c = 1;
 	doom->map.sectors[0].floor_plane.h = 0;
 
@@ -332,9 +338,10 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->editor.ind_text = 5; // as 0
 	doom->editor.img_press = 0;
 	doom->editor.press.ind_action = 5;
+	doom->editor.save_del = 0;
 }
 
-int		ft_start_edit(t_doom *doom)
+int		ft_start_edit(t_doom *doom, int fd, char *name)
 {
 	SDL_Event event;
 
@@ -356,6 +363,21 @@ int		ft_start_edit(t_doom *doom)
 		}
 		ft_render_editor(doom);
 		SDL_UpdateWindowSurface(doom->sdl.window);
+		/**** CREATE FUNCTION: CHECK SAVE DEL ***/
+		if (doom->editor.save_del == 1) //saving
+		{
+			ft_prepare_to_write(doom);
+			ft_write_changes_to_file(doom, fd);
+			doom->editor.save_del = 0;
+		}
+		else if (doom->editor.save_del == 3)
+		{
+			// if (!(ft_prepare_to_write(doom)))
+				// printf("Не хватает данных для записи");
+			ft_prepare_to_write(doom); // функция должна возврщать инт чтобы проверить хватает ли данных 
+			ft_write_changes_to_file(doom, fd);
+				return (game_mod(name));
+		}
 	}
 	return (0);
 }
@@ -369,7 +391,7 @@ void	ft_check_key(t_doom *doom, SDL_Event *event)
 		doom->game.quit = 1;
 }
 
-void	ft_render_editor(t_doom *doom)
+void	 ft_render_editor(t_doom *doom)
 {
 	ft_render_interface(doom);
 	ft_render_previous(doom);
@@ -474,6 +496,7 @@ void	ft_render_interface(t_doom *doom)
 	int			it[5]; // iterator to save space
 	int			exist;
 	int			color;
+	SDL_Surface *message;
 
 	i = 0;
 	y = -1;
@@ -483,12 +506,13 @@ void	ft_render_interface(t_doom *doom)
 	it[0] = 0;
 	doom->editor.interface.is_drawing_interface = 1;
 	
-	while (++y < WIN_HEIGHT)
+	while (++y < WIN_HEIGHT) // grey background
 	{
 		x = WIN_WIDTH - 401;
 		while (++x < WIN_WIDTH)
 			ft_draw_pixel(doom, x, y, 0x333333);
 	}
+
 
 	/* draw actions */
 	bigger.y = 130;
@@ -498,11 +522,34 @@ void	ft_render_interface(t_doom *doom)
 	SDL_BlitSurface(doom->editor.sector[4].image, NULL, doom->sdl.surface, &bigger);
 	bigger.x = 850;
 	SDL_BlitSurface(doom->editor.images[doom->editor.press.ind_action].image, NULL, doom->sdl.surface, &bigger);
+	/* ********** */
 
+	/* draw ceil, floor */
+	if (doom->editor.press.ind_action == 8)
+	{
+		y = 230;
+		while (++y < WIN_HEIGHT - 340) // background
+		{
+			x = WIN_WIDTH - 350;
+			while (++x < WIN_WIDTH - 50)
+				ft_draw_pixel(doom, x, y, 0x363535);
+		}
+		doom->editor.font.text_rect.x = 200;
+		doom->editor.font.text_rect.y = 20;
+		message = TTF_RenderText_Solid(doom->editor.font.text_font, "Something", doom->editor.font.text_color);
+		SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	}
+	/* ********* */
+
+	
+	/* draw: save, delete, play */
+	bigger.y = 750;
+	bigger.x = 10;
+	SDL_BlitSurface(doom->editor.images[9].image, NULL, doom->sdl.surface, &bigger);
 	/* ********** */
 	
 	y = 500;
-	while (++y < WIN_HEIGHT - 150) // FIX for textures 850/500 300x350
+	while (++y < WIN_HEIGHT - 150) // for textures 850/500 300x350
 	{
 		x = WIN_WIDTH - 350;
 		while (++x < WIN_WIDTH - 50)
@@ -525,7 +572,7 @@ void	ft_render_interface(t_doom *doom)
 	}
 	ft_draw_axis(doom);
 	bigger.y = 20;
-	while (++it[0] < (NB_BUTTONS - 4))
+	while (++it[0] < (NB_BUTTONS - 5))
 	{
 		exist = doom->editor.images[it[0]].exist;
 		bigger.x = 700 + (it[0] * 100);
@@ -646,14 +693,14 @@ void	change_text(t_doom *doom, SDL_Event *event)
 
 void	rec_action(t_doom *doom, SDL_Event *event)
 {
-	if (event->button.x >= 800 && event->button.x <= 850) // Left
+	if (event->button.x <= 850) // Left
 	{
 		doom->editor.press.ind_action--;
 		if (doom->editor.press.ind_action == 4)
 			doom->editor.press.ind_action = 8;
 		
 	}
-	if (event->button.x >= 1150 && event->button.x <= 1200) // Right
+	if (event->button.x >= 1150) // Right
 	{	
 		doom->editor.press.ind_action++;
 		if (doom->editor.press.ind_action == 9)
@@ -762,11 +809,27 @@ void	add_items(t_doom *doom, SDL_Event *event)
 	}
 }
 
+void	del_save_play(t_doom *doom, SDL_Event *event)
+{
+	printf("del, save, play\n");
+	if (event->button.x <= 65 && (doom->editor.save_del = 2)) // delete
+		doom->game.quit = 1;
+	else if (event->button.x >= 65 && event->button.x <= 115) //save
+		doom->editor.save_del = 1;
+	else // play
+	{
+		doom->editor.save_del = 3;
+		// doom->game.quit = 1;
+	}
+}
+
 void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event)
 {
 	if ((event->button.y >= 130 && event->button.y <= 180) && (event->button.x >= 800 && event->button.x <= 1200))
 		rec_action(doom, event);
-	if (doom->editor.press.ind_action == 5)
+	if ((event->button.y >= 750 && event->button.y <= 785) && (event->button.x >= 25 && event->button.x <= 140))
+		del_save_play(doom, event);
+	else if (doom->editor.press.ind_action == 5)
 		in_sector(doom, event);
 	if (doom->editor.press.ind_action == 6)
 		add_items(doom, event);
