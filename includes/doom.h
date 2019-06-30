@@ -70,7 +70,7 @@
 /* EDITOR */
 # define NUM_VER doom->editor.interface.iterator_num_vertex
 # define NUM_SECT doom->editor.interface.nbr_sectors
-# define NB_BUTTONS 9
+# define NB_BUTTONS 10
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
@@ -505,6 +505,7 @@ struct	s_editor
 	// t_sector 	saver[9999999];
 	t_images		images[9999]; // consist of different images for editor
 	t_images		sector[9999];
+	t_font			font;
 	int				ind_img; // number of image
 	int				img_press; // press on image
 	int 			is_drawing;
@@ -513,6 +514,7 @@ struct	s_editor
 	int				is_sector;
 	int				ind_text; // started from 5 
 	t_buttons		press;
+	int				save_del;
 };
 /****/
 
@@ -604,10 +606,12 @@ void	load_sprites(t_texture *texture, t_sdl *sdl, char *path);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int			*copy_static_arr(int *arr, const int len);
 
+int		game_mod(char *file_name);
+
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
-int			ft_read_map_edit(t_doom *doom, int fd);
+int			ft_start_edit(t_doom *doom, int fd, char *name);
 int			ft_start_edit(t_doom *doom);
 int			ft_write_changes_to_file(t_doom *doom, int fd);
 void		ft_check_key(t_doom *doom, SDL_Event *event);
