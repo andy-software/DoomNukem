@@ -612,7 +612,6 @@ int		game_mod(char *file_name);
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
 int			ft_start_edit(t_doom *doom, int fd, char *name);
-int			ft_start_edit(t_doom *doom, char *name);
 int			ft_write_changes_to_file(t_doom *doom, int fd);
 void		ft_check_key(t_doom *doom, SDL_Event *event);
 void		ft_render_editor(t_doom *doom);
@@ -627,6 +626,7 @@ void		ft_prepare_editor(t_doom *doom);
 void		ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
+int 		ft_read_map_edit(t_doom *doom, int fd);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
