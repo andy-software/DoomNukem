@@ -612,7 +612,7 @@ int		game_mod(char *file_name);
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
 int			ft_start_edit(t_doom *doom, int fd, char *name);
-int			ft_start_edit(t_doom *doom);
+int			ft_start_edit(t_doom *doom, char *name);
 int			ft_write_changes_to_file(t_doom *doom, int fd);
 void		ft_check_key(t_doom *doom, SDL_Event *event);
 void		ft_render_editor(t_doom *doom);
