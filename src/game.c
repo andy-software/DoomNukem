@@ -20,6 +20,7 @@ static int	init_game_params(t_doom *d)
 	d->game.moving = 0;
 	d->game.ground = 0;
 	d->game.falling = 1;
+	d->game.flying = 0;
 	d->game.acceleration = 0.2f;
 	d->texture.x_split = 4;
 	d->texture.y_split = 2;

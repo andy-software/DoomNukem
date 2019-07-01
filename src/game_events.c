@@ -32,6 +32,7 @@ void		move_player(t_doom *d, float dx, float dy)
 				vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
 			{
 				d->player.sector = sect->neighbors[s];
+				d->game.falling = 1;
 			}
 		d->player.coord.x += dx;
 		d->player.coord.y += dy;
@@ -44,17 +45,19 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	t_plane		ceil_p = m.sectors[p->sector].ceil_plane;
 	t_plane		floor_p = m.sectors[p->sector].floor_plane;
 	float floor_z = get_z(floor_p, p->coord.x, p->coord.y);
+	float ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
 
 	g->velocity.z -= 0.02f;
 	if (g->velocity.z < 0 && \
 		nextz <= floor_z + g->eye_height)
 	{
 		p->coord.z = floor_z + g->eye_height;
+		if (g->velocity.z < -1)
+			printf("Ur welcome in hell\n"); //minus hit point
 		g->velocity.z = 0;
 		g->falling = 0;
-		g->ground = 1;
 	}
-	else if(g->velocity.z > 0 && nextz > get_z(ceil_p, p->coord.x, p->coord.y))
+	else if(g->velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
 	{
 		g->velocity.z = 0;
 		g->falling = 1;
@@ -80,6 +83,7 @@ static void	move(t_player *p, t_map	m, t_game *g)
 	t_plane	nfloor_p;
 	float	next_x = p->coord.x + g->velocity.x;
 	float	next_y = p->coord.y + g->velocity.y;
+	int		j;
 
 	i = -1;
 	while (++i < sect->num_vert)
@@ -103,6 +107,27 @@ static void	move(t_player *p, t_map	m, t_game *g)
 				project_vector2d(&g->velocity.x, &g->velocity.y, \
 					vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y);
 				g->moving = 0;
+				j = -1;
+				next_x = p->coord.x + g->velocity.x;
+				next_y = p->coord.y + g->velocity.y;
+				while (++j < sect->num_vert)
+				{
+					if (j != i && CTL(p->coord.x, p->coord.y, next_x, next_y, vert[j].x, vert[j].y, vert[j + 1].x, vert[j + 1].y))
+					{
+						hole_low  = sect->neighbors[i] < 0 ? BIG_VALUE : \
+							max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
+						hole_high = sect->neighbors[i] < 0 ? -BIG_VALUE : \
+							min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+						if (!(hole_high > p->coord.z + HEAD_HEIGHT && \
+							hole_low < p->coord.z - EYE_HEIGHT + KNEE_HEIGHT))
+							{
+								g->velocity = (t_vector){0, 0, g->velocity.z};
+								break ;
+							}
+					}
+				}
+				if (j != sect->num_vert)
+					break ;
 			}
 		}
 	g->dx = g->velocity.x;
@@ -118,10 +143,16 @@ void		game_events(t_doom *d)
 	g->ground = !g->falling;
 	if (g->falling)
 		fall(&d->player, d->map, &d->game);
+	if (g->ground)
+		d->player.coord.z = get_z(d->map.sectors[d->player.sector].floor_plane, d->player.coord.x, d->player.coord.y) + g->eye_height;
 	if (g->moving)
 	{
 		move(&d->player, d->map, &d->game);
 		move_player(d, g->dx, g->dy);
-		g->falling = 1;
 	}
+
+	// move_mobs();
+	// change_what_changes(); //to each sector add flag changed? and pointer on function that make changes depending of time a = f(t) b = f(t) c = f(t) h = f(t)
+	// //it should be linear or not?
+	// //add variable dt = cur_frame - last_frame and change all the velocity
 }

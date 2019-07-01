@@ -41,6 +41,7 @@
 # define BIG_VALUE 9e9
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
 # define COUNT_FPS_NUMBERS 4
+# define MAX_SPEED_UPWARD 1
 
 # define MAX_SPRITES_COUNT	128
 
@@ -274,6 +275,7 @@ struct	s_game
 	int				falling;
 	int				moving;
 	int				ducking;
+	int				flying; //new feature
 	int				quit;
 	int				pause;
 	SDL_Event		event;
