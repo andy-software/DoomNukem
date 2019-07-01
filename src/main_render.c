@@ -215,10 +215,13 @@ void	textline_draw(int y1, int y2, t_render *r, t_texture *t)
 	t->wall_end = min(y2, WIN_HEIGHT - 1);
 	t->y_point = (r->zb == r->za) ? 0 : (double)(r->win_y - r->za) / (r->zb - r->za);
 	t->dy_point = (r->zb == r->za) ? 0 : 1.0 / (r->zb - r->za); // derivation of y_point
+	if (t->percent < 0 && t->percent > 1)
+		printf("%f %f\n", (t->x2 - t->x1), t->x2);
 	while(r->win_y < t->wall_end)
 	{
 		t->y_text = t->y_point * t->wall_tex[3]->h;
 		t->color = pix_from_text(t->wall_tex[3], t->x_text, t->y_text);
+
 		if (t->color != 0)
 			r->pix[r->win_y * WIN_WIDTH + r->win_x] = t->color;
 		r->win_y++;
