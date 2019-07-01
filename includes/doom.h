@@ -71,7 +71,7 @@
 /* EDITOR */
 # define NUM_VER doom->editor.interface.iterator_num_vertex
 # define NUM_SECT doom->editor.interface.nbr_sectors
-# define NB_BUTTONS 10
+# define NB_BUTTONS 11
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
@@ -633,7 +633,7 @@ void		ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
 void		ft_render_previous(t_doom *doom);
 void		ft_draw_axis(t_doom *doom);
 void		ft_prepare_editor(t_doom *doom);
-void		ft_prepare_to_write(t_doom *doom);
+int			ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
 int 		ft_read_map_edit(t_doom *doom, int fd);
