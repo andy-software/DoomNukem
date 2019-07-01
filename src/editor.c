@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/06/30 18:14:42 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/07/01 13:49:55 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ int		ft_create_window(t_doom *doom, char *name)
 		return (error_message((char *)SDL_GetError()));
 	if (TTF_Init() < 0)
 		return (error_message((char *)SDL_GetError()));
-	doom->editor.font.text_color.b = 200; // init font
+	// doom->editor.font.text_color.b = 200; // init font
+	doom->editor.font.text_color = (SDL_Color){255, 34, 200};
 	doom->editor.font.text_font = TTF_OpenFont("./textures/editor/font.ttf", 30);
 	while (++i < NB_BUTTONS) // download buttons
 	{
@@ -141,7 +142,7 @@ int		ft_create_window(t_doom *doom, char *name)
 		printf ( "IMG_Load: %s\n", IMG_GetError());
 	}
 	SDL_UpdateWindowSurface(doom->sdl.window);
-	SDL_SetWindowGrab(doom->sdl.window, 1);
+	// SDL_SetWindowGrab(doom->sdl.window, 1);
 	free(str);
 	return (1);
 }
@@ -525,6 +526,10 @@ void	ft_render_interface(t_doom *doom)
 	/* ********** */
 
 	/* draw ceil, floor */
+	char	let;
+	char	*str1;
+
+	
 	if (doom->editor.press.ind_action == 8)
 	{
 		y = 230;
@@ -534,10 +539,27 @@ void	ft_render_interface(t_doom *doom)
 			while (++x < WIN_WIDTH - 50)
 				ft_draw_pixel(doom, x, y, 0x363535);
 		}
-		doom->editor.font.text_rect.x = 200;
-		doom->editor.font.text_rect.y = 20;
-		message = TTF_RenderText_Solid(doom->editor.font.text_font, "Something", doom->editor.font.text_color);
+		doom->editor.font.text_rect.x = WIN_WIDTH - 340;
+		doom->editor.font.text_rect.y = 250;
+		message = TTF_RenderText_Solid(doom->editor.font.text_font, " Floor:        Ceiling:", doom->editor.font.text_color);
 		SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+		int i = -1;
+		let = 'a';
+		while (++i < 4)
+		{
+			char	*str = NULL;
+			str1 = (char *)malloc(sizeof(char) * 1 + 1);
+			str1[0] = let;
+			str1[1] = 0;
+			printf("%s\n", str1);
+			str = ft_strjoin(str1, " < >       a - <>");
+			doom->editor.font.text_rect.y += 35;
+			message = TTF_RenderText_Solid(doom->editor.font.text_font, str, doom->editor.font.text_color);
+			SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+			// printf("9009090   %c\n", let);
+			let++;
+		}
+		// SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
 	}
 	/* ********* */
 
