@@ -312,13 +312,13 @@ struct	s_render
 	t_vertex		t2;
 	t_vertex		v1;
 	t_vertex		v2;
-
+	
 	t_vertex		mc1;
 	t_vertex		mc2;
 	t_vertex		mc;
 	t_vertex		i1;
 	t_vertex		i2;
-
+	
 	int				t1_1_line;
 	int				t1_2_line;
 	int				t2_1_line;
@@ -363,8 +363,8 @@ struct	s_render
 	int				nz1b;
 	int				nz2a;
 	int				nz2b;
-
-
+	
+	
 	//new things
 	float			p_x;
 	float			p_y;
@@ -372,17 +372,19 @@ struct	s_render
 	float			exact_begin;
 	//added after merge
 	int				c_za;
- 	int				c_zb;
+	int				c_zb;
+	int				c_nza;
+	int				c_nzb;
 	int				win_x; // new == x;
- 	int				win_y; // new == y;
-	int				wall_num; // new uses to give 
+	int				win_y; // new == y;
+	int				wall_num; // new uses to give
 	float tx1;
-    float tx2;
+	float tx2;
 	float tz1;
-    float tz2;
+	float tz2;
 	float lp_x;
 	int				fog_distance;
- 	double			fog_perc;
+	double			fog_perc;
 	double			floor_x;
 	double			floor_y;
 	//till this
@@ -429,6 +431,12 @@ struct s_texture
 	int				wall_end;
 	int				x_split;
 	int				y_split;
+	float			x1;
+	float			x2;
+	float			percent;
+	float			xscale1;
+	float			xscale2;
+	float 			dy_point;
 };
 
 struct s_skybox
@@ -586,7 +594,7 @@ int			color_mix(Uint32 start, Uint32 end, float per);
 /*
 **main_render.c
 */
-void		textline_draw(int y1, int y2, t_render *r, t_texture *t, t_doom d,float lp_x);
+void		textline_draw(int y1, int y2, t_render *r, t_texture *t);
 void		wall_side(t_render *r, t_doom d);
 void		prepare_to_rendering(t_render *r, t_doom d);
 void		display_core(SDL_Renderer *render, SDL_Texture *texture, SDL_Surface *surface);
