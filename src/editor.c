@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/07/01 21:23:01 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/07/02 20:11:10 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int		ft_map_editor(t_doom *doom, char *name)
 		printf("doom->map.num_sect: %d\n", doom->map.num_sect);
 		printf("doom->player.coord.x: %f\n", doom->player.coord.x);
 		printf("doom->player.coord.y: %f\n", doom->player.coord.y);
+		printf("doom->map.sectors[NUM_SECT].num_ver: %u\n", doom->map.sectors[0].num_vert);
+		
 		
 		int i = -1;
 		if (doom->map.num_vert != -1) // FIX (before saving)
@@ -123,7 +125,11 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_prepare_editor(doom);
 	ft_start_edit(doom, fd, name);
 	if (doom->editor.save_del == 2)
+	{
+		doom->map.num_vert = 0;
 		ft_map_editor(doom, name);
+		
+	}
 	close(fd);
 	return (0);
 }
@@ -351,15 +357,18 @@ void	ft_prepare_editor(t_doom *doom)
 	int		i;
 
 	i = 0;
-	// doom->map.vertex = (t_vertex *)malloc(sizeof(t_vertex) * 10000);
-	doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * 1000);  //leaks
 	doom->game.quit = 0;
 	doom->editor.but1_press = 0;
 	doom->editor.is_drawing = 0;
-	doom->editor.interface.nbr_vertex = 0;
-	doom->editor.interface.iterator_num_vertex = 0;
+	if (!doom->map.num_vert) // если не было сохранений 
+	{
+		doom->map.vertex = (t_vertex *)malloc(sizeof(t_vertex) * 10000);
+		doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * 1000);  //leaks
+		doom->editor.interface.nbr_vertex = 0;
+		doom->editor.interface.iterator_num_vertex = 0;
+		doom->editor.interface.nbr_sectors = 0;
+	}
 	doom->editor.interface.is_drawing_interface = 0;
-	doom->editor.interface.nbr_sectors = 0;
 	doom->editor.interface.start_new_sector = 0;
 	while (++i < NB_BUTTONS)
 	{
@@ -377,6 +386,7 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->editor.img_press = 0;
 	doom->editor.press.ind_action = 5;
 	doom->editor.save_del = 0;
+	doom->editor.fl_or_ceil = 1;
 
 	/*  make it for all sectors  */
 	doom->map.sectors[0].ceil_plane.a = 0;
@@ -406,6 +416,8 @@ int		ft_start_edit(t_doom *doom, int fd, char *name)
 				doom->game.quit = 1;
 			else if (event.type == SDL_KEYUP)
 				ft_check_key(doom, &event);
+			else if (event.type == SDL_KEYDOWN)
+				key_floor_ceil(doom, &event);
 			else if (event.type == SDL_MOUSEBUTTONUP)
 				ft_mouse_press_edit(doom, &event);
 			else if (event.type == SDL_MOUSEBUTTONDOWN)
@@ -438,6 +450,86 @@ int		ft_start_edit(t_doom *doom, int fd, char *name)
 	return (0);
 }
 
+void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меняется на 0,1
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+	if (doom->editor.fl_or_ceil == FLOOR)
+	{
+		if (!state[SDL_SCANCODE_LSHIFT])
+		{
+			if (state[SDL_SCANCODE_A] && doom->map.sectors[0].floor_plane.a < 50)
+				doom->map.sectors[0].floor_plane.a += 0.1;
+			else if (state[SDL_SCANCODE_B] && doom->map.sectors[0].floor_plane.b < 50)
+				doom->map.sectors[0].floor_plane.b += 0.1;
+			else if (state[SDL_SCANCODE_C] && doom->map.sectors[0].floor_plane.c < 50)
+				doom->map.sectors[0].floor_plane.c += 0.1;
+			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].floor_plane.h < 50)
+				doom->map.sectors[0].floor_plane.h += 0.1;
+			else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].floor_z < 50)
+				doom->map.sectors[0].floor_z += 0.1;
+		}
+		else if (state[SDL_SCANCODE_LSHIFT])
+		{
+			if (state[SDL_SCANCODE_A] && doom->map.sectors[0].floor_plane.a < 50)
+				doom->map.sectors[0].floor_plane.a -= 0.1;
+			else if (state[SDL_SCANCODE_B] && doom->map.sectors[0].floor_plane.b < 50)
+				doom->map.sectors[0].floor_plane.b -= 0.1;
+			else if (state[SDL_SCANCODE_C] && doom->map.sectors[0].floor_plane.c < 50)
+				doom->map.sectors[0].floor_plane.c -= 0.1;
+			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].floor_plane.h < 50)
+				doom->map.sectors[0].floor_plane.h -= 0.1;
+			else if (state[SDL_SCANCODE_Z])
+					doom->map.sectors[0].floor_z -= 0.1;
+			}
+	}
+	if (doom->editor.fl_or_ceil == CEIL)
+	{
+		if (!state[SDL_SCANCODE_LSHIFT])
+		{
+			if (state[SDL_SCANCODE_A] && doom->map.sectors[0].ceil_plane.a < 50)
+				doom->map.sectors[0].ceil_plane.a += 0.1;
+			else if (state[SDL_SCANCODE_B] && doom->map.sectors[0].ceil_plane.b < 50)
+				doom->map.sectors[0].ceil_plane.b += 0.1;
+			else if (state[SDL_SCANCODE_C] && doom->map.sectors[0].ceil_plane.c < 50)
+				doom->map.sectors[0].ceil_plane.c += 0.1;
+			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].ceil_plane.h < 50)
+				doom->map.sectors[0].ceil_plane.h += 0.1;
+			else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].ceil_z < 50)
+				doom->map.sectors[0].ceil_z += 0.1;
+		}
+		else if (state[SDL_SCANCODE_LSHIFT])
+		{
+			if (state[SDL_SCANCODE_A] && doom->map.sectors[0].ceil_plane.a < 50)
+				doom->map.sectors[0].ceil_plane.a -= 0.1;
+			else if (state[SDL_SCANCODE_B] && doom->map.sectors[0].ceil_plane.b < 50)
+				doom->map.sectors[0].ceil_plane.b -= 0.1;
+			else if (state[SDL_SCANCODE_C] && doom->map.sectors[0].ceil_plane.c < 50)
+				doom->map.sectors[0].ceil_plane.c -= 0.1;
+			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].ceil_plane.h < 50)
+				doom->map.sectors[0].ceil_plane.h -= 0.1;
+			else if (state[SDL_SCANCODE_Z])
+					doom->map.sectors[0].ceil_z -= 0.1;
+		}
+	}
+
+		
+	// if (keyboard_state[KEY_A] && keyboard_state[SDL_SCANCODE_LSHIFT])
+	// 	doom->map.sectors[0].ceil_plane.a--; // FIX 0 - choosen sector
+	// if (KEY_B)
+	// 	doom->map.sectors[0].ceil_plane.b++;
+	// if (KEY_C)
+	// 	doom->map.sectors[0].ceil_plane.c++;
+	// if (KEY_H)
+	// 	doom->map.sectors[0].ceil_plane.h++;
+	// if (KEY_Z)
+	// 	doom->map.sectors[0].ceil_z++;
+	// if (KEY_B)
+	// 	doom->map.sectors[0].ceil_plane.b++;
+	// 	printf("key %d\n", state[SDL_SCANCODE_RETURN]);
+
+}
+
 void	ft_check_key(t_doom *doom, SDL_Event *event)
 {
 	int key;
@@ -459,11 +551,27 @@ void	ft_render_previous(t_doom *doom)
 	int i;
 
 	i = -1;
+	
 	doom->editor.brezen.color = 0xFFFFFF;
 	doom->editor.interface.tmp_x1 = doom->editor.brezen.x1;
 	doom->editor.interface.tmp_y1 = doom->editor.brezen.y1;
 	doom->editor.interface.tmp_x2 = doom->editor.brezen.x2;
 	doom->editor.interface.tmp_y2 = doom->editor.brezen.y2;
+	// int j = -1;
+	// while (++j < doom->map.num_sect)
+	// {
+	// 	int it = -1;
+	// 	// printf("%d ; %d  ---\n", j, doom->map.sectors[j].num_vert);
+	// 	while (++it < doom->map.sectors[j].num_vert) // количество вертексов в данном секторе
+	// 	{
+	// 		doom->editor.brezen.x1 = doom->map.sectors[j].vert[it].x * 10;
+	// 		doom->editor.brezen.y1 = doom->map.sectors[j].vert[it].y * 10;
+	// 		doom->editor.brezen.x2 = doom->map.sectors[j].vert[it + 1].x * 10;
+	// 		doom->editor.brezen.y2 = doom->map.sectors[j].vert[it + 1].y * 10;
+	// 		doom->editor.brezen.color = 0xFFFF23;
+	// 		ft_line(doom);
+	// 	}
+	// }
 	while (++i < doom->editor.interface.nbr_vertex - 1)
 	{
 		if (doom->editor.interface.start_new_sector - 1 == i && doom->editor.interface.start_new_sector != 0)
@@ -477,7 +585,28 @@ void	ft_render_previous(t_doom *doom)
 	doom->editor.brezen.x1 = doom->editor.interface.tmp_x1;
 	doom->editor.brezen.y1 = doom->editor.interface.tmp_y1;
 	doom->editor.brezen.x2 = doom->editor.interface.tmp_x2;
-	doom->editor.brezen.y2 = doom->editor.interface.tmp_y2;
+	doom->editor.brezen.y2 = doom->editor.interface.tmp_y2;	
+		
+
+	// int j = -1;
+	// while (++j < doom->map.num_sect)
+	// {
+	// 	int it = -1;
+	// 	// printf("%d ; %d  ---\n", j, doom->map.sectors[j].num_vert);
+	// 	while (++it < doom->map.sectors[j].num_vert) // количество вертексов в данном секторе
+	// 	{
+	// 		doom->editor.brezen.x1 = doom->map.sectors[j].vert[it].x * 10;
+	// 		doom->editor.brezen.y1 = doom->map.sectors[j].vert[it].y * 10;
+	// 		doom->editor.brezen.x2 = doom->map.sectors[j].vert[it + 1].x * 10;
+	// 		doom->editor.brezen.y2 = doom->map.sectors[j].vert[it + 1].y * 10;
+	// 		doom->editor.brezen.color = 0xFFFF23;
+	// 		// printf("Here\n");
+	// 		ft_line(doom);
+	// 	}
+	// }
+	// printf("tyt %d\n", j);
+		// while (++j < )
+
 }
 
 void	ft_render_other(t_doom *doom)
@@ -546,43 +675,9 @@ void	ft_draw_axis(t_doom *doom)
 void	info_ceil_floor(t_doom *doom)
 {
 	SDL_Surface		*message;
-	SDL_Rect		rect;
 	char			*str1;
 
-	rect = (SDL_Rect){850, 230};
-	SDL_BlitSurface(doom->editor.images[10].image, NULL, doom->sdl.surface, &rect);
 	doom->editor.font.text_rect = (SDL_Rect){935, 275, 0, 0};
-		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.a);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.b);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.c);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.h);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].ceil_z);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.x = 1070;
-	doom->editor.font.text_rect.y = 277;
-	free(str1);
-	SDL_FreeSurface(message);
 		str1 = ft_itoa(doom->map.sectors[0].floor_plane.a);
 	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
 	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
@@ -608,6 +703,37 @@ void	info_ceil_floor(t_doom *doom)
 	free(str1);
 	SDL_FreeSurface(message);
 		str1 = ft_itoa(doom->map.sectors[0].floor_z);
+	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	doom->editor.font.text_rect.x = 1070;
+	doom->editor.font.text_rect.y = 277;
+	free(str1);
+	SDL_FreeSurface(message);
+		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.a);
+	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	doom->editor.font.text_rect.y += 30;
+	free(str1);
+	SDL_FreeSurface(message);
+		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.b);
+	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	doom->editor.font.text_rect.y += 30;
+	free(str1);
+	SDL_FreeSurface(message);
+		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.c);
+	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	doom->editor.font.text_rect.y += 30;
+	free(str1);
+	SDL_FreeSurface(message);
+		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.h);
+	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	doom->editor.font.text_rect.y += 30;
+	free(str1);
+	SDL_FreeSurface(message);
+		str1 = ft_itoa(doom->map.sectors[0].ceil_z);
 	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
 	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
 	SDL_FreeSurface(message);
@@ -651,13 +777,21 @@ void	ft_render_interface(t_doom *doom)
 
 	/* draw ceil, floor */
 	if (doom->editor.press.ind_action == 8) // leaks
+	{	
+	// SDL_Rect kappa = (SDL_Rect){0, 0, doom->editor.images[10].image->w / 2, doom->editor.images[10].image->h / 2};
+		bigger = (SDL_Rect){850, 230, 0, 0};
+		if (doom->editor.fl_or_ceil == 1)
+			SDL_BlitSurface(doom->editor.images[10].image, NULL, doom->sdl.surface, &bigger);
+		if (doom->editor.fl_or_ceil == 2)
+			SDL_BlitSurface(doom->editor.images[11].image, NULL, doom->sdl.surface, &bigger);
 		info_ceil_floor(doom);
+	}
 	/* ********* */
 
 	
 	/* draw: save, delete, play */
 	bigger = (SDL_Rect){10, 750, 250};
-	SDL_BlitSurface(doom->editor.images[9].image, NULL, doom->sdl.surface, &bigger);
+		SDL_BlitSurface(doom->editor.images[9].image, NULL, doom->sdl.surface, &bigger);
 	/* ********** */
 	
 	if (doom->editor.press.ind_action == 7 || doom->editor.press.ind_action == 8)
@@ -687,7 +821,7 @@ void	ft_render_interface(t_doom *doom)
 	}
 	ft_draw_axis(doom);
 	bigger.y = 20;
-	while (++it[0] < (NB_BUTTONS - 6))
+	while (++it[0] < (NB_BUTTONS - 7))
 	{
 		exist = doom->editor.images[it[0]].exist;
 		bigger.x = 700 + (it[0] * 100);
@@ -705,6 +839,12 @@ void	ft_render_interface(t_doom *doom)
 				}
 			}
 		}
+		// if (it[0] == 1 && doom->player.coord.x)
+		// {
+		// 	doom->editor.images[it[0]].im_x[1] = (double)doom->player.coord.x * 10;
+		// 	doom->editor.images[it[0]].im_y[1] = (double)doom->player.coord.y * 10;
+		// 	doom->editor.images[it[0]].exist = 1;
+		// }
 		while (exist != 0)
 		{
 			it[2] = 10;
@@ -729,7 +869,7 @@ void	ft_render_interface(t_doom *doom)
 	doom->editor.interface.is_drawing_interface = 0;
 }
 
-void	convex(t_doom *doom) // выпуклость
+int		convex(t_doom *doom) // выпуклость
 {
 	double		product;
 	t_vertex	ab;
@@ -739,19 +879,19 @@ void	convex(t_doom *doom) // выпуклость
 	
 	polig = (t_vertex *)malloc(sizeof(t_vertex) * (NUM_VER * 999));
 	i = -1;
-	while (++i < NUM_VER - 1)
+	while (++i < NUM_VER - 1) // FIX_NUM
 	{
 		polig[i].x = doom->map.vertex[i + 1].x - doom->map.vertex[i].x;
 		polig[i].y = doom->map.vertex[i + 1].y - doom->map.vertex[i].y;
 	}
 	printf("\n");
 	int	j = -1;
-	while (++j < (NUM_VER - 1)) // NUM_VER - 2 
+	while (++j < (NUM_VER - 1)) // NUM_VER - 2 // FIX_NUM
 	{
 		if (j == 0)
 		{
-			ab.x = polig[j].x - polig[NUM_VER - 1].x;
-			ab.y = polig[j].y - polig[NUM_VER - 1].y;
+			ab.x = polig[j].x - polig[NUM_VER - 2].x;
+			ab.y = polig[j].y - polig[NUM_VER - 2].y;
 			bc.x = polig[j + 1].x - polig[j].x;
 			bc.y = polig[j + 1].y - polig[j].y;
 		}
@@ -762,7 +902,7 @@ void	convex(t_doom *doom) // выпуклость
 			bc.x = polig[j + 1].x - polig[j].x;
 			bc.y = polig[j + 1].y - polig[j].y;
 		}
-		product = ab.x * bc.y - ab.y * bc.x;
+		product = ab.x * bc.y - bc.x * ab.y;
 		if (product < 0)
 		{
 			i = -1;
@@ -773,13 +913,14 @@ void	convex(t_doom *doom) // выпуклость
 			}
 			printf("SECTOR ISN'T CONVEX\n");
 			doom->editor.is_sector = 2;
-			return ;
+			return (0);
 
 		}
 		printf("             Product  %f\n", product);
 	}
 	printf("SECTOR IS CONVEX\n");
 	doom->editor.is_sector = 1;
+	return (1);
 }
 
 void	change_text(t_doom *doom, SDL_Event *event)
@@ -819,10 +960,18 @@ void	change_text(t_doom *doom, SDL_Event *event)
 		point = (t_vertex){(event->button.x / 10), (event->button.y / 10)};
 		while (++i < NUM_VER - 1)
 		{
-			p = (point.x - doom->map.vertex[i + 1].x) / (doom->map.vertex[i].x - doom->map.vertex[i + 1].x);
-			p1 = (point.y - doom->map.vertex[i + 1].y) / (doom->map.vertex[i].y - doom->map.vertex[i + 1].y);
+			p = (point.x - doom->map.vertex[i].x) / (doom->map.vertex[i + 1].x - doom->map.vertex[i].x);
+			p1 = (point.y - doom->map.vertex[i].y) / (doom->map.vertex[i + 1].y - doom->map.vertex[i].y);
+			if (comp_real(doom->map.vertex[i].x, doom->map.vertex[i + 1].x, 0.1))
+			{
+				printf("this casw\n");
+				if (fabs(p1) > 0 && fabs(p1) <= 1 && comp_real(point.x, doom->map.vertex[i].x, 0.1))
+				printf("\033[1;32m skhoditsa LINIA #%d \033[0m\n\n", i + 1);
+			}
 			// printf("p:  %0.2f         p1 %0.2f \n", (p * 10), (p1 * 10));
-			if (((int)(p * 10) == (int)(p1 * 10)))
+			printf("p:  %0.2f         p1 %0.2f \n", p, p1);
+			//if (((int)(p * 10) == (int)(p1 * 10))) // make error more
+			if (comp_real(p / p1, 1, 0.1))
 			{
 				SDL_UpdateWindowSurface(doom->sdl.window);
 				write(1, "\033[1;32m skhoditsa LINIA #", 25); //18
@@ -830,8 +979,8 @@ void	change_text(t_doom *doom, SDL_Event *event)
 				write(1, "\033[0m\n", 5);
 				// printf("\033[1;32m skhoditsa LINIA #%d \033[0m\n\n", i + 1);
 			}
-
 		}
+	printf("\n");
 	}
 }
 
@@ -865,7 +1014,7 @@ int		is_in_sector(t_doom *doom, SDL_Event *event) // передавать сек
 		printf("\033[1;32m POINT IN THE SECTOR\033[0m\n");
 		printf("\n");
 	}
-		return (1);
+		return (1); // возвращает номер сектора
 }
 
 void	rec_action(t_doom *doom, SDL_Event *event)
@@ -890,40 +1039,42 @@ void	in_sector(t_doom *doom, SDL_Event *event)
 	if (event->button.x < (WIN_WIDTH - 400))
 	{
 		if (event->button.button == SDL_BUTTON_LEFT)
+		{
+			doom->editor.brezen.x2 = ft_specify_coor(event->button.x);
+			doom->editor.brezen.y2 = ft_specify_coor(event->button.y);
+			doom->editor.but1_press = 1;
+			printf("event->button.x: %d\n", event->button.x);
+			printf("event->button.y: %d\n", event->button.y);
+			doom->map.vertex[NUM_VER].x = (event->button.x / 10);
+			doom->map.vertex[NUM_VER].y = (event->button.y / 10);
+								printf("Here\n");
+		}
+		if (event->button.button == SDL_BUTTON_RIGHT)
+		{
+			if (doom->editor.is_drawing == 0)
 			{
-				doom->editor.brezen.x2 = ft_specify_coor(event->button.x);
-				doom->editor.brezen.y2 = ft_specify_coor(event->button.y);
-				doom->editor.but1_press = 1;
-				printf("event->button.x: %d\n", event->button.x);
-				printf("event->button.y: %d\n", event->button.y);
-				doom->map.vertex[NUM_VER].x = (event->button.x / 10);
-				doom->map.vertex[NUM_VER].y = (event->button.y / 10);
-			}
-			if (event->button.button == SDL_BUTTON_RIGHT)
-			{
-				if (doom->editor.is_drawing == 0)
+				if (doom->editor.interface.nbr_vertex > 0)
 				{
-					if (doom->editor.interface.nbr_vertex > 0)
-					{
-						doom->editor.interface.nbr_vertex--;
-						NUM_VER--;
-					}
+					doom->editor.interface.nbr_vertex--;
+					NUM_VER--;
 				}
+			}
 				//printf("new_sector_ver = %d\n", doom->editor.interface.start_new_sector);
-				if ((doom->editor.interface.arr_vertex_map_coor[NUM_VER - 1].x == doom->editor.interface.arr_vertex_map_coor[doom->editor.interface.start_new_sector].x) && (doom->editor.interface.arr_vertex_map_coor[NUM_VER - 1].y == doom->editor.interface.arr_vertex_map_coor[doom->editor.interface.start_new_sector].y) && NUM_VER - 1 != doom->editor.interface.start_new_sector)
+			if ((doom->editor.interface.arr_vertex_map_coor[NUM_VER - 1].x == doom->editor.interface.arr_vertex_map_coor[doom->editor.interface.start_new_sector].x) && (doom->editor.interface.arr_vertex_map_coor[NUM_VER - 1].y == doom->editor.interface.arr_vertex_map_coor[doom->editor.interface.start_new_sector].y) && NUM_VER - 1 != doom->editor.interface.start_new_sector)
+			{
+				printf("Sector: %d done and it has %d vertexes!\n", NUM_SECT, NUM_VER - 1);
+				// convex(doom);
+				if (convex(doom))
 				{
-					printf("Sector: %d done and it has %d vertexes!\n", NUM_SECT, NUM_VER - 1);
-					convex(doom);
-					if (doom->editor.is_sector == 1)
-					{
-						doom->editor.interface.sectors[NUM_SECT].num_vert = (NUM_VER - 1) - doom->editor.interface.start_new_sector;
-						doom->editor.interface.start_new_sector = NUM_VER;
-						NUM_SECT++;
-					}
+					doom->editor.interface.sectors[NUM_SECT].num_vert = (NUM_VER - 1) - doom->editor.interface.start_new_sector;
+					doom->editor.interface.start_new_sector = NUM_VER;
+					doom->map.sectors[NUM_SECT].num_vert = (NUM_VER - 1) - doom->editor.interface.start_new_sector;
+					NUM_SECT++;
 				}
-				doom->editor.but1_press = 0;
-				doom->editor.is_drawing = 0;
 			}
+			doom->editor.but1_press = 0;
+			doom->editor.is_drawing = 0;
+		}
 	}
 }
 
@@ -1000,6 +1151,17 @@ void	del_save_play(t_doom *doom, SDL_Event *event)
 	}
 }
 
+void	change_floor_ceil(t_doom *doom, SDL_Event *event)
+{
+	if ((event->button.x > 850 && event->button.x < 1150) &&  (event->button.y > 230 && event->button.y < 530))
+	{
+		if (doom->editor.fl_or_ceil == FLOOR)
+			doom->editor.fl_or_ceil = CEIL;
+		else
+			doom->editor.fl_or_ceil = FLOOR;
+	}
+}
+
 void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event)
 {
 	if ((event->button.y >= 130 && event->button.y <= 180) && (event->button.x >= 800 && event->button.x <= 1200))
@@ -1012,6 +1174,8 @@ void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event)
 		add_items(doom, event);
 	if (doom->editor.press.ind_action == 7)
 		change_text(doom, event);
+	if (doom->editor.press.ind_action == 8)
+		change_floor_ceil(doom, event);
 }
 
 int		ft_specify_coor(int nbr)
