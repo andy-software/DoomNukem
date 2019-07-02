@@ -637,6 +637,7 @@ int			ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
 int 		ft_read_map_edit(t_doom *doom, int fd);
+void		key_floor_ceil(t_doom *doom, SDL_Event *event);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
