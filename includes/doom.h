@@ -76,6 +76,8 @@
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
+# define FLOOR 1
+# define CEIL 2
 /***/
 
 typedef struct s_doom		t_doom;
