@@ -17,10 +17,10 @@
 # include "../libft/libft.h"
 # include <math.h>
 # include <pthread.h>
-# include <SDL.h>
-# include <SDL_image.h>
-# include <SDL_ttf.h>
-# include <SDL_mixer.h>
+# include "../frameworks/SDL2.framework/Headers/SDL.h"
+# include "../frameworks/SDL2_image.framework/Headers/SDL_image.h"
+# include "../frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h"
+# include "../frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h"
 # include <errno.h>
 //add network
 
@@ -41,10 +41,11 @@
 # define BIG_VALUE 9e9
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
 # define COUNT_FPS_NUMBERS 4
+# define MAX_SPEED_UPWARD 1
 
 # define MAX_SPRITES_COUNT	128
 
-# define HFOV (WIN_WIDTH / 2)
+# define HFOV (WIN_WIDTH / 2 * 1.455) //tg 55.5 make fov =~ 69 grad
 # define VFOV (0.2 * WIN_HEIGHT)
 # define STRAIGHT 1
 # define STRAFE 2
@@ -64,8 +65,8 @@
 
 # define Fix(a)  				((a) * (1LL<<8))
 # define UnFix(a) 				((a) / (float)(1LL<<8))
-# define FixMult(a, b) 			((int32_t)(((int64_t)(a) * (b)) >> 8))
-# define FixDiv(a, b) 			((int32_t)(((int64_t)(a) << 8) / (b)))
+# define FixMult(a, b) 			((((a) * (b)) >> 8))
+# define FixDiv(a, b) 			((((a) << 8) / (b)))
 
 /* EDITOR */
 # define NUM_VER doom->editor.interface.iterator_num_vertex
@@ -90,6 +91,8 @@ typedef struct s_line		t_line;
 typedef struct s_game		t_game;
 typedef struct s_vector		t_vector;
 typedef struct s_render		t_render;
+typedef struct	s_ceil_cal	t_ceil_cal;
+typedef struct	s_floor_cal	t_floor_cal;
 typedef struct s_plane		t_plane;
 typedef struct s_ui			t_ui;
 typedef struct	s_rend_sector	t_rend_sector;
@@ -109,6 +112,7 @@ typedef struct s_interface	t_interface;
 typedef struct s_vertex_int	t_vertex_int;
 typedef struct s_images t_images;
 typedef	struct s_buttons t_buttons;
+
 /***/
 
 struct	s_plane
@@ -144,9 +148,24 @@ struct	s_player
 
 struct	s_line
 {
-	int 			full;
+	int 			wall;
 	int				bot;
 	int				top;
+
+	float			x_w_scale;
+	int				x_w_shift;
+	float			y_w_scale;
+	int				y_w_shift;
+
+	float			x_b_scale;
+	int				x_b_shift;
+	float			y_b_scale;
+	int				y_b_shift;
+
+	float			x_t_scale;
+	int				x_t_shift;
+	float			y_t_scale;
+	int				y_t_shift;
 };
 
 struct	s_sector
@@ -156,10 +175,21 @@ struct	s_sector
 	t_line			*lines; //same numeration as vert
 	t_vertex		*vert;
 	char			*neighbors;
-	Uint32			floor_z; //should be replaced with equation of surface
-	Uint32			ceil_z; //should be replaced with equation of surface
+
+	int				render_ceil; //bool value that means if ceil should be rendered
 	t_plane			ceil_plane;
+	int				ceil_tex;
+	float			x_c_scale;
+	int				x_c_shift;
+	float			y_c_scale;
+	int				y_c_shift;
+
 	t_plane			floor_plane;
+	int				floor_tex;
+	float			x_f_scale;
+	int				x_f_shift;
+	float			y_f_scale;
+	int				y_f_shift;
 };
 
 struct	s_sprite
@@ -274,10 +304,12 @@ struct	s_game
 	int				falling;
 	int				moving;
 	int				ducking;
+	int				flying; //new feature
 	int				quit;
 	int				pause;
 	SDL_Event		event;
 	float			eye_height;
+	Uint32			dt;
 };
 
 struct	s_option
@@ -298,8 +330,48 @@ struct	s_rend_sector
 	int				zbot2;
 };
 
+struct	s_ceil_cal
+{
+	Uint32	color;
+	float	map_x;
+	float	map_y;
+	float	denomi;
+	float	x_multi;
+	float	deriv_map_x;
+	float	deriv_map_y;
+	int		scaled_map_x;
+	int		scaled_map_y;
+	int		x_text;
+	int		y_text;
+	int		screen_y;
+	float	dummy;
+	float	doomy;
+	t_sector	*sect;
+	t_plane	rotated;
+	t_vector	random_vector;
+};
+
+struct	s_floor_cal
+{
+	Uint32	color;
+	float	map_x;
+	float	map_y;
+	float	denomi;
+	int		x_text;
+	int		y_text;
+	int		screen_y;
+	float	dummy;
+	float	doomy;
+	float	x_multi;
+	t_sector	*sect;
+	t_plane	rotated;
+	t_vector	random_vector;
+};
+
 struct	s_render
 {
+	t_ceil_cal		ceil_cal;
+	t_floor_cal		floor_cal;
 	t_rend_sector	now;
 	t_rend_sector	*queue;
 	t_rend_sector	*tail;
@@ -313,9 +385,41 @@ struct	s_render
 	t_vertex		v1;
 	t_vertex		v2;
 
+	float			w0;
+	float			w1;
+	float			w0_bot;
+	float			w1_bot;
+	float			w0_top;
+	float			w1_top;
+	float			float_y_text;
+	float			u0;
+	float			u1;
+	float			len;
+	float			alpha;
+	float			d_alpha;
+	float			betta;
+	float			d_betta;
+	int				x_text;
+	int				x_text_lower;
+	int				x_text_upper;
+	int				y_text;
+	float			angle_z;
+	int				wall_end;
+
+	float			dummy_var_x;
+	float			d_dummy_var_x;
+	float			doomy_var_x;
+	float			d_doomy_var_x;
+	float			dummy_var_y;
+	float			doomy_var_y;
+	float			d_x_text;
+	float			d_y_text;
+	float			another_percent;
+	Uint32			color;
 	t_vertex		mc1;
 	t_vertex		mc2;
 	t_vertex		mc;
+	t_vertex		current;
 	t_vertex		i1;
 	t_vertex		i2;
 
@@ -363,6 +467,8 @@ struct	s_render
 	int				nz1b;
 	int				nz2a;
 	int				nz2b;
+	int				max_b;
+	int				min_a;
 
 
 	//new things
@@ -378,11 +484,11 @@ struct	s_render
 	int				win_x; // new == x;
  	int				win_y; // new == y;
 	int				wall_num; // new uses to give 
-	float tx1;
-    float tx2;
-	float tz1;
-    float tz2;
-	float lp_x;
+	float			tx1;
+    float			tx2;
+	float			tz1;
+    float			tz2;
+	float			lp_x;
 	int				fog_distance;
  	double			fog_perc;
 	double			floor_x;
@@ -397,6 +503,7 @@ struct	s_render
 	t_plane			ncplane;
 	t_plane			nfplane;
 	char			neighbor;
+	t_texture		*texture;
 };
 
 struct	s_ui
@@ -423,7 +530,7 @@ struct s_texture
 	SDL_Surface		*pause;
 	t_sprite_list	*sprites;
 	int				c_sprt;
-	unsigned int	x_text;
+	int				x_text;
 	int				y_text;
 	double			x_point;
 	double			y_point;
@@ -539,6 +646,48 @@ struct	s_doom
 	SDL_DisplayMode win_size;
 	t_sprite_render	spriter; //draw all things
 	t_editor		editor;
+	int				kappa;
+};
+
+typedef	struct	s_function_params	t_function_params;
+typedef	struct	s_variable_params	t_variable_params;
+typedef	struct	s_sector_movement	t_sector_movement;
+
+struct	s_variable_params
+{
+	int		lin;
+	int		quad;
+};
+
+struct	s_function_params
+{
+	t_variable_params	lin;
+	t_variable_params	quad;
+	int	(*p_lin)(t_variable_params);
+	int	(*p_quad)(t_variable_params);
+};
+
+struct	s_sector_movement
+{
+	t_function_params	param_a_c;
+	t_function_params	param_b_c;
+	t_function_params	param_c_c;
+	t_function_params	param_h_c;
+
+	t_function_params	param_a_f;
+	t_function_params	param_b_f;
+	t_function_params	param_c_f;
+	t_function_params	param_h_f;
+
+	int (*p_ceil_a)(t_function_params);
+	int (*p_ceil_b)(t_function_params);
+	int (*p_ceil_c)(t_function_params);
+	int (*p_ceil_h)(t_function_params);
+
+	int (*p_floor_a)(t_function_params);
+	int (*p_floor_b)(t_function_params);
+	int (*p_floor_c)(t_function_params);
+	int (*p_floor_h)(t_function_params);
 };
 
 //friendly user stuff
@@ -559,12 +708,19 @@ int			init_sdl(t_sdl *sdl, t_option *options);
 void		player_events(t_doom *d);
 void		game_events(t_doom *d);
 int			game_loop(t_doom doom);
+int			*intset(int *b, int c, size_t len);
 
 
 //render
 int			draw_screen(t_doom doom);
 int			user_interface(t_doom *doom);
 int			draw_minimap(t_doom *d);
+void		render_floor_line(int start, int end, t_render *r);
+void		render_ceil_line(int start, int end, t_render *r);
+void		reversed_textline_draw(int y1, int y2, t_render *r);
+void		textline_draw(int y1, int y2, t_render *r);
+void		upper_textline(int y1, int y2, t_render *r);
+void		lower_textline(int y1, int y2, t_render *r);
 
 //some math stuff
 float		get_z(t_plane plane, float x, float y);
@@ -579,6 +735,8 @@ float		fpercent(float start, float end, float current);
 float		v2dlenght(float vx, float vy);
 t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r);
 t_vertex	get_line_param(float x1, float y1, float x2, float y2);
+int			reverse_bits(int b);
+float		line_len(t_vertex start, t_vertex end);
 
 /*
 **texturelaod.c
@@ -592,11 +750,9 @@ int			color_mix(Uint32 start, Uint32 end, float per);
 /*
 **main_render.c
 */
-void		textline_draw(int y1, int y2, t_render *r, t_texture *t);
 void		wall_side(t_render *r, t_doom d);
 void		prepare_to_rendering(t_render *r, t_doom d);
-void		display_core(SDL_Renderer *render, SDL_Texture *texture, SDL_Surface *surface);
-void		floorline_draw(int x, int y, int new_col, int old_col, t_doom d);
+
 /*
 **skybox.c
 */
