@@ -38,9 +38,9 @@ int			project_vector2d(float *ax, float *ay, float bx, float by) //project a ont
 
 int		sign(float x)
 {
-	if (x > 0)
-		return (1);
-	return (x == 0 ? 0 : -1);
+	if (comp_real(x, 0.f, 0.000001f))
+		return (0);
+	return (x > 0 ? 1 : -1);
 }
 
 int		rotate_vector_xy(t_vector *a, float psin, float pcos)
@@ -83,6 +83,15 @@ float	v2dlenght(float vx, float vy)
 	return (sqrt(vx * vx + vy * vy));
 }
 
+float	line_len(t_vertex start, t_vertex end)
+{
+	t_vertex	d;
+
+	d.x = end.x - start.x;
+	d.y = end.y - start.y;
+	return (sqrt(d.x * d.x + d.y * d.y));
+}
+
 t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r)
 {
 	t_vertex	res;
@@ -116,4 +125,9 @@ t_vertex	get_line_param(float x1, float y1, float x2, float y2)
 	res.x = (y2 - y1) / (x2 - x1); // k param
 	res.y = y2 - res.x * x2; // b param
 	return (res);
+}
+
+int			reverse_bits(int b)
+{
+	return ((b * 0x0202020202ULL & 0x010884422010ULL) % 0x3ff); // just cool function that reverse bits in int like this 000011 -> 110000
 }

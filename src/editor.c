@@ -44,10 +44,18 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 		write(fd, doom->map.sectors[i].vert, sizeof(t_vertex) * doom->map.sectors[i].num_vert);
 		//write(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert); //this one is unusable here
 		write(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
-		write(fd, &doom->map.sectors[i].floor_z, sizeof(Uint32));
-		write(fd, &doom->map.sectors[i].ceil_z, sizeof(Uint32));
-		write(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
 		write(fd, &doom->map.sectors[i].ceil_plane, sizeof(t_plane));
+		write(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
+		write(fd, &doom->map.sectors[i].ceil_tex, sizeof(int));
+		write(fd, &doom->map.sectors[i].floor_tex, sizeof(int));
+		write(fd, &doom->map.sectors[i].x_c_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].x_c_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].y_c_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].y_c_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].x_f_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].x_f_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].y_f_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
 	}
 
 	write(fd, &doom->player, sizeof(t_player));
@@ -135,7 +143,7 @@ int		ft_create_window(t_doom *doom, char *name)
 		printf ( "IMG_Load: %s\n", IMG_GetError());
 	}
 	SDL_UpdateWindowSurface(doom->sdl.window);
-	SDL_SetWindowGrab(doom->sdl.window, 1);
+	// SDL_SetWindowGrab(doom->sdl.window, 1);
 	free(str);
 	return (1);
 }
@@ -162,10 +170,18 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 		//map->sectors[i].lines = (t_line*)malloc(sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
 		//read(fd, map->sectors[i].lines, sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
 		read(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
-		read(fd, &doom->map.sectors[i].floor_z, sizeof(Uint32));
-		read(fd, &doom->map.sectors[i].ceil_z, sizeof(Uint32));
-		read(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
 		read(fd, &doom->map.sectors[i].ceil_plane, sizeof(t_plane));
+		read(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
+		read(fd, &doom->map.sectors[i].ceil_tex, sizeof(int));
+		read(fd, &doom->map.sectors[i].floor_tex, sizeof(int));
+		read(fd, &doom->map.sectors[i].x_c_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].x_c_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].y_c_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].y_c_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].x_f_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].x_f_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].y_f_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
 		printf("in map reader\n");
 	}
 	read(fd, &doom->player, sizeof(t_player));
@@ -260,9 +276,9 @@ void	ft_prepare_to_write(t_doom *doom)
 	int		j;
 
 	i = -1;
-	doom->map.num_vert = NUM_VER;
+	doom->map.num_vert = NUM_VER - 1;
 	doom->map.num_sect = NUM_SECT;
-	doom->map.sectors[0].num_vert = NUM_VER; // change it
+	doom->map.sectors[0].num_vert = NUM_VER - 1; // change it
 	doom->map.sectors[0].vert = (t_vertex *)malloc(sizeof(t_vertex) * 100);
 	while (++i < doom->map.num_sect)
 	{
@@ -270,21 +286,18 @@ void	ft_prepare_to_write(t_doom *doom)
 		while (++j < doom->map.num_vert)
 		{
 			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].y;
-			doom->map.sectors[0].vert[j].y = doom->map.vertex[j].x;
+			doom->map.sectors[0].vert[j].x = doom->map.vertex[j].x;
 		}
 	}
-	doom->map.sectors[0].ceil_plane.a = 1;
+	doom->map.sectors[0].ceil_plane.a = 0;
 	doom->map.sectors[0].ceil_plane.b = 0;
 	doom->map.sectors[0].ceil_plane.c = 1;
 	doom->map.sectors[0].ceil_plane.h = -60;
 
-	doom->map.sectors[0].floor_plane.a = -0.6;
-	doom->map.sectors[0].floor_plane.b = 0.6;
+	doom->map.sectors[0].floor_plane.a = 0;
+	doom->map.sectors[0].floor_plane.b = 0;
 	doom->map.sectors[0].floor_plane.c = 1;
 	doom->map.sectors[0].floor_plane.h = 0;
-
-	doom->map.sectors[0].floor_z = 0;
-	doom->map.sectors[0].ceil_z = 40;
 	
 	doom->map.sectors[0].neighbors = (char*)malloc(sizeof(char) * doom->map.sectors->num_vert);
 	for (int i = 0; i < doom->map.sectors->num_vert; i++)
@@ -609,6 +622,8 @@ void	convex(t_doom *doom) // выпуклость
 				doom->map.vertex[i].y = 0;
 				doom->map.vertex[i].x = 0;
 			}
+
+			printf("{%f, %f} * {%f, %f}  Product  %f\n", ab.x, ab.y, bc.x, bc.y,  product);
 			printf("SECTOR ISN'T CONVEX\n");
 			doom->editor.is_sector = 2;
 			return ;

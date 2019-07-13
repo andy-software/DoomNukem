@@ -20,7 +20,7 @@ int		init_sdl(t_sdl *sdl, t_option *options)
 		return (error_message((char *)SDL_GetError()));
 	if (!(sdl->window = SDL_CreateWindow("DOOM", SDL_WINDOWPOS_CENTERED, \
 		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, \
-		WIN_HEIGHT, SDL_WINDOW_RESIZABLE)))
+		WIN_HEIGHT, SDL_WINDOW_SHOWN)))
 		return (error_message((char *)SDL_GetError()));
 	if (!(sdl->surface = SDL_GetWindowSurface(sdl->window)))
 		return (error_message((char *)SDL_GetError()));
@@ -30,4 +30,14 @@ int		init_sdl(t_sdl *sdl, t_option *options)
 	SDL_SetWindowGrab(sdl->window, 1);
 	SDL_SetRelativeMouseMode(1);
 	return (1);
+}
+
+int		*intset(int *b, int c, size_t len)
+{
+	size_t			i;
+
+	i = 0;
+	while (i < len)
+		b[i++] = c;
+	return (b);
 }

@@ -14,13 +14,15 @@
 
 void	wall_tex(t_texture *texture, t_sdl *sdl)
 {
-	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface*) * 4)))
+	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface*) * 6)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	
 	texture->wall_tex[0] = load_tex("./textures/walls/WALL3.png", sdl);
 	texture->wall_tex[1] = load_tex("./textures/walls/WALL.png", sdl);
 	texture->wall_tex[2] = load_tex("./textures/walls/WALL-1.png", sdl);
 	texture->wall_tex[3] = load_tex("./textures/walls/WALL1.png", sdl);
+	texture->wall_tex[4] = load_tex("./textures/walls/colorstone.png", sdl);
+	texture->wall_tex[5] = load_tex("./textures/walls/wood.png", sdl);
 	if (!(texture->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	

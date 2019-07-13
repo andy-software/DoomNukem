@@ -37,5 +37,5 @@ t_plane	rotate_plane_xy(t_plane *plane, float psin, float pcos)
 
 float		get_z(t_plane plane, float x, float y)
 {
-	return ((-plane.h - plane.a * x - plane.b * y) / plane.c);
+	return ((-plane.h - plane.a * x - plane.b * y)); // sorry, Yulia :'( there is no varible c
 }

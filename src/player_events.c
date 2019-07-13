@@ -79,22 +79,32 @@ void		player_events(t_doom *d)
 	}
 	while (SDL_PollEvent(&ev) && d->game.quit != 1)
 	{
-		if (ev.type == SDL_KEYDOWN || ev.type == SDL_KEYUP)
+		if (ev.type == SDL_KEYDOWN)
 		{
 			if (ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
 			{
 				//printf("velocity z %f\n", d->game.velocity.z);
-				if (d->game.ground || (d->game.velocity.z > -0.4 && d->game.velocity.z < 0))
+				if (d->game.ground || d->game.flying)
 				{
-					d->game.velocity.z += 0.6;
+					if (d->game.velocity.z < MAX_SPEED_UPWARD)
+						d->game.velocity.z += 0.6;
+					else
+						d->game.velocity.z = MAX_SPEED_UPWARD;
+					
 					d->game.falling = 1;
 				}
 			}
-		}
-		if (ev.type == SDL_KEYDOWN)
-		{
+			else if (ev.key.keysym.sym == SDLK_f && !d->game.pause)
+			{
+				printf("Fly mod\n");
+				d->game.flying = !d->game.flying;
+			}
+			if (ev.key.keysym.sym == SDLK_v)
+			{
+				d->kappa = !d->kappa;
+			}
 			if (ev.key.keysym.sym == SDLK_k)
 			{
 				if (d->game.pause == 0)
