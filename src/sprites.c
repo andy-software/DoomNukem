@@ -62,7 +62,8 @@ t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h) // h and 
 			in_rect.y = surr->h / h * i;
 		}
 	}
-	printf("");
+	printf("kappa\n");
+	fflush(stdout);
 	return (res);
 }
 

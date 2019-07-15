@@ -49,9 +49,9 @@ void	load_sprites(t_texture *texture, t_sdl *sdl, char *path)
 	surr = load_tex(path, sdl);
 	
 	SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
-	texture->c_sprt = 3 * 4;
+	texture->c_sprt = 1;
 	
-	head = split_image_to_sprites(surr, 3, 4); //check for licks and segs
+	head = split_image_to_sprites(surr, 1, 1); //check for licks and segs
 	SDL_FreeSurface(surr);
 	
 	surr = load_tex("./textures/sprites/painting_flowers.jpg", sdl);

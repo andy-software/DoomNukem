@@ -530,20 +530,6 @@ struct s_texture
 	SDL_Surface		*pause;
 	t_sprite_list	*sprites;
 	int				c_sprt;
-	int				x_text;
-	int				y_text;
-	double			x_point;
-	double			y_point;
-	int				color;
-	int				wall_end;
-	int				x_split;
-	int				y_split;
-	float			x1;
-	float			x2;
-	float			percent;
-	float			xscale1;
-	float			xscale2;
-	float 			dy_point;
 };
 
 struct s_skybox

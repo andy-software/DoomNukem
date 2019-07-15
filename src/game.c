@@ -22,8 +22,6 @@ static int	init_game_params(t_doom *d)
 	d->game.falling = 1;
 	d->game.flying = 0;
 	d->game.acceleration = 0.2f;
-	d->texture.x_split = 4;
-	d->texture.y_split = 2;
 	d->render.fog_distance = 200;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
@@ -55,7 +53,6 @@ int			game_loop(t_doom doom)
 {
 	if (!init_game_params(&doom))
 		return (0);
-	//printf("whatever\n");
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prevTime = SDL_GetTicks();

@@ -636,7 +636,7 @@ void	render_sprites(t_sprite_render sr, t_doom d)
 					d.sr.zb = (d.sr.win_x - d.sr.x1) * (d.sr.z2b - d.sr.z1b) / (d.sr.x2 - d.sr.x1) + d.sr.z1b;
 					// d.sr.c_za = max(d.sr.za, d.sr.clmp_top); // i bet i never use this
 					// d.sr.c_zb = min(d.sr.zb, d.sr.clmp_bot);
-					draw_line_of_sprite(&d.sr, d.texture.sprites->sprites[1], &d.render);
+					draw_line_of_sprite(&d.sr, d.texture.sprites->sprites[d.sr.i], &d.render);
 				}
 			}
 			if (++d.sr.tmp == (d.render.queue + MAX_SECTORS_RENDERED))
