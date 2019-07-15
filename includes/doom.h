@@ -618,6 +618,7 @@ struct	s_editor
 	int				ind_text; // started from 5 
 	t_buttons		press;
 	int				save_del;
+	int				fl_or_ceil;
 };
 /****/
 

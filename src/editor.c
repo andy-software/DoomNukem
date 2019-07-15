@@ -415,8 +415,8 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->map.sectors[0].floor_plane.c = 1;
 	doom->map.sectors[0].floor_plane.h = 0;
 
-	doom->map.sectors[0].floor_z = 0;
-	doom->map.sectors[0].ceil_z = 40;
+	// doom->map.sectors[0].floor_z = 0;
+	// doom->map.sectors[0].ceil_z = 40;
 	/* ****** */
 }
 
@@ -482,8 +482,8 @@ void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меня�
 				doom->map.sectors[0].floor_plane.c += 0.1;
 			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].floor_plane.h < 50)
 				doom->map.sectors[0].floor_plane.h += 0.1;
-			else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].floor_z < 50)
-				doom->map.sectors[0].floor_z += 0.1;
+			// else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].floor_z < 50)
+			// 	doom->map.sectors[0].floor_z += 0.1;
 		}
 		else if (state[SDL_SCANCODE_LSHIFT])
 		{
@@ -495,8 +495,8 @@ void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меня�
 				doom->map.sectors[0].floor_plane.c -= 0.1;
 			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].floor_plane.h < 50)
 				doom->map.sectors[0].floor_plane.h -= 0.1;
-			else if (state[SDL_SCANCODE_Z])
-					doom->map.sectors[0].floor_z -= 0.1;
+			// else if (state[SDL_SCANCODE_Z])
+			// 		doom->map.sectors[0].floor_z -= 0.1;
 			}
 	}
 	if (doom->editor.fl_or_ceil == CEIL)
@@ -511,8 +511,8 @@ void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меня�
 				doom->map.sectors[0].ceil_plane.c += 0.1;
 			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].ceil_plane.h < 50)
 				doom->map.sectors[0].ceil_plane.h += 0.1;
-			else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].ceil_z < 50)
-				doom->map.sectors[0].ceil_z += 0.1;
+			// else if (state[SDL_SCANCODE_Z] && doom->map.sectors[0].ceil_z < 50)
+			// 	doom->map.sectors[0].ceil_z += 0.1;
 		}
 		else if (state[SDL_SCANCODE_LSHIFT])
 		{
@@ -524,8 +524,8 @@ void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меня�
 				doom->map.sectors[0].ceil_plane.c -= 0.1;
 			else if (state[SDL_SCANCODE_H] && doom->map.sectors[0].ceil_plane.h < 50)
 				doom->map.sectors[0].ceil_plane.h -= 0.1;
-			else if (state[SDL_SCANCODE_Z])
-					doom->map.sectors[0].ceil_z -= 0.1;
+			// else if (state[SDL_SCANCODE_Z])
+			// 		doom->map.sectors[0].ceil_z -= 0.1;
 		}
 	}
 
@@ -718,12 +718,12 @@ void	info_ceil_floor(t_doom *doom)
 	doom->editor.font.text_rect.y += 30;
 	free(str1);
 	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].floor_z);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	// 	str1 = ft_itoa(doom->map.sectors[0].floor_z);
+	// message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	// SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
 	doom->editor.font.text_rect.x = 1070;
 	doom->editor.font.text_rect.y = 277;
-	free(str1);
+	// free(str1);
 	SDL_FreeSurface(message);
 		str1 = ft_itoa(doom->map.sectors[0].ceil_plane.a);
 	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
@@ -749,11 +749,11 @@ void	info_ceil_floor(t_doom *doom)
 	doom->editor.font.text_rect.y += 30;
 	free(str1);
 	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[0].ceil_z);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
-	SDL_FreeSurface(message);
-	free(str1);
+	// 	str1 = ft_itoa(doom->map.sectors[0].ceil_z);
+	// message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
+	// SDL_BlitSurface(message, NULL, doom->sdl.surface, &doom->editor.font.text_rect);
+	// SDL_FreeSurface(message);
+	// free(str1);
 }
 
 void	ft_render_interface(t_doom *doom)
