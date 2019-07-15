@@ -26,6 +26,8 @@ int		init_sdl(t_sdl *sdl, t_option *options)
 		return (error_message((char *)SDL_GetError()));
 	if (TTF_Init() == -1)
 		return (error_message((char *)SDL_GetError()));
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		return (error_message((char *)SDL_GetError()));
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetWindowGrab(sdl->window, 1);
 	SDL_SetRelativeMouseMode(1);
