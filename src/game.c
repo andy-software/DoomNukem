@@ -49,6 +49,11 @@ static int	init_game_params(t_doom *d)
 	return (1);
 }
 
+void	*fun(void*a)
+{
+	return (0);
+}
+
 int			game_loop(t_doom doom)
 {
 	if (!init_game_params(&doom))

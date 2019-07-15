@@ -42,6 +42,7 @@
 # define MAX_SECTORS_RENDERED 32  //must be the power of 2
 # define COUNT_FPS_NUMBERS 4
 # define MAX_SPEED_UPWARD 1
+# define NUM_OF_THRD 4
 
 # define MAX_SPRITES_COUNT	128
 
@@ -114,6 +115,8 @@ typedef struct s_interface	t_interface;
 typedef struct s_vertex_int	t_vertex_int;
 typedef struct s_images t_images;
 typedef	struct s_buttons t_buttons;
+typedef	struct s_thread	t_thread;
+
 
 /***/
 
@@ -234,6 +237,21 @@ struct	s_sprite_render
 	t_vector		t2;
 	t_vector		v1;
 	t_vector		v2;
+	float			xscale1_p;
+	float			xscale2_p;
+	float			x1_p;
+	float			x2_p;
+	float			percent;
+	float			d_percent;
+	float			percent_of_wall;
+	float			d_percent_of_wall;
+	SDL_Surface		*surr;
+
+	float			d_y;
+	float			x_text;
+	float			d_x_text;
+	int				y_text;
+	Uint32			color;
 
 	int				clmp_top;
 	int				clmp_bot;
@@ -252,8 +270,10 @@ struct	s_sprite_render
 	int				begin_x;
 	int				end_x;
 	float			y;
-	int				za;
-	int				zb;
+	float			za;
+	float			zb;
+	float			d_za;
+	float			d_zb;
 	int				nza;
 	int				nzb;
 	float			x1;
@@ -351,6 +371,7 @@ struct	s_ceil_cal
 	t_sector	*sect;
 	t_plane	rotated;
 	t_vector	random_vector;
+	SDL_Surface	*surr;
 };
 
 struct	s_floor_cal
@@ -368,6 +389,7 @@ struct	s_floor_cal
 	t_sector	*sect;
 	t_plane	rotated;
 	t_vector	random_vector;
+	SDL_Surface	*surr;
 };
 
 struct	s_render
@@ -425,6 +447,12 @@ struct	s_render
 	t_vertex		i1;
 	t_vertex		i2;
 	
+	float			kt;
+	float			kza;
+	float			kzb;
+	float			nkza;
+	float			nkzb;	
+
 	int				t1_1_line;
 	int				t1_2_line;
 	int				t2_1_line;
@@ -622,8 +650,16 @@ struct	s_editor
 };
 /****/
 
+struct	s_thread
+{
+	pthread_t	thrd;
+	Uint32		id;
+	int			finished;
+};
+
 struct	s_doom
 {
+	//t_thread		threads[NUM_OF_THRD];
 	t_sprite_render		sr;
 	t_render		render;
 	t_ui			ui;
@@ -635,9 +671,8 @@ struct	s_doom
 	t_texture		texture;
 	t_skybox		sky;
 	SDL_DisplayMode win_size;
-	t_sprite_render	spriter; //draw all things
+	//t_sprite_render	spriter; //draw all things
 	t_editor		editor;
-	int				kappa;
 };
 
 typedef	struct	s_function_params	t_function_params;
