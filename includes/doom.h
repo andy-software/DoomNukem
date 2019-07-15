@@ -71,11 +71,13 @@
 /* EDITOR */
 # define NUM_VER doom->editor.interface.iterator_num_vertex
 # define NUM_SECT doom->editor.interface.nbr_sectors
-# define NB_BUTTONS 9
+# define NB_BUTTONS 11
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
+# define FLOOR 1
+# define CEIL 2
 /***/
 
 typedef struct s_doom		t_doom;
@@ -422,7 +424,7 @@ struct	s_render
 	t_vertex		current;
 	t_vertex		i1;
 	t_vertex		i2;
-
+	
 	int				t1_1_line;
 	int				t1_2_line;
 	int				t2_1_line;
@@ -490,7 +492,7 @@ struct	s_render
     float			tz2;
 	float			lp_x;
 	int				fog_distance;
- 	double			fog_perc;
+	double			fog_perc;
 	double			floor_x;
 	double			floor_y;
 	//till this
@@ -606,6 +608,7 @@ struct	s_editor
 	// t_sector 	saver[9999999];
 	t_images		images[9999]; // consist of different images for editor
 	t_images		sector[9999];
+	t_font			font;
 	int				ind_img; // number of image
 	int				img_press; // press on image
 	int 			is_drawing;
@@ -614,6 +617,7 @@ struct	s_editor
 	int				is_sector;
 	int				ind_text; // started from 5 
 	t_buttons		press;
+	int				save_del;
 };
 /****/
 
@@ -754,11 +758,12 @@ void	load_sprites(t_texture *texture, t_sdl *sdl, char *path);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int			*copy_static_arr(int *arr, const int len);
 
+int		game_mod(char *file_name);
+
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
-int			ft_read_map_edit(t_doom *doom, int fd);
-int			ft_start_edit(t_doom *doom);
+int			ft_start_edit(t_doom *doom, int fd, char *name);
 int			ft_write_changes_to_file(t_doom *doom, int fd);
 void		ft_check_key(t_doom *doom, SDL_Event *event);
 void		ft_render_editor(t_doom *doom);
@@ -770,9 +775,11 @@ void		ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
 void		ft_render_previous(t_doom *doom);
 void		ft_draw_axis(t_doom *doom);
 void		ft_prepare_editor(t_doom *doom);
-void		ft_prepare_to_write(t_doom *doom);
+int			ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
+int 		ft_read_map_edit(t_doom *doom, int fd);
+void		key_floor_ceil(t_doom *doom, SDL_Event *event);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/

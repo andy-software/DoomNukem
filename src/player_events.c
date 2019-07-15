@@ -101,10 +101,6 @@ void		player_events(t_doom *d)
 				printf("Fly mod\n");
 				d->game.flying = !d->game.flying;
 			}
-			if (ev.key.keysym.sym == SDLK_v)
-			{
-				d->kappa = !d->kappa;
-			}
 			if (ev.key.keysym.sym == SDLK_k)
 			{
 				if (d->game.pause == 0)
