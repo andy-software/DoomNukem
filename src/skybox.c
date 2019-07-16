@@ -14,21 +14,14 @@
 
 //x = const * a
 //y = const * tan(b)
+//todo pthreads here
 void	draw_skybox(t_render *r, t_doom d)
 {
-	const	int	text_y_start = 900 + d.player.angle_z * 160;
+	const	int	text_y_start = 640 + d.player.angle_z * 120;
 	static	const int	W_H2 = WIN_HEIGHT * WIN_WIDTH;
 
 	d.sky.win_x = 0;
-	d.sky.pos_angle = ((d.player.anglesin) / 0.005556);
-	d.sky.pos_max = 5;
-	d.sky.pos_max = SKY_W / 2 / 360;
-	if (d.player.anglecos >= 0)
-		d.sky.text_x = (int)(d.sky.pos_angle * d.sky.pos_max);
-	else
-		d.sky.text_x = (int)(SKY_W / 2 - d.sky.pos_angle * d.sky.pos_max);
-	if (d.sky.text_x < 0)
-		d.sky.text_x = 4096 + d.sky.text_x;
+	d.sky.text_x = (d.player.angle / (2 * M_PI) * (SKY_W - 1));
 	while (d.sky.win_x < WIN_WIDTH && d.sky.text_x <= SKY_W)
 	{
 		d.sky.text_x++;

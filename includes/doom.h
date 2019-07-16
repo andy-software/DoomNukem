@@ -43,6 +43,8 @@
 # define COUNT_FPS_NUMBERS 4
 # define MAX_SPEED_UPWARD 1
 # define NUM_OF_THRD 4
+# define MIN_SLICE_WIDTH 40
+# define MAX_THREADS_IN_RENDER	3
 
 # define MAX_SPRITES_COUNT	128
 
@@ -394,6 +396,9 @@ struct	s_floor_cal
 
 struct	s_render
 {
+	float			width_slice;
+	int				count_slice;
+
 	t_ceil_cal		ceil_cal;
 	t_floor_cal		floor_cal;
 	t_rend_sector	now;
@@ -408,71 +413,39 @@ struct	s_render
 	t_vertex		t2;
 	t_vertex		v1;
 	t_vertex		v2;
-
 	float			w0;
 	float			w1;
 	float			w0_bot;
 	float			w1_bot;
 	float			w0_top;
 	float			w1_top;
-	float			float_y_text;
-	float			u0;
-	float			u1;
 	float			len;
-	float			alpha;
 	float			d_alpha;
-	float			betta;
-	float			d_betta;
-	int				x_text;
-	int				x_text_lower;
-	int				x_text_upper;
-	int				y_text;
 	float			angle_z;
-	int				wall_end;
-
-	float			dummy_var_x;
+	float			dummy_var;
 	float			d_dummy_var_x;
-	float			doomy_var_x;
 	float			d_doomy_var_x;
-	float			dummy_var_y;
-	float			doomy_var_y;
-	float			d_x_text;
-	float			d_y_text;
 	float			another_percent;
 	Uint32			color;
 	t_vertex		mc1;
 	t_vertex		mc2;
-	t_vertex		mc;
 	t_vertex		current;
 	t_vertex		i1;
 	t_vertex		i2;
-	
 	float			kt;
 	float			kza;
 	float			kzb;
 	float			nkza;
 	float			nkzb;	
-
 	int				t1_1_line;
 	int				t1_2_line;
 	int				t2_1_line;
 	int				t2_2_line;
 	int				max_sector_rendered;
-	// float			vx1;
 	float			pcos;
 	float			psin;
-	// float			vy1;
-	// float			vx2;
-	// float			vy2;
-	// float			tx2;
-	// float			ty2;
 	int				begin_x;
 	int				end_x;
-	float			y;
-	int				za;
-	int				zb;
-	int				nza;
-	int				nzb;
 	float			x1;
 	float			x2;
 	int				z1;
@@ -499,35 +472,12 @@ struct	s_render
 	int				nz2b;
 	int				max_b;
 	int				min_a;
-
-
 	//new things
 	float			p_x;
 	float			p_y;
 	float			p_z;
-	float			exact_begin;
-	//added after merge
-	int				c_za;
- 	int				c_zb;
-	int				c_nza;
-	int				c_nzb;
-	int				win_x; // new == x;
- 	int				win_y; // new == y;
-	int				wall_num; // new uses to give 
-	float			tx1;
-    float			tx2;
-	float			tz1;
-    float			tz2;
-	float			lp_x;
-	int				fog_distance;
-	double			fog_perc;
-	double			floor_x;
-	double			floor_y;
-	//till this
 	Uint32			*pix;
 	t_line			line;
-	Uint32			last_frame;
-	Uint32			this_frame;
 	t_plane			cplane;
 	t_plane			fplane;
 	t_plane			ncplane;
@@ -568,7 +518,7 @@ struct s_skybox
 	int				text_x;
 	int				win_y;
 	int				text_y;
-	int				pos_angle;
+	float			pos_angle;
 	int				pos_max;
 };
 
@@ -655,11 +605,43 @@ struct	s_thread
 	pthread_t	thrd;
 	Uint32		id;
 	int			finished;
+
+	float		alpha;
+	float		d_alpha; //hm
+	int			end_x;
+	int			begin_x;
+	float		doomy_var_x;
+	float		dummy_var_x;
+	float		d_doomy_var_x; //hm
+	float		d_dummy_var_x; //hm
+	int			x_text;
+	int			x_text_upper;
+	int			x_text_lower;
+	int			win_x;
+	int			win_y;
+	float		y;
+	int			za;
+	int			zb;
+	int			c_za;
+	int			c_zb;
+	t_render	*r;
+	int			nza;
+	int			nzb;
+	int			c_nza;
+	int			c_nzb;
+	t_floor_cal	fc;
+	t_ceil_cal	cc;
+	int			wall_end;
+	float		d_betta;
+	float		betta;
+	float		float_y_text;
+	float		d_y_text;
+	Uint32		color;		
 };
 
 struct	s_doom
 {
-	//t_thread		threads[NUM_OF_THRD];
+	t_thread		threads[NUM_OF_THRD];
 	t_sprite_render		sr;
 	t_render		render;
 	t_ui			ui;
@@ -741,12 +723,17 @@ int			*intset(int *b, int c, size_t len);
 int			draw_screen(t_doom doom);
 int			user_interface(t_doom *doom);
 int			draw_minimap(t_doom *d);
-void		render_floor_line(int start, int end, t_render *r);
-void		render_ceil_line(int start, int end, t_render *r);
-void		reversed_textline_draw(int y1, int y2, t_render *r);
-void		textline_draw(int y1, int y2, t_render *r);
-void		upper_textline(int y1, int y2, t_render *r);
-void		lower_textline(int y1, int y2, t_render *r);
+void		render_floor_line(int start, int end, t_render *r, t_thread *t);
+void		render_ceil_line(int start, int end, t_render *r, t_thread *t);
+void		reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t);
+void		textline_draw(int y1, int y2, t_render *r, t_thread *t);
+void		upper_textline(int y1, int y2, t_render *r, t_thread *t);
+void		lower_textline(int y1, int y2, t_render *r, t_thread *t);
+
+//threads
+int			find_count_and_width_of_slice(t_render *r);
+int			fill_the_params(t_render *r, t_thread *t);
+void		*start_the_work(void *data);
 
 //some math stuff
 float		get_z(t_plane plane, float x, float y);

@@ -63,6 +63,10 @@ static void	mouse_rotation(t_doom *d)
 	g = &d->game; //should it be used?
 	SDL_GetRelativeMouseState(&x,&y); //pislya pauzi nabuvae yakogos znachenya mojna postaviti kostilni flag pause?
 	d->player.angle += x * SPEED_ROTATION;
+	if (d->player.angle > 2 * M_PI)
+		d->player.angle -= 2 * M_PI;
+	else if (d->player.angle < 0)
+		d->player.angle += 2 * M_PI;
 	d->player.angle_z = clamp(d->player.angle_z - y * SPEED_ROTATION_Z, -MAX_Z_ANGLE, MAX_Z_ANGLE);
 	d->player.anglesin = sinf(d->player.angle);
 	d->player.anglecos = cosf(d->player.angle);

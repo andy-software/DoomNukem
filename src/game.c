@@ -22,7 +22,6 @@ static int	init_game_params(t_doom *d)
 	d->game.falling = 1;
 	d->game.flying = 0;
 	d->game.acceleration = 0.2f;
-	d->render.fog_distance = 200;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
@@ -66,6 +65,7 @@ int			game_loop(t_doom doom)
 		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
+			doom.ui.prevTime = SDL_GetTicks();
 			draw_skybox(&doom.render, doom);
 			draw_screen(doom);
 			//draw_ui();
@@ -80,6 +80,8 @@ int			game_loop(t_doom doom)
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;
+		
+		
 		draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
 	}
