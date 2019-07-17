@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
-//Testing kfmgiu fnghcujdyujruhikruhodingtyi
+
 int		editor_mod(char *file_name)
 {
     t_doom doom;
@@ -38,7 +38,7 @@ int		game_mod(char *file_name)
 
 int		main(int argc, char **argv)
 {
-	// srand(time(NULL));
+	srand(time(NULL));
 	if (argc == 3)
 	{
 		if (ft_strcmp(argv[1], "play") == 0)

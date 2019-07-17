@@ -55,6 +55,7 @@ void	*fun(void*a)
 
 int			game_loop(t_doom doom)
 {
+	// changes(&doom);
 	if (!init_game_params(&doom))
 		return (0);
 	while (doom.game.quit != 1)
@@ -65,8 +66,7 @@ int			game_loop(t_doom doom)
 		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
-			doom.ui.prevTime = SDL_GetTicks();
-			draw_skybox(&doom.render, doom);
+			draw_skybox(doom);
 			draw_screen(doom);
 			//draw_ui();
 			//set_up_the_timing();
@@ -76,11 +76,10 @@ int			game_loop(t_doom doom)
 			//game is paused
 		}
 
-		// while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6); // lock fps to 60
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 10); // lock fps to 100
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;
-		
 		
 		draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);

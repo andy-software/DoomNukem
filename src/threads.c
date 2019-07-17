@@ -45,7 +45,6 @@ int		fill_the_params(t_render *r, t_thread *t)
 		t[i].r = r;
 		i++;
 	}
-
 	return (1);
 }
 
@@ -78,7 +77,7 @@ void	*start_the_work(void *data)
 
 
 		render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
-		if (r->sect->render_ceil)
+		if (r->sect->render_ceil) // 	if (t->c_za < t->c_zb)?
 			render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
 
 		if(r->neighbor >= 0)
@@ -96,8 +95,8 @@ void	*start_the_work(void *data)
 			lower_textline(t->nzb, t->zb, r, t);
 			r->zbottom[t->win_x] = clamp(min(t->c_zb, t->c_nzb), 0, r->zbottom[t->win_x]);
 		}
-		// else
-		// 	textline_draw(t->c_za, t->c_zb, r, t);
+		else
+			textline_draw(t->c_za, t->c_zb, r, t);
 		t->alpha += r->d_alpha;
 		t->doomy_var_x += r->d_doomy_var_x;
 		t->dummy_var_x += r->d_dummy_var_x;

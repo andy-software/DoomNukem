@@ -159,9 +159,6 @@ void	render_sector(t_render *r, t_doom *d)
 		r->zceil2  = get_z(r->cplane, r->mc2.x, r->mc2.y) - r->p_z;
 		r->zfloor2 = get_z(r->fplane, r->mc2.x, r->mc2.y) - r->p_z;
 
-		r->max_b = max(r->zfloor1, r->zfloor2);
-		r->min_a = min(r->zceil1, r->zceil2);
-
 		r->z1a = WIN_HEIGHT / 2 - (int)((r->zceil1 + r->t1.y * r->angle_z) * r->zscale1);
 		r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor1 + r->t1.y * r->angle_z) * r->zscale1);
 		r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil2 + r->t2.y * r->angle_z) * r->zscale2);
@@ -233,7 +230,7 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	surr = r->texture->wall_tex[r->line.top];
 
 	t->win_y = clamp(y2, 0, WIN_HEIGHT - 1);//kostill
-	t->wall_end = clamp(y1, 0, WIN_HEIGHT - 1);
+	t->wall_end = clamp(y1 + 1, 0, WIN_HEIGHT - 1);
 	
 	t->d_betta = -1.0 / (t->zb - t->za); 
 	t->betta = (float)(t->win_y - t->za) * t->d_betta; //kostill//not like this

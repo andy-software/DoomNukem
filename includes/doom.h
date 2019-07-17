@@ -22,6 +22,7 @@
 # include "../frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h"
 # include "../frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h"
 # include <errno.h>
+# include <stdio.h>
 //add network
 
 # define WIN_WIDTH 1200
@@ -45,6 +46,7 @@
 # define NUM_OF_THRD 4
 # define MIN_SLICE_WIDTH 40
 # define MAX_THREADS_IN_RENDER	3
+# define MAX_THREADS_IN_SKY	4
 
 # define MAX_SPRITES_COUNT	128
 
@@ -419,6 +421,7 @@ struct	s_render
 	float			w1_bot;
 	float			w0_top;
 	float			w1_top;
+
 	float			len;
 	float			d_alpha;
 	float			angle_z;
@@ -470,8 +473,6 @@ struct	s_render
 	int				nz1b;
 	int				nz2a;
 	int				nz2b;
-	int				max_b;
-	int				min_a;
 	//new things
 	float			p_x;
 	float			p_y;
@@ -514,12 +515,16 @@ struct s_texture
 
 struct s_skybox
 {
+	t_doom			*doom;
 	int				win_x;
+	int				end_x;
 	int				text_x;
 	int				win_y;
+	int				start_text_y;
 	int				text_y;
 	float			pos_angle;
 	int				pos_max;
+	Uint32			*pix;
 };
 
 /* EDITOR */
@@ -639,6 +644,11 @@ struct	s_thread
 	Uint32		color;		
 };
 
+struct	s_changes
+{
+
+};
+
 struct	s_doom
 {
 	t_thread		threads[NUM_OF_THRD];
@@ -651,51 +661,10 @@ struct	s_doom
 	t_game			game;
 	t_player		player;
 	t_texture		texture;
-	t_skybox		sky;
-	SDL_DisplayMode win_size;
+	t_skybox		sky[4];
+	// SDL_DisplayMode win_size;
 	//t_sprite_render	spriter; //draw all things
 	t_editor		editor;
-};
-
-typedef	struct	s_function_params	t_function_params;
-typedef	struct	s_variable_params	t_variable_params;
-typedef	struct	s_sector_movement	t_sector_movement;
-
-struct	s_variable_params
-{
-	int		lin;
-	int		quad;
-};
-
-struct	s_function_params
-{
-	t_variable_params	lin;
-	t_variable_params	quad;
-	int	(*p_lin)(t_variable_params);
-	int	(*p_quad)(t_variable_params);
-};
-
-struct	s_sector_movement
-{
-	t_function_params	param_a_c;
-	t_function_params	param_b_c;
-	t_function_params	param_c_c;
-	t_function_params	param_h_c;
-
-	t_function_params	param_a_f;
-	t_function_params	param_b_f;
-	t_function_params	param_c_f;
-	t_function_params	param_h_f;
-
-	int (*p_ceil_a)(t_function_params);
-	int (*p_ceil_b)(t_function_params);
-	int (*p_ceil_c)(t_function_params);
-	int (*p_ceil_h)(t_function_params);
-
-	int (*p_floor_a)(t_function_params);
-	int (*p_floor_b)(t_function_params);
-	int (*p_floor_c)(t_function_params);
-	int (*p_floor_h)(t_function_params);
 };
 
 //friendly user stuff
@@ -750,6 +719,7 @@ t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_ren
 t_vertex	get_line_param(float x1, float y1, float x2, float y2);
 int			reverse_bits(int b);
 float		line_len(t_vertex start, t_vertex end);
+Uint32		get_color_value(Uint32 start, Uint32 end, float perc);
 
 /*
 **texturelaod.c
@@ -769,8 +739,11 @@ void		prepare_to_rendering(t_render *r, t_doom d);
 /*
 **skybox.c
 */
-void		draw_skybox(t_render *r, t_doom d);
+void		draw_skybox(t_doom d);
 void		draw_sky_line(t_render *r, t_doom d);
+int			prepare_to_sky(t_doom *d);
+void		*sky_threads(void *data);
+void		rain_sky_box(t_doom d);
 
 /*
 **sprites.c && load.c
