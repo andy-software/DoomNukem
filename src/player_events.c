@@ -83,6 +83,7 @@ void		player_events(t_doom *d)
 	{
 		if (ev.type == SDL_KEYDOWN)
 		{
+			printf("%d\n", ev.key.keysym.sym);
 			if (ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
@@ -123,15 +124,18 @@ void		player_events(t_doom *d)
 			}
 			else if (ev.key.keysym.sym == SDLK_g)
 			{
-				d->ui.fire = 1;
+				d->game.hp_level -= 15;
 			}
 			else if (ev.key.keysym.sym == SDLK_h)
 			{
-				d->ui.ammo_1 += 20;
+				if (d->ui.ammo_1 + 20 <= 60)
+					d->ui.ammo_1 += 20;
+				else
+					d->ui.ammo_1 = 60;
 				// if(d->game.hp_level < 4)
 				// 	d->game.hp_level += 1;
 			}
-			if (ev.key.keysym.sym == SDLK_k)
+			if (ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
 				{

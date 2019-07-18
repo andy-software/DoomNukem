@@ -33,13 +33,15 @@ void		draw_fps(t_doom *d, int fps)
 	SDL_Surface	*message;
 
 	i = -1;
+	if (fps > 999)
+		fps = 999;
 	while (++i < 3)
 	{
 		str[2 - i] = fps % 10 + 48;
 		fps /= 10;
 	}
 	str[3] = 0;
-	message = TTF_RenderText_Solid(d->texture.fonts[0].text_font, str, d->texture.fonts[0].text_color);
-	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[0].text_rect);
+	message = TTF_RenderText_Solid(d->texture.fonts[FPS_FONT].text_font, str, d->texture.fonts[FPS_FONT].text_color);
+	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[FPS_FONT].text_rect);
 	SDL_FreeSurface(message);
 }

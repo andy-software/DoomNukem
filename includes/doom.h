@@ -24,8 +24,8 @@
 # include <errno.h>
 //add network
 
-# define WIN_WIDTH 4000
-# define WIN_HEIGHT 2800
+# define WIN_WIDTH 1200
+# define WIN_HEIGHT 800
 # define SKY_W 4096
 # define SKY_H 2048
 # define WALL_TEXT_W 256	
@@ -44,6 +44,7 @@
 # define MAX_SPEED_UPWARD 1
 # define GREATER 46 // keycode of >
 # define LESER 44 // <
+# define PAUSE 96 // §
 
 # define MAX_SPRITES_COUNT	128
 
@@ -146,7 +147,7 @@ struct	s_player
 	t_vector		coord; //earlier was t_vertex could cause some troubles
 	Uint32			sector;
 	float			angle;
-	float			anglesin; 
+	float			anglesin;
 	float			anglecos;
 	float			angle_z; // angle of player z view
 };
@@ -313,6 +314,7 @@ struct	s_game
 	int				quit;
 	int				pause;
 	int				hp_level;
+	int				damage;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -530,11 +532,22 @@ struct	s_ui
 	int				ammo_1;	
 };
 
+struct	s_menu
+{
+};
+
 struct	s_font
 {
 	SDL_Rect		text_rect;
 	SDL_Color		text_color;
 	TTF_Font		*text_font;
+};
+
+enum font {
+
+	FPS_FONT = 0,
+	HP_FONT = 1,
+	AMMO_FONT = 2,
 };
 
 struct s_texture
@@ -548,7 +561,6 @@ struct s_texture
 	SDL_Surface		**hp;
 	SDL_Surface		**gun1;
 	SDL_Surface		**gun2;
-	SDL_Surface		**armor;
 	SDL_Surface		**dude;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
@@ -560,7 +572,6 @@ struct s_texture
 	SDL_Rect		ammo_r;
 	int				dude_l;
 	int				visor_l;
-	int				hp_l;
 	int				gun1_l;
 	int				gun2_l;
 	int				armor_l;

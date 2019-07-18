@@ -18,9 +18,13 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 		return (error_message("failed to malloc textures"));
 	if (!(t->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts = ft_memalloc(sizeof(t_font))))
+	if (!(t->fonts = ft_memalloc(sizeof(t_font) * 3)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts[0].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
+	if (!(t->fonts[FPS_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
+		return (error_message("failed to malloc textures"));
+	if (!(t->fonts[HP_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
+		return (error_message("failed to malloc textures"));
+	if (!(t->fonts[AMMO_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 50)))
 		return (error_message("failed to malloc textures"));
 	t->wall_tex[0] = load_tex("./materials/textures/walls/WALL3.png", sdl);
 	t->wall_tex[1] = load_tex("./materials/textures/walls/WALL.png", sdl);
@@ -30,8 +34,9 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->wall_tex[5] = load_tex("./materials/textures/walls/wood.png", sdl);
 	t->sky_box[0] = load_tex("./materials/textures/sky/sky0.jpg", sdl);
 	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.png", sdl);
-	t->fonts[0].text_color = (SDL_Color){65, 166, 205, 0};
-	t->fonts[0].text_rect = (SDL_Rect){20, 20, 50, 10};
+	t->fonts[FPS_FONT].text_color = (SDL_Color){65, 166, 205, 0};
+	t->fonts[FPS_FONT].text_rect = (SDL_Rect){10, 15, 50, 10};
+	t->fonts[HP_FONT].text_color = (SDL_Color){0, 255, 0, 0};
 	load_sprites(t, sdl);
 	load_sounds(&d->sound);
 	load_ui(t, sdl, d);
@@ -43,17 +48,11 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->gun1_l = 21;
 	t->gun2_l = 18;
 	t->dude_l = 34;
-	t->hp_l = 5;
-	t->armor_l = 3;
 	if (!(t->dude = ft_memalloc(sizeof(SDL_Surface*) * t->dude_l)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->gun1 = ft_memalloc(sizeof(SDL_Surface*) * t->gun1_l)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->gun2 = ft_memalloc(sizeof(SDL_Surface*) * t->gun2_l)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->hp = ft_memalloc(sizeof(SDL_Surface*) * t->hp_l)))
-	return (error_message("failed to malloc textures"));
-	if (!(t->armor = ft_memalloc(sizeof(SDL_Surface*) * t->armor_l)))
 		return (error_message("failed to malloc textures"));
 	t->pause = load_tex("./materials/textures/ui/pause.png", sdl);
 	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", sdl);
@@ -136,15 +135,6 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->dude[33] = load_tex("./materials/textures/ui/win/34.png", sdl);
 	t->visor = load_tex("./materials/textures/ui/hud/visor.png", sdl);
 
-	t->hp[0] = load_tex("./materials/textures/ui/hud/hp1.png", sdl);
-	t->hp[1] = load_tex("./materials/textures/ui/hud/hp2.png", sdl);
-	t->hp[2] = load_tex("./materials/textures/ui/hud/hp3.png", sdl);
-	t->hp[3] = load_tex("./materials/textures/ui/hud/hp4.png", sdl);
-	t->hp[4] = load_tex("./materials/textures/ui/hud/hp5.png", sdl);
-
-	// t->armor[0] = load_tex("./materials/textures/ui/hud/HP.png", sdl);
-	// t->armor[1] = load_tex("./materials/textures/ui/hud/HP.png", sdl);
-	// t->armor[2] = load_tex("./materials/textures/ui/hud/HP.png", sdl);
 	t->len = t->gun1_l;
 	resize_surf(WIN_WIDTH / 3, WIN_HEIGHT / 3, t->gun1, d);
 	t->len = t->gun2_l;
@@ -153,8 +143,6 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	resize_surf(WIN_WIDTH, WIN_HEIGHT, &t->visor, d);
 	t->len = t->dude_l;
 	resize_surf(WIN_WIDTH / 2, WIN_HEIGHT / 2, t->dude, d);
-	// t->len = t->hp_l;
-	// resize_surf(WIN_WIDTH, WIN_HEIGHT / 10, t->hp, d);
 	return (1);
 }
 

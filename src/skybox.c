@@ -20,7 +20,7 @@ void	draw_skybox(t_render *r, t_doom d)
 	static	const int	W_H2 = WIN_HEIGHT * WIN_WIDTH;
 
 	d.sky.win_x = 0;
-	d.sky.pos_angle = ((d.player.anglesin) / 0.005556);
+	d.sky.pos_angle = ((d.player.anglesin) / (2 / 360.0));
 	d.sky.pos_max = 5;
 	d.sky.pos_max = SKY_W / 2 / 360;
 	if (d.player.anglecos >= 0)
