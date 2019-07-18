@@ -24,6 +24,8 @@ static void	change_move(t_vertex *move, t_doom *d, int str, int dir)
 		move->x += d->player.anglesin * MOVE_SPEED * dir;
 		move->y -= d->player.anglecos * MOVE_SPEED * dir;
 	}
+	if(!d->game.flying)
+		move_sound(&d->sound);
 }
 
 static void	movement_keys(t_doom *d)
@@ -85,6 +87,7 @@ void		player_events(t_doom *d)
 	{
 		if (ev.type == SDL_KEYDOWN)
 		{
+			printf("%d\n", ev.key.keysym.sym);
 			if (ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
@@ -99,13 +102,44 @@ void		player_events(t_doom *d)
 					
 					d->game.falling = 1;
 				}
+				if (!(Mix_Playing(1)) && !d->game.flying)
+					Mix_PlayChannel(1, d->sound.jump, 0);
 			}
 			else if (ev.key.keysym.sym == SDLK_f && !d->game.pause)
 			{
 				printf("Fly mod\n");
 				d->game.flying = !d->game.flying;
 			}
-			if (ev.key.keysym.sym == SDLK_k)
+			else if (ev.key.keysym.sym == SDLK_1)
+			{	
+				d->ui.fire = 0;
+				d->ui.gun_num = 0;
+			}
+			else if (ev.key.keysym.sym == SDLK_2)
+			{
+				d->ui.start_saw = 0;
+				d->ui.fire = 0;
+				d->ui.gun_num = 1;
+			}
+			else if (ev.key.keysym.sym == SDLK_3)
+			{
+				d->ui.fire = 0;
+				d->ui.gun_num = 2;
+			}
+			else if (ev.key.keysym.sym == SDLK_g)
+			{
+				d->game.hp_level -= 15;
+			}
+			else if (ev.key.keysym.sym == SDLK_h)
+			{
+				if (d->ui.ammo_1 + 20 <= 60)
+					d->ui.ammo_1 += 20;
+				else
+					d->ui.ammo_1 = 60;
+				// if(d->game.hp_level < 4)
+				// 	d->game.hp_level += 1;
+			}
+			if (ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
 				{
@@ -113,6 +147,7 @@ void		player_events(t_doom *d)
 					SDL_ShowCursor(SDL_ENABLE);
 					SDL_SetRelativeMouseMode(SDL_DISABLE);
 					SDL_SetWindowGrab(d->sdl.window, 0);
+					SDL_BlitScaled(d->texture.pause, 0, d->sdl.surface, 0);
 				}
 				else
 				{
@@ -123,8 +158,22 @@ void		player_events(t_doom *d)
 				}
 			}
 		}
+		else if (ev.type == SDL_MOUSEBUTTONDOWN && ev.button.button == SDL_BUTTON_LEFT)
+		{
+
+			if(d->ui.fire == 0)
+			{
+				d->ui.fire = 1;
+				d->ui.start = d->ui.prevTime;
+				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
+					d->ui.ammo_1 -= 2;
+			}
+			else if(d->ui.fire == 1)
+				d->ui.fire = 0;
+		}
 		else if (ev.type == SDL_QUIT)
 			d->game.quit = 1;
+		switch_music(&d->sound, ev);
 	}
 
 }

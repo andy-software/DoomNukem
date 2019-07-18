@@ -221,18 +221,18 @@ int		main(int argc, char **argv)
 	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].text_no = i % 12;
-		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, -5+0.3*i, -5+0.3*i)};
+		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, -5+0.3*i, -5+0.3*i)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
 		map.sprites[i].width = 2;
 		map.sprites[i].start_z = 1;
 		map.sprites[i].end_z = 3;
 	}
 
-	// for (int i = 1; i < 2; i++)
+	// for (int i = 0; i < 1; i++)
 	// {
-	// 	map.sprites[i].text_no = i % 12;
-	// 	map.sprites[i].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, 5+0.3*i, -5+0.3*i)};
-	// 	map.sprites[i].sector_no = -10+0.3*i < 0 ? 0 : -2;
+	// 	map.sprites[i + 1].text_no = i % 12;
+	// 	map.sprites[i + 1].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, 5+0.3*i, -5+0.3*i)};
+	// 	map.sprites[i + 1].sector_no = -10+0.3*i < 0 ? 0 : -2;
 	// }
 
 	player.coord.x = -5;

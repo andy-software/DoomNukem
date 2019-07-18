@@ -47,6 +47,9 @@
 # define MIN_SLICE_WIDTH 40
 # define MAX_THREADS_IN_RENDER	4
 # define MAX_THREADS_IN_SKY	4
+# define GREATER 46 // keycode of >
+# define LESER 44 // <
+# define PAUSE 96 // §
 
 # define MAX_SPRITES_COUNT	128
 
@@ -111,6 +114,7 @@ typedef struct	s_sprite_render	t_sprite_render;
 typedef struct	s_sprite_list	t_sprite_list;
 typedef	struct	s_painting		t_painting;
 typedef	struct	s_font			t_font;
+typedef	struct	s_sound			t_sound;
 
 /* EDITOR */
 typedef struct s_editor	t_editor;
@@ -150,7 +154,7 @@ struct	s_player
 	t_vector		coord; //earlier was t_vertex could cause some troubles
 	Uint32			sector;
 	float			angle;
-	float			anglesin; 
+	float			anglesin;
 	float			anglecos;
 	float			angle_z; // angle of player z view
 };
@@ -339,6 +343,8 @@ struct	s_game
 	int				flying; //new feature
 	int				quit;
 	int				pause;
+	int				hp_level;
+	int				damage;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -497,9 +503,22 @@ struct	s_ui
 {
 	SDL_Rect		*minimap_rect;
 	SDL_Surface		*minimap_surf;
+	SDL_Surface		*message;
 	Uint32			prevTime;
 	Uint32			currTime;
+	Uint32			start;
+	char			*text;
+	char			*text0;
 	float			fps;
+	int				fire;
+	int				gun_num;
+	int				start_saw;
+	int				idle;
+	int				ammo_1;	
+};
+
+struct	s_menu
+{
 };
 
 struct	s_font
@@ -509,13 +528,39 @@ struct	s_font
 	TTF_Font		*text_font;
 };
 
+enum font {
+
+	FPS_FONT = 0,
+	HP_FONT = 1,
+	AMMO_FONT = 2,
+};
+
 struct s_texture
 {
 	t_font			*fonts;
+	t_sprite_list	*sprites;
 	SDL_Surface		**wall_tex;
 	SDL_Surface		**sky_box;
 	SDL_Surface		*pause;
-	t_sprite_list	*sprites;
+	SDL_Surface		*visor;
+	SDL_Surface		**hp;
+	SDL_Surface		**gun1;
+	SDL_Surface		**gun2;
+	SDL_Surface		**dude;
+	SDL_Rect		dude_r;
+	SDL_Rect		gun1_r;
+	SDL_Rect		gun21_r;
+	SDL_Rect		gun22_r;
+	SDL_Rect		cross_r;
+	SDL_Rect		hp_r;
+	SDL_Rect		armor_r;
+	SDL_Rect		ammo_r;
+	int				dude_l;
+	int				visor_l;
+	int				gun1_l;
+	int				gun2_l;
+	int				armor_l;
+	int				len;
 	int				c_sprt;
 };
 
@@ -610,6 +655,19 @@ struct	s_editor
 	int				fl_or_ceil;
 };
 /****/
+struct	s_sound
+{
+	Mix_Music		*music[3];
+	Mix_Chunk		*steps;
+	Mix_Chunk		*run;
+	Mix_Chunk		*jump;
+	Mix_Chunk		**gun1;
+	Mix_Chunk		*win;
+	Mix_Chunk		**gun2;
+	Mix_Chunk		*fly;
+	Mix_Chunk		*hurt;
+	int				n;
+};
 
 struct	s_thread
 {
@@ -669,6 +727,7 @@ struct	s_doom
 	t_texture		texture;
 	t_skybox		sky[4];
 	t_editor		editor;
+	t_sound			sound;
 };
 
 //friendly user stuff
@@ -727,38 +786,43 @@ Uint32		get_color_value(Uint32 start, Uint32 end, float perc);
 int			line_point_int(int start, int end, int p);
 Uint32		get_color_value_int(Uint32 start, Uint32 end, int perc);
 /*
+**interface.c
+*/
+void			draw_ui(t_doom *d);
+void			gun_anim(t_doom *d);
+/*
 **texturelaod.c
 */
-void		wall_tex(t_texture *texture, t_sdl *sdl);
-SDL_Surface	*load_tex(char *path, t_sdl *sdl);
-void		pix_to_surf(t_render *r, int x, int y, int color);
-Uint32		pix_from_text(SDL_Surface *texture, int x, int y);
-int			stop(char *str); // for testing
-int			color_mix(Uint32 start, Uint32 end, float per);
-/*
-**main_render.c
-*/
-void		wall_side(t_render *r, t_doom d);
 void		prepare_to_rendering(t_render *r, t_doom d);
 /*
 **skybox.c
 */
 void		draw_skybox(t_doom d);
-void		draw_sky_line(t_render *r, t_doom d);
 int			prepare_to_sky(t_doom *d);
 void		*sky_threads(void *data);
-void		rain_sky_box(t_doom d);
-
+SDL_Surface		*load_tex(char *path, t_sdl *sdl);
+int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
+int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
+void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
+Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
 /*
 **sprites.c && load.c
 */
-int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p);
-int			sprite_sort(t_sprite *arr_spr, int len);
-void	load_sprites(t_texture *texture, t_sdl *sdl, char *path);
+int				translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p);
+int				sprite_sort(t_sprite *arr_spr, int len);
+void			load_sprites(t_texture *texture, t_sdl *sdl);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
-int			*copy_static_arr(int *arr, const int len);
-
-int		game_mod(char *file_name);
+int				*copy_static_arr(int *arr, const int len);
+int				game_mod(char *file_name);
+/*
+**sounds.c  
+*/
+Mix_Chunk		*load_sound(char *path);
+Mix_Music		*load_music(char *path);
+void			move_sound(t_sound *sound);
+void			load_sounds(t_sound *sound);
+void			play_music(t_sound *sound, int n);
+void			switch_music(t_sound *sound, SDL_Event ev);
 
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);
