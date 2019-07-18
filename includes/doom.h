@@ -45,7 +45,7 @@
 # define MAX_SPEED_UPWARD 1
 # define NUM_OF_THRD 4
 # define MIN_SLICE_WIDTH 40
-# define MAX_THREADS_IN_RENDER	3
+# define MAX_THREADS_IN_RENDER	4
 # define MAX_THREADS_IN_SKY	4
 
 # define MAX_SPRITES_COUNT	128
@@ -199,14 +199,20 @@ struct	s_sector
 	int				x_f_shift;
 	float			y_f_scale;
 	int				y_f_shift;
+
+	int				volume_lvl;
+	int				sound_num;
+
+	int				light_lvl;
 };
 
 struct	s_sprite
 {
 	int		text_no;
 	t_vector	coord;
-	int		w;
-	int		h;
+	float	width;
+	float	end_z; //end_z - start_z its height of sprite
+	float	start_z; //if sprite is flying unit then its non equil to 0
 	int		sector_no;
 };
 
@@ -662,8 +668,6 @@ struct	s_doom
 	t_player		player;
 	t_texture		texture;
 	t_skybox		sky[4];
-	// SDL_DisplayMode win_size;
-	//t_sprite_render	spriter; //draw all things
 	t_editor		editor;
 };
 
@@ -720,7 +724,8 @@ t_vertex	get_line_param(float x1, float y1, float x2, float y2);
 int			reverse_bits(int b);
 float		line_len(t_vertex start, t_vertex end);
 Uint32		get_color_value(Uint32 start, Uint32 end, float perc);
-
+int			line_point_int(int start, int end, int p);
+Uint32		get_color_value_int(Uint32 start, Uint32 end, int perc);
 /*
 **texturelaod.c
 */
@@ -735,7 +740,6 @@ int			color_mix(Uint32 start, Uint32 end, float per);
 */
 void		wall_side(t_render *r, t_doom d);
 void		prepare_to_rendering(t_render *r, t_doom d);
-
 /*
 **skybox.c
 */

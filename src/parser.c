@@ -97,6 +97,7 @@ int			read_file(t_doom *doom, char *file_name)
 		read(fd, &map->sectors[i].x_f_shift, sizeof(int));
 		read(fd, &map->sectors[i].y_f_scale, sizeof(float));
 		read(fd, &map->sectors[i].y_f_shift, sizeof(int));
+		read(fd, &map->sectors[i].light_lvl, sizeof(int));
 	}
 
 	read(fd, player, sizeof(t_player));

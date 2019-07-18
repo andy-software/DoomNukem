@@ -51,6 +51,7 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		write(fd, &map.sectors[i].x_f_shift, sizeof(int));
 		write(fd, &map.sectors[i].y_f_scale, sizeof(float));
 		write(fd, &map.sectors[i].y_f_shift, sizeof(int));
+		write(fd, &map.sectors[i].light_lvl, sizeof(int));
 	}
 
 	write(fd, &mplayer, sizeof(t_player));
@@ -97,7 +98,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].y_f_scale = 1.0 / 10;
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
-
+	map.sectors[0].light_lvl = 30;
 	map.sectors[0].render_ceil = 0;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
@@ -154,7 +155,7 @@ int		main(int argc, char **argv)
 	map.sectors[1].floor_plane.b = 1;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
-
+	map.sectors[1].light_lvl = 60;
 	map.sectors[1].ceil_tex = 4;
 	map.sectors[1].floor_tex = 5;
 	map.sectors[1].x_c_scale = 1.0 / 8;
@@ -222,6 +223,9 @@ int		main(int argc, char **argv)
 		map.sprites[i].text_no = i % 12;
 		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, -5+0.3*i, -5+0.3*i)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+		map.sprites[i].width = 2;
+		map.sprites[i].start_z = 1;
+		map.sprites[i].end_z = 3;
 	}
 
 	// for (int i = 1; i < 2; i++)

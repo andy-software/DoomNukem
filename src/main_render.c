@@ -241,7 +241,7 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (int)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -268,7 +268,7 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (unsigned)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -295,7 +295,7 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	{
 		t->color = pix_from_text(surr, t->x_text_lower, (unsigned)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -308,6 +308,8 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 
 	if (y2 == y1)
 		return ;
+	// printf("%i\n",  t->r->sect->light_lvl);
+	// fflush(stdout);
 	surr = r->texture->wall_tex[r->line.wall];
 
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
@@ -323,7 +325,7 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	{
 		t->color = pix_from_text(surr, t->x_text, (unsigned)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -492,7 +494,7 @@ void	render_ceil_line(int start, int end, t_render *r, t_thread *t)
 		cc.y_text = (cc.map_y * cc.surr->h) * cc.sect->y_c_scale + cc.sect->y_c_shift;
 		cc.color = pix_from_text(cc.surr, (unsigned)cc.x_text % cc.surr->w, (unsigned)cc.y_text % cc.surr->h);
 		if (cc.color != 0)
-			r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = cc.color;
+			r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = get_color_value_int(cc.color, 0x0, t->r->sect->light_lvl);
 		cc.screen_y--;
 	}
 }
@@ -519,7 +521,7 @@ void	render_floor_line(int start, int end, t_render *r, t_thread *t)
 		fc.y_text = (fc.map_y * fc.surr->h) * fc.sect->y_f_scale + fc.sect->x_f_shift;
 		fc.color = pix_from_text(fc.surr, (unsigned)fc.x_text % fc.surr->w, (unsigned)fc.y_text % fc.surr->h);
 		if (fc.color != 0)
-			r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = fc.color;
+			r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = get_color_value_int(fc.color, 0x0, t->r->sect->light_lvl);
 		fc.screen_y++;
 	}
 }
@@ -542,12 +544,12 @@ void	render_sprites(t_doom *d)
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0)
 	{
 		sr.surr = d->texture.sprites->sprites[sr.i];
-		sr.t1.x = sr.sprites[sr.i].coord.x + 1; //this 1 could be replaced with sprite width
+		sr.t1.x = sr.sprites[sr.i].coord.x + sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t1.y = sr.sprites[sr.i].coord.y;
-		sr.t2.x = sr.sprites[sr.i].coord.x - 1; //this 1 could be replaced with sprite width
+		sr.t2.x = sr.sprites[sr.i].coord.x - sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t2.y = sr.sprites[sr.i].coord.y;
-		sr.t1.z = sr.sprites[sr.i].coord.z + 3; //2 - sprite height right now
-		sr.t2.z = sr.sprites[sr.i].coord.z + 1; //
+		sr.t1.z = sr.sprites[sr.i].coord.z + sr.sprites[sr.i].end_z; //2 - sprite height right now
+		sr.t2.z = sr.sprites[sr.i].coord.z + sr.sprites[sr.i].start_z; //
 		sr.z1 = sr.t1.z - d->player.coord.z; //top
 		sr.z2 = sr.t2.z - d->player.coord.z; //bot
 
