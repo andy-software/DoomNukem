@@ -95,6 +95,10 @@ int			game_loop(t_doom doom)
 			draw_screen(doom);
 			draw_ui(&doom);
 		}
+		else if (doom.game.pause == 1)
+		{
+			SDL_BlitScaled(doom.texture.pause, 0, doom.sdl.surface, 0);
+		}
 		else
 		{
 			doom.ui.message = TTF_RenderText_Solid(doom.texture.fonts[HP_FONT].text_font, "U LOOOOSe BOiiiiii", doom.texture.fonts[HP_FONT].text_color);
@@ -102,7 +106,7 @@ int			game_loop(t_doom doom)
 			SDL_FreeSurface(doom.ui.message);
 		}
 
-		//while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 10); // lock fps to 100
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6); // lock fps to 100
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;

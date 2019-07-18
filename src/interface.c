@@ -14,14 +14,27 @@
 
 void	draw_ui(t_doom *d)
 {
-	char	*hp;
+	int i;
+	int temp;
 
-	hp = ft_itoa(d->game.hp_level);
+	i = -1;
+	temp = d->game.hp_level;
+	while(i++ < 3)
+	{
+		if (d->game.hp_level == 100)
+			d->ui.masage[2 - i] = temp % 10 + '0';
+		else
+			d->ui.masage[1 - i] = temp % 10 + '0';
+		temp /= 10; 
+	}
+	if (d->game.hp_level == 100)
+		d->ui.masage[3] = 0;
+	else
+		d->ui.masage[2] = 0;
 	gun_anim(d);
     SDL_BlitSurface(d->texture.visor, 0, d->sdl.surface, 0);
-	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_FONT].text_font, hp, d->texture.fonts[HP_FONT].text_color);
+	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_FONT].text_font, d->ui.masage, d->texture.fonts[HP_FONT].text_color);
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.hp_r);
-	free(hp);
 	SDL_FreeSurface(d->ui.message);
 }
 

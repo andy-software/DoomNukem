@@ -507,7 +507,7 @@ struct	s_ui
 	Uint32			prevTime;
 	Uint32			currTime;
 	Uint32			start;
-	char			*text;
+	char			masage[8];
 	char			*text0;
 	float			fps;
 	int				fire;

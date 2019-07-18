@@ -147,14 +147,14 @@ void		player_events(t_doom *d)
 					SDL_ShowCursor(SDL_ENABLE);
 					SDL_SetRelativeMouseMode(SDL_DISABLE);
 					SDL_SetWindowGrab(d->sdl.window, 0);
-					SDL_BlitScaled(d->texture.pause, 0, d->sdl.surface, 0);
 				}
 				else
 				{
 					d->game.pause = 0;
-					SDL_ShowCursor(SDL_DISABLE);
+					// SDL_ShowCursor(SDL_DISABLE);
 					SDL_SetWindowGrab(d->sdl.window, 1);
 					SDL_SetRelativeMouseMode(SDL_ENABLE);
+					SDL_GetRelativeMouseState(NULL, NULL);
 				}
 			}
 		}
