@@ -166,12 +166,12 @@ void	load_sprites(t_texture *texture, t_sdl *sdl)
 	SDL_Surface	*surr;
 	t_sprite_list	*head; //it must read more then 1 sprite should right present it
 
-	surr = load_tex("./materials/textures/sprites/saw_sprite.png", sdl);
+	surr = load_tex("./materials/textures/sprites/images.png", sdl);
 	
-	// SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
-	texture->c_sprt = 1;
+	SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
+	texture->c_sprt = 12;
 	
-	head = split_image_to_sprites(surr, 1, 1); //check for licks and segs
+	head = split_image_to_sprites(surr, 3, 4); //check for licks and segs
 	SDL_FreeSurface(surr);
 	
 	surr = load_tex("./materials/textures/sprites/dude_sprite.png", sdl);

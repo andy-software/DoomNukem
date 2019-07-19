@@ -83,6 +83,7 @@ int			game_loop(t_doom doom)
 	// changes(&doom);
 	if (!init_game_params(&doom))
 		return (0);
+	init_moves(&doom);
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prevTime = SDL_GetTicks();

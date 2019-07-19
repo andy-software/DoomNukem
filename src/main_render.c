@@ -541,9 +541,9 @@ void	render_sprites(t_doom *d)
 	sprite_sort(sr.sprites, sr.c_sprt); //sorted by descent
 
 	sr.i = -1;
-	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0)
+	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.i];
+		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no];
 		sr.t1.x = sr.sprites[sr.i].coord.x + sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t1.y = sr.sprites[sr.i].coord.y;
 		sr.t2.x = sr.sprites[sr.i].coord.x - sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width

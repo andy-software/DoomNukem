@@ -87,7 +87,6 @@ void		player_events(t_doom *d)
 	{
 		if (ev.type == SDL_KEYDOWN)
 		{
-			printf("%d\n", ev.key.keysym.sym);
 			if (ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
 			else if (ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)

@@ -50,6 +50,7 @@
 # define GREATER 46 // keycode of >
 # define LESER 44 // <
 # define PAUSE 96 // §
+# define COUNT_OF_MOVES 2
 
 # define MAX_SPRITES_COUNT	128
 
@@ -70,6 +71,11 @@
 
 # define PointSide(px,py, x0,y0, x1,y1) \
 	(vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
+
+//CROSS_THE_LINE
+#define CTL(x0, y0, x1, y1, x2, y2, x3, y3) \
+	(IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && \
+		PointSide(x1, y1, x2, y2, x3, y3) < 0)
 
 # define Fix(a)  				((a) * (1LL<<8))
 # define UnFix(a) 				((a) / (float)(1LL<<8))
@@ -218,6 +224,17 @@ struct	s_sprite
 	float	end_z; //end_z - start_z its height of sprite
 	float	start_z; //if sprite is flying unit then its non equil to 0
 	int		sector_no;
+	int		mob;
+	int		draw;
+	float	anglesin;
+	float	anglecos;
+	float	angle;
+
+	float	speed_x;
+	float	speed_y;
+	float	move_speed;
+
+	int		own_moves;
 };
 
 struct	s_painting
@@ -708,9 +725,14 @@ struct	s_thread
 	Uint32		color;		
 };
 
+typedef struct s_changes	t_changes;
+typedef int (*bots_move)(t_doom *, t_sprite *);
+
+
+
 struct	s_changes
 {
-
+	bots_move	moves[COUNT_OF_MOVES];
 };
 
 struct	s_doom
@@ -728,6 +750,7 @@ struct	s_doom
 	t_skybox		sky[4];
 	t_editor		editor;
 	t_sound			sound;
+	t_changes		changes;
 };
 
 //friendly user stuff
@@ -785,6 +808,7 @@ float		line_len(t_vertex start, t_vertex end);
 Uint32		get_color_value(Uint32 start, Uint32 end, float perc);
 int			line_point_int(int start, int end, int p);
 Uint32		get_color_value_int(Uint32 start, Uint32 end, int perc);
+float		find_angle_2pi(float sin, float cos);
 /*
 **interface.c
 */
@@ -797,9 +821,9 @@ void		prepare_to_rendering(t_render *r, t_doom d);
 /*
 **skybox.c
 */
-void		draw_skybox(t_doom d);
-int			prepare_to_sky(t_doom *d);
-void		*sky_threads(void *data);
+void			draw_skybox(t_doom d);
+int				prepare_to_sky(t_doom *d);
+void			*sky_threads(void *data);
 SDL_Surface		*load_tex(char *path, t_sdl *sdl);
 int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
 int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
@@ -814,6 +838,10 @@ void			load_sprites(t_texture *texture, t_sdl *sdl);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int				*copy_static_arr(int *arr, const int len);
 int				game_mod(char *file_name);
+void			move_mobs(t_doom *d);
+int				first_own_moves(t_doom *d, t_sprite *spr);
+int				mirror_own_moves(t_doom *d, t_sprite *spr);
+int				init_moves(t_doom *d);
 /*
 **sounds.c  
 */

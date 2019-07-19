@@ -34,6 +34,13 @@ int		init_sdl(t_sdl *sdl, t_option *options)
 	return (1);
 }
 
+int		init_moves(t_doom *d)
+{
+	d->changes.moves[0] = first_own_moves;
+	d->changes.moves[1] = mirror_own_moves;
+	return (1);
+}
+
 int		*intset(int *b, int c, size_t len)
 {
 	size_t			i;

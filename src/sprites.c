@@ -52,14 +52,14 @@ t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h) // h and 
 		j = -1;
 		while (++j < w)
 		{
+			in_rect.x = surr->w / w * j;
+			in_rect.y = surr->h / h * i;
 			if ((SDL_BlitSurface(surr, &in_rect, res->sprites[i * w + j], NULL)) < 0)
 			{
 				error_message("Couldnt copy a surface. Sprite.c\n");
 				exit(1); // im too lazy to avoid licks
 				return (0);
 			}
-			in_rect.x = surr->w / w * j;
-			in_rect.y = surr->h / h * i;
 		}
 	}
 	return (res);

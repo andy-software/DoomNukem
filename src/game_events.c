@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
-//CROSS_THE_LINE
-#define CTL(x0, y0, x1, y1, x2, y2, x3, y3) \
-	(IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && \
-		PointSide(x1, y1, x2, y2, x3, y3) < 0)
 
 void		move_player(t_doom *d, float dx, float dy)
 {
@@ -151,9 +147,7 @@ void		game_events(t_doom *d)
 		move(&d->player, d->map, &d->game);
 		move_player(d, g->dx, g->dy);
 	}
-
-	// move_mobs();
+	move_mobs(d);
 	// change_what_changes(); //to each sector add flag changed? and pointer on function that make changes depending of time a = f(t) b = f(t) c = f(t) h = f(t)
 	// //it should be linear or not?
-	// //add variable dt = cur_frame - last_frame and change all the velocity
 }

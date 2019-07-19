@@ -221,11 +221,18 @@ int		main(int argc, char **argv)
 	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].text_no = i % 12;
-		map.sprites[i].coord = (t_vector){-5+0.3*i, -5+0.3*i, get_z(map.sectors[0].floor_plane, -5+0.3*i, -5+0.3*i)};
+		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
 		map.sprites[i].width = 2;
 		map.sprites[i].start_z = 1;
 		map.sprites[i].end_z = 3;
+		map.sprites[i].mob = 1;
+		map.sprites[i].angle = M_PI / 4;
+		map.sprites[i].anglecos = cos(map.sprites[i].angle);
+		map.sprites[i].anglesin = sin(map.sprites[i].angle);
+		map.sprites[i].own_moves = 1;
+		map.sprites[i].move_speed = 0.1;
+		map.sprites[i].draw = 1;
 	}
 
 	// for (int i = 0; i < 1; i++)
@@ -244,8 +251,8 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 2);
-	map.num_paint = 2;
+	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
+	map.num_paint = 1;
 	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;

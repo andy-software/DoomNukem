@@ -19,7 +19,7 @@ t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4) //find th
 	float	n2;
 
 	n1 = vxs(d1.x, d1.y, d2.x, d2.y);
-	n2 = vxs(d3.x, d3.y, d3.x, d3.y);
+	n2 = vxs(d3.x, d3.y, d4.x, d4.y);
 	lenght = vxs(d1.x - d2.x, d1.y - d2.y, d3.x - d4.x, d3.y - d4.y);
 	return ((t_vertex){vxs(n1, d1.x - d2.x, n2, d3.x - d4.x) / lenght,
 		vxs(n1, d1.y - d2.y, n2, d3.y - d4.y) / lenght});
@@ -54,6 +54,14 @@ int		rotate_vector_xy(t_vector *a, float psin, float pcos)
 	a->y = buff.x * pcos + buff.y * psin;
 	a->z = a->z;
 	return (0);
+}
+
+float	find_angle_2pi(float sin, float cos)
+{
+	if (sin > 0)
+		return (acos(cos));
+	else
+		return (2 * M_PI - acos(cos));
 }
 
 int		rotate_vertex_xy(t_vertex *a, float psin, float pcos)
