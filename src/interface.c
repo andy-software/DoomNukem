@@ -35,7 +35,9 @@ void	draw_ui(t_doom *d)
 	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_FONT].text_font, d->ui.masage, d->texture.fonts[HP_FONT].text_color);
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.hp_r);
 	SDL_FreeSurface(d->ui.message);
+	
 	gun_anim(d);
+	
 }
 
 void    gun_anim(t_doom *d)

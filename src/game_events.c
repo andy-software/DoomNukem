@@ -68,8 +68,8 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 
 static void	move(t_player *p, t_map	m, t_game *g)
 {
-	const	t_sector *sect = &m.sectors[p->sector];
-	const	t_vertex *const vert = sect->vert;
+	t_sector *sect = m.sectors + p->sector;
+	t_vertex *const vert = sect->vert;
 	int		i;
 	float 	hole_low;
 	float	hole_high;
@@ -82,15 +82,23 @@ static void	move(t_player *p, t_map	m, t_game *g)
 	int		j;
 
 	i = -1;
-	while (++i < sect->num_vert)
+	while (++i < (int)sect->num_vert)
 		if (CTL(p->coord.x, p->coord.y, next_x, next_y, vert[i].x, vert[i].y, vert[i + 1].x, vert[i + 1].y))
 		{
-			nceil_p = m.sectors[(int)sect->neighbors[i]].ceil_plane;
-			nfloor_p = m.sectors[(int)sect->neighbors[i]].floor_plane;
-			hole_low  = sect->neighbors[i] < 0 ? BIG_VALUE : \
-				max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
-			hole_high = sect->neighbors[i] < 0 ? -BIG_VALUE : \
-				min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+			if (sect->neighbors[i] < 0)
+			{
+				hole_low = BIG_VALUE;
+				hole_high = -BIG_VALUE;
+				nceil_p = m.sectors[0].ceil_plane;
+				nfloor_p = m.sectors[0].floor_plane;
+			}
+			else
+			{
+				nceil_p = m.sectors[(int)sect->neighbors[i]].ceil_plane;
+				nfloor_p = m.sectors[(int)sect->neighbors[i]].floor_plane;
+				hole_low = max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
+				hole_high = min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+			}
 			if (hole_high > p->coord.z + HEAD_HEIGHT && \
 				hole_low < p->coord.z - EYE_HEIGHT + KNEE_HEIGHT)
 			{
@@ -106,8 +114,7 @@ static void	move(t_player *p, t_map	m, t_game *g)
 				j = -1;
 				next_x = p->coord.x + g->velocity.x;
 				next_y = p->coord.y + g->velocity.y;
-				// printf("He he i bump into wall num %i and im in sector num %i\n", i, sect->num);
-				while (++j < sect->num_vert) // TODO: check only neightbors walls
+				while (++j < (int)sect->num_vert) // TODO: check only neightbors walls
 				{
 					if (j != i && CTL(p->coord.x, p->coord.y, next_x, next_y, vert[j].x, vert[j].y, vert[j + 1].x, vert[j + 1].y))
 					{
@@ -123,12 +130,52 @@ static void	move(t_player *p, t_map	m, t_game *g)
 							}
 					}
 				}
-				if (j != sect->num_vert)
+				if (j != (int)sect->num_vert)
 					break ;
 			}
 		}
 	g->dx = g->velocity.x;
 	g->dy = g->velocity.y;
+}
+
+void		check_sprite_intersection(t_doom *d)
+{
+	int			i;
+	t_vector	t1;
+	t_vector	t2;
+
+	i = -1;
+	while (++i < (int)d->map.num_sprites)
+		d->sr.sprites[i] = d->map.sprites[i];
+
+	translate_and_rotate_sprites(d->sr.sprites, d->map.num_sprites, d->player);
+	sprite_sort(d->sr.sprites, d->map.num_sprites);
+
+	i = -1;
+	while (++i < (int)d->map.num_sprites)
+		if (d->sr.sprites[i].coord.y < 0)
+			break ;
+
+	while (--i >= 0)
+	{
+		if (!d->sr.sprites[i].live)
+			continue ;
+		t1.x = d->sr.sprites[i].coord.x + d->sr.sprites[i].width / 2;
+		t1.y = d->sr.sprites[i].coord.y;
+		t2.x = d->sr.sprites[i].coord.x - d->sr.sprites[i].width / 2;
+		t2.y = d->sr.sprites[i].coord.y;
+		t1.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z - d->player.coord.z;
+		t2.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z - d->player.coord.z;
+
+		if (t1.x > 0 && t2.x < 0)
+		{
+			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
+			{
+				d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
+				break ;
+			}
+		}
+	}
 }
 
 void		game_events(t_doom *d)
@@ -147,7 +194,10 @@ void		game_events(t_doom *d)
 		move(&d->player, d->map, &d->game);
 		move_player(d, g->dx, g->dy);
 	}
+	if (d->game.fire == 1)
+	{
+		check_sprite_intersection(d);
+		d->game.fire = 0;
+	}
 	move_mobs(d);
-	// change_what_changes(); //to each sector add flag changed? and pointer on function that make changes depending of time a = f(t) b = f(t) c = f(t) h = f(t)
-	// //it should be linear or not?
 }

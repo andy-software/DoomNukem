@@ -116,7 +116,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[0].num_vert);
 	for (int i = 0; i < map.sectors->num_vert; i++)
 	{
-		map.sectors[0].lines[i].wall = 1;
+		map.sectors[0].lines[i].wall = 4;
 		map.sectors[0].lines[i].top = 2;
 		map.sectors[0].lines[i].bot = 3;
 
@@ -183,7 +183,7 @@ int		main(int argc, char **argv)
 	map.sectors[1].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[1].num_vert);
 	for (int i = 0; i < map.sectors[1].num_vert; i++)
 	{
-		map.sectors[1].lines[i].wall = 1;
+		map.sectors[1].lines[i].wall = 3;
 		map.sectors[1].lines[i].top = 2;
 		map.sectors[1].lines[i].bot = 3;
 
@@ -217,22 +217,24 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 1;
-	for (int i = 0; i < 1; i++)
+	map.num_sprites = 2;
+	for (int i = 0; i < 2; i++)
 	{
-		map.sprites[i].text_no = i % 12;
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
-		map.sprites[i].width = 2;
-		map.sprites[i].start_z = 1;
+		map.sprites[i].width = 5;
+		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 3;
 		map.sprites[i].mob = 1;
 		map.sprites[i].angle = M_PI / 4;
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
-		map.sprites[i].own_moves = 1;
-		map.sprites[i].move_speed = 0.1;
+		map.sprites[i].own_moves = i;
+		map.sprites[i].move_speed = 0.03 * (i + 1);
 		map.sprites[i].draw = 1;
+		map.sprites[i].live = 1;
 	}
 
 	// for (int i = 0; i < 1; i++)
@@ -256,10 +258,10 @@ int		main(int argc, char **argv)
 	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;
-	map.paint[0].v1.z = 35;
+	map.paint[0].v1.z = 40;
 	map.paint[0].v2.x = -3;
 	map.paint[0].v2.y = -10;
-	map.paint[0].v2.z = 25;
+	map.paint[0].v2.z = 30;
 	map.paint[0].text_no = 0;
 
 	map.paint[1].sector_no = 0;

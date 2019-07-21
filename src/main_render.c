@@ -78,7 +78,7 @@ void	render_sector(t_render *r, t_doom *d)
 	r->fplane = r->sect->floor_plane;
 	
 	i = -1;
-	while (++i < r->sect->num_vert) // wall
+	while (++i < (int)r->sect->num_vert) // wall
 	{
 		r->line = r->sect->lines[i];
 		r->t1.x = r->sect->vert[i].x - r->p_x;
@@ -308,8 +308,6 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 
 	if (y2 == y1)
 		return ;
-	// printf("%i\n",  t->r->sect->light_lvl);
-	// fflush(stdout);
 	surr = r->texture->wall_tex[r->line.wall];
 
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
@@ -344,7 +342,7 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 	sr->win_y = clamp(sr->za, sr->clmp_top, sr->clmp_bot);
 	wall_end = clamp(sr->zb, sr->clmp_top, sr->clmp_bot);
 	dy_point = 1.0 / (sr->zb - sr->za); // derivation of y_point
-	y_point = (double)(sr->win_y - sr->za) * dy_point;
+	y_point = (double)(sr->win_y - sr->za) * dy_point; //seg fault coz of int y
 	while(sr->win_y < wall_end)
 	{
 		sr->y_text = y_point * sprtext->h;
@@ -367,7 +365,7 @@ void	render_painting(t_doom *d)
 
 	while (++sr.i < sr.c_paint)
 	{
-		sr.surr = d->texture.sprites->next->sprites[sr.paint[sr.i].text_no]; //omg
+		sr.surr = d->texture.sprites->next->sprites[sr.paint[sr.i].text_no];
 		sr.t1.x = sr.paint[sr.i].v1.x - d->player.coord.x; 
 		sr.t1.y = sr.paint[sr.i].v1.y - d->player.coord.y;
 		sr.t2.x = sr.paint[sr.i].v2.x - d->player.coord.x;
@@ -410,7 +408,7 @@ void	render_painting(t_doom *d)
 		sr.tmp = sr.begin;
 		while (sr.tmp != d->render.tail)
 		{
-			if (sr.tmp->num == sr.paint[sr.i].sector_no)
+			if ((int)sr.tmp->num == sr.paint[sr.i].sector_no)
 			{
 				
 				if(sr.x1 >= sr.x2 || sr.x2 < sr.tmp->sx1 || sr.x1 > sr.tmp->sx2)
@@ -435,23 +433,26 @@ void	render_painting(t_doom *d)
 				sr.z2b = WIN_HEIGHT / 2 - (int)((sr.z2 + sr.t2.y  * d->player.angle_z) * sr.zscale2);
 
 				sr.d_percent = 1.0 / (sr.x2_p - sr.x1_p);
-				sr.percent = (sr.win_x - sr.x1_p) * sr.d_percent;
-				
+
+				sr.percent = (sr.begin_x - sr.x1_p) * sr.d_percent; // max(sr.x1, sr.tmp->sx1) is float earlier was a bug coz of int
+					printf("%f %f\n", sr.begin_x, sr.x1_p);
+					fflush(stdout);
 				sr.d_za = (sr.z2a - sr.z1a) / (sr.x2 - sr.x1);
 				sr.d_zb = (sr.z2b - sr.z1b) / (sr.x2 - sr.x1);
-				sr.za = (sr.win_x - sr.x1) * sr.d_za + sr.z1a;
-				sr.zb = (sr.win_x - sr.x1) * sr.d_zb + sr.z1b;
+				sr.za = (sr.begin_x - sr.x1) * sr.d_za + sr.z1a;
+				sr.zb = (sr.begin_x - sr.x1) * sr.d_zb + sr.z1b;
 				
-				sr.percent_of_wall = fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.win_x);
+				sr.percent_of_wall = fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.begin_x);
 				sr.d_percent_of_wall = 1.0 / ((float)sr.tmp->sx2 - sr.tmp->sx1); //deri
 
 				sr.d_y = (sr.t2.y - sr.t1.y) / (sr.x2 - sr.x1);
-				sr.y = (sr.win_x - sr.x1) * sr.d_y + sr.t1.y; //dunno if it need
-				
+				sr.y = (sr.begin_x - sr.x1) * sr.d_y + sr.t1.y;
 
 				while (++sr.win_x <= sr.end_x) // in wall 
 				{
 					sr.x_text = (sr.surr->w * sr.percent) / ((1 - sr.percent) * sr.v2.y / sr.v1.y + sr.percent); 	// a * w / ((1 - a) * z2 / z1 + a)
+					if (sr.x_text < 0)
+						printf("%f\n", sr.percent);
 					sr.clmp_bot = line_point(sr.tmp->zbot1, sr.tmp->zbot2, sr.percent_of_wall);
 					sr.clmp_top = line_point(sr.tmp->ztop1, sr.tmp->ztop2, sr.percent_of_wall);
 					sr.clmp_top = max(sr.clmp_top, 0);
@@ -526,6 +527,18 @@ void	render_floor_line(int start, int end, t_render *r, t_thread *t)
 	}
 }
 
+void set_pos(t_doom *d, t_sprite_render *sr)
+{
+	sr->time_from_loop_start += d->game.dt;
+	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
+		if (++sr->pos > 2)
+		{
+			sr->pos = 0;
+			sr->time_from_loop_start -= sr->prev_frame;
+		}
+	sr->prev_frame = sr->time_from_loop_start;
+}
+
 void	render_sprites(t_doom *d)
 {
 	t_sprite_render	sr;
@@ -539,11 +552,11 @@ void	render_sprites(t_doom *d)
 
 	translate_and_rotate_sprites(sr.sprites, sr.c_sprt, d->player);
 	sprite_sort(sr.sprites, sr.c_sprt); //sorted by descent
-
+	set_pos(d, &d->sr);
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no];
+		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no + sr.pos];
 		sr.t1.x = sr.sprites[sr.i].coord.x + sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t1.y = sr.sprites[sr.i].coord.y;
 		sr.t2.x = sr.sprites[sr.i].coord.x - sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
@@ -588,7 +601,7 @@ void	render_sprites(t_doom *d)
 		sr.tmp = sr.begin;
 		while (sr.tmp != d->render.tail)
 		{
-			if (sr.tmp->num == sr.sprites[sr.i].sector_no)
+			if ((int)sr.tmp->num == sr.sprites[sr.i].sector_no)
 			{
 				if(sr.x1 >= sr.x2 || sr.x2 < sr.tmp->sx1 || sr.x1 > sr.tmp->sx2)
 				{
@@ -645,26 +658,27 @@ void	render_sprites(t_doom *d)
 				sr.tmp = d->render.queue;
 		}
 	}
+	
 }
 
-int		draw_screen(t_doom d)
+int		draw_screen(t_doom *d)
 {
-	*d.render.head = (t_rend_sector){d.player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
+	*d->render.head = (t_rend_sector){d->player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
 	
-	d.sr.begin = d.render.head;
-	if (++d.render.head == d.render.queue + MAX_SECTORS_RENDERED)
-	 	d.render.head = d.render.queue;
+	d->sr.begin = d->render.head;
+	if (++d->render.head == d->render.queue + MAX_SECTORS_RENDERED)
+	 	d->render.head = d->render.queue;
 
-	while (d.render.head != d.render.tail)
+	while (d->render.head != d->render.tail)
 	{
-		d.render.now = *d.render.tail;
-		if (++d.render.tail == (d.render.queue + MAX_SECTORS_RENDERED))
-			d.render.tail = d.render.queue;
-		if (d.render.rendered_sectors[d.render.now.num] & (MAX_SECTORS_RENDERED + 1))
+		d->render.now = *d->render.tail;
+		if (++d->render.tail == (d->render.queue + MAX_SECTORS_RENDERED))
+			d->render.tail = d->render.queue;
+		if (d->render.rendered_sectors[d->render.now.num] & (MAX_SECTORS_RENDERED + 1))
 			continue ;
-		render_sector(&d.render, &d);
+		render_sector(&d->render, d);
 	}
-	render_painting(&d);
-	render_sprites(&d);
+	render_painting(d);
+	render_sprites(d);
 	return (0);
 }

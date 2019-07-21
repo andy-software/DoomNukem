@@ -12,11 +12,33 @@
 
 #include "../includes/doom.h"
 
+void		move_sprites(t_doom *d, float dx, float dy, t_sprite *spr)
+{
+	float px = spr->coord.x;
+	float py = spr->coord.y;
+	t_sector *sect = d->map.sectors + spr->sector_no;
+	t_vertex *vert = sect->vert;
+	float hole_high = get_z(sect->ceil_plane, px + dx, py + dy);
+	float hole_low = get_z(sect->floor_plane, px + dx, py + dy);
+
+	if (hole_high > spr->coord.z + spr->start_z && hole_low < spr->coord.z + spr->end_z)
+	{
+		for(unsigned s = 0; s < sect->num_vert; s++)
+			if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
+				vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
+			{
+				spr->sector_no = sect->neighbors[s];
+			}
+		spr->coord.x += dx;
+		spr->coord.y += dy;
+	}
+}
+
 int			first_own_moves(t_doom *d, t_sprite *spr)
 {
 	float	next_x;
 	float	next_y;
-	int		i;
+	Uint32		i;
 	t_sector	*sect;
 	t_vertex	*vert;
 	t_vertex	vertex;
@@ -61,7 +83,7 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 {
 	float	next_x;
 	float	next_y;
-	int		i;
+	Uint32		i;
 	t_sector	*sect;
 	t_vertex	*vert;
 	t_vertex	vertex;
@@ -111,27 +133,59 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 		spr->coord.x = next_x;
 		spr->coord.y = next_y;
 	}
-	if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) > 0)
-		spr->text_no = 9;
-	else if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 0)
-		spr->text_no = 0;
-	else if (vxs(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 0)
-		spr->text_no = 3;
-	else
-		spr->text_no = 6;
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	return (1);
 }
 
 
-void		move_sprite(t_doom *d, t_sprite *spr, t_vector coord)
+void		chase(t_doom *d, t_sprite *spr)
 {
+	t_vertex	move_vector;
+	float		len;
+	t_sector	*sect;
 
+	sect = d->map.sectors + spr->sector_no;
+	move_vector = (t_vertex){d->player.coord.x - spr->coord.x, d->player.coord.y - spr->coord.y};
+	len = v2dlenght(move_vector.x, move_vector.y);
+	move_vector.x /= len;
+	move_vector.y /= len; //normillize vector to unit vector
+
+	spr->anglecos = move_vector.x;
+	spr->anglesin = move_vector.y;
+	spr->angle = find_angle_2pi(spr->anglesin, spr->anglecos);
+
+	spr->speed_x = spr->anglecos * spr->move_speed;
+	spr->speed_y = spr->anglesin * spr->move_speed;
+
+	move_sprites(d, spr->speed_x, spr->speed_y, spr);
+	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
+}
+
+void		get_sprite_for_mob(t_sprite	*spr, t_doom *d)
+{
+	if (vxs(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) > 0)
+	{
+		if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < -1.0 / 2)
+			spr->text_no = 0;
+		else if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 1.0 / 2)
+			spr->text_no = 3;
+		else
+			spr->text_no = 9;
+	}
+	else 
+	{
+		if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < -1.0 / 2)
+			spr->text_no = 0;
+		else if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 1.0 / 2)
+			spr->text_no = 6;
+		else
+			spr->text_no = 9;
+	}
 }
 
 void		move_mobs(t_doom *d)
 {
-	int			m;
+	Uint32		m;
 	t_vector	coord;
 	t_sprite	*spr;
 
@@ -139,17 +193,23 @@ void		move_mobs(t_doom *d)
 	spr = d->map.sprites;
 	while (++m < d->map.num_sprites)
 	{
-		if (spr[m].mob && spr[m].draw)
+		if (spr[m].mob && spr[m].live)
 		{
 			coord = d->player.coord;
 			coord.x -= spr[m].coord.x;
 			coord.y -= spr[m].coord.y;
 
-			rotate_vector_xy(&coord, spr[m].anglesin, spr[m].anglecos); //anglesin, anglecos -1, 0, 1
-			// if (coord.y < 1 && coord.y > -1) // max vision rate forward and min backward // should also check if not a wall
-			// 	move_sprite(d, spr + m, coord);
+			rotate_vector_xy(&coord, spr[m].anglesin, spr[m].anglecos);
+			if (coord.y < 2 && coord.y > -1) // max vision rate forward and min backward // should also check if not a wall
+				chase(d, spr + m);
 			if (spr[m].own_moves > -1)
 				d->changes.moves[spr[m].own_moves](d, spr + m);
+			
 		}
+		else if (spr[m].mob && !spr[m].live)
+		{
+			printf("Dog is dead\n");
+		}
+		get_sprite_for_mob(spr + m, d);
 	}
 }

@@ -159,10 +159,10 @@ void		player_events(t_doom *d)
 		}
 		else if (ev.type == SDL_MOUSEBUTTONDOWN && ev.button.button == SDL_BUTTON_LEFT)
 		{
-
 			if(d->ui.fire == 0)
 			{
 				d->ui.fire = 1;
+				d->game.fire = 1;
 				d->ui.start = d->ui.prevTime;
 				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
 					d->ui.ammo_1 -= 2;

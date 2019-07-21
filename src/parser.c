@@ -17,15 +17,15 @@ static void	Info_about_map(t_map *map)
 
 	printf("sector count %i\nvertex count %i\n", map->num_sect, map->num_vert);
 
-	for (int v = 0; v < map->num_vert; v++)
+	for (int v = 0; v < (int)map->num_vert; v++)
 		printf("vertex %i - {%f, %f}\n", v, map->vertex[v].x, map->vertex[v].y);
 
 
-	for (int s = 0; s < map->num_sect; s++)
+	for (int s = 0; s < (int)map->num_sect; s++)
 	{
 		printf("sector num - %i\n", map->sectors[s].num);
 		printf("sector vertx count - %i\n", map->sectors[s].num_vert);
-		for (int i = 0; i < map->sectors[s].num_vert; i++)
+		for (int i = 0; i < (int)map->sectors[s].num_vert; i++)
 		{
 			printf("vertex %i - {%f, %f}\n", i, map->sectors[s].vert[i].x, map->sectors[s].vert[i].y);
 			printf("neightbors %i - %i\n", i, map->sectors[s].neighbors[i]);
@@ -56,8 +56,8 @@ int			read_file(t_doom *doom, char *file_name)
 {
 	t_map		*map;
 	t_player	*player;
-	int		fd;
-	int		i;
+	int			fd;
+	Uint32		i;
 
 	map = &doom->map;
 	player = &doom->player;

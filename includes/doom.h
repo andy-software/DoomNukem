@@ -218,6 +218,7 @@ struct	s_sector
 
 struct	s_sprite
 {
+	int		spr_num;
 	int		text_no;
 	t_vector	coord;
 	float	width;
@@ -226,6 +227,7 @@ struct	s_sprite
 	int		sector_no;
 	int		mob;
 	int		draw;
+	int		live; //only if mob affected
 	float	anglesin;
 	float	anglecos;
 	float	angle;
@@ -292,13 +294,17 @@ struct	s_sprite_render
 	int				t2_1_line;
 	int				t2_2_line;
 
+	int				pos;
+	Uint32			time_from_loop_start;
+	Uint32			prev_frame;
+
 	t_vertex		i1;
 	t_vertex		i2;
 
 	int				i;
 	t_rend_sector	*now;
 	int				c_sprt;
-	int				begin_x;
+	float			begin_x;
 	int				end_x;
 	float			y;
 	float			za;
@@ -351,6 +357,7 @@ struct	s_game
 {
 	float			dx;
 	float			dy;
+	int				fire;
 	t_vector		velocity;
 	float			acceleration;
 	int				ground;
@@ -775,7 +782,7 @@ int			*intset(int *b, int c, size_t len);
 
 
 //render
-int			draw_screen(t_doom doom);
+int			draw_screen(t_doom *d);
 int			user_interface(t_doom *doom);
 int			draw_minimap(t_doom *d);
 void		render_floor_line(int start, int end, t_render *r, t_thread *t);

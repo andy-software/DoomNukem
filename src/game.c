@@ -56,11 +56,14 @@ static int	init_game_params(t_doom *d)
 	d->render.queue = (t_rend_sector*)ft_memalloc(sizeof(t_rend_sector) * MAX_SECTORS_RENDERED);
 	d->game.dt = 0;
 	d->render.texture = &d->texture;
+	d->sr.time_from_loop_start = 0;
+	d->sr.pos = 0;
+	d->sr.prev_frame = 0;
 	init_hud(d);
 	int	i;
 
 	i = 0;
-	while (i < d->map.num_sect)
+	while (i < (int)d->map.num_sect)
 	{
 		if (d->map.sectors[i].ceil_plane.c == 0)
 			return (error_message("What the hell did you bring to this cursed lands.."));
@@ -71,11 +74,6 @@ static int	init_game_params(t_doom *d)
 		i++;
 	}
 	return (1);
-}
-
-void	*fun(void*a)
-{
-	return (0);
 }
 
 int			game_loop(t_doom doom)
@@ -93,7 +91,7 @@ int			game_loop(t_doom doom)
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
 			draw_skybox(doom);
-			draw_screen(doom);
+			draw_screen(&doom);
 			draw_ui(&doom);
 		}
 		else if (doom.game.pause == 1)

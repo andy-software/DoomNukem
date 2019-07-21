@@ -171,10 +171,10 @@ void	load_sprites(t_texture *texture, t_sdl *sdl)
 	SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
 	texture->c_sprt = 12;
 	
-	head = split_image_to_sprites(surr, 3, 4); //check for licks and segs
+	head = split_image_to_sprites(surr, 3, 4);
 	SDL_FreeSurface(surr);
 	
-	surr = load_tex("./materials/textures/sprites/dude_sprite.png", sdl);
+	surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", sdl);
 	head->next = split_image_to_sprites(surr, 1, 1);
 	SDL_FreeSurface(surr);
 	if (head == 0)
