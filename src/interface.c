@@ -14,6 +14,7 @@
 
 void	draw_ui(t_doom *d)
 {
+	gun_anim(d);
 	int i;
 	int temp;
 
@@ -31,13 +32,10 @@ void	draw_ui(t_doom *d)
 		d->ui.masage[3] = 0;
 	else
 		d->ui.masage[2] = 0;
-    SDL_BlitSurface(d->texture.visor, 0, d->sdl.surface, 0);
 	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_FONT].text_font, d->ui.masage, d->texture.fonts[HP_FONT].text_color);
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.hp_r);
 	SDL_FreeSurface(d->ui.message);
-	
-	gun_anim(d);
-	
+	SDL_BlitSurface(d->texture.visor, 0, d->sdl.surface, 0);
 }
 
 void    gun_anim(t_doom *d)
@@ -170,12 +168,12 @@ void    gun_anim(t_doom *d)
 	{
     	if (d->ui.fire == 0)
 			SDL_BlitSurface(d->texture.dude[0], 0, d->sdl.surface, &d->texture.dude_r);
-		else if (d->ui.fire <= 34)
+		else if (d->ui.fire > 0)
 		{
 			if (!(Mix_Playing(2)))
 				Mix_PlayChannel(2, d->sound.win, 0);
 			SDL_BlitSurface(d->texture.dude[d->ui.fire], 0, d->sdl.surface, &d->texture.dude_r);
-			d->ui.fire = ((d->ui.prevTime - d->ui.start) * 150 / d->game.dt / 1000) % 34 + 1;
+			d->ui.fire = ((d->ui.prevTime - d->ui.start) * 200 / d->game.dt / 1000) % 34 + 1;
 			if (d->ui.fire > 33)
 				d->ui.fire = 0;
 		}
