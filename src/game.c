@@ -59,6 +59,8 @@ static int	init_game_params(t_doom *d)
 	d->sr.time_from_loop_start = 0;
 	d->sr.pos = 0;
 	d->sr.prev_frame = 0;
+	d->sr.map = &d->map;
+	d->render.map = &d->map;
 	init_hud(d);
 	int	i;
 

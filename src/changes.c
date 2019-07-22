@@ -200,7 +200,7 @@ void		move_mobs(t_doom *d)
 			coord.y -= spr[m].coord.y;
 
 			rotate_vector_xy(&coord, spr[m].anglesin, spr[m].anglecos);
-			if (coord.y < 2 && coord.y > -1) // max vision rate forward and min backward // should also check if not a wall
+			if (coord.y < spr[m].vision_forward && coord.y > spr[m].vision_backward) // max vision rate forward and min backward // should also check if not a wall
 				chase(d, spr + m);
 			if (spr[m].own_moves > -1)
 				d->changes.moves[spr[m].own_moves](d, spr + m);

@@ -25,6 +25,9 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		return (0);
 	printf("%s %i", name, fd);
 
+	write(fd, &map.fog, sizeof(int));
+	write(fd, &map.fog_color, sizeof(Uint32));
+
 	write(fd, &map.num_sect, sizeof(Uint32));
 	write(fd, &map.num_vert, sizeof(Uint32));
 
@@ -75,19 +78,19 @@ int		main(int argc, char **argv)
 	map.sectors = (t_sector*)malloc(sizeof(t_sector) * map.num_sect);
 	map.sectors[0].num_vert = 4;
 	map.sectors[0].num = 0;
-
-	map.sectors[0].ceil_plane.a = 1;
+	
+	map.sectors[0].ceil_plane.a = 0;
 	map.sectors[0].ceil_plane.b = 0;
 	map.sectors[0].ceil_plane.c = 1;
 	map.sectors[0].ceil_plane.h = -50;
 
-	map.sectors[0].floor_plane.a = -0.6;
-	map.sectors[0].floor_plane.b = 0.6;
+	map.sectors[0].floor_plane.a = -0.0001;
+	map.sectors[0].floor_plane.b = 0.0001;
 	map.sectors[0].floor_plane.c = 1;
 	map.sectors[0].floor_plane.h = -20;
 
-	map.sectors[0].ceil_tex = 4;
-	map.sectors[0].floor_tex = 5;
+	map.sectors[0].ceil_tex = rand() % 6;
+	map.sectors[0].floor_tex = rand() % 6;
 
 	map.sectors[0].x_c_scale = 1;
 	map.sectors[0].y_c_scale = 1;
@@ -98,17 +101,17 @@ int		main(int argc, char **argv)
 	map.sectors[0].y_f_scale = 1.0 / 10;
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
-	map.sectors[0].light_lvl = 30;
-	map.sectors[0].render_ceil = 0;
+	map.sectors[0].light_lvl = rand() % 80;
+	map.sectors[0].render_ceil = 1;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
 
 	map.sectors[0].vert[0].x = 0;
 	map.sectors[0].vert[0].y = 0;
-	map.sectors[0].vert[3].x = 10;
+	map.sectors[0].vert[3].x = 100;
 	map.sectors[0].vert[3].y = 0;
-	map.sectors[0].vert[2].x = 10;
+	map.sectors[0].vert[2].x = 100;
 	map.sectors[0].vert[2].y = -10;
 	map.sectors[0].vert[1].x = 0;
 	map.sectors[0].vert[1].y = -10;
@@ -116,9 +119,9 @@ int		main(int argc, char **argv)
 	map.sectors[0].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[0].num_vert);
 	for (int i = 0; i < map.sectors->num_vert; i++)
 	{
-		map.sectors[0].lines[i].wall = 4;
-		map.sectors[0].lines[i].top = 2;
-		map.sectors[0].lines[i].bot = 3;
+		map.sectors[0].lines[i].wall = rand() % 5;
+		map.sectors[0].lines[i].top = rand() % 5;
+		map.sectors[0].lines[i].bot = rand() % 5;
 
 		map.sectors[0].lines[i].x_w_scale = 2;
 		map.sectors[0].lines[i].x_b_scale = 2;
@@ -143,30 +146,31 @@ int		main(int argc, char **argv)
 
 	map.sectors[1].num_vert = 4;
 	map.sectors[1].num = 1;
-
+	map.fog = 1;
+	map.fog_color = 0x00AA00;
 	map.sectors[1].ceil_plane.a = 0;
 	map.sectors[1].ceil_plane.b = 1;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
 
-	map.sectors[0].render_ceil = 1;
+	map.sectors[1].render_ceil = 1;
 
 	map.sectors[1].floor_plane.a = 0;
 	map.sectors[1].floor_plane.b = 1;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
-	map.sectors[1].light_lvl = 60;
-	map.sectors[1].ceil_tex = 4;
-	map.sectors[1].floor_tex = 5;
-	map.sectors[1].x_c_scale = 1.0 / 8;
-	map.sectors[1].y_c_scale = 1.0 / 8;
-	map.sectors[1].x_c_shift = 0;
-	map.sectors[1].y_c_shift = 0;
+	map.sectors[1].light_lvl = rand() % 80;
+	map.sectors[1].ceil_tex = rand() % 6;
+	map.sectors[1].floor_tex = rand() % 6;
+	map.sectors[1].x_c_scale = 1.0 / 10;
+	map.sectors[1].y_c_scale = 1.0 / 10;
+	map.sectors[1].x_c_shift = (rand() % 100);
+	map.sectors[1].y_c_shift = (rand() % 100);
 
-	map.sectors[1].x_f_scale = 1.0 / 5;
-	map.sectors[1].y_f_scale = 1.0 / 5;
-	map.sectors[1].x_f_shift = 0;
-	map.sectors[1].y_f_shift = 0;
+	map.sectors[1].x_f_scale = 1.0 / 10;
+	map.sectors[1].y_f_scale = 1.0 / 10;
+	map.sectors[1].x_f_shift = (rand() % 100);
+	map.sectors[1].y_f_shift = (rand() % 100);
 
 	map.sectors[1].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[1].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
@@ -183,9 +187,9 @@ int		main(int argc, char **argv)
 	map.sectors[1].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[1].num_vert);
 	for (int i = 0; i < map.sectors[1].num_vert; i++)
 	{
-		map.sectors[1].lines[i].wall = 3;
-		map.sectors[1].lines[i].top = 2;
-		map.sectors[1].lines[i].bot = 3;
+		map.sectors[1].lines[i].wall = rand() % 6;
+		map.sectors[1].lines[i].top = rand() % 6;
+		map.sectors[1].lines[i].bot = rand() % 6;
 
 		map.sectors[1].lines[i].x_w_scale = 1;
 		map.sectors[1].lines[i].x_b_scale = 1;
@@ -226,7 +230,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
 		map.sprites[i].width = 5;
 		map.sprites[i].start_z = 0;
-		map.sprites[i].end_z = 3;
+		map.sprites[i].end_z = 5;
 		map.sprites[i].mob = 1;
 		map.sprites[i].angle = M_PI / 4;
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
@@ -235,14 +239,9 @@ int		main(int argc, char **argv)
 		map.sprites[i].move_speed = 0.03 * (i + 1);
 		map.sprites[i].draw = 1;
 		map.sprites[i].live = 1;
+		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
 	}
-
-	// for (int i = 0; i < 1; i++)
-	// {
-	// 	map.sprites[i + 1].text_no = i % 12;
-	// 	map.sprites[i + 1].coord = (t_vector){5+0.3*i, -5+0.3*i, get_z(map.sectors[1].floor_plane, 5+0.3*i, -5+0.3*i)};
-	// 	map.sprites[i + 1].sector_no = -10+0.3*i < 0 ? 0 : -2;
-	// }
 
 	player.coord.x = -5;
 	player.coord.y = -5;
@@ -264,14 +263,14 @@ int		main(int argc, char **argv)
 	map.paint[0].v2.z = 30;
 	map.paint[0].text_no = 0;
 
-	map.paint[1].sector_no = 0;
-	map.paint[1].v1.x = 0;
-	map.paint[1].v1.y = -3.5;
-	map.paint[1].v1.z = 30;
-	map.paint[1].v2.x = 0;
-	map.paint[1].v2.y = -5;
-	map.paint[1].v2.z = 20;
-	map.paint[1].text_no = 0;
+	// map.paint[1].sector_no = 0;
+	// map.paint[1].v1.x = 0;
+	// map.paint[1].v1.y = -3.5;
+	// map.paint[1].v1.z = 30;
+	// map.paint[1].v2.x = 0;
+	// map.paint[1].v2.y = -5;
+	// map.paint[1].v2.z = 20;
+	// map.paint[1].text_no = 0;
 	
 	write_to_file(map, argv[1], player);
 	return (0);

@@ -148,8 +148,8 @@ void		check_sprite_intersection(t_doom *d)
 	while (++i < (int)d->map.num_sprites)
 		d->sr.sprites[i] = d->map.sprites[i];
 
-	translate_and_rotate_sprites(d->sr.sprites, d->map.num_sprites, d->player);
-	sprite_sort(d->sr.sprites, d->map.num_sprites);
+	translate_and_rotate_sprites(d->sr.sprites, d->map.num_sprites, d->player); //should it been rotated in future
+	sprite_sort(d->sr.sprites, d->map.num_sprites); //should it been sorted in future
 
 	i = -1;
 	while (++i < (int)d->map.num_sprites)
