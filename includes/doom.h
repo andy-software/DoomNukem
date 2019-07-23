@@ -218,6 +218,7 @@ struct	s_sector
 
 struct	s_sprite
 {
+	int		spr_num;
 	int		text_no;
 	t_vector	coord;
 	float	width;
@@ -226,6 +227,7 @@ struct	s_sprite
 	int		sector_no;
 	int		mob;
 	int		draw;
+	int		live; //only if mob affected
 	float	anglesin;
 	float	anglecos;
 	float	angle;
@@ -235,6 +237,8 @@ struct	s_sprite
 	float	move_speed;
 
 	int		own_moves;
+	float	vision_forward;
+	float	vision_backward;
 };
 
 struct	s_painting
@@ -258,6 +262,7 @@ struct	s_sprite_list
 
 struct	s_sprite_render
 {
+	t_sector		*curr_sect;
 	t_rend_sector	*begin;
 	t_rend_sector	*tmp;
 	t_sprite		*sprites; //to sort by y-distance //all sprites thats need to be rendered
@@ -292,14 +297,18 @@ struct	s_sprite_render
 	int				t2_1_line;
 	int				t2_2_line;
 
+	int				pos;
+	Uint32			time_from_loop_start;
+	Uint32			prev_frame;
+
 	t_vertex		i1;
 	t_vertex		i2;
 
 	int				i;
 	t_rend_sector	*now;
 	int				c_sprt;
-	int				begin_x;
-	int				end_x;
+	float			begin_x;
+	float			end_x;
 	float			y;
 	float			za;
 	float			zb;
@@ -317,7 +326,7 @@ struct	s_sprite_render
 	int				z2b;
 	int				c_za;
 	int				c_zb;
-	int				win_x;
+	float			win_x;
 	float			zscale1;
 	float			zscale2;
 	float			xscale1;
@@ -337,6 +346,8 @@ struct	s_map
 												// but still static
 	Uint32			num_paint;
 	t_painting		*paint; //always same count
+	int				fog;
+	Uint32			fog_color;
 };
 
 struct	s_sdl
@@ -351,6 +362,7 @@ struct	s_game
 {
 	float			dx;
 	float			dy;
+	int				fire;
 	t_vector		velocity;
 	float			acceleration;
 	int				ground;
@@ -476,8 +488,8 @@ struct	s_render
 	int				max_sector_rendered;
 	float			pcos;
 	float			psin;
-	int				begin_x;
-	int				end_x;
+	float			begin_x;
+	float			end_x;
 	float			x1;
 	float			x2;
 	int				z1;
@@ -514,6 +526,7 @@ struct	s_render
 	t_plane			nfplane;
 	char			neighbor;
 	t_texture		*texture;
+	t_map			*map;
 };
 
 struct	s_ui
@@ -694,8 +707,8 @@ struct	s_thread
 
 	float		alpha;
 	float		d_alpha; //hm
-	int			end_x;
-	int			begin_x;
+	float		end_x;
+	float		begin_x;
 	float		doomy_var_x;
 	float		dummy_var_x;
 	float		d_doomy_var_x; //hm
@@ -775,7 +788,7 @@ int			*intset(int *b, int c, size_t len);
 
 
 //render
-int			draw_screen(t_doom doom);
+int			draw_screen(t_doom *d);
 int			user_interface(t_doom *doom);
 int			draw_minimap(t_doom *d);
 void		render_floor_line(int start, int end, t_render *r, t_thread *t);
@@ -784,7 +797,7 @@ void		reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		upper_textline(int y1, int y2, t_render *r, t_thread *t);
 void		lower_textline(int y1, int y2, t_render *r, t_thread *t);
-
+Uint32			get_fog_color(Uint32 color, Uint32 fog_color, float y);
 //threads
 int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);

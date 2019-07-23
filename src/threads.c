@@ -36,7 +36,7 @@ int		fill_the_params(t_render *r, t_thread *t)
 	{
 		t[i].id = i;
 		t[i].begin_x = i * r->width_slice + r->begin_x;
-		t[i].end_x = (i + 1) * r->width_slice + r->begin_x - 1;
+		t[i].end_x = (i + 1) * r->width_slice + r->begin_x; 
 		t[i].alpha = (t[i].begin_x - r->x1) * r->d_alpha;
 		t[i].dummy_var_x = (1 - t[i].alpha) / r->t1.y;
 		t[i].doomy_var_x = t[i].alpha / r->t2.y;
@@ -45,6 +45,7 @@ int		fill_the_params(t_render *r, t_thread *t)
 		t[i].r = r;
 		i++;
 	}
+	t[r->count_slice - 1].end_x = r->end_x;//some shit 
 	return (1);
 }
 
@@ -55,12 +56,13 @@ void	*start_the_work(void *data)
 
 	t = (t_thread*)data;
 	r = t->r;
-	t->win_x = t->begin_x;
+	t->win_x = (int)t->begin_x;
 	
-	while (t->win_x <= t->end_x) // in wall 
+	//printf("t->i %i ---- t->win_x %i\n", t->id, t->win_x);
+
+	while (t->win_x < (int)t->end_x) // in wall 
 	{
 		t->x_text = (t->dummy_var_x * r->w0 + t->doomy_var_x * r->w1) / (t->dummy_var_x + t->doomy_var_x);
-		
 		t->x_text %= r->texture->wall_tex[r->line.wall]->w;
 		
 		t->x_text_lower = (t->dummy_var_x * r->w0_bot + t->doomy_var_x * r->w1_bot) / (t->dummy_var_x + t->doomy_var_x);
@@ -74,7 +76,6 @@ void	*start_the_work(void *data)
 
 		t->c_za = clamp(t->za, r->ztop[t->win_x], r->zbottom[t->win_x]);
 		t->c_zb = clamp(t->zb, r->ztop[t->win_x], r->zbottom[t->win_x]);
-
 
 		render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
 		if (r->sect->render_ceil) // 	if (t->c_za < t->c_zb)?
@@ -100,7 +101,7 @@ void	*start_the_work(void *data)
 		t->alpha += r->d_alpha;
 		t->doomy_var_x += r->d_doomy_var_x;
 		t->dummy_var_x += r->d_dummy_var_x;
-		t->win_x++;		
+		t->win_x++;
 	}
 	return (0);
 }

@@ -19,8 +19,6 @@ void	vertical_line(int x, int y1, int y2, t_render *r, int color)
 	while (++y1 <= y2)
 		if (color != 0)
 			r->pix[y1 * WIN_WIDTH + x] = color;
-		else
-			r->pix[y1 * WIN_WIDTH + x] = ~r->pix[y1 * WIN_WIDTH + x];
 }
 
 void	prepare_to_render_next_sector(t_render *r)
@@ -78,7 +76,7 @@ void	render_sector(t_render *r, t_doom *d)
 	r->fplane = r->sect->floor_plane;
 	
 	i = -1;
-	while (++i < r->sect->num_vert) // wall
+	while (++i < (int)r->sect->num_vert) // wall
 	{
 		r->line = r->sect->lines[i];
 		r->t1.x = r->sect->vert[i].x - r->p_x;
@@ -148,10 +146,10 @@ void	render_sector(t_render *r, t_doom *d)
 			r->nzfloor1 = get_z(r->nfplane, r->mc1.x, r->mc1.y) - r->p_z;
 			r->nzceil2 = get_z(r->ncplane, r->mc2.x, r->mc2.y) - r->p_z;
 			r->nzfloor2 = get_z(r->nfplane, r->mc2.x, r->mc2.y) - r->p_z;
-			r->nz1a = WIN_HEIGHT / 2 - (int)((r->nzceil1 + r->t1.y * r->angle_z) * r->zscale1);
-			r->nz1b = WIN_HEIGHT / 2 - (int)((r->nzfloor1 + r->t1.y * r->angle_z) * r->zscale1);
-			r->nz2a = WIN_HEIGHT / 2 - (int)((r->nzceil2 + r->t2.y * r->angle_z) * r->zscale2);
-			r->nz2b = WIN_HEIGHT / 2 - (int)((r->nzfloor2 + r->t2.y * r->angle_z) * r->zscale2);
+			r->nz1a = WIN_HEIGHT / 2 - ((r->nzceil1 + r->t1.y * r->angle_z) * r->zscale1);
+			r->nz1b = WIN_HEIGHT / 2 - ((r->nzfloor1 + r->t1.y * r->angle_z) * r->zscale1);
+			r->nz2a = WIN_HEIGHT / 2 - ((r->nzceil2 + r->t2.y * r->angle_z) * r->zscale2);
+			r->nz2b = WIN_HEIGHT / 2 - ((r->nzfloor2 + r->t2.y * r->angle_z) * r->zscale2);
 		}
 		
 		r->zceil1  = get_z(r->cplane, r->mc1.x, r->mc1.y) - r->p_z;
@@ -159,10 +157,10 @@ void	render_sector(t_render *r, t_doom *d)
 		r->zceil2  = get_z(r->cplane, r->mc2.x, r->mc2.y) - r->p_z;
 		r->zfloor2 = get_z(r->fplane, r->mc2.x, r->mc2.y) - r->p_z;
 
-		r->z1a = WIN_HEIGHT / 2 - (int)((r->zceil1 + r->t1.y * r->angle_z) * r->zscale1);
-		r->z1b = WIN_HEIGHT / 2 - (int)((r->zfloor1 + r->t1.y * r->angle_z) * r->zscale1);
-		r->z2a  = WIN_HEIGHT / 2 - (int)((r->zceil2 + r->t2.y * r->angle_z) * r->zscale2);
-		r->z2b = WIN_HEIGHT / 2 - (int)((r->zfloor2 + r->t2.y  * r->angle_z) * r->zscale2);
+		r->z1a = WIN_HEIGHT / 2 - ((r->zceil1 + r->t1.y * r->angle_z) * r->zscale1);
+		r->z1b = WIN_HEIGHT / 2 - ((r->zfloor1 + r->t1.y * r->angle_z) * r->zscale1);
+		r->z2a = WIN_HEIGHT / 2 - ((r->zceil2 + r->t2.y * r->angle_z) * r->zscale2);
+		r->z2b = WIN_HEIGHT / 2 - ((r->zfloor2 + r->t2.y  * r->angle_z) * r->zscale2);
 		
 		r->kt = (r->t2.y - r->t1.y) / (r->x2 - r->x1);
 		r->kza = (r->z2a - r->z1a) / (r->x2 - r->x1);
@@ -229,19 +227,31 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
 
-	t->win_y = clamp(y2, 0, WIN_HEIGHT - 1);//kostill
-	t->wall_end = clamp(y1 + 1, 0, WIN_HEIGHT - 1);
-	
-	t->d_betta = -1.0 / (t->zb - t->za); 
-	t->betta = (float)(t->win_y - t->za) * t->d_betta; //kostill//not like this
-	
-	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta;  //add some scaler
+	if (y1 > y2)
+	{
+		t->d_betta = -1.0 / (t->zb - t->za); 
+		t->win_y = clamp(y2, 0, WIN_HEIGHT - 1);
+		t->wall_end = clamp(y1 + 1, 0, WIN_HEIGHT - 1);
+	}
+	else
+	{
+		t->d_betta = 1.0 / (t->zb - t->za);
+		t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
+		t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
+	}
+	t->betta = (t->win_y - t->za) * t->d_betta;
+	t->float_y_text = t->betta * (surr->h - 1);
+	t->d_y_text = (surr->h - 1) * t->d_betta;
 	while(t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (int)t->float_y_text % surr->h);
-		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+				if (t->color != 0)
+			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+		else
+			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
+		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -257,7 +267,7 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	surr = r->texture->wall_tex[r->line.top];
 
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
 	
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (float)(t->win_y - t->za) * t->d_betta; //not like this
@@ -268,7 +278,12 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (unsigned)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+		else
+			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
+		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -291,15 +306,28 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	
 	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
 	t->d_y_text = surr->h * t->d_betta; //add some scaler
-	while(t->win_y < t->wall_end)
+	while(t->win_y <= t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text_lower, (unsigned)t->float_y_text % surr->h);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+		else
+			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
+		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
 	}
+}
+
+
+Uint32	get_fog_color(Uint32 color, Uint32 fog_color, float y)
+{
+	color = y < 100 ? get_color_value_int(color, fog_color, y) : fog_color;
+	return (color);
 }
 
 void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
@@ -308,24 +336,23 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 
 	if (y2 == y1)
 		return ;
-	// printf("%i\n",  t->r->sect->light_lvl);
-	// fflush(stdout);
 	surr = r->texture->wall_tex[r->line.wall];
-
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
-	
 	t->d_betta = 1.0 / (t->zb - t->za);
-	t->betta = (float)(t->win_y - t->za) * t->d_betta; //not like this
-	
+	t->betta = (t->win_y - t->za) * t->d_betta; //not like this
 	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta; //add some scaler
-
-	while(t->win_y < t->wall_end)
+	t->d_y_text = surr->h * t->d_betta; //add some scale
+	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text, (unsigned)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text);
 		if (t->color != 0)
-			r->pix[t->win_y * WIN_WIDTH + t->win_x] = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+		else
+			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
+		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -344,15 +371,23 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 	sr->win_y = clamp(sr->za, sr->clmp_top, sr->clmp_bot);
 	wall_end = clamp(sr->zb, sr->clmp_top, sr->clmp_bot);
 	dy_point = 1.0 / (sr->zb - sr->za); // derivation of y_point
-	y_point = (double)(sr->win_y - sr->za) * dy_point;
+	y_point = (double)(sr->win_y - (int)sr->za) * dy_point; //seg fault coz of int y
 	while(sr->win_y < wall_end)
 	{
-		sr->y_text = y_point * sprtext->h;
+		sr->y_text = y_point * (sprtext->h - 1);
 		sr->color = pix_from_text(sprtext, sr->x_text, sr->y_text);
 		if (sr->color != 0)
-			render->pix[sr->win_y * WIN_WIDTH + sr->win_x] = sr->color;
+		{
+			sr->color = get_color_value_int(sr->color, 0x0, sr->curr_sect->light_lvl);
+			if (sr->map->fog)
+				sr->color = get_fog_color(sr->color, sr->map->fog_color, sr->y);
+			render->pix[(int)(sr->win_y * WIN_WIDTH + sr->win_x)] = sr->color;
+		}
+		
 		sr->win_y++;
 		y_point += dy_point;
+		if (y_point > 1)
+			y_point = 1;
 	}
 }
 
@@ -367,7 +402,7 @@ void	render_painting(t_doom *d)
 
 	while (++sr.i < sr.c_paint)
 	{
-		sr.surr = d->texture.sprites->next->sprites[sr.paint[sr.i].text_no]; //omg
+		sr.surr = d->texture.sprites->next->sprites[sr.paint[sr.i].text_no];
 		sr.t1.x = sr.paint[sr.i].v1.x - d->player.coord.x; 
 		sr.t1.y = sr.paint[sr.i].v1.y - d->player.coord.y;
 		sr.t2.x = sr.paint[sr.i].v2.x - d->player.coord.x;
@@ -410,7 +445,7 @@ void	render_painting(t_doom *d)
 		sr.tmp = sr.begin;
 		while (sr.tmp != d->render.tail)
 		{
-			if (sr.tmp->num == sr.paint[sr.i].sector_no)
+			if ((int)sr.tmp->num == sr.paint[sr.i].sector_no)
 			{
 				
 				if(sr.x1 >= sr.x2 || sr.x2 < sr.tmp->sx1 || sr.x1 > sr.tmp->sx2)
@@ -419,7 +454,7 @@ void	render_painting(t_doom *d)
 						sr.tmp = d->render.queue;
 					continue ;
 				}
-
+				sr.curr_sect = d->map.sectors + sr.paint[sr.i].sector_no;
 				sr.xscale1_p = HFOV / sr.v1.y;
 				sr.xscale2_p = HFOV / sr.v2.y;
 				sr.x1_p = WIN_WIDTH / 2 - (sr.v1.x * sr.xscale1_p);
@@ -435,19 +470,18 @@ void	render_painting(t_doom *d)
 				sr.z2b = WIN_HEIGHT / 2 - (int)((sr.z2 + sr.t2.y  * d->player.angle_z) * sr.zscale2);
 
 				sr.d_percent = 1.0 / (sr.x2_p - sr.x1_p);
-				sr.percent = (sr.win_x - sr.x1_p) * sr.d_percent;
-				
+
+				sr.percent = (sr.begin_x - sr.x1_p) * sr.d_percent; // max(sr.x1, sr.tmp->sx1) is float earlier was a bug coz of int
 				sr.d_za = (sr.z2a - sr.z1a) / (sr.x2 - sr.x1);
 				sr.d_zb = (sr.z2b - sr.z1b) / (sr.x2 - sr.x1);
-				sr.za = (sr.win_x - sr.x1) * sr.d_za + sr.z1a;
-				sr.zb = (sr.win_x - sr.x1) * sr.d_zb + sr.z1b;
+				sr.za = (sr.begin_x - sr.x1) * sr.d_za + sr.z1a;
+				sr.zb = (sr.begin_x - sr.x1) * sr.d_zb + sr.z1b;
 				
-				sr.percent_of_wall = fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.win_x);
+				sr.percent_of_wall = fpercent(sr.tmp->sx1, sr.tmp->sx2, sr.begin_x);
 				sr.d_percent_of_wall = 1.0 / ((float)sr.tmp->sx2 - sr.tmp->sx1); //deri
 
 				sr.d_y = (sr.t2.y - sr.t1.y) / (sr.x2 - sr.x1);
-				sr.y = (sr.win_x - sr.x1) * sr.d_y + sr.t1.y; //dunno if it need
-				
+				sr.y = (sr.begin_x - sr.x1) * sr.d_y + sr.t1.y;
 
 				while (++sr.win_x <= sr.end_x) // in wall 
 				{
@@ -471,7 +505,6 @@ void	render_painting(t_doom *d)
 	}
 }
 
-
 void	render_ceil_line(int start, int end, t_render *r, t_thread *t)
 {
 	t_ceil_cal	cc;
@@ -485,6 +518,7 @@ void	render_ceil_line(int start, int end, t_render *r, t_thread *t)
 	while (cc.screen_y > end)
 	{
 		cc.map_y = (cc.rotated.h) * VFOV / (cc.screen_y + cc.denomi);
+		float y = cc.map_y;
 		cc.map_x = cc.map_y * cc.x_multi;
 		cc.dummy = cc.map_y * r->pcos + cc.map_x * r->psin;
 		cc.doomy = cc.map_y * r->psin - cc.map_x * r->pcos;
@@ -494,7 +528,12 @@ void	render_ceil_line(int start, int end, t_render *r, t_thread *t)
 		cc.y_text = (cc.map_y * cc.surr->h) * cc.sect->y_c_scale + cc.sect->y_c_shift;
 		cc.color = pix_from_text(cc.surr, (unsigned)cc.x_text % cc.surr->w, (unsigned)cc.y_text % cc.surr->h);
 		if (cc.color != 0)
-			r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = get_color_value_int(cc.color, 0x0, t->r->sect->light_lvl);
+			cc.color = get_color_value_int(cc.color, 0x0, t->r->sect->light_lvl);
+		else
+			cc.color = r->pix[cc.screen_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			cc.color =  get_fog_color(cc.color, r->map->fog_color, y);
+		r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = cc.color;
 		cc.screen_y--;
 	}
 }
@@ -512,6 +551,7 @@ void	render_floor_line(int start, int end, t_render *r, t_thread *t)
 	while (fc.screen_y < end)
 	{
 		fc.map_y = (fc.rotated.h) * VFOV / (fc.screen_y + fc.denomi);
+		float y = fc.map_y;
 		fc.map_x = fc.map_y * fc.x_multi;
 		fc.dummy = fc.map_y * r->pcos + fc.map_x * r->psin;
 		fc.doomy = fc.map_y * r->psin - fc.map_x * r->pcos;
@@ -521,9 +561,26 @@ void	render_floor_line(int start, int end, t_render *r, t_thread *t)
 		fc.y_text = (fc.map_y * fc.surr->h) * fc.sect->y_f_scale + fc.sect->x_f_shift;
 		fc.color = pix_from_text(fc.surr, (unsigned)fc.x_text % fc.surr->w, (unsigned)fc.y_text % fc.surr->h);
 		if (fc.color != 0)
-			r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = get_color_value_int(fc.color, 0x0, t->r->sect->light_lvl);
+			fc.color = get_color_value_int(fc.color, 0x0, t->r->sect->light_lvl);
+		else
+			fc.color = r->pix[fc.screen_y * WIN_WIDTH + t->win_x];
+		if (r->map->fog)
+			fc.color =  get_fog_color(fc.color, r->map->fog_color, y);
+		r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = fc.color;	
 		fc.screen_y++;
 	}
+}
+
+void set_pos(t_doom *d, t_sprite_render *sr)
+{
+	sr->time_from_loop_start += d->game.dt;
+	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
+		if (++sr->pos > 2)
+		{
+			sr->pos = 0;
+			sr->time_from_loop_start -= sr->prev_frame;
+		}
+	sr->prev_frame = sr->time_from_loop_start;
 }
 
 void	render_sprites(t_doom *d)
@@ -539,11 +596,11 @@ void	render_sprites(t_doom *d)
 
 	translate_and_rotate_sprites(sr.sprites, sr.c_sprt, d->player);
 	sprite_sort(sr.sprites, sr.c_sprt); //sorted by descent
-
+	set_pos(d, &d->sr);
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no];
+		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no + sr.pos];
 		sr.t1.x = sr.sprites[sr.i].coord.x + sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t1.y = sr.sprites[sr.i].coord.y;
 		sr.t2.x = sr.sprites[sr.i].coord.x - sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
@@ -588,7 +645,7 @@ void	render_sprites(t_doom *d)
 		sr.tmp = sr.begin;
 		while (sr.tmp != d->render.tail)
 		{
-			if (sr.tmp->num == sr.sprites[sr.i].sector_no)
+			if ((int)sr.tmp->num == sr.sprites[sr.i].sector_no)
 			{
 				if(sr.x1 >= sr.x2 || sr.x2 < sr.tmp->sx1 || sr.x1 > sr.tmp->sx2)
 				{
@@ -596,7 +653,7 @@ void	render_sprites(t_doom *d)
 						sr.tmp = d->render.queue;
 					continue ;
 				}
-
+				sr.curr_sect = d->map.sectors + sr.sprites[sr.i].sector_no;
 				sr.xscale1_p = HFOV / sr.v1.y;
 				sr.xscale2_p = HFOV / sr.v2.y;
 				sr.x1_p = WIN_WIDTH / 2 - (sr.v1.x * sr.xscale1_p);
@@ -645,26 +702,27 @@ void	render_sprites(t_doom *d)
 				sr.tmp = d->render.queue;
 		}
 	}
+	
 }
 
-int		draw_screen(t_doom d)
+int		draw_screen(t_doom *d)
 {
-	*d.render.head = (t_rend_sector){d.player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
+	*d->render.head = (t_rend_sector){d->player.sector, 0, WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
 	
-	d.sr.begin = d.render.head;
-	if (++d.render.head == d.render.queue + MAX_SECTORS_RENDERED)
-	 	d.render.head = d.render.queue;
+	d->sr.begin = d->render.head;
+	if (++d->render.head == d->render.queue + MAX_SECTORS_RENDERED)
+	 	d->render.head = d->render.queue;
 
-	while (d.render.head != d.render.tail)
+	while (d->render.head != d->render.tail)
 	{
-		d.render.now = *d.render.tail;
-		if (++d.render.tail == (d.render.queue + MAX_SECTORS_RENDERED))
-			d.render.tail = d.render.queue;
-		if (d.render.rendered_sectors[d.render.now.num] & (MAX_SECTORS_RENDERED + 1))
+		d->render.now = *d->render.tail;
+		if (++d->render.tail == (d->render.queue + MAX_SECTORS_RENDERED))
+			d->render.tail = d->render.queue;
+		if (d->render.rendered_sectors[d->render.now.num] & (MAX_SECTORS_RENDERED + 1))
 			continue ;
-		render_sector(&d.render, &d);
+		render_sector(&d->render, d);
 	}
-	render_painting(&d);
-	render_sprites(&d);
+	render_painting(d);
+	render_sprites(d);
 	return (0);
 }
