@@ -133,6 +133,7 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->dude[31] = load_tex("./materials/textures/ui/win/32.png", sdl);
 	t->dude[32] = load_tex("./materials/textures/ui/win/33.png", sdl);
 	t->dude[33] = load_tex("./materials/textures/ui/win/34.png", sdl);
+	
 	t->visor = load_tex("./materials/textures/ui/hud/visor.png", sdl);
 
 	t->len = t->gun1_l;
