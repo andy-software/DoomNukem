@@ -26,7 +26,7 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[AMMO_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 50)))
 		return (error_message("failed to malloc textures"));
-	t->wall_tex[0] = load_tex("./materials/textures/walls/WALL3.png", sdl);
+	t->wall_tex[0] = load_tex("./materials/textures/walls/WALL2.png", sdl);
 	t->wall_tex[1] = load_tex("./materials/textures/walls/WALL.png", sdl);
 	t->wall_tex[2] = load_tex("./materials/textures/walls/WALL-1.png", sdl);
 	t->wall_tex[3] = load_tex("./materials/textures/walls/WALL1.png", sdl);

@@ -159,6 +159,10 @@ void		chase(t_doom *d, t_sprite *spr)
 
 	move_sprites(d, spr->speed_x, spr->speed_y, spr);
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
+	if (((int)d->player.coord.y == (int)spr->coord.y) && ((int)d->player.coord.x == (int)spr->coord.x))
+	{
+		d->game.hp_level -= 5;
+	}
 }
 
 void		get_sprite_for_mob(t_sprite	*spr, t_doom *d)
@@ -208,7 +212,8 @@ void		move_mobs(t_doom *d)
 		}
 		else if (spr[m].mob && !spr[m].live)
 		{
-			printf("Dog is dead\n");
+			printf("THIS boyy is DEAD, yo!\n");
+			printf("%d\n", m);
 		}
 		get_sprite_for_mob(spr + m, d);
 	}
