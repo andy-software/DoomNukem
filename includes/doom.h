@@ -83,15 +83,31 @@
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
 
 /* EDITOR */
-# define NUM_VER doom->editor.interface.iterator_num_vertex
-# define NUM_SECT doom->editor.interface.nbr_sectors
-# define NB_BUTTONS 11
+# define NB_BUTTONS 16
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
 # define FLOOR 1
 # define CEIL 2
+# define p(x) printf(x)
+# define MAX_NUM_SECTORS 20
+
+/*  BREZEN NORM */
+# define BDX doom->editor.brezen.dx
+# define BDY doom->editor.brezen.dy
+# define BSTARTX doom->editor.brezen.startx
+# define BSTARTY doom->editor.brezen.starty
+
+/*  TEXT COLOR  */
+# define TNULL "\x1B[0m"
+# define TRED  "\x1B[31m"
+# define TGRE  "\x1B[32m"
+# define TYEL  "\x1B[33m"
+# define TBLU  "\x1B[34m"
+# define TPIN  "\x1B[35m"
+# define TCYN  "\x1B[36m"
+# define TWHY  "\x1B[37m"
 /***/
 
 typedef struct s_doom		t_doom;
@@ -129,6 +145,8 @@ typedef struct s_interface	t_interface;
 typedef struct s_vertex_int	t_vertex_int;
 typedef struct s_images t_images;
 typedef	struct s_buttons t_buttons;
+typedef struct s_title	t_title;
+typedef	struct s_fline 	t_fline;
 typedef	struct s_thread	t_thread;
 
 
@@ -665,6 +683,14 @@ struct s_brezen
 	int color;
 };
 
+struct s_fline // for line
+{
+	int		num_line1; // like a number of vertex
+	int		num_line2; // like a number of vertex for second case  == -1
+	int		sec1;
+	int		sec2;  // if line only in in one sector == -1 
+};
+
 struct	s_editor
 {
 	t_brezen		brezen;
@@ -683,6 +709,8 @@ struct	s_editor
 	t_buttons		press;
 	int				save_del;
 	int				fl_or_ceil;
+	int				is_portal; // 0 no; 1 yes
+	t_fline			fline;
 };
 /****/
 struct	s_sound
@@ -866,10 +894,13 @@ void			play_music(t_sound *sound, int n);
 void			switch_music(t_sound *sound, SDL_Event ev);
 
 /* EDITOR */
+void		change_text(t_doom *doom, SDL_Event *event);
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
-int			ft_start_edit(t_doom *doom, int fd, char *name);
+int			ft_read_map_edit(t_doom *doom, int fd);
+int			ft_start_edit(t_doom *doom, int fd, char *name); // refresh
 int			ft_write_changes_to_file(t_doom *doom, int fd);
+int			write_changes_to_file(t_map map, int fd, t_player mplayer);
 void		ft_check_key(t_doom *doom, SDL_Event *event);
 void		ft_render_editor(t_doom *doom);
 void		ft_render_interface(t_doom *doom);
@@ -883,8 +914,8 @@ void		ft_prepare_editor(t_doom *doom);
 int			ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
-int 		ft_read_map_edit(t_doom *doom, int fd);
 void		key_floor_ceil(t_doom *doom, SDL_Event *event);
+void		info_ceil_floor(t_doom *doom);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
