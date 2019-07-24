@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/07/23 20:22:43 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/07/24 14:29:52 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,47 @@ void	ft_draw_pixel(t_doom *doom, int x, int y, int color)
 
 int		ft_write_changes_to_file(t_doom *doom, int fd)
 {
+	
 	p("\nIN FT_WRITE_CHANGES_TO_FILE\n");
 	int i;
- 
-	i = -1;
+
+	write(fd, &doom->map.fog, sizeof(int));
+	write(fd, &doom->map.fog_color, sizeof(Uint32));
+
 	write(fd, &doom->map.num_sect, sizeof(Uint32));
+	write(fd, &doom->map.num_vert, sizeof(Uint32));
+
+	write(fd, doom->map.vertex, sizeof(t_vertex) * doom->map.num_vert);
+	
 	i = -1;
 	while (++i < (int)doom->map.num_sect)
 	{
 		write(fd, &doom->map.sectors[i].num, sizeof(Uint32));
 		write(fd, &doom->map.sectors[i].num_vert, sizeof(Uint32));
 		write(fd, doom->map.sectors[i].vert, sizeof(t_vertex) * doom->map.sectors[i].num_vert);
-		/* write(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert); //this one is unusable here */
+		write(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert);
 		write(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
-		write(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
 		write(fd, &doom->map.sectors[i].ceil_plane, sizeof(t_plane));
+		write(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
+		write(fd, &doom->map.sectors[i].render_ceil, sizeof(int));
+		write(fd, &doom->map.sectors[i].ceil_tex, sizeof(int));
+		write(fd, &doom->map.sectors[i].floor_tex, sizeof(int));
+		write(fd, &doom->map.sectors[i].x_c_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].x_c_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].y_c_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].y_c_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].x_f_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].x_f_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].y_f_scale, sizeof(float));
+		write(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
+		write(fd, &doom->map.sectors[i].light_lvl, sizeof(int));
 	}
 
 	write(fd, &doom->player, sizeof(t_player));
-	/* write(fd, &doom->map.num_sprites, sizeof(Uint32));
-	 write(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
-	 write(fd, &doom->map.num_paint, sizeof(Uint32));
-	 write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint); */
+	write(fd, &doom->map.num_sprites, sizeof(Uint32));
+	write(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	write(fd, &doom->map.num_paint, sizeof(Uint32));
+	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint); //*//
 	printf("Количесвто вертексов в сеторе 0: %d\n", doom->map.sectors[0].num_vert);
 	return (1);
 }
@@ -308,9 +327,11 @@ void	ft_render_interface(t_doom *doom)
 	if (doom->editor.press.ind_action == 5) //DRAW SECTOR // FIX add colors (0x00AAAA 0xFFFFFF 0x000000)
 	{
 		bigger = (SDL_Rect){840, 630, 0, 0};
-		SDL_BlitSurface(doom->editor.images[14].image, NULL, doom->sdl.surface, &bigger);
-		// if fog need to be removed 
+		if (doom->map.fog == 1)
 			SDL_BlitSurface(doom->editor.images[14].image, NULL, doom->sdl.surface, &bigger);
+		// if fog need to be removed
+		else 
+			SDL_BlitSurface(doom->editor.images[15].image, NULL, doom->sdl.surface, &bigger);
 	}
 	/* ********** */
 

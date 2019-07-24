@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 15:52:00 by arudyi            #+#    #+#             */
-/*   Updated: 2019/07/24 11:04:25 by myuliia          ###   ########.fr       */
+/*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
+/*   Updated: 2019/07/24 16:01:36 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,13 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 	int i;
 
 	i = -1;
+
+	read(fd, &doom->map.fog, sizeof(int));
+	read(fd, &doom->map.fog_color, sizeof(Uint32));
 	read(fd, &doom->map.num_sect, sizeof(Uint32));
+	read(fd, &doom->map.num_vert, sizeof(Uint32));
+	doom->map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * doom->map.num_vert);
+	read(fd, doom->map.vertex, sizeof(t_vertex) * doom->map.num_vert);
 	doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * doom->map.num_sect);
 	if (doom->map.num_sect > MAX_NUM_SECTORS)
 	{
@@ -86,18 +92,31 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 		doom->map.sectors[i].vert[doom->map.sectors[i].num_vert].x = doom->map.sectors[i].vert[0].x; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		doom->map.sectors[i].vert[doom->map.sectors[i].num_vert].y = doom->map.sectors[i].vert[0].y; //MAKE ONE LAST SAME WITH THE FIRST FOR RENDERING
 		doom->map.sectors[i].neighbors = (char *)malloc(sizeof(char) * doom->map.sectors[i].num_vert);
-		//map->sectors[i].lines = (t_line*)malloc(sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
-		//read(fd, map->sectors[i].lines, sizeof(t_line) * map->sectors[i].num_vert); //this one is unusable in first test map
+		doom->map.sectors[i].lines = (t_line*)malloc(sizeof(t_line) * doom->map.sectors[i].num_vert); //this one is unusable in first test map
+		read(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert); //this one is unusable in first test map
 		read(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
-		read(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
 		read(fd, &doom->map.sectors[i].ceil_plane, sizeof(t_plane));
-		// printf("in map reader\n");
+		read(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
+		read(fd, &doom->map.sectors[i].render_ceil, sizeof(int));
+		read(fd, &doom->map.sectors[i].ceil_tex, sizeof(int));
+		read(fd, &doom->map.sectors[i].floor_tex, sizeof(int));
+		read(fd, &doom->map.sectors[i].x_c_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].x_c_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].y_c_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].y_c_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].x_f_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].x_f_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].y_f_scale, sizeof(float));
+		read(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
+		read(fd, &doom->map.sectors[i].light_lvl, sizeof(int));
+	
+	
 	}
 	read(fd, &doom->player, sizeof(t_player));
-	// read(fd, &doom->map.num_sprites, sizeof(Uint32));
-	// read(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
-	// read(fd, &doom->map.num_paint, sizeof(Uint32));
-	// read(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
+	read(fd, &doom->map.num_sprites, sizeof(Uint32));
+	read(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	read(fd, &doom->map.num_paint, sizeof(Uint32));
+	read(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
 	return (0);
 }
 
@@ -105,6 +124,7 @@ int		ft_prepare_to_write(t_doom *doom)
 {
 	p("\nIN FT_PREAPARE_TO_WRITE\n");
 	int		i;
+	int		k = -1;
 
 	i = -1;
 	if (!doom->map.num_sect || !doom->player.coord.y)
@@ -113,18 +133,78 @@ int		ft_prepare_to_write(t_doom *doom)
 		return (0);
 	}
 	printf("Общее количесвто секторов: %d \n", doom->map.num_sect);
-	// else	
-		// doom->map.num_vert = NUM_VER - 1;
-	// doom->map.num_sect = NUM_SECT;
-	// doom->map.sectors[0].num_vert = NUM_VER - 1; // change it
-	// doom->map.sectors[0].vert = (t_vertex *)malloc(sizeof(t_vertex) * 100);
-	// doom->map.sectors[0].neighbors = (char*)malloc(sizeof(char) * doom->map.sectors->num_vert);
-	// for (int i = 0; i < doom->map.sectors->num_vert; i++)
-	// 	doom->map.sectors[0].neighbors[i] = -1;
-	// doom->player.coord.x = 20;
-	// doom->player.coord.y = 20;
 	printf("doom->player.coord.x:   %f\n", doom->player.coord.x);
 	printf("doom->player.coord.y:   %f\n", doom->player.coord.y);
+
+	doom->map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * doom->map.num_vert);
+	doom->map.num_vert = 6;
+
+	while (++k < (int)doom->map.num_sect)
+	{
+		printf("%s       TYTYYTY %s\n", TRED, TNULL);
+		doom->map.sectors[k].num = 0;
+		doom->map.sectors[k].ceil_plane.a = 0;
+		doom->map.sectors[k].ceil_plane.b = 0;
+		doom->map.sectors[k].ceil_plane.c = 1;
+		doom->map.sectors[k].ceil_plane.h = -80;
+
+		doom->map.sectors[k].floor_plane.a = -0.0001;
+		doom->map.sectors[k].floor_plane.b = 0.0001;
+		doom->map.sectors[k].floor_plane.c = 1;
+		doom->map.sectors[k].floor_plane.h = -10;
+
+		doom->map.sectors[k].ceil_tex = 4;
+		doom->map.sectors[k].floor_tex = 4;
+
+		doom->map.sectors[k].x_c_scale = 1;
+		doom->map.sectors[k].y_c_scale = 1;
+		doom->map.sectors[k].x_c_shift = 0;
+		doom->map.sectors[k].y_c_shift = 0;
+
+		doom->map.sectors[k].x_f_scale = 1.0 / 10;
+		doom->map.sectors[k].y_f_scale = 1.0 / 10;
+		doom->map.sectors[k].x_f_shift = 0;
+		doom->map.sectors[k].y_f_shift = 0;
+		doom->map.sectors[k].light_lvl = rand() % 80;
+		doom->map.sectors[k].render_ceil = 1;
+
+		doom->map.sectors[k].lines = (t_line*)malloc(sizeof(t_line) * doom->map.sectors[k].num_vert);
+		for (int i = 0; i < (int)doom->map.sectors[k].num_vert; i++)
+		{
+			doom->map.sectors[k].lines[i].wall = 1;
+			doom->map.sectors[k].lines[i].top = 1;
+			doom->map.sectors[k].lines[i].bot = 1;
+			// doom->map.sectors[k].lines[i].wall = rand() % 5;
+			// doom->map.sectors[k].lines[i].top = rand() % 5;
+			// doom->map.sectors[k].lines[i].bot = rand() % 5;
+
+			doom->map.sectors[k].lines[i].x_w_scale = 2;
+			doom->map.sectors[k].lines[i].x_b_scale = 2;
+			doom->map.sectors[k].lines[i].x_t_scale = 2;
+
+			doom->map.sectors[k].lines[i].x_w_shift = 50;
+			doom->map.sectors[k].lines[i].x_b_shift = 50;
+			doom->map.sectors[k].lines[i].x_t_shift = 50;
+
+			doom->map.sectors[k].lines[i].y_w_scale = 1;
+			doom->map.sectors[k].lines[i].y_b_scale = 1;
+			doom->map.sectors[k].lines[i].y_t_scale = 1;
+
+			doom->map.sectors[k].lines[i].y_w_shift = 0;
+			doom->map.sectors[k].lines[i].y_b_shift = 0;
+			doom->map.sectors[k].lines[i].y_t_shift = 0;
+		} 
+}
+		doom->map.sectors[1].ceil_plane.a = 0;
+		doom->map.sectors[1].ceil_plane.b = 0;
+		doom->map.sectors[1].ceil_plane.c = 1;
+		doom->map.sectors[1].ceil_plane.h = -20;
+
+		doom->map.sectors[1].floor_plane.a = -0.0001;
+		doom->map.sectors[1].floor_plane.b = 0.0001;
+		doom->map.sectors[1].floor_plane.c = 1;
+		doom->map.sectors[1].floor_plane.h = -10;
+
 	doom->player.coord.z = 10;
 	doom->player.sector = 0;
 	doom->player.angle = 0;
@@ -132,9 +212,41 @@ int		ft_prepare_to_write(t_doom *doom)
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);
 
+	doom->map.num_sprites = 2;
+	for (int i = 0; i < 2; i++)
+	{
+		doom->map.sprites[i].spr_num = i;
+		doom->map.sprites[i].text_no = 0;
+		doom->map.sprites[i].coord = (t_vector){-2, -3, get_z(doom->map.sectors[0].floor_plane, -2, -3)};
+		doom->map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+		doom->map.sprites[i].width = 5;
+		doom->map.sprites[i].start_z = 0;
+		doom->map.sprites[i].end_z = 5;
+		doom->map.sprites[i].mob = 1;
+		doom->map.sprites[i].angle = M_PI / 4;
+		doom->map.sprites[i].anglecos = cos(doom->map.sprites[i].angle);
+		doom->map.sprites[i].anglesin = sin(doom->map.sprites[i].angle);
+		doom->map.sprites[i].own_moves = i;
+		doom->map.sprites[i].move_speed = 0.03 * (i + 1);
+		doom->map.sprites[i].draw = 1;
+		doom->map.sprites[i].live = 1;
+		doom->map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
+		doom->map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
+	}
+
+	doom->map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
+	doom->map.num_paint = 1;
+	doom->map.paint[0].sector_no = 1;
+	doom->map.paint[0].v1.x = -6;
+	doom->map.paint[0].v1.y = -10;
+	doom->map.paint[0].v1.z = 40;
+	doom->map.paint[0].v2.x = -3;
+	doom->map.paint[0].v2.y = -10;
+	doom->map.paint[0].v2.z = 30;
+	doom->map.paint[0].text_no = 0;
+
 	doom->map.num_sprites = 0;
 	doom->map.num_paint = 0;
-	doom->map.sectors[0].neighbors[3] = 1;
 	return (1);
 }
 
@@ -148,6 +260,13 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->editor.but1_press = 0;
 	doom->editor.is_drawing = 0;
 	doom->editor.is_portal = 0;
+	doom->editor.ind_img = 0;
+	doom->editor.is_sector = 1;
+	doom->editor.ind_text = 5; // as 0
+	doom->editor.img_press = 0;
+	doom->editor.press.ind_action = 5;
+	doom->editor.save_del = 0;
+	doom->editor.fl_or_ceil = 1;
 	if (!doom->map.num_sect || doom->editor.save_del == 2) // если не было сохранений 
 	{
 		printf("\nIT WAS NO SAVINGS BEFORE\n");
@@ -171,15 +290,12 @@ void	ft_prepare_editor(t_doom *doom)
 		doom->editor.images[i].im_y[1] = 20;
 		doom->editor.images[i].exist = 0;
 	}
-	doom->editor.ind_img = 0;
-	doom->editor.is_sector = 0;
-	doom->editor.ind_text = 5; // as 0
-	doom->editor.img_press = 0;
-	doom->editor.press.ind_action = 5;
-	doom->editor.save_del = 0;
-	doom->editor.fl_or_ceil = 1;
+	/******      FOG      ********/
+	doom->map.fog = 0;
+	doom->map.fog_color = 0x575244;
+	/****************************/
+	/* initial values:  make it for all sectors  */
 
-	/*  make it for all sectors  */
 	doom->map.sectors[0].ceil_plane.a = 0;
 	doom->map.sectors[0].ceil_plane.b = 0;
 	doom->map.sectors[0].ceil_plane.c = 1;
@@ -190,12 +306,7 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->map.sectors[0].floor_plane.c = 1;
 	doom->map.sectors[0].floor_plane.h = 0;
 
-	doom->editor.is_sector = 1;
 	/* ****** */
-
-	// printf("doom->map.num_sect:    %d\n", doom->map.num_sect);
-		// doom->map.sectors[doom->map.num_sect].num_vert = 0;
-
 	/****   To make objects visible on map (player, sprite..)  *****/
 	if (doom->player.coord.x && doom->player.coord.y)
 	{
@@ -396,7 +507,7 @@ int		convex(t_doom *doom) // выпуклость
 			return (0);
 		}
 		// printf("             Product  %f\n", product);
-		}
+	}
 	printf("\033[1;33m SECTOR IS CONVEX\033[0m\n");
 	doom->editor.is_sector = 1;
 	return (1);
@@ -511,6 +622,13 @@ void	in_sector(t_doom *doom, SDL_Event *event)
 			printf("here2 Number of sectors:   %d\n", doom->map.num_sect);
 			doom->editor.but1_press = 0;
 		}
+	}
+	if ((event->button.x >= 840 && event->button.x <= (840 + 325)) && (event->button.y >= 630 && event->button.y <= (630 + 55)))
+	{
+		if (doom->map.fog == 1)
+			doom->map.fog = 0;
+		else
+			doom->map.fog = 1;
 	}
 }
 
