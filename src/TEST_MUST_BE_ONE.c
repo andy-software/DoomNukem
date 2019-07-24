@@ -149,8 +149,8 @@ int		main(int argc, char **argv)
 
 	map.sectors[1].num_vert = 4;
 	map.sectors[1].num = 1;
-	map.fog = 0;
-	map.fog_color = 0x000000;
+	map.fog = 1;
+	map.fog_color = 0x00AAAA;
 	map.sectors[1].ceil_plane.a = 0;
 	map.sectors[1].ceil_plane.b = 1;
 	map.sectors[1].ceil_plane.c = 1;

@@ -18,13 +18,13 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 		return (error_message("failed to malloc textures"));
 	if (!(t->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts = ft_memalloc(sizeof(t_font) * 3)))
-		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[FPS_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[HP_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[AMMO_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 50)))
+		return (error_message("failed to malloc textures"));
+	if (!(t->fonts[MENU_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 75)))
 		return (error_message("failed to malloc textures"));
 	t->wall_tex[0] = load_tex("./materials/textures/walls/WALL2.png", sdl);
 	t->wall_tex[1] = load_tex("./materials/textures/walls/WALL.png", sdl);
@@ -54,7 +54,7 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 		return (error_message("failed to malloc textures"));
 	if (!(t->gun2 = ft_memalloc(sizeof(SDL_Surface*) * t->gun2_l)))
 		return (error_message("failed to malloc textures"));
-	t->pause = load_tex("./materials/textures/ui/pause.png", sdl);
+	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", sdl);
 	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", sdl);
 	t->gun1[1] = load_tex("./materials/textures/ui/gun1/2.png", sdl);
 	t->gun1[2] = load_tex("./materials/textures/ui/gun1/2.png", sdl);

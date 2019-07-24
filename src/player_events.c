@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_events.c                                    :+:      :+:    :+:   */
+/*   player_d->events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -62,7 +62,7 @@ static void	mouse_rotation(t_doom *d)
 	int				y;
 	t_game			*g;
 
-	g = &d->game; //should it be used?
+	g = &d->game; //should it be used? // actually yes, but NO!
 	SDL_GetRelativeMouseState(&x,&y); //pislya pauzi nabuvae yakogos znachenya mojna postaviti kostilni flag pause?
 	d->player.angle += x * SPEED_ROTATION;
 	if (d->player.angle > 2 * M_PI)
@@ -76,22 +76,19 @@ static void	mouse_rotation(t_doom *d)
 
 void		player_events(t_doom *d)
 {
-	SDL_Event	ev;
-
 	if (!d->game.pause)
 	{
 		movement_keys(d);
 		mouse_rotation(d);
 	}
-	while (SDL_PollEvent(&ev) && d->game.quit != 1)
+	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 	{
-		if (ev.type == SDL_KEYDOWN)
+		if (d->ev.type == SDL_KEYDOWN)
 		{
-			if (ev.key.keysym.sym == SDLK_ESCAPE) 
+			if (d->ev.key.keysym.sym == SDLK_ESCAPE) 
 				d->game.quit = 1;
-			else if (ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
+			else if (d->ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
 			{
-				//printf("velocity z %f\n", d->game.velocity.z);
 				if (d->game.ground || d->game.flying)
 				{
 					if (d->game.velocity.z < MAX_SPEED_UPWARD)
@@ -104,41 +101,39 @@ void		player_events(t_doom *d)
 				if (!(Mix_Playing(1)) && !d->game.flying)
 					Mix_PlayChannel(1, d->sound.jump, 0);
 			}
-			else if (ev.key.keysym.sym == SDLK_f && !d->game.pause)
+			else if (d->ev.key.keysym.sym == SDLK_f && !d->game.pause)
 			{
 				printf("Fly mod\n");
 				d->game.flying = !d->game.flying;
 			}
-			else if (ev.key.keysym.sym == SDLK_1)
+			else if (d->ev.key.keysym.sym == SDLK_1)
 			{	
 				d->ui.fire = 0;
 				d->ui.gun_num = 0;
 			}
-			else if (ev.key.keysym.sym == SDLK_2)
+			else if (d->ev.key.keysym.sym == SDLK_2)
 			{
 				d->ui.start_saw = 0;
 				d->ui.fire = 0;
 				d->ui.gun_num = 1;
 			}
-			else if (ev.key.keysym.sym == SDLK_3)
+			else if (d->ev.key.keysym.sym == SDLK_3)
 			{
 				d->ui.fire = 0;
 				d->ui.gun_num = 2;
 			}
-			else if (ev.key.keysym.sym == SDLK_g)
+			else if (d->ev.key.keysym.sym == SDLK_g)
 			{
 				d->game.hp_level -= 15;
 			}
-			else if (ev.key.keysym.sym == SDLK_h)
+			else if (d->ev.key.keysym.sym == SDLK_h)
 			{
 				if (d->ui.ammo_1 + 20 <= 60)
 					d->ui.ammo_1 += 20;
 				else
 					d->ui.ammo_1 = 60;
-				// if(d->game.hp_level < 4)
-				// 	d->game.hp_level += 1;
 			}
-			if (ev.key.keysym.sym == PAUSE)
+			if (d->ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
 				{
@@ -149,15 +144,15 @@ void		player_events(t_doom *d)
 				}
 				else
 				{
-					d->game.pause = 0;
-					// SDL_ShowCursor(SDL_DISABLE);
+						d->game.pause = 0;
+					// SDL_ShowCursor(SDL_DISABLE);  das useless
 					SDL_SetWindowGrab(d->sdl.window, 1);
 					SDL_SetRelativeMouseMode(SDL_ENABLE);
 					SDL_GetRelativeMouseState(NULL, NULL);
 				}
 			}
 		}
-		else if (ev.type == SDL_MOUSEBUTTONDOWN && ev.button.button == SDL_BUTTON_LEFT)
+		else if (d->ev.type == SDL_MOUSEBUTTONDOWN && d->ev.button.button == SDL_BUTTON_LEFT)
 		{
 			if(d->ui.fire == 0)
 			{
@@ -170,9 +165,9 @@ void		player_events(t_doom *d)
 			else if(d->ui.fire == 1)
 				d->ui.fire = 0;
 		}
-		else if (ev.type == SDL_QUIT)
+		else if (d->ev.type == SDL_QUIT)
 			d->game.quit = 1;
-		switch_music(&d->sound, ev);
+		switch_music(&d->sound, d->ev);
 	}
 
 }

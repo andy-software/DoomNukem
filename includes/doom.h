@@ -362,6 +362,8 @@ struct	s_game
 {
 	float			dx;
 	float			dy;
+	int				mouse_x;
+	int				mouse_y;
 	int				fire;
 	t_vector		velocity;
 	float			acceleration;
@@ -549,6 +551,7 @@ struct	s_ui
 
 struct	s_menu
 {
+	
 };
 
 struct	s_font
@@ -563,11 +566,20 @@ enum font {
 	FPS_FONT = 0,
 	HP_FONT = 1,
 	AMMO_FONT = 2,
+	MENU_FONT = 3,
+};
+
+enum mods {
+
+	START_MOD = 0,
+	GAME_MOD = 1,
+	PAUSE_MOD = 2,
+	DEAD_MOD = 3,
 };
 
 struct s_texture
 {
-	t_font			*fonts;
+	t_font			fonts[4];
 	t_sprite_list	*sprites;
 	SDL_Surface		**wall_tex;
 	SDL_Surface		**sky_box;
@@ -750,6 +762,7 @@ struct	s_changes
 
 struct	s_doom
 {
+	SDL_Event		ev;
 	t_thread		threads[NUM_OF_THRD];
 	t_sprite_render		sr;
 	t_render		render;
@@ -864,6 +877,10 @@ void			move_sound(t_sound *sound);
 void			load_sounds(t_sound *sound);
 void			play_music(t_sound *sound, int n);
 void			switch_music(t_sound *sound, SDL_Event ev);
+/*
+**menus.c  
+*/
+void				show_pause(t_doom *d);
 
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);
