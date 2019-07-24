@@ -81,7 +81,6 @@
 # define UnFix(a) 				((a) / (float)(1LL<<8))
 # define FixMult(a, b) 			((((a) * (b)) >> 8))
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
-
 /* EDITOR */
 # define NB_BUTTONS 16
 # define NB_IMAGES 8
@@ -92,13 +91,11 @@
 # define CEIL 2
 # define p(x) printf(x)
 # define MAX_NUM_SECTORS 20
-
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
 # define BDY doom->editor.brezen.dy
 # define BSTARTX doom->editor.brezen.startx
 # define BSTARTY doom->editor.brezen.starty
-
 /*  TEXT COLOR  */
 # define TNULL "\x1B[0m"
 # define TRED  "\x1B[31m"
@@ -123,33 +120,30 @@ typedef struct s_line		t_line;
 typedef struct s_game		t_game;
 typedef struct s_vector		t_vector;
 typedef struct s_render		t_render;
-typedef struct	s_ceil_cal	t_ceil_cal;
-typedef struct	s_floor_cal	t_floor_cal;
+typedef struct s_ceil_cal	t_ceil_cal;
+typedef struct s_floor_cal	t_floor_cal;
 typedef struct s_plane		t_plane;
 typedef struct s_ui			t_ui;
-typedef struct	s_rend_sector	t_rend_sector;
+typedef struct s_rend_sector	t_rend_sector;
 
 typedef struct s_texture	t_texture;
 typedef struct s_skybox		t_skybox;
 typedef struct s_sprite		t_sprite;
-typedef struct	s_sprite_render	t_sprite_render;
-typedef struct	s_sprite_list	t_sprite_list;
-typedef	struct	s_painting		t_painting;
-typedef	struct	s_font			t_font;
-typedef	struct	s_sound			t_sound;
-
+typedef struct s_sprite_render	t_sprite_render;
+typedef struct s_sprite_list	t_sprite_list;
+typedef	struct s_painting		t_painting;
+typedef	struct s_font			t_font;
+typedef	struct s_sound			t_sound;
 /* EDITOR */
 typedef struct s_editor	t_editor;
 typedef struct s_brezen	t_brezen;
 typedef struct s_interface	t_interface;
 typedef struct s_vertex_int	t_vertex_int;
-typedef struct s_images t_images;
-typedef	struct s_buttons t_buttons;
+typedef struct s_images	t_images;
+typedef	struct s_buttons	t_buttons;
 typedef struct s_title	t_title;
-typedef	struct s_fline 	t_fline;
+typedef	struct s_fline	t_fline;
 typedef	struct s_thread	t_thread;
-
-
 /***/
 
 struct	s_plane
@@ -236,45 +230,45 @@ struct	s_sector
 
 struct	s_sprite
 {
-	int		spr_num;
-	int		text_no;
+	int			spr_num;
+	int			text_no;
 	t_vector	coord;
-	float	width;
-	float	end_z; //end_z - start_z its height of sprite
-	float	start_z; //if sprite is flying unit then its non equil to 0
-	int		sector_no;
-	int		mob;
-	int		draw;
-	int		live; //only if mob affected
-	float	anglesin;
-	float	anglecos;
-	float	angle;
+	float		width;
+	float		end_z; //end_z - start_z its height of sprite
+	float		start_z; //if sprite is flying unit then its non equil to 0
+	int			sector_no;
+	int			mob;
+	int			draw;
+	int			live; //only if mob affected
+	float		anglesin;
+	float		anglecos;
+	float		angle;
 
-	float	speed_x;
-	float	speed_y;
-	float	move_speed;
+	float		speed_x;
+	float		speed_y;
+	float		move_speed;
 
-	int		own_moves;
-	float	vision_forward;
-	float	vision_backward;
+	int			own_moves;
+	float		vision_forward;
+	float		vision_backward;
 };
 
 struct	s_painting
 {
-	int		text_no;
+	int			text_no;
 	t_vector	v1;
 	t_vector	v2;
-	int		w;
-	int		h;
-	int		sector_no;
+	int			w;
+	int			h;
+	int			sector_no;
 };
 
 struct	s_sprite_list
 {
-	SDL_Surface	**sprites;
-	int			c_sprt;
-	int			w;
-	int			h;
+	SDL_Surface				**sprites;
+	int						c_sprt;
+	int						w;
+	int						h;
 	struct	s_sprite_list	*next;
 };
 
@@ -417,40 +411,40 @@ struct	s_rend_sector
 
 struct	s_ceil_cal
 {
-	Uint32	color;
-	float	map_x;
-	float	map_y;
-	float	denomi;
-	float	x_multi;
-	float	deriv_map_x;
-	float	deriv_map_y;
-	int		scaled_map_x;
-	int		scaled_map_y;
-	int		x_text;
-	int		y_text;
-	int		screen_y;
-	float	dummy;
-	float	doomy;
-	t_sector	*sect;
-	t_plane	rotated;
-	t_vector	random_vector;
-	SDL_Surface	*surr;
+	Uint32			color;
+	float			map_x;
+	float			map_y;
+	float			denomi;
+	float			x_multi;
+	float			deriv_map_x;
+	float			deriv_map_y;
+	int				scaled_map_x;
+	int				scaled_map_y;
+	int				x_text;
+	int				y_text;
+	int				screen_y;
+	float			dummy;
+	float			doomy;
+	t_sector		*sect;
+	t_plane			rotated;
+	t_vector		random_vector;
+	SDL_Surface		*surr;
 };
 
 struct	s_floor_cal
 {
-	Uint32	color;
-	float	map_x;
-	float	map_y;
-	float	denomi;
-	int		x_text;
-	int		y_text;
-	int		screen_y;
-	float	dummy;
-	float	doomy;
-	float	x_multi;
+	Uint32		color;
+	float		map_x;
+	float		map_y;
+	float		denomi;
+	int			x_text;
+	int			y_text;
+	int			screen_y;
+	float		dummy;
+	float		doomy;
+	float		x_multi;
 	t_sector	*sect;
-	t_plane	rotated;
+	t_plane		rotated;
 	t_vector	random_vector;
 	SDL_Surface	*surr;
 };
@@ -498,7 +492,7 @@ struct	s_render
 	float			kza;
 	float			kzb;
 	float			nkza;
-	float			nkzb;	
+	float			nkzb;
 	int				t1_1_line;
 	int				t1_2_line;
 	int				t2_1_line;
@@ -565,10 +559,6 @@ struct	s_ui
 	int				ammo_1;	
 };
 
-struct	s_menu
-{
-};
-
 struct	s_font
 {
 	SDL_Rect		text_rect;
@@ -576,14 +566,14 @@ struct	s_font
 	TTF_Font		*text_font;
 };
 
-enum font {
+enum	font {
 
 	FPS_FONT = 0,
 	HP_FONT = 1,
 	AMMO_FONT = 2,
 };
 
-struct s_texture
+struct	s_texture
 {
 	t_font			*fonts;
 	t_sprite_list	*sprites;
@@ -612,7 +602,7 @@ struct s_texture
 	int				c_sprt;
 };
 
-struct s_skybox
+struct	s_skybox
 {
 	t_doom			*doom;
 	int				win_x;
@@ -627,26 +617,26 @@ struct s_skybox
 };
 
 /* EDITOR */
-struct s_vertex_int
+struct	s_vertex_int
 {
-	int x;
-	int y;
+	int				x;
+	int				y;
 };
 
 struct	s_interface
 {
-	int tmp_x1;
-	int tmp_y1;
-	int tmp_x2;
-	int tmp_y2;
+	int				tmp_x1;
+	int				tmp_y1;
+	int				tmp_x2;
+	int				tmp_y2;
 	t_vertex_int	arr_vertex_map_coor[9999];
-	t_vertex 		arr_vertex_real_coor[9999];
+	t_vertex			arr_vertex_real_coor[9999];
 	t_sector		sectors[2000];
-	int nbr_vertex;
-	int nbr_sectors;
-	int iterator_num_vertex;
-	int is_drawing_interface;
-	int start_new_sector;
+	int				nbr_vertex;
+	int				nbr_sectors;
+	int				iterator_num_vertex;
+	int				is_drawing_interface;
+	int				start_new_sector;
 };
 
 
@@ -666,46 +656,45 @@ struct	s_buttons
 	int				ind_action;
 };
 
-struct s_brezen
+struct	s_brezen
 {
-	int		x1;
-	int		x2;
-	int		y1;
-	int		y2;
-	double d;
-	double starty;
-	double startx;
-	double d1;
-	double d2;
-	double iterator;
-	int dy;
-	int dx;
-	int color;
+	int				x1;
+	int				x2;
+	int				y1;
+	int				y2;
+	double			d;
+	double			starty;
+	double			startx;
+	double			d1;
+	double			d2;
+	double			iterator;
+	int				dy;
+	int				dx;
+	int				color;
 };
 
-struct s_fline // for line
+struct	s_fline // for line
 {
 	int		num_line1; // like a number of vertex
 	int		num_line2; // like a number of vertex for second case  == -1
 	int		sec1;
-	int		sec2;  // if line only in in one sector == -1 
+	int		sec2;  // if line only in in one sector == -1
 };
 
 struct	s_editor
 {
 	t_brezen		brezen;
 	t_interface		interface;
-	// t_sector 	saver[9999999];
 	t_images		images[9999]; // consist of different images for editor
 	t_images		sector[9999];
 	t_font			font;
 	int				ind_img; // number of image
 	int				img_press; // press on image
-	int 			is_drawing;
+	int				is_drawing;
 	int				zoom;
 	int				but1_press;
 	int				is_sector;
-	int				ind_text; // started from 5 
+	int				ind_text; // started from 5
 	t_buttons		press;
 	int				save_del;
 	int				fl_or_ceil;
@@ -763,13 +752,11 @@ struct	s_thread
 	float		betta;
 	float		float_y_text;
 	float		d_y_text;
-	Uint32		color;		
+	Uint32		color;
 };
 
 typedef struct s_changes	t_changes;
-typedef int (*bots_move)(t_doom *, t_sprite *);
-
-
+typedef int	(*bots_move)(t_doom *, t_sprite *);
 
 struct	s_changes
 {
@@ -779,7 +766,7 @@ struct	s_changes
 struct	s_doom
 {
 	t_thread		threads[NUM_OF_THRD];
-	t_sprite_render		sr;
+	t_sprite_render	sr;
 	t_render		render;
 	t_ui			ui;
 	t_sdl			sdl;
@@ -802,7 +789,6 @@ int			error_message(char *message);
 int			prepare_to_draw_ui(t_doom *doom);
 void		draw_fps(t_doom *d, int fps);
 
-
 //parser & initial
 int			read_file(t_doom *doom, char *file_name);
 int			init_sdl(t_sdl *sdl, t_option *options);
@@ -813,7 +799,6 @@ void		player_events(t_doom *d);
 void		game_events(t_doom *d);
 int			game_loop(t_doom doom);
 int			*intset(int *b, int c, size_t len);
-
 
 //render
 int			draw_screen(t_doom *d);
@@ -873,7 +858,8 @@ Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
 /*
 **sprites.c && load.c
 */
-int				translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p);
+int				translate_and_rotate_sprites(t_sprite *arr_spr,
+	int len, t_player p);
 int				sprite_sort(t_sprite *arr_spr, int len);
 void			load_sprites(t_texture *texture, t_sdl *sdl);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
@@ -917,7 +903,7 @@ void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
 void		key_floor_ceil(t_doom *doom);
 void		info_ceil_floor(t_doom *doom);
 // brezen in editor
-void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
-/***/
+void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom,
+	SDL_Event *event);
 
 #endif
