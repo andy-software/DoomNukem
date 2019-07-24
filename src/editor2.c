@@ -31,7 +31,7 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	i = -1;
 	write(fd, &doom->map.num_sect, sizeof(Uint32));
 	i = -1;
-	while (++i < doom->map.num_sect)
+	while (++i < (int)doom->map.num_sect)
 	{
 		write(fd, &doom->map.sectors[i].num, sizeof(Uint32));
 		write(fd, &doom->map.sectors[i].num_vert, sizeof(Uint32));
@@ -72,7 +72,7 @@ int		ft_create_window(t_doom *doom, char *name)
 	if (TTF_Init() < 0)
 		return (error_message((char *)SDL_GetError()));
 	// doom->editor.font.text_color.b = 200; // init font
-	doom->editor.font.text_color = (SDL_Color){255, 255, 250};
+	doom->editor.font.text_color = (SDL_Color){255, 255, 250, 1};
 	doom->editor.font.text_font = TTF_OpenFont("./materials/textures/editor/font.ttf", 30);
 	while (++i < NB_BUTTONS) // download buttons
 	{
@@ -95,11 +95,12 @@ int		ft_create_window(t_doom *doom, char *name)
 		if (!doom->editor.sector[i].image)
 		printf ( "IMG_Load: %s\n", IMG_GetError());
 	}
+	name = 0; // use this parametr to name window
 	SDL_UpdateWindowSurface(doom->sdl.window);
 	return (1);
 }
 
-void	key_floor_ceil(t_doom *doom, SDL_Event *event) // a, b, c, h, z - меняется на 0,1
+void	key_floor_ceil(t_doom *doom) // a, b, c, h, z - меняется на 0,1
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
@@ -264,7 +265,7 @@ void	ft_render_interface(t_doom *doom)
 
 
 	/* draw actions */
-	bigger = (SDL_Rect){800, 130};
+	bigger = (SDL_Rect){800, 130, 0, 0};
 	SDL_BlitSurface(doom->editor.sector[3].image, NULL, doom->sdl.surface, &bigger);
 	bigger.x = 1150;
 	SDL_BlitSurface(doom->editor.sector[4].image, NULL, doom->sdl.surface, &bigger);
@@ -288,7 +289,7 @@ void	ft_render_interface(t_doom *doom)
 
 	
 	/* draw: save, delete, play */
-	bigger = (SDL_Rect){10, 750, 250};
+	bigger = (SDL_Rect){10, 750, 250, 0};
 		SDL_BlitSurface(doom->editor.images[9].image, NULL, doom->sdl.surface, &bigger);
 	/* ********** */
 	

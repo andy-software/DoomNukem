@@ -24,12 +24,12 @@ int		ft_map_editor(t_doom *doom, char *name)
 		printf("READ MAP-----------------------------------------\n");
 		int	i = -1;
 		printf("doom->num_sect                     %d\n", doom->map.num_sect);
-		while (++i < doom->map.num_sect)
+		while (++i < (int)doom->map.num_sect)
 		{
 			p("HER\n");
 			printf("doom->map.sectors[%d].num_vert:     %d\n", i, doom->map.sectors[i].num_vert);
 			int j = -1;
-			while (++j < doom->map.sectors[i].num_vert)
+			while (++j < (int)doom->map.sectors[i].num_vert)
 			{
 				printf("doom->map.sectors[%d].vert[%d].x:   %f\n", i, j, doom->map.sectors[i].vert[j].x);
 				printf("doom->map.sectors[%d].vert[%d].y:   %f\n", i, j, doom->map.sectors[i].vert[j].y);
@@ -77,7 +77,7 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 		ft_putstr("Wrong file or to many sectors\n");
 		exit(0);
 	}
-	while (++i < doom->map.num_sect)
+	while (++i < (int)doom->map.num_sect)
 	{
 		read(fd, &doom->map.sectors[i].num, sizeof(Uint32));
 		read(fd, &doom->map.sectors[i].num_vert, sizeof(Uint32));
@@ -190,8 +190,6 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->map.sectors[0].floor_plane.c = 1;
 	doom->map.sectors[0].floor_plane.h = 0;
 
-	doom->map.sectors[0].floor_z = 0;
-	doom->map.sectors[0].ceil_z = 40;
 	doom->editor.is_sector = 1;
 	/* ****** */
 
@@ -225,7 +223,7 @@ int		ft_start_edit(t_doom *doom, int fd, char *name)
 			else if (event.type == SDL_KEYUP)
 				ft_check_key(doom, &event);
 			else if (event.type == SDL_KEYDOWN)
-				key_floor_ceil(doom, &event);
+				key_floor_ceil(doom);
 			else if (event.type == SDL_MOUSEBUTTONUP)
 				ft_mouse_press_edit(doom, &event);
 			else if (event.type == SDL_MOUSEBUTTONDOWN)
@@ -274,10 +272,10 @@ void	ft_render_previous(t_doom *doom)
 	doom->editor.interface.tmp_y1 = doom->editor.brezen.y1;
 	doom->editor.interface.tmp_x2 = doom->editor.brezen.x2;
 	doom->editor.interface.tmp_y2 = doom->editor.brezen.y2;
-	while (++j < doom->map.num_sect)
+	while (++j < (int)doom->map.num_sect)
 	{
 		it = -1;
-		while (++it < doom->map.sectors[j].num_vert)
+		while (++it < (int)doom->map.sectors[j].num_vert)
 		{
 			doom->editor.brezen.x1 = doom->map.sectors[j].vert[it].x * 10;
 			doom->editor.brezen.y1 = doom->map.sectors[j].vert[it].y * 10;
@@ -295,7 +293,7 @@ void	ft_render_previous(t_doom *doom)
 	it = 0;
 	if (doom->editor.is_drawing == 0) // segfault here
 		doom->map.sectors[doom->map.num_sect].num_vert = 0;
-	while (++it < doom->map.sectors[doom->map.num_sect].num_vert)
+	while (++it < (int)doom->map.sectors[doom->map.num_sect].num_vert)
 	{
 		doom->editor.brezen.x1 = (doom->map.sectors[doom->map.num_sect].vert[it].x * 10);
 		doom->editor.brezen.y1 = doom->map.sectors[doom->map.num_sect].vert[it].y * 10;
@@ -362,11 +360,11 @@ int		convex(t_doom *doom) // выпуклость
 
 	polig = (t_vertex *)malloc(sizeof(t_vertex) * (doom->map.sectors[doom->map.num_sect].num_vert * 999)); // FIX 
 	i = -1;
-	while (++i < doom->map.sectors[doom->map.num_sect].num_vert) // FIX_NUM  doom->map.sectors[doom->map.num_sect].num_vert
+	while (++i < (int)doom->map.sectors[doom->map.num_sect].num_vert) // FIX_NUM  doom->map.sectors[doom->map.num_sect].num_vert
 	{
 		polig[i].x = doom->map.sectors[doom->map.num_sect].vert[i + 1].x - doom->map.sectors[doom->map.num_sect].vert[i].x;
 		polig[i].y = doom->map.sectors[doom->map.num_sect].vert[i + 1].y - doom->map.sectors[doom->map.num_sect].vert[i].y;
-		if (i == (doom->map.sectors[doom->map.num_sect].num_vert - 1))
+		if (i == ((int)doom->map.sectors[doom->map.num_sect].num_vert - 1))
 		{
 			polig[i].x = doom->map.sectors[doom->map.num_sect].vert[0].x - doom->map.sectors[doom->map.num_sect].vert[i].x;
 			polig[i].y = doom->map.sectors[doom->map.num_sect].vert[0].y - doom->map.sectors[doom->map.num_sect].vert[i].y;
@@ -374,9 +372,9 @@ int		convex(t_doom *doom) // выпуклость
 		// printf("polig.x: %f,  polig.y: %f\n", polig[i].x, polig[i].y);
 	}
 	int	j = -1;
-	while (++j < doom->map.sectors[doom->map.num_sect].num_vert) // NUM_VER - 2 // FIX_NUM
+	while (++j < (int)doom->map.sectors[doom->map.num_sect].num_vert) // NUM_VER - 2 // FIX_NUM
 	{
-		if (j == (doom->map.sectors[doom->map.num_sect].num_vert - 1))
+		if (j == ((int)doom->map.sectors[doom->map.num_sect].num_vert - 1))
 		{
 			ab.x = polig[j].x - polig[j - 1].x;
 			ab.y = polig[j].y - polig[j - 1].y;
@@ -418,13 +416,13 @@ int		is_in_sector(t_doom *doom, SDL_Event *event)
 
 		sec = -1;
 		point = (t_vertex){(event->button.x / 10), (event->button.y / 10)};
-		while (++sec < doom->map.num_sect)
+		while (++sec < (int)doom->map.num_sect)
 		{		
 			i = -1;
-			while (++i < doom->map.sectors[sec].num_vert)	
+			while (++i < (int)doom->map.sectors[sec].num_vert)	
 			{
 				vert = (t_vertex){(doom->map.sectors[sec].vert[i].x - point.x), (doom->map.sectors[sec].vert[i].y - point.y)};
-				if (i == doom->map.sectors[sec].num_vert - 1)
+				if (i == (int)doom->map.sectors[sec].num_vert - 1)
 					vert2 = (t_vertex){(doom->map.sectors[sec].vert[0].x - point.x), (doom->map.sectors[sec].vert[0].y - point.y)};
 				else
 					vert2 = (t_vertex){(doom->map.sectors[sec].vert[i + 1].x - point.x), (doom->map.sectors[sec].vert[i + 1].y - point.y)};
@@ -432,13 +430,13 @@ int		is_in_sector(t_doom *doom, SDL_Event *event)
 				if (product < 0 && (i = -1))
 				{
 					sec++;
-					if (sec == doom->map.num_sect)
+					if (sec == (int)doom->map.num_sect)
 					{
 						printf("\033[1;31m POINT NOT IN THE SECTOR\033[0m\n"); // leave it, but with write
 						return (-1);
 					}
 				}
-				if (i == doom->map.sectors[sec].num_vert - 1)
+				if (i == (int)doom->map.sectors[sec].num_vert - 1)
 				{
 					printf("\033[1;32m POINT IN THE SECTOR: %d\033[0m\n", sec);
 					return (sec);
@@ -694,10 +692,10 @@ void	change_text(t_doom *doom, SDL_Event *event)
 		more = 0;
 		k = -1;
 		point = (t_vertex){(event->button.x / 10), (event->button.y / 10)};
-		while (++k < doom->map.num_sect)
+		while (++k < (int)doom->map.num_sect)
 		{
 			i = -1;
-			while (++i < doom->map.sectors[k].num_vert)
+			while (++i < (int)doom->map.sectors[k].num_vert)
 			{
 				p = ((point.x - doom->map.sectors[k].vert[i].x) * (doom->map.sectors[k].vert[i + 1].y - doom->map.sectors[k].vert[i].y))
 				- ((doom->map.sectors[k].vert[i + 1].x - doom->map.sectors[k].vert[i].x) * (point.y - doom->map.sectors[k].vert[i].y));

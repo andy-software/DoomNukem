@@ -914,7 +914,7 @@ void		ft_prepare_editor(t_doom *doom);
 int			ft_prepare_to_write(t_doom *doom);
 int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
-void		key_floor_ceil(t_doom *doom, SDL_Event *event);
+void		key_floor_ceil(t_doom *doom);
 void		info_ceil_floor(t_doom *doom);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
