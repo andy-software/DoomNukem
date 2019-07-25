@@ -105,7 +105,7 @@ int			game_loop(t_doom doom)
 			SDL_SetWindowGrab(doom.sdl.window, 0);
 			show_lose(&doom);
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 5); // lock fps to 100
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6); // lock fps to 100
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;

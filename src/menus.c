@@ -108,15 +108,17 @@ void	draw_menu(t_doom *d, int opt, char **title, SDL_Color *col)
 				d->ev.motion.x <= d->menu.pos[1].x + d->menu.pos[1].w &&
 				d->ev.motion.y >= d->menu.pos[1].y &&
 				d->ev.motion.y <= d->menu.pos[1].y + d->menu.pos[1].h)
-			system("./doom-nukem play maps/fool && exit");
-            // system("exec ./doom-nukem && exit");
+			exit(1);
 	}
 	else if (d->ev.type == SDL_KEYDOWN && d->ev.key.keysym.sym == PAUSE)
 		while (++i < opt)
 			SDL_FreeSurface(d->menu.m[i]);
 	i = -1;
 	while (++i < opt)
+    {
 		SDL_BlitSurface(d->menu.m[i], NULL, d->sdl.surface, &d->menu.pos[i]);
+        SDL_FreeSurface(d->menu.m[i]);
+    }
 }
 
 void	menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col)
