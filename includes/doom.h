@@ -121,6 +121,7 @@ typedef struct	s_sprite_list	t_sprite_list;
 typedef	struct	s_painting		t_painting;
 typedef	struct	s_font			t_font;
 typedef	struct	s_sound			t_sound;
+typedef	struct	s_menu			t_menu;
 
 /* EDITOR */
 typedef struct s_editor	t_editor;
@@ -551,7 +552,8 @@ struct	s_ui
 
 struct	s_menu
 {
-	
+	SDL_Surface *m[3];
+	SDL_Rect pos[3];
 };
 
 struct	s_font
@@ -584,6 +586,8 @@ struct s_texture
 	SDL_Surface		**wall_tex;
 	SDL_Surface		**sky_box;
 	SDL_Surface		*pause;
+	SDL_Surface		*lose;
+	SDL_Surface		*start;
 	SDL_Surface		*visor;
 	SDL_Surface		**hp;
 	SDL_Surface		**gun1;
@@ -777,6 +781,7 @@ struct	s_doom
 	t_editor		editor;
 	t_sound			sound;
 	t_changes		changes;
+	t_menu			menu;
 };
 
 //friendly user stuff
@@ -880,7 +885,10 @@ void			switch_music(t_sound *sound, SDL_Event ev);
 /*
 **menus.c  
 */
-void				show_pause(t_doom *d);
+void    		show_pause(t_doom *d);
+void    		show_lose(t_doom *d);
+void			draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
+void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);
@@ -905,5 +913,5 @@ void		key_floor_ceil(t_doom *doom, SDL_Event *event);
 // brezen in editor
 void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
-
+int	init_game_params(t_doom *d);
 #endif

@@ -33,7 +33,7 @@ void     init_hud(t_doom *d)
 	d->texture.hp_r.y = WIN_HEIGHT / 1.2;
 }
 
-static int	init_game_params(t_doom *d)
+int	init_game_params(t_doom *d)
 {
 	d->game.quit = 0;
 	d->game.pause = 0;
@@ -97,21 +97,20 @@ int			game_loop(t_doom doom)
 			draw_ui(&doom);
 		}
 		else if (doom.game.pause == 1)
-		{
 			show_pause(&doom);
-		}
-		else
+		else if (doom.game.hp_level <= 0)
 		{
-			doom.ui.message = TTF_RenderText_Solid(doom.texture.fonts[HP_FONT].text_font, "U LOOOOSe BOiiiiii", doom.texture.fonts[HP_FONT].text_color);
-			SDL_BlitSurface(doom.ui.message, NULL, doom.sdl.surface, NULL);
-			SDL_FreeSurface(doom.ui.message);
+			SDL_ShowCursor(SDL_ENABLE);
+			SDL_SetRelativeMouseMode(SDL_DISABLE);
+			SDL_SetWindowGrab(doom.sdl.window, 0);
+			show_lose(&doom);
 		}
 		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 5); // lock fps to 100
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;
-		
-		draw_fps(&doom, (int)(1.0 / doom.ui.fps));
+		if (doom.game.pause == 0 && doom.game.hp_level > 0)
+			draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
 	}
 	return (1);

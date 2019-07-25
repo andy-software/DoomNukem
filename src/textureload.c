@@ -55,6 +55,8 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	if (!(t->gun2 = ft_memalloc(sizeof(SDL_Surface*) * t->gun2_l)))
 		return (error_message("failed to malloc textures"));
 	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", sdl);
+	t->start = load_tex("./materials/textures/ui/hud/start.jpg", sdl);
+	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", sdl);
 	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", sdl);
 	t->gun1[1] = load_tex("./materials/textures/ui/gun1/2.png", sdl);
 	t->gun1[2] = load_tex("./materials/textures/ui/gun1/2.png", sdl);
