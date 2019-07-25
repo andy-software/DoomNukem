@@ -18,13 +18,13 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 		return (error_message("failed to malloc textures"));
 	if (!(t->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts[FPS_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
+	if (!(t->fonts[FPS_F].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts[HP_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
+	if (!(t->fonts[HP_F].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts[AMMO_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 50)))
+	if (!(t->fonts[AMMO_F].text_font = TTF_OpenFont("fonts/doom.ttf", 50)))
 		return (error_message("failed to malloc textures"));
-	if (!(t->fonts[MENU_FONT].text_font = TTF_OpenFont("fonts/doom.ttf", 75)))
+	if (!(t->fonts[MENU_F].text_font = TTF_OpenFont("fonts/doom.ttf", 75)))
 		return (error_message("failed to malloc textures"));
 	t->wall_tex[0] = load_tex("./materials/textures/walls/WALL2.png", sdl);
 	t->wall_tex[1] = load_tex("./materials/textures/walls/WALL.png", sdl);
@@ -34,9 +34,9 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->wall_tex[5] = load_tex("./materials/textures/walls/wood.png", sdl);
 	t->sky_box[0] = load_tex("./materials/textures/sky/sky0.jpg", sdl);
 	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.png", sdl);
-	t->fonts[FPS_FONT].text_color = (SDL_Color){65, 166, 205, 0};
-	t->fonts[FPS_FONT].text_rect = (SDL_Rect){10, 15, 50, 10};
-	t->fonts[HP_FONT].text_color = (SDL_Color){0, 255, 0, 0};
+	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
+	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
+	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
 	load_sprites(t, sdl);
 	load_sounds(&d->sound);
 	load_ui(t, sdl, d);

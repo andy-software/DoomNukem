@@ -32,7 +32,7 @@ void	draw_ui(t_doom *d)
 		d->ui.masage[3] = 0;
 	else
 		d->ui.masage[2] = 0;
-	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_FONT].text_font, d->ui.masage, d->texture.fonts[HP_FONT].text_color);
+	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_F].text_font, d->ui.masage, d->texture.fonts[HP_F].text_color);
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.hp_r);
 	SDL_FreeSurface(d->ui.message);
 	SDL_BlitSurface(d->texture.visor, 0, d->sdl.surface, 0);
@@ -66,10 +66,10 @@ void    gun_anim(t_doom *d)
 			}
 			SDL_BlitSurface(d->texture.gun1[0], 0, d->sdl.surface, &d->texture.gun1_r);
 			if (d->ui.ammo_1 >= 0)
-				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_FONT].text_font, d->ui.masage, d->texture.fonts[FPS_FONT].text_color);
+				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font, d->ui.masage, d->texture.fonts[FPS_F].text_color);
 			else if (d->ui.ammo_1 < 0)
-				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_FONT].text_font,
-					" 0 / 0", d->texture.fonts[FPS_FONT].text_color);
+				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
+					" 0 / 0", d->texture.fonts[FPS_F].text_color);
 		}
 		else if (d->ui.fire > 0)
 		{
@@ -94,7 +94,7 @@ void    gun_anim(t_doom *d)
 				if (!(Mix_Playing(2)))
 					Mix_PlayChannel(2, d->sound.gun1[0], 0);
 				SDL_BlitSurface(d->texture.gun1[d->ui.fire], 0, d->sdl.surface, &d->texture.gun1_r);
-				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_FONT].text_font, d->ui.masage, d->texture.fonts[FPS_FONT].text_color);
+				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font, d->ui.masage, d->texture.fonts[FPS_F].text_color);
 				d->ui.fire = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 21 + 1;
 				if (d->ui.fire > 20)
 					d->ui.fire = 0;
@@ -104,8 +104,8 @@ void    gun_anim(t_doom *d)
 				if (!(Mix_Playing(3)))
 					Mix_PlayChannel(3, d->sound.gun1[1], 0);
 				SDL_BlitSurface(d->texture.gun1[d->ui.fire], 0, d->sdl.surface, &d->texture.gun1_r);
-				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_FONT].text_font,
-					" 0 / 0", d->texture.fonts[FPS_FONT].text_color);
+				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
+					" 0 / 0", d->texture.fonts[FPS_F].text_color);
 				d->ui.fire = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 3 + 1;
 				if (d->ui.fire > 2)
 					d->ui.fire = 0;
@@ -115,8 +115,8 @@ void    gun_anim(t_doom *d)
 				if (!(Mix_Playing(4)))
 					Mix_PlayChannel(4, d->sound.gun1[2], 0);
 				SDL_BlitSurface(d->texture.gun1[0], 0, d->sdl.surface, &d->texture.gun1_r);
-				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_FONT].text_font,
-					" 0 / 0", d->texture.fonts[FPS_FONT].text_color);
+				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
+					" 0 / 0", d->texture.fonts[FPS_F].text_color);
 				d->ui.fire = 0;
 				d->ui.ammo_1 = -2;
 			}

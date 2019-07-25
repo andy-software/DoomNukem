@@ -565,10 +565,10 @@ struct	s_font
 
 enum font {
 
-	FPS_FONT = 0,
-	HP_FONT = 1,
-	AMMO_FONT = 2,
-	MENU_FONT = 3,
+	FPS_F = 0,
+	HP_F = 1,
+	AMMO_F = 2,
+	MENU_F = 3,
 };
 
 enum mods {
@@ -705,7 +705,7 @@ struct	s_sound
 {
 	Mix_Music		*music[3];
 	Mix_Chunk		*steps;
-	Mix_Chunk		*run;
+	Mix_Chunk		*hover;
 	Mix_Chunk		*jump;
 	Mix_Chunk		**gun1;
 	Mix_Chunk		*win;
@@ -889,6 +889,7 @@ void    		show_pause(t_doom *d);
 void    		show_lose(t_doom *d);
 void			draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
 void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
+void			show_start(t_doom *d);
 
 /* EDITOR */
 int			ft_map_editor(t_doom *doom, char *name);

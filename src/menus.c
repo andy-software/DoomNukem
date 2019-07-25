@@ -20,11 +20,11 @@ void	show_pause(t_doom *d)
 
 	opt = 3;
 	d->menu.m[0] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[0], col[0]);
+		d->texture.fonts[MENU_F].text_font, t[0], col[0]);
 	d->menu.m[1] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[1], col[0]);
+		d->texture.fonts[MENU_F].text_font, t[1], col[0]);
 	d->menu.m[2] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[2], col[1]);
+		d->texture.fonts[MENU_F].text_font, t[2], col[1]);
 	d->menu.pos[0].x = WIN_WIDTH / 2 - d->menu.m[0]->w / 2;
 	d->menu.pos[0].y = WIN_HEIGHT / 2 - d->menu.m[0]->h;
 	d->menu.pos[0].w = WIN_WIDTH / 7;
@@ -42,15 +42,15 @@ void	show_lose(t_doom *d)
 {
 	int			opt;
 	char		*t[3] = {"Exit", "Restart", "YOU ARE DEAD!"};
-	SDL_Color	col[2] = {{255, 255, 255, 0}, {255, 0, 0, 0}};
+	SDL_Color	col[2] = {{102, 0, 0, 0}, {204, 229, 255, 0}};
 
 	opt = 3;
 	d->menu.m[0] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[0], col[0]);
+		d->texture.fonts[MENU_F].text_font, t[0], col[0]);
 	d->menu.m[1] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[1], col[0]);
+		d->texture.fonts[MENU_F].text_font, t[1], col[0]);
 	d->menu.m[2] = TTF_RenderText_Solid(
-		d->texture.fonts[MENU_FONT].text_font, t[2], col[1]);
+		d->texture.fonts[MENU_F].text_font, t[2], (SDL_Color){255, 0, 0, 0});
 	d->menu.pos[0].x = WIN_WIDTH / 2 - d->menu.m[0]->w / 2;
 	d->menu.pos[0].y = WIN_HEIGHT / 2 - d->menu.m[0]->h;
 	d->menu.pos[0].w = WIN_WIDTH / 7;
@@ -61,6 +61,32 @@ void	show_lose(t_doom *d)
 	d->menu.pos[1].h = WIN_HEIGHT / 7;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
 	SDL_BlitScaled(d->texture.lose, 0, d->sdl.surface, 0);
+	draw_menu(d, opt, t, col);
+}
+
+void	show_start(t_doom *d)
+{
+	int			opt;
+	char		*t[3] = {"Play", "Createmap", "DOOM-NUKEM 3D"};
+	SDL_Color	col[2] = {{255, 255, 255, 0}, {200, 20, 10, 0}};
+
+	opt = 3;
+	d->menu.m[0] = TTF_RenderText_Solid(
+		d->texture.fonts[MENU_F].text_font, t[0], col[0]);
+	d->menu.m[1] = TTF_RenderText_Solid(
+		d->texture.fonts[MENU_F].text_font, t[1], col[0]);
+	d->menu.m[2] = TTF_RenderText_Solid(
+		d->texture.fonts[MENU_F].text_font, t[2], col[1]);
+	d->menu.pos[0].x = WIN_WIDTH / 2 - d->menu.m[0]->w / 2;
+	d->menu.pos[0].y = WIN_HEIGHT / 2 - d->menu.m[0]->h;
+	d->menu.pos[0].w = WIN_WIDTH / 7;
+	d->menu.pos[0].h = WIN_HEIGHT / 7;
+	d->menu.pos[1].x = WIN_WIDTH / 2 - d->menu.m[1]->w / 2;
+	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h;
+	d->menu.pos[1].w = WIN_WIDTH / 7;
+	d->menu.pos[1].h = WIN_HEIGHT / 7;
+	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
+	SDL_BlitScaled(d->texture.start, 0, d->sdl.surface, 0);
 	draw_menu(d, opt, t, col);
 }
 
@@ -82,7 +108,8 @@ void	draw_menu(t_doom *d, int opt, char **title, SDL_Color *col)
 				d->ev.motion.x <= d->menu.pos[1].x + d->menu.pos[1].w &&
 				d->ev.motion.y >= d->menu.pos[1].y &&
 				d->ev.motion.y <= d->menu.pos[1].y + d->menu.pos[1].h)
-			game_mod("maps/fool");
+			system("./doom-nukem play maps/fool && exit");
+            // system("exec ./doom-nukem && exit");
 	}
 	else if (d->ev.type == SDL_KEYDOWN && d->ev.key.keysym.sym == PAUSE)
 		while (++i < opt)
@@ -110,7 +137,7 @@ void	menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col)
 				select[i] = 1;
 				SDL_FreeSurface(d->menu.m[i]);
 				d->menu.m[i] = TTF_RenderText_Solid(
-					d->texture.fonts[MENU_FONT].text_font, t[i], col[1]);
+					d->texture.fonts[MENU_F].text_font, t[i], col[1]);
 			}
 		}
 		else
@@ -118,7 +145,7 @@ void	menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col)
 			select[i] = 0;
 			SDL_FreeSurface(d->menu.m[i]);
 			d->menu.m[i] = TTF_RenderText_Solid(
-				d->texture.fonts[MENU_FONT].text_font, t[i], col[0]);
+				d->texture.fonts[MENU_F].text_font, t[i], col[0]);
 		}
 	}
 }

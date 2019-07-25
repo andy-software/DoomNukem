@@ -167,7 +167,7 @@ void		check_sprite_intersection(t_doom *d)
 		t1.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z - d->player.coord.z;
 		t2.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z - d->player.coord.z;
 
-		if (t1.x > 0 && t2.x < 0)
+		if (t1.x > 0 && t2.x < 0 && d->ui.ammo_1 >= -2)
 		{
 			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
 			{

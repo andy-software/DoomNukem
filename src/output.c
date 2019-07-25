@@ -41,7 +41,7 @@ void		draw_fps(t_doom *d, int fps)
 		fps /= 10;
 	}
 	str[3] = 0;
-	message = TTF_RenderText_Solid(d->texture.fonts[FPS_FONT].text_font, str, d->texture.fonts[FPS_FONT].text_color);
-	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[FPS_FONT].text_rect);
+	message = TTF_RenderText_Solid(d->texture.fonts[FPS_F].text_font, str, d->texture.fonts[FPS_F].text_color);
+	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[FPS_F].text_rect);
 	SDL_FreeSurface(message);
 }

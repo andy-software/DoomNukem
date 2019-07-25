@@ -96,7 +96,7 @@ int			game_loop(t_doom doom)
 			draw_screen(&doom);
 			draw_ui(&doom);
 		}
-		else if (doom.game.pause == 1)
+		else if (doom.game.pause == 1 && doom.game.hp_level > 0)
 			show_pause(&doom);
 		else if (doom.game.hp_level <= 0)
 		{

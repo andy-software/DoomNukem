@@ -161,7 +161,9 @@ void		chase(t_doom *d, t_sprite *spr)
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	if (((int)d->player.coord.y == (int)spr->coord.y) && ((int)d->player.coord.x == (int)spr->coord.x))
 	{
-		d->game.hp_level -= 5;
+		if (!(Mix_Playing(6)))
+			Mix_PlayChannel(6, d->sound.hurt, 0);
+		d->game.hp_level -= (rand() % 10);
 	}
 }
 

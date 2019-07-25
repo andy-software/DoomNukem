@@ -83,6 +83,8 @@ void	load_sounds(t_sound *sound)
 	sound->win = load_sound("./materials/sounds/win.wav"); // 5
     sound->steps = load_sound("./materials/sounds/step.wav"); // -1chanell
 	sound->jump = load_sound("./materials/sounds/jump.wav"); // 1 chanel
+	sound->hover = load_sound("./materials/sounds/hover.wav"); // 1
+	sound->hurt = load_sound("./materials/sounds/hurt.wav"); // 6
     sound->gun1[0] = load_sound("./materials/sounds/gun1.wav"); // 2
 	sound->gun1[1] = load_sound("./materials/sounds/gun1_short.wav"); // 3
 	sound->gun1[2] = load_sound("./materials/sounds/gun1_empty.wav"); // 4

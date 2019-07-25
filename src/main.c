@@ -46,6 +46,8 @@ int		main(int argc, char **argv)
 			return (game_mod(argv[2]));
 		else if (ft_strcmp(argv[1], "edit") == 0)
 			return (editor_mod(argv[2]));
+		else if (ft_strcmp(argv[1], "start") == 0)
+			return (editor_mod(argv[2]));
 		else
 			print_usage();
 	}
