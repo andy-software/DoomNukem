@@ -33,9 +33,9 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
 	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
-	load_sprites(d);
 	load_sounds(&d->sound);
 	load_ui(t, sdl, d);
+	load_sprites(d);
 	return(1);
 }
 
@@ -44,12 +44,6 @@ int		load_ui(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->gun1_l = 21;
 	t->gun2_l = 18;
 	t->dude_l = 34;
-	if (!(t->dude = ft_memalloc(sizeof(SDL_Surface*) * t->dude_l)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->gun1 = ft_memalloc(sizeof(SDL_Surface*) * t->gun1_l)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->gun2 = ft_memalloc(sizeof(SDL_Surface*) * t->gun2_l)))
-		return (error_message("failed to malloc textures"));
 	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", sdl);
 	t->start = load_tex("./materials/textures/ui/hud/start.jpg", sdl);
 	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", sdl);
@@ -160,7 +154,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 	}
 }
 
-t_sprite_sheet	*split_surf(int w, int h, char *path, t_doom *d)
+SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 {
 	// t_sprite_sheet	*res;
 	// SDL_Surface *temp;
@@ -171,29 +165,34 @@ t_sprite_sheet	*split_surf(int w, int h, char *path, t_doom *d)
 	// return (res);
 	int			i;
 	int			j;
-	SDL_Rect	in_rect;
-	SDL_Surface	**splited;
+	int			count;
+	SDL_Rect	rect;
+	static SDL_Surface	*splited[w * h];
 	SDL_Surface *sheet;
 
 	i = -1;
-	sheet = load_tex(path, d->sdl);
-	in_rect = (SDL_Rect){0, 0, res->w - 1, res->h - 1};
+	count = 0;
+	sheet = load_tex(path, &d->sdl);
+	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
 	while (++i < h)
 	{
 		j = -1;
 		while (++j < w)
 		{
-			in_rect.x = surr->w / w * j;
-			in_rect.y = surr->h / h * i;
-			if ((SDL_BlitSurface(surr, &in_rect, res[i * w + j], NULL)) < 0)
+			rect.x = sheet->w / w * j;
+			rect.y = sheet->h / h * i;
+			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w, rect.h, 32, d->sdl.surface->format->format);
+			if ((SDL_BlitSurface(sheet, &rect, splited[count], NULL)) < 0)
 			{
 				error_message("Couldnt copy a surface. Sprite.c\n");
 				exit(1); // im too lazy to avoid licks
 				return (0);
 			}
+			printf("c = %d\n", count);
+			count++;
 		}
 	}
-	return (res);
+	return (splited);
 }
 
 void	load_sprites(t_doom *d)
@@ -201,11 +200,13 @@ void	load_sprites(t_doom *d)
 	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 6);
 
 	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
-	d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
-	d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
-	d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
-	d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
-	d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/key.png", d);
+	printf("das fine");
+
+	// d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
+	// d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
+	// d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
+	// d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
+	// d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/key.png", d);
 	
 
 	// surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", sdl);
