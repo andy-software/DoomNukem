@@ -167,12 +167,13 @@ SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 	int			j;
 	int			count;
 	SDL_Rect	rect;
-	static SDL_Surface	*splited[w * h];
+	SDL_Surface	**splited;
 	SDL_Surface *sheet;
 
 	i = -1;
 	count = 0;
 	sheet = load_tex(path, &d->sdl);
+	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
 	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
 	while (++i < h)
 	{
@@ -181,6 +182,7 @@ SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 		{
 			rect.x = sheet->w / w * j;
 			rect.y = sheet->h / h * i;
+			printf("c = %d\n", count);
 			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w, rect.h, 32, d->sdl.surface->format->format);
 			if ((SDL_BlitSurface(sheet, &rect, splited[count], NULL)) < 0)
 			{
@@ -188,7 +190,6 @@ SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 				exit(1); // im too lazy to avoid licks
 				return (0);
 			}
-			printf("c = %d\n", count);
 			count++;
 		}
 	}
@@ -199,13 +200,11 @@ void	load_sprites(t_doom *d)
 {
 	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 6);
 
-	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
-	printf("das fine");
-
+	// d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
 	// d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
 	// d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
 	// d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
-	// d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
+	d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
 	// d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/key.png", d);
 	
 
