@@ -14,10 +14,6 @@
 
 int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 {
-	if (!(t->wall_tex = ft_memalloc(sizeof(SDL_Surface*) * 6)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
-		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[FPS_F].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[HP_F].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
@@ -37,7 +33,7 @@ int		load_all(t_texture *t, t_sdl *sdl, t_doom *d)
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
 	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
-	load_sprites(t, sdl);
+	load_sprites(d);
 	load_sounds(&d->sound);
 	load_ui(t, sdl, d);
 	return(1);
@@ -164,28 +160,55 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 	}
 }
 
-void	load_sprites(t_texture *texture, t_sdl *sdl)
+t_sprite_sheet	*split_surf(int w, int h, char *path, t_doom *d)
 {
-	SDL_Surface	*surr;
-	t_sprite_list	*head; //it must read more then 1 sprite should right present it
+	// t_sprite_sheet	*res;
+	// SDL_Surface *temp;
 
-	surr = load_tex("./materials/textures/sprites/images.png", sdl);
-	
-	SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
-	texture->c_sprt = 12;
-	
-	head = split_image_to_sprites(surr, 3, 4);
-	SDL_FreeSurface(surr);
-	
-	surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", sdl);
-	head->next = split_image_to_sprites(surr, 1, 1);
-	SDL_FreeSurface(surr);
-	if (head == 0)
+	// temp = load_tex(path, &d->sdl);
+	// res = split_sheet_to_sprites(temp, w, h);
+	// SDL_FreeSurface(temp);
+	// return (res);
+	int			i;
+	int			j;
+	SDL_Rect	in_rect;
+	SDL_Surface	**splited;
+	SDL_Surface *sheet;
+
+	i = -1;
+	sheet = load_tex(path, d->sdl);
+	in_rect = (SDL_Rect){0, 0, res->w - 1, res->h - 1};
+	while (++i < h)
 	{
-		error_message("Texture load error\n");
-		exit(1); // im too lazy to exit it right
+		j = -1;
+		while (++j < w)
+		{
+			in_rect.x = surr->w / w * j;
+			in_rect.y = surr->h / h * i;
+			if ((SDL_BlitSurface(surr, &in_rect, res[i * w + j], NULL)) < 0)
+			{
+				error_message("Couldnt copy a surface. Sprite.c\n");
+				exit(1); // im too lazy to avoid licks
+				return (0);
+			}
+		}
 	}
-	texture->sprites = head;
+	return (res);
+}
+
+void	load_sprites(t_doom *d)
+{
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 6);
+
+	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
+	d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
+	d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
+	d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
+	d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
+	d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/key.png", d);
+	
+
+	// surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", sdl);
 }
 
 SDL_Surface	*load_tex(char *path, t_sdl *sdl)

@@ -130,7 +130,7 @@ typedef struct s_texture	t_texture;
 typedef struct s_skybox		t_skybox;
 typedef struct s_sprite		t_sprite;
 typedef struct	s_sprite_render	t_sprite_render;
-typedef struct	s_sprite_list	t_sprite_list;
+typedef struct	s_sprite_sheet	t_sprite_sheet;
 typedef	struct	s_painting		t_painting;
 typedef	struct	s_font			t_font;
 typedef	struct	s_sound			t_sound;
@@ -265,13 +265,10 @@ struct	s_painting
 	int			sector_no;
 };
 
-struct	s_sprite_list
+struct	s_sprite_sheet
 {
 	SDL_Surface				**sprites;
-	int						c_sprt;
-	int						w;
-	int						h;
-	struct	s_sprite_list	*next;
+	// int						c_sprt; // c
 };
 
 struct	s_sprite_render
@@ -390,6 +387,7 @@ struct	s_game
 	int				pause;
 	int				hp_level;
 	int				damage;
+	int				kills;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -595,17 +593,16 @@ enum mods {
 struct	s_texture
 {
 	t_font			fonts[4];
-	t_sprite_list	*sprites;
-	SDL_Surface		**wall_tex;
-	SDL_Surface		**sky_box;
+	t_sprite_sheet	*sprt;  // mob has sheet
+	SDL_Surface		*wall_tex[6];
+	SDL_Surface		*sky_box[2];
+	SDL_Surface		*gun1[21];
+	SDL_Surface		*gun2[18];
+	SDL_Surface		*dude[34];
 	SDL_Surface		*pause;
 	SDL_Surface		*lose;
 	SDL_Surface		*start;
 	SDL_Surface		*visor;
-	SDL_Surface		**hp;
-	SDL_Surface		**gun1;
-	SDL_Surface		**gun2;
-	SDL_Surface		**dude;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
 	SDL_Rect		gun21_r;
@@ -866,26 +863,26 @@ void			gun_anim(t_doom *d);
 /*
 **texturelaod.c
 */
-void		prepare_to_rendering(t_render *r, t_doom d);
+void			prepare_to_rendering(t_render *r, t_doom d);
+t_sprite_sheet	*split_surf(int w, int h, char *path, t_doom *d);
+void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
+SDL_Surface		*load_tex(char *path, t_sdl *sdl);
+int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
+int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
+Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
+void			load_sprites(t_doom *d);
 /*
 **skybox.c
 */
 void			draw_skybox(t_doom d);
 int				prepare_to_sky(t_doom *d);
 void			*sky_threads(void *data);
-SDL_Surface		*load_tex(char *path, t_sdl *sdl);
-int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
-int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
-void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
-Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
 /*
 **sprites.c && load.c
 */
-int				translate_and_rotate_sprites(t_sprite *arr_spr,
-	int len, t_player p);
+int				translate_and_rotate_sprites(t_sprite *arr_spr, int len, t_player p);
 int				sprite_sort(t_sprite *arr_spr, int len);
-void			load_sprites(t_texture *texture, t_sdl *sdl);
-t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
+SDL_Surface		*split_sheet_to_sprites(SDL_Surface *surr, int w, int h);
 int				*copy_static_arr(int *arr, const int len);
 int				game_mod(char *file_name);
 void			move_mobs(t_doom *d);

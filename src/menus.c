@@ -68,8 +68,10 @@ void	show_start(t_doom *d)
 {
 	int			opt;
 	char		*t[3] = {"Play", "Createmap", "DOOM-NUKEM 3D"};
-	SDL_Color	col[2] = {{255, 255, 255, 0}, {200, 20, 10, 0}};
-
+	SDL_Color	col[2];
+	
+	*col = 		(SDL_Color){255, 255, 255, 0};
+ 	*(col + 1)  = (SDL_Color){200, 20, 10, 0};
 	opt = 3;
 	d->menu.m[0] = TTF_RenderText_Solid(
 		d->texture.fonts[MENU_F].text_font, t[0], col[0]);

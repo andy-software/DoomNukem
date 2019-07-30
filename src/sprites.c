@@ -37,12 +37,12 @@ t_sprite_list	*new_branch(SDL_Surface *surr, int w, int h) //sprite list should 
 	return (res);
 }
 
-t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h) // h and w count of the sprites in the row or coloumn
+SDL_Surface		*split_sheet_to_sprites(SDL_Surface *surr, int w, int h) // h and w count of the sprites in the row or coloumn
 {																		//sprite list should be useless cos map must already containt all the sprites and sprites textures
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 	SDL_Rect	in_rect;
-	t_sprite_list	*res;
+	SDL_Surface	*res;
 
 	i = -1;
 	res = new_branch(surr, w, h);
@@ -54,7 +54,7 @@ t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h) // h and 
 		{
 			in_rect.x = surr->w / w * j;
 			in_rect.y = surr->h / h * i;
-			if ((SDL_BlitSurface(surr, &in_rect, res->sprites[i * w + j], NULL)) < 0)
+			if ((SDL_BlitSurface(surr, &in_rect, res[i * w + j], NULL)) < 0)
 			{
 				error_message("Couldnt copy a surface. Sprite.c\n");
 				exit(1); // im too lazy to avoid licks
