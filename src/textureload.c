@@ -156,13 +156,6 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 
 SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 {
-	// t_sprite_sheet	*res;
-	// SDL_Surface *temp;
-
-	// temp = load_tex(path, &d->sdl);
-	// res = split_sheet_to_sprites(temp, w, h);
-	// SDL_FreeSurface(temp);
-	// return (res);
 	int			i;
 	int			j;
 	int			count;
@@ -184,15 +177,12 @@ SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 			rect.y = sheet->h / h * i;
 			printf("c = %d\n", count);
 			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w, rect.h, 32, d->sdl.surface->format->format);
-			if ((SDL_BlitSurface(sheet, &rect, splited[count], NULL)) < 0)
-			{
-				error_message("Couldnt copy a surface. Sprite.c\n");
-				exit(1); // im too lazy to avoid licks
-				return (0);
-			}
+			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
+			SDL_SetColorKey(splited[count], SDL_TRUE, SDL_MapRGB(splited[count]->format, 255, 255, 255));
 			count++;
 		}
 	}
+	SDL_FreeSurface(sheet);
 	return (splited);
 }
 
@@ -200,15 +190,12 @@ void	load_sprites(t_doom *d)
 {
 	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 6);
 
-	// d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
-	// d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
-	// d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
-	// d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
+	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
+	d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
+	d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
+	d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
 	d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
-	// d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/key.png", d);
-	
-
-	// surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", sdl);
+	d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/keys.png", d);
 }
 
 SDL_Surface	*load_tex(char *path, t_sdl *sdl)
