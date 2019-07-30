@@ -12,58 +12,38 @@
 
 #include "../includes/doom.h"
 
-// t_sprite_list	*new_branch(SDL_Surface *surr, int w, int h) //sprite list should be useless cos map must already containt all the sprites and sprites textures
-// {
-// 	t_sprite_list	*res;
-// 	int		i;
+SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
+{
+	int			i;
+	int			j;
+	int			count;
+	SDL_Rect	rect;
+	SDL_Surface	**splited;
+	SDL_Surface *sheet;
 
-// 	res = ft_memalloc(sizeof(t_sprite_list));
-// 	res->w = surr->w / w;
-// 	res->h = surr->h / h;
-// 	res->sprites = ft_memalloc(sizeof(SDL_Surface*) * w * h);
-// 	i = -1;
-// 	while (++i < w * h)
-// 	{
-// 		res->sprites[i] = SDL_CreateRGBSurface(0, surr->w / w, surr->h / h, 0x20, 0, 0, 0, 0);
-// 		if (res->sprites[i] == 0)
-// 		{
-// 			error_message("Couldnt create a surface. Sprite.c\n");
-// 			exit(1); // im too lazy to avoid licks
-// 			return (0);
-// 		}
-// 	}
-// 	res->next = 0;
-// 	fflush(stdout);
-// 	return (res);
-// }
-
-// SDL_Surface		*split_sheet_to_sprites(SDL_Surface *surr, int w, int h) // h and w count of the sprites in the row or coloumn
-// {																		//sprite list should be useless cos map must already containt all the sprites and sprites textures
-// 	int			i;
-// 	int			j;
-// 	SDL_Rect	in_rect;
-// 	SDL_Surface	*res;
-
-// 	i = -1;
-// 	res = new_branch(surr, w, h);
-// 	in_rect = (SDL_Rect){0, 0, res->w - 1, res->h - 1};
-// 	while (++i < h)
-// 	{
-// 		j = -1;
-// 		while (++j < w)
-// 		{
-// 			in_rect.x = surr->w / w * j;
-// 			in_rect.y = surr->h / h * i;
-// 			if ((SDL_BlitSurface(surr, &in_rect, res[i * w + j], NULL)) < 0)
-// 			{
-// 				error_message("Couldnt copy a surface. Sprite.c\n");
-// 				exit(1); // im too lazy to avoid licks
-// 				return (0);
-// 			}
-// 		}
-// 	}
-// 	return (res);
-// }
+	i = -1;
+	count = 0;
+	sheet = load_tex(path, &d->sdl);
+	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
+	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
+	while (++i < h)
+	{
+		j = -1;
+		while (++j < w)
+		{
+			rect.x = sheet->w / w * j;
+			rect.y = sheet->h / h * i;
+			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w,
+				rect.h, 32, d->sdl.surface->format->format);
+			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
+			SDL_SetColorKey(splited[count], SDL_TRUE,
+				SDL_MapRGB(splited[count]->format, 255, 255, 255));
+			count++;
+		}
+	}
+	SDL_FreeSurface(sheet);
+	return (splited);
+}
 
 int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
 {
@@ -79,7 +59,4 @@ int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
 	return (1);
 }
 
-// int		render_sprites()
-// {
-	
-// }
+

@@ -877,17 +877,20 @@ void			draw_skybox(t_doom d);
 int				prepare_to_sky(t_doom *d);
 void			*sky_threads(void *data);
 /*
-**sprites.c && load.c
+**sprites.c
 */
+SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d);
 int				translate_and_rotate_sprites(t_sprite *arr_spr, int len, t_player p);
-int				sprite_sort(t_sprite *arr_spr, int len);
-SDL_Surface		*split_sheet_to_sprites(SDL_Surface *surr, int w, int h);
+/*
+**load.c
+*/
 int				*copy_static_arr(int *arr, const int len);
 int				game_mod(char *file_name);
 void			move_mobs(t_doom *d);
 int				first_own_moves(t_doom *d, t_sprite *spr);
 int				mirror_own_moves(t_doom *d, t_sprite *spr);
 int				init_moves(t_doom *d);
+int				sprite_sort(t_sprite *arr_spr, int len);
 /*
 **sounds.c  
 */

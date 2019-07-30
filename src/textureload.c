@@ -154,38 +154,6 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 	}
 }
 
-SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
-{
-	int			i;
-	int			j;
-	int			count;
-	SDL_Rect	rect;
-	SDL_Surface	**splited;
-	SDL_Surface *sheet;
-
-	i = -1;
-	count = 0;
-	sheet = load_tex(path, &d->sdl);
-	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
-	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
-	while (++i < h)
-	{
-		j = -1;
-		while (++j < w)
-		{
-			rect.x = sheet->w / w * j;
-			rect.y = sheet->h / h * i;
-			printf("c = %d\n", count);
-			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w, rect.h, 32, d->sdl.surface->format->format);
-			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
-			SDL_SetColorKey(splited[count], SDL_TRUE, SDL_MapRGB(splited[count]->format, 255, 255, 255));
-			count++;
-		}
-	}
-	SDL_FreeSurface(sheet);
-	return (splited);
-}
-
 void	load_sprites(t_doom *d)
 {
 	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 6);
