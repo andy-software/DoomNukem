@@ -259,8 +259,9 @@ struct	s_sprite
 
 	int			key;
 	int			key_state;
+	int			changes;
 	int			event_num;
-	int			start_event_time;
+	float		speed;
 };
 
 struct	s_painting
@@ -275,9 +276,15 @@ struct	s_painting
 
 	int			key;
 	int			key_state;
+	int			changes;
 	int			event_num;
-	int			start_event_time;
-	int			draw;
+	int			draw; //is it drawable
+	float		speed; //if its a lift
+	float		high_point;
+	float		low_point;
+	int			num_of_sect_to_lift;
+	float		charge; //if its a first aid or recharge point
+	int			click;
 };
 
 struct	s_sprite_list
@@ -866,6 +873,7 @@ void		draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *r
 int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);
 void		*start_the_work(void *data);
+void		check_keys_state(t_doom *d);
 
 //some math stuff
 float		get_z(t_plane plane, float x, float y);
@@ -934,6 +942,8 @@ int				win_pnt_event(t_doom *d, t_painting *paint);
 
 void			check_painting_intersection(t_doom *d);
 void			check_keys_intersection(t_doom *d);
+void			check_keys_state(t_doom *d);
+
 void			sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p);
 
 /*

@@ -250,9 +250,9 @@ int		main(int argc, char **argv)
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
 		map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
 		map.sprites[i].key = 1;
+		map.sprites[i].changes = 0;
 		map.sprites[i].key_state = 0;
 		map.sprites[i].event_num = 1;
-		map.sprites[i].start_event_time = 0;
 	}
 
 	player.coord.x = -5;
@@ -276,9 +276,14 @@ int		main(int argc, char **argv)
 	map.paint[0].text_no = 0;
 	map.paint[0].key = 1;
 	map.paint[0].draw = 1;
-	map.paint[0].key_state = 0;
-	map.paint[0].event_num = 0;
-	map.paint[0].start_event_time = 0;
+	map.paint[0].key_state = 1;
+	map.paint[0].changes = 0;
+	map.paint[0].event_num = 1;
+	map.paint[0].speed = 5;
+	map.paint[0].high_point = -40;
+	map.paint[0].low_point = -10;
+	map.paint[0].num_of_sect_to_lift = 0;
+	map.paint[0].click = 0;
 	map.editing = 0;
 
 	// map.paint[1].sector_no = 0;

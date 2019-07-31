@@ -111,8 +111,6 @@ int			game_loop(t_doom doom)
 		if (doom.game.pause == 0 && doom.game.hp_level > 0)
 			draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
-		if (!doom.map.editing)
-			return (2);
 	}
 	return (1);
 }

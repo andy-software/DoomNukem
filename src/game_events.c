@@ -206,5 +206,6 @@ void		game_events(t_doom *d)
 		check_painting_intersection(d);
 		d->game.click = 0;
 	}
+	check_keys_state(d);
 	move_mobs(d);
 }

@@ -12,11 +12,6 @@
 
 #include "../includes/doom.h"
 
-void	go_next_line()
-{
-
-}
-
 void	vertical_line(int x, int y1, int y2, t_render *r, int color)
 {
 	y1 = clamp(y1, 0, WIN_HEIGHT - 1) - 1;
