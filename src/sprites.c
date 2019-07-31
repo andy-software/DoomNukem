@@ -79,6 +79,16 @@ int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
 	return (1);
 }
 
+void	sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p)
+{
+	t1->x = sprite->coord.x + sprite->width / 2;
+	t1->y = sprite->coord.y;
+	t2->x = sprite->coord.x - sprite->width / 2;
+	t2->y = sprite->coord.y;
+	t1->z = sprite->coord.z + sprite->end_z - p.coord.z;
+	t2->z = sprite->coord.z + sprite->start_z - p.coord.z;
+}
+
 // int		render_sprites()
 // {
 	

@@ -25,6 +25,8 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		return (0);
 	printf("%s %i", name, fd);
 
+	write(fd, &map.editing, sizeof(int));
+
 	write(fd, &map.fog, sizeof(int));
 	write(fd, &map.fog_color, sizeof(Uint32));
 
@@ -227,17 +229,17 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 2;
-	for (int i = 0; i < 2; i++)
+	map.num_sprites = 1;
+	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
-		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 5;
 		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 5;
-		map.sprites[i].mob = 1;
+		map.sprites[i].mob = 0;
 		map.sprites[i].angle = M_PI / 4;
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
@@ -247,6 +249,10 @@ int		main(int argc, char **argv)
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
 		map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
+		map.sprites[i].key = 1;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].event_num = 1;
+		map.sprites[i].start_event_time = 0;
 	}
 
 	player.coord.x = -5;
@@ -268,6 +274,12 @@ int		main(int argc, char **argv)
 	map.paint[0].v2.y = -10;
 	map.paint[0].v2.z = 30;
 	map.paint[0].text_no = 0;
+	map.paint[0].key = 1;
+	map.paint[0].draw = 1;
+	map.paint[0].key_state = 0;
+	map.paint[0].event_num = 0;
+	map.paint[0].start_event_time = 0;
+	map.editing = 0;
 
 	// map.paint[1].sector_no = 0;
 	// map.paint[1].v1.x = 0;

@@ -44,13 +44,16 @@
 # define COUNT_FPS_NUMBERS 4
 # define MAX_SPEED_UPWARD 1
 # define NUM_OF_THRD 4
-# define MIN_SLICE_WIDTH 40
+# define MIN_SLICE_WIDTH 80
 # define MAX_THREADS_IN_RENDER	4
 # define MAX_THREADS_IN_SKY	4
 # define GREATER 46 // keycode of >
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
+# define COUNT_OF_SPRITE_EVENTS 2
+# define COUNT_OF_PAINT_EVENTS 6
+# define MAX_RANGE_SPRITE_CLICKING 2
 
 # define MAX_SPRITES_COUNT	128
 
@@ -253,16 +256,28 @@ struct	s_sprite
 	int			own_moves;
 	float		vision_forward;
 	float		vision_backward;
+
+	int			key;
+	int			key_state;
+	int			event_num;
+	int			start_event_time;
 };
 
 struct	s_painting
 {
+	// int			pnt_num;
 	int			text_no;
 	t_vector	v1;
 	t_vector	v2;
 	int			w;
 	int			h;
 	int			sector_no;
+
+	int			key;
+	int			key_state;
+	int			event_num;
+	int			start_event_time;
+	int			draw;
 };
 
 struct	s_sprite_list
@@ -334,10 +349,10 @@ struct	s_sprite_render
 	float			x2;
 	float			z1;
 	float			z2;
-	int				z1a;
-	int				z1b;
-	int				z2a;
-	int				z2b;
+	float			z1a;
+	float			z1b;
+	float			z2a;
+	float			z2b;
 	int				c_za;
 	int				c_zb;
 	float			win_x;
@@ -347,6 +362,8 @@ struct	s_sprite_render
 	float			xscale2;
 
 	int				win_y;
+
+	float			doomy;
 };
 
 struct	s_map
@@ -362,6 +379,7 @@ struct	s_map
 	t_painting		*paint; //always same count
 	int				fog;
 	Uint32			fog_color;
+	int				editing;
 };
 
 struct	s_sdl
@@ -379,6 +397,7 @@ struct	s_game
 	int				mouse_x;
 	int				mouse_y;
 	int				fire;
+	int				click;
 	t_vector		velocity;
 	float			acceleration;
 	int				ground;
@@ -432,6 +451,7 @@ struct	s_ceil_cal
 	t_sector		*sect;
 	t_plane			rotated;
 	t_vector		random_vector;
+	float			y;
 	SDL_Surface		*surr;
 };
 
@@ -451,6 +471,7 @@ struct	s_floor_cal
 	t_plane		rotated;
 	t_vector	random_vector;
 	SDL_Surface	*surr;
+	float			y;
 };
 
 struct	s_render
@@ -778,10 +799,14 @@ struct	s_thread
 
 typedef struct s_changes	t_changes;
 typedef int	(*bots_move)(t_doom *, t_sprite *);
+typedef int	(*spr_event_type)(t_doom *, t_sprite *);
+typedef int	(*pnt_event_type)(t_doom *, t_painting *);
 
 struct	s_changes
 {
 	bots_move	moves[COUNT_OF_MOVES];
+	spr_event_type	spr_events[COUNT_OF_SPRITE_EVENTS];
+	pnt_event_type	pnt_events[COUNT_OF_PAINT_EVENTS];
 };
 
 struct	s_doom
@@ -833,7 +858,10 @@ void		reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		upper_textline(int y1, int y2, t_render *r, t_thread *t);
 void		lower_textline(int y1, int y2, t_render *r, t_thread *t);
-Uint32			get_fog_color(Uint32 color, Uint32 fog_color, float y);
+Uint32		get_fog_color(Uint32 color, Uint32 fog_color, float y);
+void		render_sprites(t_doom *d);
+void		render_painting(t_doom *d);
+void		draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *render);
 //threads
 int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);
@@ -870,12 +898,12 @@ void		prepare_to_rendering(t_render *r, t_doom d);
 /*
 **skybox.c
 */
-void			draw_skybox(t_doom d);
+void			draw_skybox(t_doom *d);
 int				prepare_to_sky(t_doom *d);
 void			*sky_threads(void *data);
-SDL_Surface		*load_tex(char *path, t_sdl *sdl);
-int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
-int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
+SDL_Surface		*load_tex(char *path, Uint32 format);
+int				load_all(t_texture *t, Uint32 format, t_doom *d);
+int				load_ui(t_texture *texture, Uint32 format, t_doom *d);
 void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
 Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
 /*
@@ -884,7 +912,7 @@ Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
 int				translate_and_rotate_sprites(t_sprite *arr_spr,
 	int len, t_player p);
 int				sprite_sort(t_sprite *arr_spr, int len);
-void			load_sprites(t_texture *texture, t_sdl *sdl);
+void			load_sprites(t_texture *texture, Uint32 format);
 t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
 int				*copy_static_arr(int *arr, const int len);
 int				game_mod(char *file_name);
@@ -892,6 +920,22 @@ void			move_mobs(t_doom *d);
 int				first_own_moves(t_doom *d, t_sprite *spr);
 int				mirror_own_moves(t_doom *d, t_sprite *spr);
 int				init_moves(t_doom *d);
+
+
+
+int				lift_floor_event(t_doom *d, t_painting *paint);
+int				turn_light_event(t_doom *d, t_painting *paint);
+int				lift_ceil_event(t_doom *d, t_painting *paint);
+int				first_aid_event(t_doom *d, t_painting *paint);
+int				get_ammo_event(t_doom *d, t_painting *paint);
+int				win_spr_event(t_doom *d, t_sprite *sprite);
+int				talk_event(t_doom *d, t_sprite *sprite);
+int				win_pnt_event(t_doom *d, t_painting *paint);
+
+void			check_painting_intersection(t_doom *d);
+void			check_keys_intersection(t_doom *d);
+void			sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p);
+
 /*
 **sounds.c  
 */
@@ -911,11 +955,13 @@ void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 void			show_start(t_doom *d);
 
 /* EDITOR */
+int			game_mod_editor(t_doom *doom);
+int			game_loop_for_editor(t_doom *doom);
 void		change_text(t_doom *doom, SDL_Event *event);
 int			ft_map_editor(t_doom *doom, char *name);
 int			ft_create_window(t_doom *doom, char *name);
 int			ft_read_map_edit(t_doom *doom, int fd);
-int			ft_start_edit(t_doom *doom, int fd, char *name); // refresh
+int			ft_start_edit(t_doom *doom, int fd); // refresh
 int			ft_write_changes_to_file(t_doom *doom, int fd);
 int			write_changes_to_file(t_map map, int fd, t_player mplayer);
 void		ft_check_key(t_doom *doom, SDL_Event *event);

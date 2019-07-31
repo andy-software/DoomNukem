@@ -65,15 +65,15 @@ void	*sky_threads(void *data)
 	return (0);
 }
 
-void	draw_skybox(t_doom d)
+void	draw_skybox(t_doom *d)
 {
 	int		t;
 
-	prepare_to_sky(&d);
+	prepare_to_sky(d);
 	t = -1;
 	while (++t < MAX_THREADS_IN_SKY)
-		pthread_create(&d.threads[t].thrd, NULL, sky_threads, d.sky + t);
+		pthread_create(&d->threads[t].thrd, NULL, sky_threads, d->sky + t);
 	t = -1;
 	while (++t < MAX_THREADS_IN_SKY)
-		pthread_join(d.threads[t].thrd, NULL);
+		pthread_join(d->threads[t].thrd, NULL);
 }

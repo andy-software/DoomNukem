@@ -146,13 +146,6 @@ void		check_sprite_intersection(t_doom *d)
 
 	i = -1;
 	while (++i < (int)d->map.num_sprites)
-		d->sr.sprites[i] = d->map.sprites[i];
-
-	translate_and_rotate_sprites(d->sr.sprites, d->map.num_sprites, d->player); //should it been rotated in future
-	sprite_sort(d->sr.sprites, d->map.num_sprites); //should it been sorted in future
-
-	i = -1;
-	while (++i < (int)d->map.num_sprites)
 		if (d->sr.sprites[i].coord.y < 0)
 			break ;
 
@@ -160,13 +153,7 @@ void		check_sprite_intersection(t_doom *d)
 	{
 		if (!d->sr.sprites[i].live)
 			continue ;
-		t1.x = d->sr.sprites[i].coord.x + d->sr.sprites[i].width / 2;
-		t1.y = d->sr.sprites[i].coord.y;
-		t2.x = d->sr.sprites[i].coord.x - d->sr.sprites[i].width / 2;
-		t2.y = d->sr.sprites[i].coord.y;
-		t1.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z - d->player.coord.z;
-		t2.z = d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z - d->player.coord.z;
-
+		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);
 		if (t1.x > 0 && t2.x < 0 && d->ui.ammo_1 >= -2)
 		{
 			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
@@ -176,6 +163,19 @@ void		check_sprite_intersection(t_doom *d)
 			}
 		}
 	}
+}
+
+static int	sprite_sort_cal(t_doom *d) //sort one time at game_events when start
+{
+	int		i;
+
+	i = -1;
+	while (++i < (int)d->map.num_sprites)
+		d->sr.sprites[i] = d->map.sprites[i];
+
+	translate_and_rotate_sprites(d->sr.sprites, d->map.num_sprites, d->player);
+	sprite_sort(d->sr.sprites, d->map.num_sprites);
+	return (1);
 }
 
 void		game_events(t_doom *d)
@@ -194,10 +194,17 @@ void		game_events(t_doom *d)
 		move(&d->player, d->map, &d->game);
 		move_player(d, g->dx, g->dy);
 	}
+	sprite_sort_cal(d);
 	if (d->game.fire == 1)
 	{
 		check_sprite_intersection(d);
 		d->game.fire = 0;
+	}
+	if (d->game.click == 1)
+	{
+		check_keys_intersection(d);
+		check_painting_intersection(d);
+		d->game.click = 0;
 	}
 	move_mobs(d);
 }

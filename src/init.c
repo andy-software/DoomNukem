@@ -38,6 +38,15 @@ int		init_moves(t_doom *d)
 {
 	d->changes.moves[0] = first_own_moves;
 	d->changes.moves[1] = mirror_own_moves;
+
+	d->changes.pnt_events[0] = turn_light_event;
+	d->changes.pnt_events[1] = lift_floor_event;
+	d->changes.pnt_events[2] = lift_ceil_event;
+	d->changes.pnt_events[3] = first_aid_event;
+	d->changes.pnt_events[4] = get_ammo_event;
+	d->changes.pnt_events[5] = win_pnt_event;
+	d->changes.spr_events[0] = win_spr_event;
+	d->changes.spr_events[1] = talk_event;
 	return (1);
 }
 
@@ -50,3 +59,4 @@ int		*intset(int *b, int c, size_t len)
 		b[i++] = c;
 	return (b);
 }
+

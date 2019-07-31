@@ -53,7 +53,7 @@ int		ft_map_editor(t_doom *doom, char *name)
 			exit(0);
 	}
 	ft_prepare_editor(doom);
-	ft_start_edit(doom, fd, name);
+	ft_start_edit(doom, fd);
 	if (doom->editor.save_del == 2)
 	{
 		doom->map.num_vert = 0;
@@ -70,7 +70,7 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 	int i;
 
 	i = -1;
-
+	read(fd, &doom->map.editing, sizeof(int));
 	read(fd, &doom->map.fog, sizeof(int));
 	read(fd, &doom->map.fog_color, sizeof(Uint32));
 	read(fd, &doom->map.num_sect, sizeof(Uint32));
@@ -321,7 +321,7 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->editor.fline.sec2 = -1;
 }
 
-int		ft_start_edit(t_doom *doom, int fd, char *name)
+int		ft_start_edit(t_doom *doom, int fd)
 {
 	p("\nIN FT_START_EDIT\n");
 	SDL_Event event;
@@ -356,8 +356,11 @@ int		ft_start_edit(t_doom *doom, int fd, char *name)
 		{
 			if (ft_prepare_to_write(doom)) // функция должна возврщать инт чтобы проверить хватает ли данных 
 			{
+				doom->map.editing = 1;
 				ft_write_changes_to_file(doom, fd);
-				return (game_mod(name));
+				game_mod_editor(doom);
+				ft_write_changes_to_file(doom, fd);
+				exit(0); //delete this exit after changing window and surface pointers name
 			}
 			doom->editor.save_del = 0;
 		}

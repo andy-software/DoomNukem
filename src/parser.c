@@ -64,6 +64,8 @@ int			read_file(t_doom *doom, char *file_name)
 	if ((fd = open(file_name, O_RDONLY)) == -1)
 		return (0);
 
+	read(fd, &map->editing, sizeof(int));
+
 	read(fd, &map->fog, sizeof(int));
 	read(fd, &map->fog_color, sizeof(Uint32));
 

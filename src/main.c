@@ -15,7 +15,7 @@
 int		editor_mod(char *file_name)
 {
     t_doom doom;
-    
+
     ft_map_editor(&doom, file_name);
     //ft_putstr("File creating\n");
     //ft_putstr("Editor\n");
@@ -30,7 +30,7 @@ int		game_mod(char *file_name)
 		return (error_message("Error with file") + 1);
 	if (init_sdl(&doom.sdl, &doom.options) == 0)
 		return (error_message("Error with SDL init") + 1);
-	if (load_all(&doom.texture, &doom.sdl, &doom) == 0) 
+	if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0) 
 		return (error_message("Error with textures") + 1);
 	if (game_loop(doom) == 0)
 		return (error_message("Something really sad is happened") + 1);

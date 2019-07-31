@@ -80,7 +80,6 @@ int	init_game_params(t_doom *d)
 
 int			game_loop(t_doom doom)
 {
-	// changes(&doom);
 	if (!init_game_params(&doom))
 		return (0);
 	init_moves(&doom);
@@ -92,7 +91,7 @@ int			game_loop(t_doom doom)
 		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
-			draw_skybox(doom);
+			draw_skybox(&doom);
 			draw_screen(&doom);
 			draw_ui(&doom);
 		}
@@ -112,6 +111,8 @@ int			game_loop(t_doom doom)
 		if (doom.game.pause == 0 && doom.game.hp_level > 0)
 			draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
+		if (!doom.map.editing)
+			return (2);
 	}
 	return (1);
 }

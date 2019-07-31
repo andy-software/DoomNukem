@@ -16,7 +16,12 @@ FLAGS =  -Wall -g -O3 -Wextra #-fsanitize=address  #-Werror
 
 NAME = doom-nukem
 
-SRC = main.c output.c init.c parser.c game_events.c player_events.c game.c math.c main_render.c plane_functions.c textureload.c skybox.c sprites.c sorting.c editor.c editor2.c brezen.c threads.c sound.c interface.c changes.c menus.c
+SRC = main.c output.c init.c parser.c game_events.c player_events.c\
+	 game.c math.c main_render.c plane_functions.c textureload.c skybox.c\
+	  sprites.c sorting.c editor.c editor2.c brezen.c threads.c sound.c\
+	   interface.c changes.c menus.c keys.c painting.c sprite_render.c\
+	   sprite_events.c paint_events.c game_mod_for_map_editor.c
+
 
 INC = includes/doom.h
 

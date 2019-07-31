@@ -29,6 +29,8 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	p("\nIN FT_WRITE_CHANGES_TO_FILE\n");
 	int i;
 
+	write(fd, &doom->map.editing, sizeof(int));
+
 	write(fd, &doom->map.fog, sizeof(int));
 	write(fd, &doom->map.fog_color, sizeof(Uint32));
 
@@ -80,7 +82,7 @@ int		ft_create_window(t_doom *doom, char *name)
 	i = 0;
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return (error_message((char *)SDL_GetError()));
-	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+	if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) != (IMG_INIT_PNG | IMG_INIT_JPG))
 		return (error_message((char *)SDL_GetError()));
 	if (!(doom->sdl.window = SDL_CreateWindow("DOOM", SDL_WINDOWPOS_CENTERED, \
 		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, \
@@ -90,6 +92,8 @@ int		ft_create_window(t_doom *doom, char *name)
 		return (error_message((char *)SDL_GetError()));
 	if (TTF_Init() < 0)
 		return (error_message((char *)SDL_GetError()));
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		return (error_message((char *)SDL_GetError()));
 	// doom->editor.font.text_color.b = 200; // init font
 	doom->editor.font.text_color = (SDL_Color){255, 255, 250, 1};
 	doom->editor.font.text_font = TTF_OpenFont("./materials/textures/editor/font.ttf", 30);
@@ -98,7 +102,7 @@ int		ft_create_window(t_doom *doom, char *name)
 		str2 = ft_itoa(i);
 		str1 = ft_strjoin("./materials/textures/editor/photo", str2);
 		str = ft_strjoin(str1, ".png");
-		doom->editor.images[i].image = load_tex(str, &doom->sdl);
+		doom->editor.images[i].image = load_tex(str, doom->sdl.surface->format->format);
 		free(str2); free(str); free(str1);
 		if (!doom->editor.images[i].image)
 		printf ( "IMG_Load: %s\n", IMG_GetError());
@@ -109,12 +113,18 @@ int		ft_create_window(t_doom *doom, char *name)
 		str2 = ft_itoa(i);
 		str1 = ft_strjoin("./materials/textures/editor/sector", str2);
 		str = ft_strjoin(str1, ".png");
-		doom->editor.sector[i].image = load_tex(str, &doom->sdl);
+		doom->editor.sector[i].image = load_tex(str, doom->sdl.surface->format->format);
 		free(str2); free(str); free(str1);
 		if (!doom->editor.sector[i].image)
 		printf ( "IMG_Load: %s\n", IMG_GetError());
 	}
 	name = 0; // use this parametr to name window
+
+	//it will be here may couse seg faults
+	if (load_all(&doom->texture, doom->sdl.surface->format->format, doom) == 0) //
+		return (error_message("Error with textures") + 1);
+	//
+
 	SDL_UpdateWindowSurface(doom->sdl.window);
 	return (1);
 }
