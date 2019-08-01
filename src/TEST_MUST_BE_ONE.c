@@ -234,6 +234,7 @@ int		main(int argc, char **argv)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 4;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 5;
@@ -285,6 +286,7 @@ int		main(int argc, char **argv)
 	map.paint[0].num_of_sect_to_lift = 0;
 	map.paint[0].click = 0;
 	map.editing = 0;
+	map.paint[0].num_sheet = 6;
 
 	// map.paint[1].sector_no = 0;
 	// map.paint[1].v1.x = 0;

@@ -35,7 +35,7 @@ void	render_sprites(t_doom *d)
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no + sr.pos];
+		sr.surr = d->texture.sprt[sr.sprites[sr.i].num_sheet].sprites[sr.sprites[sr.i].text_no + sr.pos];
 		sprite_vert_cal(&sr.t1, &sr.t2, sr.sprites + sr.i, d->player);
 
 		sr.v1 = sr.t1;

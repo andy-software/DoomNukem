@@ -14,7 +14,7 @@
 
 static void	first_part(t_sprite_render *sr, t_doom *d)
 {
-	sr->surr = d->texture.sprites->next->sprites[sr->paint[sr->i].text_no];
+	sr->surr = d->texture.sprt[sr->paint->num_sheet].sprites[sr->paint[sr->i].text_no];
 	sr->t1.x = sr->paint[sr->i].v1.x - d->player.coord.x;
 	sr->t1.y = sr->paint[sr->i].v1.y - d->player.coord.y;
 	sr->t2.x = sr->paint[sr->i].v2.x - d->player.coord.x;

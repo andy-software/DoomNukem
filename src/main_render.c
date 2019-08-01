@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-static void	vertical_line(int x, int y1, int y2, t_render *r, int color)
+void	vertical_line(int x, int y1, int y2, t_render *r, int color)
 {
 	y1 = clamp(y1, 0, WIN_HEIGHT - 1) - 1;
 	y2 = clamp(y2, 0, WIN_HEIGHT - 1);
@@ -342,11 +342,11 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta; //not like this
-	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta; //add some scale
+	t->float_y_text = t->betta * (surr->h * r->line.y_w_scale - 1) + r->line.y_w_shift; //add some scaler
+	t->d_y_text = (surr->h * r->line.y_w_scale - 1) * t->d_betta; //add some scale
 	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text);
+		t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text % surr->h);
 		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else
