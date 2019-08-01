@@ -402,7 +402,7 @@ void	render_painting(t_doom *d)
 
 	while (++sr.i < sr.c_paint)
 	{
-		sr.surr = d->texture.sprites->next->sprites[sr.paint[sr.i].text_no];
+		sr.surr = d->texture.sprt[sr.paint->num_sheet].sprites[sr.paint->text_no];//->next->sprites[sr.paint[sr.i].text_no];
 		sr.t1.x = sr.paint[sr.i].v1.x - d->player.coord.x; 
 		sr.t1.y = sr.paint[sr.i].v1.y - d->player.coord.y;
 		sr.t2.x = sr.paint[sr.i].v2.x - d->player.coord.x;
@@ -600,7 +600,7 @@ void	render_sprites(t_doom *d)
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no + sr.pos];
+		sr.surr = d->texture.sprt[sr.sprites->num_sheet].sprites[sr.sprites[sr.i].text_no + sr.pos];
 		sr.t1.x = sr.sprites[sr.i].coord.x + sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width
 		sr.t1.y = sr.sprites[sr.i].coord.y;
 		sr.t2.x = sr.sprites[sr.i].coord.x - sr.sprites[sr.i].width / 2; //this 1 could be replaced with sprite width

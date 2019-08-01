@@ -24,6 +24,7 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 	i = -1;
 	count = 0;
 	sheet = load_tex(path, &d->sdl);
+	SDL_SetColorKey(sheet, SDL_TRUE, SDL_MapRGB(sheet->format, 255, 255, 255));
 	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
 	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
 	while (++i < h)
@@ -35,9 +36,7 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 			rect.y = sheet->h / h * i;
 			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w,
 				rect.h, 32, d->sdl.surface->format->format);
-			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
-			SDL_SetColorKey(splited[count], SDL_TRUE,
-				SDL_MapRGB(splited[count]->format, 255, 255, 255));
+			SDL_BlitSurface(sheet, &rect, splited[count], NULL );
 			count++;
 		}
 	}

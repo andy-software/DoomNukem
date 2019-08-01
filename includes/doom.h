@@ -253,6 +253,7 @@ struct	s_sprite
 	int			own_moves;
 	float		vision_forward;
 	float		vision_backward;
+	int			num_sheet;
 };
 
 struct	s_painting
@@ -263,12 +264,15 @@ struct	s_painting
 	int			w;
 	int			h;
 	int			sector_no;
+	int			num_sheet;
 };
 
 struct	s_sprite_sheet
 {
 	SDL_Surface				**sprites;
-	// int						c_sprt; // c
+	int						c_sprt; // c
+	int						w;
+	int						h;
 };
 
 struct	s_sprite_render
@@ -863,7 +867,6 @@ void			gun_anim(t_doom *d);
 **texturelaod.c
 */
 void			prepare_to_rendering(t_render *r, t_doom d);
-SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d);
 void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
 SDL_Surface		*load_tex(char *path, t_sdl *sdl);
 int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);

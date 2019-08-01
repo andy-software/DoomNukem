@@ -232,6 +232,7 @@ int		main(int argc, char **argv)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 4;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
 		map.sprites[i].width = 5;
@@ -268,6 +269,7 @@ int		main(int argc, char **argv)
 	map.paint[0].v2.y = -10;
 	map.paint[0].v2.z = 30;
 	map.paint[0].text_no = 0;
+	map.paint[0].num_sheet = 6;
 
 	// map.paint[1].sector_no = 0;
 	// map.paint[1].v1.x = 0;
