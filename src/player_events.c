@@ -159,8 +159,8 @@ void		player_events(t_doom *d)
 			{
 				if (d->map.editing)
 				{
-					printf("kappa\n");
-					d->map.sectors[d->player.sector].light_lvl++;
+					ft_putnbr(check_what_line_player_are_looking(d));
+					ft_putchar('\n');
 				}
 			}
 			else if (d->ev.key.keysym.sym == SDLK_m)

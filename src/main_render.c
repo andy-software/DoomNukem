@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-void	vertical_line(int x, int y1, int y2, t_render *r, int color)
+static void	vertical_line(int x, int y1, int y2, t_render *r, int color)
 {
 	y1 = clamp(y1, 0, WIN_HEIGHT - 1) - 1;
 	y2 = clamp(y2, 0, WIN_HEIGHT - 1);
@@ -266,8 +266,10 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
 
-	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
+	// t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
+	// t->wall_end = clamp(y2 + 1, 0, r->zbottom[t->win_x]);
+	t->win_y = y1;
+	t->wall_end = y2 + 1;
 	
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (float)(t->win_y - t->za) * t->d_betta; //not like this

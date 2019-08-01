@@ -78,8 +78,14 @@ void	*start_the_work(void *data)
 		t->c_zb = clamp(t->zb, r->ztop[t->win_x], r->zbottom[t->win_x]);
 
 		render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
-		if (r->sect->render_ceil) // 	if (t->c_za < t->c_zb)?
-			render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
+
+		if (r->sect->render_ceil)
+		{
+			if (r->ztop[t->win_x] > t->c_zb)
+				render_ceil_line(t->c_za, t->c_zb, r, t);
+			else
+				render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
+		}
 
 		if(r->neighbor >= 0)
 		{
@@ -88,10 +94,16 @@ void	*start_the_work(void *data)
 			t->nzb = (t->win_x - r->x1) * r->nkzb + r->nz1b;
 			t->c_nzb = clamp(t->nzb, r->ztop[t->win_x], r->zbottom[t->win_x]);
 
+			t->c_nza = min(t->c_nza, min(t->c_zb, t->c_nzb));
+			t->c_nzb = max(t->c_nzb, max(t->c_za, t->c_nza));
 			if (!r->sect->render_ceil)
-				reversed_textline_draw(t->za, t->nza, r, t);
+				reversed_textline_draw(t->c_za, t->c_nza, r, t);
 			else
-				upper_textline(t->za, t->nza, r, t);
+			{
+				//printf("neight %i %i %i %i\n", t->nzb, t->nza, r->zbottom[t->win_x], r->ztop[t->win_x]);
+				//printf("curr %i %i %i %i\n", t->zb, t->za, r->zbottom[t->win_x], r->ztop[t->win_x]);
+				upper_textline(t->c_za, t->c_nza, r, t);
+			}
 			r->ztop[t->win_x] = clamp(max(t->c_za, t->c_nza), r->ztop[t->win_x], WIN_HEIGHT - 1);
 			lower_textline(t->nzb, t->zb, r, t);
 			r->zbottom[t->win_x] = clamp(min(t->c_zb, t->c_nzb), 0, r->zbottom[t->win_x]);

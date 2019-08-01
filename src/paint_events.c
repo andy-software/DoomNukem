@@ -32,30 +32,24 @@ int			lift_floor_event(t_doom *d, t_painting *paint)
 	float	dist;
 	float	*curr;
 
-	if (paint->click)
+	if (paint->click == 1)
 	{
 		paint->changes = 1;
-		printf("1 %i\n", paint->key_state);
 		paint->key_state = !paint->key_state;
-		printf("2 %i\n", paint->key_state);
 		paint->click = 0;
 	}
 	if (paint->changes)
 	{
 		curr = &d->map.sectors[paint->num_of_sect_to_lift].floor_plane.h;
-		printf("3 %i\n", paint->key_state);
 		dist = paint->speed * d->game.dt / 500.f * (paint->key_state - 0.5f);
 		*curr += dist;
+		paint->changes = 0;
 		if (*curr > paint->low_point)
-		{
 			*curr = min(*curr, paint->low_point);
-			paint->changes = 0;
-		}
 		else if (*curr < paint->high_point)
-		{
 			*curr = max(*curr, paint->high_point);
-			paint->changes = 0;
-		}		
+		else
+			paint->changes = 1;
 	}
 	return (1);
 }
@@ -65,21 +59,24 @@ int			lift_ceil_event(t_doom *d, t_painting *paint)
 	float	dist;
 	float	*curr;
 
-	if (paint->changes == 0)
+	if (paint->click == 1)
 	{
 		paint->changes = 1;
 		paint->key_state = !paint->key_state;
+		paint->click = 0;
 	}
 	else
 	{
 		curr = &d->map.sectors[paint->num_of_sect_to_lift].ceil_plane.h;
 		dist = paint->speed * d->game.dt / 500.f * (paint->key_state - 0.5f);
 		*curr += dist;
-		if (paint->high_point < *curr && *curr > paint->low_point)
-		{
-			*curr = clamp(*curr, paint->high_point, paint->low_point);
-			paint->changes = 0;
-		}
+		paint->changes = 0;
+		if (*curr > paint->low_point)
+			*curr = min(*curr, paint->low_point);
+		else if (*curr < paint->high_point)
+			*curr = max(*curr, paint->high_point);
+		else
+			paint->changes = 1;
 	}
 	return (1);
 }

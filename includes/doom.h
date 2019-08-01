@@ -965,6 +965,7 @@ void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 void			show_start(t_doom *d);
 
 /* EDITOR */
+int			check_what_line_player_are_looking(t_doom *d);
 int			game_mod_editor(t_doom *doom);
 int			game_loop_for_editor(t_doom *doom);
 void		change_text(t_doom *doom, SDL_Event *event);

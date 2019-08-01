@@ -32,9 +32,7 @@ void		check_keys_intersection(t_doom *d) //should be another events like talking
 		if (t1.x > 0 && t2.x < 0)
 			if (t1.y < MAX_RANGE_SPRITE_CLICKING)
 				if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
-				{
-					d->sr.sprites[i].key_state = ev(d, d->sr.sprites + i);
-				}
+					ev(d, d->sr.sprites + i);
 	}
 }
 
@@ -66,7 +64,7 @@ void		check_painting_intersection(t_doom *d)
 				if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t2.y * d->player.angle_z < 0)
 				{
 					d->map.paint->click = 1;
-					d->map.paint[i].key_state = ev(d, d->map.paint + i);
+					ev(d, d->map.paint + i);
 				}
 	}
 }
