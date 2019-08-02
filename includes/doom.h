@@ -83,15 +83,19 @@
 # define FixMult(a, b) 			((((a) * (b)) >> 8))
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
 /* EDITOR */
-# define NB_BUTTONS 16
+# define NB_BUTTONS 17
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
 # define FLOOR 1
 # define CEIL 2
+# define WALL 3
+# define SPRITES 4
 # define p(x) printf(x)
 # define MAX_NUM_SECTORS 20
+# define MAX_SECTORS 100
+# define MAX_VERT 100
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
 # define BDY doom->editor.brezen.dy
@@ -669,6 +673,13 @@ struct	s_vertex_int
 	int				y;
 };
 
+enum wall {
+
+	BOTTOM = 1,
+	MIDDLE = 2,
+	TOP = 3,
+};
+
 struct	s_interface
 {
 	int				tmp_x1;
@@ -745,6 +756,8 @@ struct	s_editor
 	int				fl_or_ceil;
 	int				is_portal; // 0 no; 1 yes
 	t_fline			fline;
+	t_sdl			sdl;
+	int				nb_vert; // nb of current vertex
 };
 /****/
 struct	s_sound
@@ -969,12 +982,10 @@ void		show_lose(t_doom *d);
 void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
 void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 void		show_start(t_doom *d);
+
 /* EDITOR */
-int			check_what_line_player_are_looking(t_doom *d);
-//add this
 int			check_what_sprite_player_are_looking(t_doom *d);
 int			check_what_paint_player_are_looking(t_doom *d);
-//add this
 int			game_mod_editor(t_doom *doom);
 int			game_loop_for_editor(t_doom *doom);
 void		change_text(t_doom *doom, SDL_Event *event);
@@ -999,9 +1010,12 @@ int			ft_specify_coor(int nbr);
 void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
 void		key_floor_ceil(t_doom *doom);
 void		info_ceil_floor(t_doom *doom);
+int			check_what_line_player_are_looking(t_doom *d);
+void		editor_player_events(t_doom *doom);
+void		editor_movement_keys(t_doom *d);
+void		key_texure_change(t_doom *doom, Uint8 *state);
 // brezen in editor
-void		ft_line(t_doom *doom);
-void		ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
+void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
-int			init_game_params(t_doom *d);
+int	init_game_params(t_doom *d);
 #endif
