@@ -375,8 +375,6 @@ struct	s_sprite_render
 
 struct	s_map
 {
-	Uint32			num_vert;
-	t_vertex		*vertex; //delete this doesnt useful
 	Uint32			num_sect;
 	t_sector		*sectors;
 	Uint32			num_sprites;
@@ -393,7 +391,6 @@ struct	s_sdl
 {
 	SDL_Window		*window;
 	SDL_Surface		*surface;
-	SDL_Renderer	*render;
 };
 
 struct	s_game
@@ -799,6 +796,14 @@ struct	s_thread
 	float		float_y_text;
 	float		d_y_text;
 	Uint32		color;
+	float		zfloor;
+	float		zceil;
+	float		nzceil;
+	float		nzfloor;
+	float		doomy_y;
+
+	float		u0;
+	float		u1;
 };
 
 typedef struct s_changes	t_changes;

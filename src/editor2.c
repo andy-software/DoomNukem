@@ -35,9 +35,6 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	write(fd, &doom->map.fog_color, sizeof(Uint32));
 
 	write(fd, &doom->map.num_sect, sizeof(Uint32));
-	write(fd, &doom->map.num_vert, sizeof(Uint32));
-
-	write(fd, doom->map.vertex, sizeof(t_vertex) * doom->map.num_vert);
 	
 	i = -1;
 	while (++i < (int)doom->map.num_sect)

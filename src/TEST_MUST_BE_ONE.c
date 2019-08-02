@@ -31,9 +31,6 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 	write(fd, &map.fog_color, sizeof(Uint32));
 
 	write(fd, &map.num_sect, sizeof(Uint32));
-	write(fd, &map.num_vert, sizeof(Uint32));
-
-	write(fd, map.vertex, sizeof(t_vertex) * map.num_vert);
 
 	i = -1;
 	while (++i < map.num_sect)
@@ -72,9 +69,6 @@ int		main(int argc, char **argv)
 {
 	t_map	map;
 	t_player	player;
-
-	map.num_vert = 6;
-	map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * map.num_vert);
 
 	map.num_sect = 2;
 	map.sectors = (t_sector*)malloc(sizeof(t_sector) * map.num_sect);

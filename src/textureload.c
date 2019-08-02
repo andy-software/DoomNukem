@@ -199,7 +199,7 @@ Uint32	pix_from_text(SDL_Surface *texture, int x, int y)
 {
 	Uint32 *ptr;
 
-	ptr = (Uint32 *)texture->pixels;
+	ptr = (Uint32 *)texture->pixels; //surface->pixel
 	return (ptr[(y * texture->w) + x]);
 }
 

@@ -40,6 +40,13 @@ int		fill_the_params(t_render *r, t_thread *t)
 		t[i].alpha = (t[i].begin_x - r->x1) * r->d_alpha;
 		t[i].dummy_var_x = (1 - t[i].alpha) / r->t1.y;
 		t[i].doomy_var_x = t[i].alpha / r->t2.y;
+		// if (r->neighbor >= 0)
+		// {
+		// 	t[i].nzceil = r->nzceil1 + t[i].alpha * (r->nzceil2 - r->nzceil1);
+		// 	t[i].nzfloor = r->nzfloor1 + t[i].alpha * (r->nzfloor2 - r->nzfloor1);
+		// }
+		// t[i].zceil = r->zceil1 + t[i].alpha * (r->zceil2 - r->zceil1);
+		// t[i].zfloor = r->zfloor1 + t[i].alpha * (r->zfloor2 - r->zfloor1);
 		t[i].cc = r->ceil_cal;
 		t[i].fc = r->floor_cal;
 		t[i].r = r;
@@ -62,6 +69,19 @@ void	*start_the_work(void *data)
 
 	while (t->win_x < (int)t->end_x) // in wall 
 	{
+		t->zceil = r->zceil1 + r->p_z + t->alpha * (r->zceil2 - r->zceil1);
+		t->zfloor = r->zfloor1 + r->p_z + t->alpha * (r->zfloor2 - r->zfloor1);
+		if (r->neighbor >= 0)
+		{
+			t->nzceil = r->nzceil1 + t->alpha * (r->nzceil2 - r->nzceil1);
+			t->nzfloor = r->nzfloor1 + t->alpha * (r->nzfloor2 - r->nzfloor1);
+		}
+
+		t->doomy_y = (r->texture->wall_tex[r->line.wall]->h * r->line.y_w_scale - 1) / 20.f;
+
+		t->u0 = t->doomy_y * t->zceil + r->line.y_w_shift;
+		t->u1 = t->doomy_y * t->zfloor + r->line.y_w_shift;
+
 		t->x_text = (t->dummy_var_x * r->w0 + t->doomy_var_x * r->w1) / (t->dummy_var_x + t->doomy_var_x);
 		t->x_text %= r->texture->wall_tex[r->line.wall]->w;
 		

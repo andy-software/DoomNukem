@@ -333,20 +333,49 @@ Uint32	get_fog_color(Uint32 color, Uint32 fog_color, float y)
 
 void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 {
+	// SDL_Surface	*surr;
+
+	// if (y2 == y1)
+	// 	return ;
+	// surr = r->texture->wall_tex[r->line.wall];
+	// t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
+	// t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	// t->d_betta = 1.0 / (t->zb - t->za);
+	// t->betta = (t->win_y - t->za) * t->d_betta; //not like this
+	// t->float_y_text = t->betta * (surr->h * r->line.y_w_scale - 1) + r->line.y_w_shift; //add some scaler
+	// t->d_y_text = (surr->h * r->line.y_w_scale - 1) * t->d_betta; //add some scale
+	// while (t->win_y < t->wall_end)
+	// {
+	// 	t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text % surr->h);
+	// 	if (t->color != 0)
+	// 		t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
+	// 	else
+	// 		t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
+	// 	if (r->map->fog)
+	// 		t->color = get_fog_color(t->color, r->map->fog_color, t->y);
+	// 	r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
+	// 	t->win_y++;
+	// 	t->betta += t->d_betta;
+	// 	t->float_y_text += t->d_y_text;
+	// }
 	SDL_Surface	*surr;
 
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.wall];
+	
+	
+	//printf("%f %f\n", t->u0, t->u1);
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
-	t->d_betta = 1.0 / (t->zb - t->za);
-	t->betta = (t->win_y - t->za) * t->d_betta; //not like this
-	t->float_y_text = t->betta * (surr->h * r->line.y_w_scale - 1) + r->line.y_w_shift; //add some scaler
-	t->d_y_text = (surr->h * r->line.y_w_scale - 1) * t->d_betta; //add some scale
+		t->d_betta = 1.0 / (t->zb - t->za);
+	t->betta = (t->win_y - t->za) * t->d_betta;
+	t->float_y_text = (1 - t->betta) * t->u0 + t->betta * t->u1; //todo for all other type of wall 
+	t->d_y_text = -t->d_betta * t->u0 + t->d_betta * t->u1; //todo for all other type of wall try perspective correct and increase performance
+
 	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, t->x_text, (unsigned int)t->float_y_text % surr->h);
 		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else

@@ -56,7 +56,6 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_start_edit(doom, fd);
 	if (doom->editor.save_del == 2)
 	{
-		doom->map.num_vert = 0;
 		ft_map_editor(doom, name);
 		
 	}
@@ -74,9 +73,6 @@ int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *
 	read(fd, &doom->map.fog, sizeof(int));
 	read(fd, &doom->map.fog_color, sizeof(Uint32));
 	read(fd, &doom->map.num_sect, sizeof(Uint32));
-	read(fd, &doom->map.num_vert, sizeof(Uint32));
-	doom->map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * doom->map.num_vert);
-	read(fd, doom->map.vertex, sizeof(t_vertex) * doom->map.num_vert);
 	doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * doom->map.num_sect);
 	if (doom->map.num_sect > MAX_NUM_SECTORS)
 	{
@@ -136,8 +132,6 @@ int		ft_prepare_to_write(t_doom *doom)
 	printf("doom->player.coord.x:   %f\n", doom->player.coord.x);
 	printf("doom->player.coord.y:   %f\n", doom->player.coord.y);
 
-	doom->map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * doom->map.num_vert);
-	doom->map.num_vert = 6;
 
 	while (++k < (int)doom->map.num_sect)
 	{
