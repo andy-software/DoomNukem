@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4) //find the coord dot of intersection of line {d1, d2} and line {d3, d4}
+t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4)
 {
 	float	lenght;
 	float	n1;
@@ -25,7 +25,16 @@ t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4) //find th
 		vxs(n1, d1.y - d2.y, n2, d3.y - d4.y) / lenght});
 }
 
-int			project_vector2d(float *ax, float *ay, float bx, float by) //project a onto b
+t_vertex	vec_to_ver(t_vector v)
+{
+	t_vertex	vert;
+
+	vert.x = v.x;
+	vert.y = v.y;
+	return (vert);
+}
+
+int			project_vector2d(float *ax, float *ay, float bx, float by)
 {
 	float	k;
 
@@ -35,28 +44,26 @@ int			project_vector2d(float *ax, float *ay, float bx, float by) //project a ont
 	return (1);
 }
 
-
-int		sign(float x)
+int			sign(float x)
 {
 	if (comp_real(x, 0.f, 0.000001f))
 		return (0);
 	return (x > 0 ? 1 : -1);
 }
 
-int		rotate_vector_xy(t_vector *a, float psin, float pcos)
+int			rotate_vector_xy(t_vector *a, float psin, float pcos)
 {
 	t_vertex buff;
 
 	buff.x = a->x;
-	buff.y = a->y;	
-
+	buff.y = a->y;
 	a->x = buff.x * psin - buff.y * pcos;
 	a->y = buff.x * pcos + buff.y * psin;
 	a->z = a->z;
 	return (0);
 }
 
-float	find_angle_2pi(float sin, float cos)
+float		find_angle_2pi(float sin, float cos)
 {
 	if (sin > 0)
 		return (acos(cos));
@@ -64,19 +71,18 @@ float	find_angle_2pi(float sin, float cos)
 		return (2 * M_PI - acos(cos));
 }
 
-int		rotate_vertex_xy(t_vertex *a, float psin, float pcos)
+int			rotate_vertex_xy(t_vertex *a, float psin, float pcos)
 {
 	t_vertex buff;
 
 	buff.x = a->x;
-	buff.y = a->y;	
-
+	buff.y = a->y;
 	a->x = buff.x * psin - buff.y * pcos;
 	a->y = buff.x * pcos + buff.y * psin;
 	return (0);
 }
 
-float	fpercent(float start, float end, float current)
+float		fpercent(float start, float end, float current)
 {
 	float	placement;
 	float	distance;
@@ -86,12 +92,12 @@ float	fpercent(float start, float end, float current)
 	return ((distance == 0) ? 1.0 : (placement / distance));
 }
 
-float	v2dlenght(float vx, float vy)
+float		v2dlenght(float vx, float vy)
 {
 	return (sqrt(vx * vx + vy * vy));
 }
 
-float	line_len(t_vertex start, t_vertex end)
+float		line_len(t_vertex start, t_vertex end)
 {
 	t_vertex	d;
 
@@ -100,27 +106,24 @@ float	line_len(t_vertex start, t_vertex end)
 	return (sqrt(d.x * d.x + d.y * d.y));
 }
 
-t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r)
+t_vertex	find_x_from_screen_coords(float xw, t_vertex start, \
+	t_vertex end, t_render *r)
 {
 	t_vertex	res;
 	double		a;
 	double		b;
 
 	xw -= (WIN_WIDTH / 2);
-	if (comp_real(end.x, start.x, 0.001)) //in case of parallel rays //could be more precisely
-	{
-		// res = (t_vertex){start.x ,(start.x * HFOV * start.y / \
-		// 	(start.y * (r->exact_begin - xw) + start.x * HFOV))}; // some old version idr how i calculate this so i will leave it
+	if (comp_real(end.x, start.x, 0.001))
 		res = (t_vertex){start.x, -start.x * HFOV / xw};
-	}
 	else
-	{	
+	{
 		a = (end.y - start.y) / (end.x - start.x);
 		b = start.y - a * start.x;
 		res.x = -b * xw / (double)(HFOV + a * xw);
 		res.y = a * res.x + b;
 	}
-	rotate_vertex_xy(&res, r->psin, -r->pcos); //rotate and translate back
+	rotate_vertex_xy(&res, r->psin, -r->pcos);
 	res.x += r->p_x;
 	res.y += r->p_y;
 	return (res);
@@ -130,23 +133,26 @@ t_vertex	get_line_param(float x1, float y1, float x2, float y2)
 {
 	t_vertex	res;
 
-	res.x = (y2 - y1) / (x2 - x1); // k param
-	res.y = y2 - res.x * x2; // b param
+	res.x = (y2 - y1) / (x2 - x1);
+	res.y = y2 - res.x * x2;
 	return (res);
 }
 
+/*
+	just cool function that reverse bits in int like this 000011 -> 110000
+*/
+
 int			reverse_bits(int b)
 {
-	return ((b * 0x0202020202ULL & 0x010884422010ULL) % 0x3ff); // just cool function that reverse bits in int like this 000011 -> 110000
+	return ((b * 0x0202020202ULL & 0x010884422010ULL) % 0x3ff);
 }
 
-int		line_point_int(int start, int end, int p)
+int			line_point_int(int start, int end, int p)
 {
 	return (start + (end - start) * p / 100);
 }
 
-
-Uint32	get_color_value_int(Uint32 start, Uint32 end, int perc)
+Uint32		get_color_value_int(Uint32 start, Uint32 end, int perc)
 {
 	int		r;
 	int		g;
@@ -158,7 +164,7 @@ Uint32	get_color_value_int(Uint32 start, Uint32 end, int perc)
 	return ((r << 16) | (g << 8) | b);
 }
 
-Uint32	get_color_value(Uint32 start, Uint32 end, float perc)
+Uint32		get_color_value(Uint32 start, Uint32 end, float perc)
 {
 	int		r;
 	int		g;

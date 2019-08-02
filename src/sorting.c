@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-static void	swap_two_sprites(t_sprite	*a, t_sprite	*b)
+static void	swap_two_sprites(t_sprite *a, t_sprite *b)
 {
 	t_sprite	temp;
 
@@ -21,10 +21,10 @@ static void	swap_two_sprites(t_sprite	*a, t_sprite	*b)
 	*b = temp;
 }
 
-int			sprite_sort(t_sprite *arr_spr, int len) //intersection sort
+int			sprite_sort(t_sprite *arr_spr, int len)
 {
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 	t_sprite	key;
 
 	i = 0;

@@ -157,17 +157,16 @@ void		player_events(t_doom *d)
 			}
 			else if (d->ev.key.keysym.sym == SDLK_o)
 			{
-				if (d->map.editing)
-				{
-					ft_putnbr(check_what_line_player_are_looking(d));
+				// if (d->map.editing)
+				// {
+					ft_putnbr(check_what_paint_player_are_looking(d));
 					ft_putchar('\n');
-				}
+				// }
 			}
 			else if (d->ev.key.keysym.sym == SDLK_m)
 			{
 				if (d->map.editing)
 				{
-					printf("kappa\n");
 					d->map.editing = 0;
 				}
 			}

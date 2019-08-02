@@ -57,7 +57,8 @@ void	*sky_threads(void *data)
 		sky.text_y = sky.start_text_y - 1;
 		while (sky.win_y < W_H2 && ++sky.text_y < SKY_H - 1)
 		{
-			pix[sky.win_y + sky.win_x] = pix_from_text(surr, sky.text_x, sky.text_y);
+			pix[sky.win_y + sky.win_x] = \
+				pix_from_text(surr, sky.text_x, sky.text_y);
 			sky.win_y += WIN_WIDTH;
 		}
 		sky.win_x++;

@@ -100,11 +100,3 @@ int			get_ammo_event(t_doom *d, t_painting *paint)
 	}
 	return (0);
 }
-
-int			win_pnt_event(t_doom *d, t_painting *paint)
-{
-	(void)d;
-	(void)paint;
-	exit(1);
-	return (0);
-}

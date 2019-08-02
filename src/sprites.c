@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
+SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 {
 	int			i;
 	int			j;
@@ -36,7 +36,7 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 			rect.y = sheet->h / h * i;
 			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w,
 				rect.h, 32, d->sdl.surface->format->format); //d->sdl.surface->format->format change to d->editor.sdl.surface->format->format
-			SDL_BlitSurface(sheet, &rect, splited[count], NULL );
+			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
 			count++;
 		}
 	}
@@ -44,7 +44,8 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 	return (splited);
 }
 
-int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
+int			translate_and_rotate_sprites(t_sprite *arr_spr, \
+											int len, t_player p)
 {
 	int		i;
 
@@ -58,7 +59,8 @@ int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
 	return (1);
 }
 
-void	sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p)
+void		sprite_vert_cal(t_vector *t1, t_vector *t2, \
+									t_sprite *sprite, t_player p)
 {
 	t1->x = sprite->coord.x + sprite->width / 2;
 	t1->y = sprite->coord.y;
@@ -67,8 +69,3 @@ void	sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p)
 	t1->z = sprite->coord.z + sprite->end_z - p.coord.z;
 	t2->z = sprite->coord.z + sprite->start_z - p.coord.z;
 }
-
-// int		render_sprites()
-// {
-	
-// }
