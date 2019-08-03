@@ -232,12 +232,12 @@ int		main(int argc, char **argv)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
-		map.sprites[i].num_sheet = 4;
+		map.sprites[i].num_sheet = 8;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
-		map.sprites[i].width = 5;
-		map.sprites[i].start_z = 0;
-		map.sprites[i].end_z = 5;
+		map.sprites[i].width = 3;
+		map.sprites[i].start_z = 6;
+		map.sprites[i].end_z = 12;
 		map.sprites[i].mob = 1;
 		map.sprites[i].angle = M_PI / 4;
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);

@@ -175,18 +175,18 @@ void		get_sprite_for_mob(t_sprite	*spr, t_doom *d)
 		if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < -1.0 / 2)
 			spr->text_no = 0;
 		else if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 1.0 / 2)
-			spr->text_no = 3;
+			spr->text_no = d->texture.sprt[spr->num_sheet].w;
 		else
-			spr->text_no = 9;
+			spr->text_no = d->texture.sprt[spr->num_sheet].w * 2;
 	}
 	else 
 	{
 		if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < -1.0 / 2)
 			spr->text_no = 0;
 		else if (dvp(spr->anglecos, spr->anglesin, d->player.anglecos, d->player.anglesin) < 1.0 / 2)
-			spr->text_no = 6;
+			spr->text_no =  d->texture.sprt[spr->num_sheet].w * 3;
 		else
-			spr->text_no = 9;
+			spr->text_no = d->texture.sprt[spr->num_sheet].w * 2;
 	}
 }
 
