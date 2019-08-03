@@ -801,9 +801,15 @@ struct	s_thread
 	float		nzceil;
 	float		nzfloor;
 	float		doomy_y;
+	float		dummy_y;
 
 	float		u0;
 	float		u1;
+	float		u0_b;
+	float		u1_b;
+	float		u0_t;
+	float		u1_t;
+	t_vertex	mc;
 };
 
 typedef struct s_changes	t_changes;

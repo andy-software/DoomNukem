@@ -123,16 +123,16 @@ int		main(int argc, char **argv)
 		map.sectors[0].lines[i].bot = 4;
 
 		map.sectors[0].lines[i].x_w_scale = 5;
-		map.sectors[0].lines[i].x_b_scale = 5;
-		map.sectors[0].lines[i].x_t_scale = 5;
+		map.sectors[0].lines[i].x_b_scale = 1;
+		map.sectors[0].lines[i].x_t_scale = 1;
 
 		map.sectors[0].lines[i].x_w_shift = 50;
 		map.sectors[0].lines[i].x_b_shift = 50;
 		map.sectors[0].lines[i].x_t_shift = 50;
 
-		map.sectors[0].lines[i].y_w_scale = 4;
-		map.sectors[0].lines[i].y_b_scale = 4;
-		map.sectors[0].lines[i].y_t_scale = 4;
+		map.sectors[0].lines[i].y_w_scale = 3;
+		map.sectors[0].lines[i].y_b_scale = 10;
+		map.sectors[0].lines[i].y_t_scale = 10;
 
 		map.sectors[0].lines[i].y_w_shift = 0;
 		map.sectors[0].lines[i].y_b_shift = 0;
@@ -148,14 +148,14 @@ int		main(int argc, char **argv)
 	map.fog = 1;
 	map.fog_color = 0x00AAAA;
 	map.sectors[1].ceil_plane.a = 0;
-	map.sectors[1].ceil_plane.b = 1;
+	map.sectors[1].ceil_plane.b = 0;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
 
-	map.sectors[1].render_ceil = 1;
+	map.sectors[1].render_ceil = 0;
 
 	map.sectors[1].floor_plane.a = 0;
-	map.sectors[1].floor_plane.b = 1;
+	map.sectors[1].floor_plane.b = 0;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
 	map.sectors[1].light_lvl = 70;
@@ -193,17 +193,17 @@ int		main(int argc, char **argv)
 		map.sectors[1].lines[i].top = rand() % 6;
 		map.sectors[1].lines[i].bot = rand() % 6;
 
-		map.sectors[1].lines[i].x_w_scale = 4;
-		map.sectors[1].lines[i].x_b_scale = 4;
-		map.sectors[1].lines[i].x_t_scale = 4;
+		map.sectors[1].lines[i].x_w_scale = 1;
+		map.sectors[1].lines[i].x_b_scale = 1;
+		map.sectors[1].lines[i].x_t_scale = 1;
 
 		map.sectors[1].lines[i].x_w_shift = 0;
 		map.sectors[1].lines[i].x_b_shift = 0;
 		map.sectors[1].lines[i].x_t_shift = 0;
 
-		map.sectors[1].lines[i].y_w_scale = 2;
-		map.sectors[1].lines[i].y_b_scale = 2;
-		map.sectors[1].lines[i].y_t_scale = 2;
+		map.sectors[1].lines[i].y_w_scale = 10;
+		map.sectors[1].lines[i].y_b_scale = 10;
+		map.sectors[1].lines[i].y_t_scale = 50;
 
 		map.sectors[1].lines[i].y_w_shift = 0;
 		map.sectors[1].lines[i].y_b_shift = 0;
