@@ -12,29 +12,31 @@
 
 #include "../includes/doom.h"
 
-void     init_hud(t_doom *d)
+void	init_hud(t_doom *d)
 {
 	d->texture.gun1_r.x = WIN_WIDTH / 2;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
 
-    d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
+	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
 	d->texture.gun21_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
 
-    d->texture.gun22_r.x =  WIN_WIDTH - d->texture.gun2[14]->w * 2;
+	d->texture.gun22_r.x = WIN_WIDTH - d->texture.gun2[14]->w * 2;
 	d->texture.gun22_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
-    
-    d->texture.dude_r.x =  WIN_WIDTH / 3;
+
+	d->texture.dude_r.x = WIN_WIDTH / 3;
 	d->texture.dude_r.y = WIN_HEIGHT - d->texture.dude[0]->h;
 
-    d->texture.ammo_r.x = WIN_WIDTH - WIN_WIDTH / 3.5;
+	d->texture.ammo_r.x = WIN_WIDTH - WIN_WIDTH / 3.5;
 	d->texture.ammo_r.y = WIN_HEIGHT - WIN_HEIGHT / 6;
 
 	d->texture.hp_r.x = WIN_WIDTH / 4.5;
 	d->texture.hp_r.y = WIN_HEIGHT / 1.2;
 }
 
-int	init_game_params(t_doom *d)
+int		init_game_params(t_doom *d)
 {
+	int	i;
+
 	d->game.quit = 0;
 	d->game.pause = 0;
 	d->game.ducking = 0;
@@ -46,7 +48,7 @@ int	init_game_params(t_doom *d)
 	d->game.hp_level = 100;
 	d->game.dt = 0;
 	d->game.kills = 0;
-    d->ui.ammo_1 = 10;
+	d->ui.ammo_1 = 10;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
@@ -63,8 +65,6 @@ int	init_game_params(t_doom *d)
 	d->sr.map = &d->map;
 	d->render.map = &d->map;
 	init_hud(d);
-	int	i;
-
 	i = 0;
 	while (i < (int)d->map.num_sect)
 	{
@@ -79,9 +79,8 @@ int	init_game_params(t_doom *d)
 	return (1);
 }
 
-int			game_loop(t_doom doom)
+int		game_loop(t_doom doom)
 {
-	// changes(&doom);
 	if (!init_game_params(&doom))
 		return (0);
 	init_moves(&doom);
@@ -93,7 +92,7 @@ int			game_loop(t_doom doom)
 		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
-			draw_skybox(doom);
+			draw_skybox(&doom);
 			draw_screen(&doom);
 			draw_ui(&doom);
 		}
@@ -106,7 +105,8 @@ int			game_loop(t_doom doom)
 			SDL_SetWindowGrab(doom.sdl.window, 0);
 			show_lose(&doom);
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6); // lock fps to 100
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6)
+			;
 		doom.ui.currTime = SDL_GetTicks();
 		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 		doom.ui.fps = doom.game.dt / 1000.0;

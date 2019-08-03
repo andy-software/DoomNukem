@@ -126,6 +126,10 @@ void		player_events(t_doom *d)
 			{
 				d->game.hp_level -= 15;
 			}
+			else if (d->ev.key.keysym.sym == SDLK_e)
+			{
+				d->game.click = 1;
+			}
 			else if (d->ev.key.keysym.sym == SDLK_h)
 			{
 				if (d->ui.ammo_1 + 20 <= 60)
@@ -133,7 +137,7 @@ void		player_events(t_doom *d)
 				else
 					d->ui.ammo_1 = 60;
 			}
-			if (d->ev.key.keysym.sym == PAUSE)
+			else if (d->ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
 				{
@@ -149,6 +153,21 @@ void		player_events(t_doom *d)
 					SDL_SetWindowGrab(d->sdl.window, 1);
 					SDL_SetRelativeMouseMode(SDL_ENABLE);
 					SDL_GetRelativeMouseState(NULL, NULL);
+				}
+			}
+			else if (d->ev.key.keysym.sym == SDLK_o)
+			{
+				// if (d->map.editing)
+				// {
+					ft_putnbr(check_what_paint_player_are_looking(d));
+					ft_putchar('\n');
+				// }
+			}
+			else if (d->ev.key.keysym.sym == SDLK_m)
+			{
+				if (d->map.editing)
+				{
+					d->map.editing = 0;
 				}
 			}
 		}
@@ -169,5 +188,4 @@ void		player_events(t_doom *d)
 			d->game.quit = 1;
 		switch_music(&d->sound, d->ev);
 	}
-
 }

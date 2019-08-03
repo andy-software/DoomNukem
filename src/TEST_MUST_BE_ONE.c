@@ -25,13 +25,12 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		return (0);
 	printf("%s %i", name, fd);
 
+	write(fd, &map.editing, sizeof(int));
+
 	write(fd, &map.fog, sizeof(int));
 	write(fd, &map.fog_color, sizeof(Uint32));
 
 	write(fd, &map.num_sect, sizeof(Uint32));
-	write(fd, &map.num_vert, sizeof(Uint32));
-
-	write(fd, map.vertex, sizeof(t_vertex) * map.num_vert);
 
 	i = -1;
 	while (++i < map.num_sect)
@@ -71,9 +70,6 @@ int		main(int argc, char **argv)
 	t_map	map;
 	t_player	player;
 
-	map.num_vert = 6;
-	map.vertex = (t_vertex*)malloc(sizeof(t_vertex) * map.num_vert);
-
 	map.num_sect = 2;
 	map.sectors = (t_sector*)malloc(sizeof(t_sector) * map.num_sect);
 	map.sectors[0].num_vert = 4;
@@ -102,7 +98,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
 	map.sectors[0].light_lvl = 0;
-	map.sectors[0].render_ceil = 0;
+	map.sectors[0].render_ceil = 1;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
@@ -127,16 +123,16 @@ int		main(int argc, char **argv)
 		map.sectors[0].lines[i].bot = 4;
 
 		map.sectors[0].lines[i].x_w_scale = 5;
-		map.sectors[0].lines[i].x_b_scale = 5;
-		map.sectors[0].lines[i].x_t_scale = 5;
+		map.sectors[0].lines[i].x_b_scale = 1;
+		map.sectors[0].lines[i].x_t_scale = 1;
 
 		map.sectors[0].lines[i].x_w_shift = 50;
 		map.sectors[0].lines[i].x_b_shift = 50;
 		map.sectors[0].lines[i].x_t_shift = 50;
 
-		map.sectors[0].lines[i].y_w_scale = 4;
-		map.sectors[0].lines[i].y_b_scale = 4;
-		map.sectors[0].lines[i].y_t_scale = 4;
+		map.sectors[0].lines[i].y_w_scale = 3;
+		map.sectors[0].lines[i].y_b_scale = 10;
+		map.sectors[0].lines[i].y_t_scale = 10;
 
 		map.sectors[0].lines[i].y_w_shift = 0;
 		map.sectors[0].lines[i].y_b_shift = 0;
@@ -152,14 +148,14 @@ int		main(int argc, char **argv)
 	map.fog = 1;
 	map.fog_color = 0x00AAAA;
 	map.sectors[1].ceil_plane.a = 0;
-	map.sectors[1].ceil_plane.b = 1;
+	map.sectors[1].ceil_plane.b = 0;
 	map.sectors[1].ceil_plane.c = 1;
 	map.sectors[1].ceil_plane.h = -40;
 
-	map.sectors[1].render_ceil = 1;
+	map.sectors[1].render_ceil = 0;
 
 	map.sectors[1].floor_plane.a = 0;
-	map.sectors[1].floor_plane.b = 1;
+	map.sectors[1].floor_plane.b = 0;
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
 	map.sectors[1].light_lvl = 70;
@@ -197,17 +193,17 @@ int		main(int argc, char **argv)
 		map.sectors[1].lines[i].top = rand() % 6;
 		map.sectors[1].lines[i].bot = rand() % 6;
 
-		map.sectors[1].lines[i].x_w_scale = 4;
-		map.sectors[1].lines[i].x_b_scale = 4;
-		map.sectors[1].lines[i].x_t_scale = 4;
+		map.sectors[1].lines[i].x_w_scale = 1;
+		map.sectors[1].lines[i].x_b_scale = 1;
+		map.sectors[1].lines[i].x_t_scale = 1;
 
 		map.sectors[1].lines[i].x_w_shift = 0;
 		map.sectors[1].lines[i].x_b_shift = 0;
 		map.sectors[1].lines[i].x_t_shift = 0;
 
-		map.sectors[1].lines[i].y_w_scale = 2;
-		map.sectors[1].lines[i].y_b_scale = 2;
-		map.sectors[1].lines[i].y_t_scale = 2;
+		map.sectors[1].lines[i].y_w_scale = 10;
+		map.sectors[1].lines[i].y_b_scale = 10;
+		map.sectors[1].lines[i].y_t_scale = 50;
 
 		map.sectors[1].lines[i].y_w_shift = 0;
 		map.sectors[1].lines[i].y_b_shift = 0;
@@ -227,14 +223,14 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 2;
-	for (int i = 0; i < 2; i++)
+	map.num_sprites = 1;
+	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 8;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
-		map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
+		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 3;
 		map.sprites[i].start_z = 6;
 		map.sprites[i].end_z = 12;
@@ -248,6 +244,11 @@ int		main(int argc, char **argv)
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
 		map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
+		map.sprites[i].key = 1;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 1;
 	}
 
 	player.coord.x = -5;
@@ -269,6 +270,17 @@ int		main(int argc, char **argv)
 	map.paint[0].v2.y = -10;
 	map.paint[0].v2.z = 30;
 	map.paint[0].text_no = 0;
+	map.paint[0].key = 1;
+	map.paint[0].draw = 1;
+	map.paint[0].key_state = 1;
+	map.paint[0].changes = 0;
+	map.paint[0].event_num = 1;
+	map.paint[0].speed = 5;
+	map.paint[0].high_point = -40;
+	map.paint[0].low_point = -10;
+	map.paint[0].num_of_sect_to_lift = 0;
+	map.paint[0].click = 0;
+	map.editing = 0;
 	map.paint[0].num_sheet = 6;
 
 	// map.paint[1].sector_no = 0;

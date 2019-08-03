@@ -57,7 +57,8 @@ void	*sky_threads(void *data)
 		sky.text_y = sky.start_text_y - 1;
 		while (sky.win_y < W_H2 && ++sky.text_y < SKY_H - 1)
 		{
-			pix[sky.win_y + sky.win_x] = pix_from_text(surr, sky.text_x, sky.text_y);
+			pix[sky.win_y + sky.win_x] = \
+				pix_from_text(surr, sky.text_x, sky.text_y);
 			sky.win_y += WIN_WIDTH;
 		}
 		sky.win_x++;
@@ -65,15 +66,15 @@ void	*sky_threads(void *data)
 	return (0);
 }
 
-void	draw_skybox(t_doom d)
+void	draw_skybox(t_doom *d)
 {
 	int		t;
 
-	prepare_to_sky(&d);
+	prepare_to_sky(d);
 	t = -1;
 	while (++t < MAX_THREADS_IN_SKY)
-		pthread_create(&d.threads[t].thrd, NULL, sky_threads, d.sky + t);
+		pthread_create(&d->threads[t].thrd, NULL, sky_threads, d->sky + t);
 	t = -1;
 	while (++t < MAX_THREADS_IN_SKY)
-		pthread_join(d.threads[t].thrd, NULL);
+		pthread_join(d->threads[t].thrd, NULL);
 }

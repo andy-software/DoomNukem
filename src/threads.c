@@ -36,10 +36,7 @@ int		fill_the_params(t_render *r, t_thread *t)
 	{
 		t[i].id = i;
 		t[i].begin_x = i * r->width_slice + r->begin_x;
-		t[i].end_x = (i + 1) * r->width_slice + r->begin_x; 
-		t[i].alpha = (t[i].begin_x - r->x1) * r->d_alpha;
-		t[i].dummy_var_x = (1 - t[i].alpha) / r->t1.y;
-		t[i].doomy_var_x = t[i].alpha / r->t2.y;
+		t[i].end_x = (i + 1) * r->width_slice + r->begin_x;
 		t[i].cc = r->ceil_cal;
 		t[i].fc = r->floor_cal;
 		t[i].r = r;
@@ -57,11 +54,38 @@ void	*start_the_work(void *data)
 	t = (t_thread*)data;
 	r = t->r;
 	t->win_x = (int)t->begin_x;
-	
-	//printf("t->i %i ---- t->win_x %i\n", t->id, t->win_x);
 
 	while (t->win_x < (int)t->end_x) // in wall 
 	{
+		t->mc = find_x_from_screen_coords(t->win_x, r->t1, r->t2, r);
+		if (comp_real(r->mc2.x, r->mc1.x, 0.01))
+			t->alpha = (t->mc.y - r->mc1.y) / (r->mc2.y - r->mc1.y);
+		else
+			t->alpha = (t->mc.x - r->mc1.x) / (r->mc2.x - r->mc1.x);
+		float	alpha2 = (t->win_x - (int)r->x1) / (r->x2 - r->x1); //omg add this to struct
+		t->dummy_var_x = (1 - alpha2) / r->t1.y;
+		t->doomy_var_x = alpha2 / r->t2.y;
+		
+		t->zceil = r->zceil1 + r->p_z + t->alpha * (r->zceil2 - r->zceil1);
+		t->zfloor = r->zfloor1 + r->p_z + t->alpha * (r->zfloor2 - r->zfloor1);
+		if (r->neighbor >= 0)
+		{
+			t->nzceil = r->nzceil1 + r->p_z + t->alpha * (r->nzceil2 - r->nzceil1);
+			t->nzfloor = r->nzfloor1 + r->p_z + t->alpha * (r->nzfloor2 - r->nzfloor1);
+		}
+
+		t->doomy_y = (r->texture->wall_tex[r->line.wall]->h * r->line.y_w_scale - 1) / 100.f;
+
+		t->u0 = t->doomy_y * t->zceil + r->line.y_w_shift;
+		t->u1 = t->doomy_y * t->zfloor + r->line.y_w_shift;
+		t->doomy_y = (r->texture->wall_tex[r->line.bot]->h * r->line.y_b_scale - 1) / 100.f;
+		t->u0_b = t->doomy_y * t->nzfloor + r->line.y_b_shift;
+		t->u1_b = t->doomy_y * t->zfloor + r->line.y_b_shift;
+
+		t->doomy_y = (r->texture->wall_tex[r->line.top]->h * r->line.y_t_scale - 1) / 100.f;
+		t->u0_t = t->doomy_y * t->zceil + r->line.y_t_shift;
+		t->u1_t = t->doomy_y * t->nzceil + r->line.y_t_shift;
+
 		t->x_text = (t->dummy_var_x * r->w0 + t->doomy_var_x * r->w1) / (t->dummy_var_x + t->doomy_var_x);
 		t->x_text %= r->texture->wall_tex[r->line.wall]->w;
 		
@@ -78,8 +102,14 @@ void	*start_the_work(void *data)
 		t->c_zb = clamp(t->zb, r->ztop[t->win_x], r->zbottom[t->win_x]);
 
 		render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
-		if (r->sect->render_ceil) // 	if (t->c_za < t->c_zb)?
-			render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
+
+		if (r->sect->render_ceil)
+		{
+			if (r->ztop[t->win_x] > t->c_zb)
+				render_ceil_line(t->c_za, t->c_zb, r, t);
+			else
+				render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
+		}
 
 		if(r->neighbor >= 0)
 		{
@@ -88,19 +118,25 @@ void	*start_the_work(void *data)
 			t->nzb = (t->win_x - r->x1) * r->nkzb + r->nz1b;
 			t->c_nzb = clamp(t->nzb, r->ztop[t->win_x], r->zbottom[t->win_x]);
 
+			t->c_nza = min(t->c_nza, min(t->c_zb, t->c_nzb));
+			t->c_nzb = max(t->c_nzb, max(t->c_za, t->c_nza));
 			if (!r->sect->render_ceil)
-				reversed_textline_draw(t->za, t->nza, r, t);
+				reversed_textline_draw(t->c_za, t->c_nza, r, t);
 			else
-				upper_textline(t->za, t->nza, r, t);
+			{
+				//printf("neight %i %i %i %i\n", t->nzb, t->nza, r->zbottom[t->win_x], r->ztop[t->win_x]);
+				//printf("curr %i %i %i %i\n", t->zb, t->za, r->zbottom[t->win_x], r->ztop[t->win_x]);
+				upper_textline(t->c_za, t->c_nza + 1, r, t);
+			}
 			r->ztop[t->win_x] = clamp(max(t->c_za, t->c_nza), r->ztop[t->win_x], WIN_HEIGHT - 1);
-			lower_textline(t->nzb, t->zb, r, t);
+			lower_textline(t->c_nzb, t->c_zb, r, t);
 			r->zbottom[t->win_x] = clamp(min(t->c_zb, t->c_nzb), 0, r->zbottom[t->win_x]);
 		}
 		else
 			textline_draw(t->c_za, t->c_zb, r, t);
-		t->alpha += r->d_alpha;
-		t->doomy_var_x += r->d_doomy_var_x;
-		t->dummy_var_x += r->d_dummy_var_x;
+		//t->alpha += r->d_alpha;
+		// t->doomy_var_x += r->d_doomy_var_x;
+		// t->dummy_var_x += r->d_dummy_var_x;
 		t->win_x++;
 	}
 	return (0);

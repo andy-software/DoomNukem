@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
+SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 {
 	int			i;
 	int			j;
@@ -23,7 +23,7 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 
 	i = -1;
 	count = 0;
-	sheet = load_tex(path, &d->sdl);
+	sheet = load_tex(path, d->texture.format);
 	SDL_SetColorKey(sheet, SDL_TRUE, SDL_MapRGB(sheet->format, 255, 255, 255));
 	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
 	rect = (SDL_Rect){0, 0, sheet->w / w - 1, sheet->h / h - 1};
@@ -35,8 +35,8 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 			rect.x = sheet->w / w * j;
 			rect.y = sheet->h / h * i;
 			splited[count] = SDL_CreateRGBSurfaceWithFormat(0, rect.w,
-				rect.h, 32, d->sdl.surface->format->format);
-			SDL_BlitSurface(sheet, &rect, splited[count], NULL );
+				rect.h, 32, d->texture.format);
+			SDL_BlitSurface(sheet, &rect, splited[count], NULL);
 			count++;
 		}
 	}
@@ -44,7 +44,8 @@ SDL_Surface		**split_surf(int w, int h, char *path, t_doom *d)
 	return (splited);
 }
 
-int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
+int			translate_and_rotate_sprites(t_sprite *arr_spr, \
+											int len, t_player p)
 {
 	int		i;
 
@@ -58,4 +59,13 @@ int		translate_and_rotate_sprites(t_sprite	*arr_spr, int len, t_player	p)
 	return (1);
 }
 
-
+void		sprite_vert_cal(t_vector *t1, t_vector *t2, \
+									t_sprite *sprite, t_player p)
+{
+	t1->x = sprite->coord.x + sprite->width / 2;
+	t1->y = sprite->coord.y;
+	t2->x = sprite->coord.x - sprite->width / 2;
+	t2->y = sprite->coord.y;
+	t1->z = sprite->coord.z + sprite->end_z - p.coord.z;
+	t2->z = sprite->coord.z + sprite->start_z - p.coord.z;
+}

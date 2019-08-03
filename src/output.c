@@ -28,7 +28,7 @@ int			error_message(char *message)
 
 void		draw_fps(t_doom *d, int fps)
 {
-	char	str[4];
+	char		str[4];
 	int			i;
 	SDL_Surface	*message;
 
@@ -41,7 +41,9 @@ void		draw_fps(t_doom *d, int fps)
 		fps /= 10;
 	}
 	str[3] = 0;
-	message = TTF_RenderText_Solid(d->texture.fonts[FPS_F].text_font, str, d->texture.fonts[FPS_F].text_color);
-	SDL_BlitSurface(message, NULL, d->sdl.surface, &d->texture.fonts[FPS_F].text_rect);
+	message = TTF_RenderText_Solid(d->texture.fonts[FPS_F].text_font, \
+		str, d->texture.fonts[FPS_F].text_color);
+	SDL_BlitSurface(message, NULL, d->sdl.surface, \
+		&d->texture.fonts[FPS_F].text_rect);
 	SDL_FreeSurface(message);
 }

@@ -92,4 +92,8 @@ void	load_sounds(t_sound *sound)
     sound->gun2[1] = load_sound("./materials/sounds/saw_idle.wav"); // 3 
     sound->gun2[2] = load_sound("./materials/sounds/saw_atac.wav"); // 4 
     sound->music[0] = load_music("./materials/sounds/classic.mp3");
+	sound->mobs_reaction[0] = load_music("./materials/sounds/phrases/groot.mp3");
+	sound->mobs_reaction[1] = load_music("./materials/sounds/phrases/groot.mp3");
+	sound->mobs_reaction[2] = load_music("./materials/sounds/phrases/groot.mp3");
+	sound->mobs_reaction[3] = load_music("./materials/sounds/phrases/groot.mp3");
 }
