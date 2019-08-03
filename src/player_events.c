@@ -187,7 +187,5 @@ void		player_events(t_doom *d)
 		else if (d->ev.type == SDL_QUIT)
 			d->game.quit = 1;
 		switch_music(&d->sound, d->ev);
-		
 	}
-
 }
