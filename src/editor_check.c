@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/04 18:06:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/04 19:30:16 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 19:04:22 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,8 @@ int			convex(t_doom *doom, int j)
 	polig = convex2(doom);
 	while (++j < NUM_VERT)
 	{
-		ab.x = j == 0 ? polig[j].x - polig[NUM_VERT - 1].x
-		: polig[j].x - polig[j - 1].x;
-		ab.y = j == 0 ? polig[j].y - polig[NUM_VERT - 1].y
-		: polig[j].x - polig[j - 1].x;
-		bc.x = polig[j + 1].x - polig[j].x;
-		bc.y = polig[j + 1].y - polig[j].y;
+		ab = polig[j];
+		bc = ((j + 1) == NUM_VERT) ? polig[0] : polig[j + 1];
 		product = ab.x * bc.y - bc.x * ab.y;
 		if (product < 0 && (doom->editor.is_sector = 2))
 		{
@@ -108,7 +104,7 @@ int			is_in_sector(t_doom *doom, int x, int y)
 			while (++i < (int)doom->map.sectors[sec].num_vert)	
 			{
 				vert = (t_vertex){(doom->map.sectors[sec].vert[i].x - point.x), (doom->map.sectors[sec].vert[i].y - point.y)};
-				vert2 = (i == (int)doom->map.sectors[sec].num_vert - 1) ?  (t_vertex){(doom->map.sectors[sec].vert[0].x - point.x), (doom->map.sectors[sec].vert[0].y - point.y)}
+				vert2 = (i == (int)doom->map.sectors[sec].num_vert - 1) ? (t_vertex){(doom->map.sectors[sec].vert[0].x - point.x), (doom->map.sectors[sec].vert[0].y - point.y)}
 					: (t_vertex){(doom->map.sectors[sec].vert[i + 1].x - point.x), (doom->map.sectors[sec].vert[i + 1].y - point.y)};
 				product = vert.x * vert2.y - vert2.x * vert.y;
 				if (product < 0 && (i = -1))

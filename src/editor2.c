@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 17:49:46 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 21:19:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,48 +21,6 @@ void	ft_draw_pixel(t_doom *doom, int x, int y, int color)
 		index = doom->editor.sdl.surface->pitch * y + x * doom->editor.sdl.surface->format->BytesPerPixel;
 		*(unsigned *)(doom->editor.sdl.surface->pixels + index) = color;
 	}
-}
-
-int		ft_write_changes_to_file(t_doom *doom, int fd) //norm
-{
-	p("\nIN FT_WRITE_CHANGES_TO_FILE\n");
-	int i;
-
-	write(fd, &doom->map.editing, sizeof(int));
-	write(fd, &doom->map.fog, sizeof(int));
-	write(fd, &doom->map.fog_color, sizeof(Uint32));
-	write(fd, &doom->map.num_sect, sizeof(Uint32));
-
-	i = -1;
-	while (++i < (int)doom->map.num_sect)
-	{
-		write(fd, &doom->map.sectors[i].num, sizeof(Uint32));
-		write(fd, &doom->map.sectors[i].num_vert, sizeof(Uint32));
-		write(fd, doom->map.sectors[i].vert, sizeof(t_vertex) * doom->map.sectors[i].num_vert);
-		write(fd, doom->map.sectors[i].lines, sizeof(t_line) * doom->map.sectors[i].num_vert);
-		write(fd, doom->map.sectors[i].neighbors, sizeof(char) * doom->map.sectors[i].num_vert);
-		write(fd, &doom->map.sectors[i].ceil_plane, sizeof(t_plane));
-		write(fd, &doom->map.sectors[i].floor_plane, sizeof(t_plane));
-		write(fd, &doom->map.sectors[i].render_ceil, sizeof(int));
-		write(fd, &doom->map.sectors[i].ceil_tex, sizeof(int));
-		write(fd, &doom->map.sectors[i].floor_tex, sizeof(int));
-		write(fd, &doom->map.sectors[i].x_c_scale, sizeof(float));
-		write(fd, &doom->map.sectors[i].x_c_shift, sizeof(int));
-		write(fd, &doom->map.sectors[i].y_c_scale, sizeof(float));
-		write(fd, &doom->map.sectors[i].y_c_shift, sizeof(int));
-		write(fd, &doom->map.sectors[i].x_f_scale, sizeof(float));
-		write(fd, &doom->map.sectors[i].x_f_shift, sizeof(int));
-		write(fd, &doom->map.sectors[i].y_f_scale, sizeof(float));
-		write(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
-		write(fd, &doom->map.sectors[i].light_lvl, sizeof(int));
-	}
-
-	write(fd, &doom->player, sizeof(t_player));
-	write(fd, &doom->map.num_sprites, sizeof(Uint32));
-	write(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
-	write(fd, &doom->map.num_paint, sizeof(Uint32));
-	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
-	return (1);
 }
 
 int		ft_create_window(t_doom *doom, char *name) //norm
@@ -111,8 +69,6 @@ int		ft_create_window(t_doom *doom, char *name) //norm
 		printf ( "IMG_Load: %s\n", IMG_GetError());
 	}
 	name = 0; // use this parametr to name window
-
-	//it will be here may couse seg faults
 	if (load_all(&doom->texture, doom->editor.sdl.surface->format->format, doom) == 0) //
 		return (error_message("Error with textures") + 1);
 	SDL_UpdateWindowSurface(doom->editor.sdl.window);
@@ -129,59 +85,6 @@ void	key_editor_change(t_doom *doom, const Uint8 *state)
 
 void	key_texure_change(t_doom *doom, const Uint8 *state)
 {
-}
-
-void	key_ceil(t_doom *doom, const Uint8 *state)
-{
-	if (doom->editor.fl_or_ceil == CEIL)
-	{
-		if (!state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.a += 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.b += 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.h += 0.1;
-		}
-		else if (state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.a -= 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.b -= 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.h -= 0.1;
-		}
-	}
-}
-
-void	key_floor_ceil(t_doom *doom) // a, b, h - меняется на 0,1 
-{
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
-
-	if (doom->editor.fl_or_ceil == FLOOR)
-	{
-		if (!state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].floor_plane.a < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.a += 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].floor_plane.b < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.b += 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].floor_plane.h < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.h += 0.1;
-		}
-		else if (state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].floor_plane.a < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.a -= 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].floor_plane.b < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.b -= 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].floor_plane.h < 50)
-				doom->map.sectors[doom->player.sector].floor_plane.h -= 0.1;
-			}
-	}
-	key_ceil(doom, state);
 }
 
 void	ft_check_key(t_doom *doom, SDL_Event *event)
@@ -215,62 +118,6 @@ void	ft_draw_axis(t_doom *doom)
 	doom->editor.brezen.y1 = doom->editor.interface.tmp_y1;
 	doom->editor.brezen.x2 = doom->editor.interface.tmp_x2;
 	doom->editor.brezen.y2 = doom->editor.interface.tmp_y2;
-}
-
-void	info_ceil_floor(t_doom *doom)
-{
-	SDL_Surface		*message;
-	char			*str1;
-	doom->editor.font.text_rect = (SDL_Rect){935, 275, 0, 0};
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].floor_plane.a);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].floor_plane.b);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].floor_plane.c);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 31;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].floor_plane.h);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.x = 1070;
-	doom->editor.font.text_rect.y = 277;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].ceil_plane.a);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].ceil_plane.b);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].ceil_plane.c);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 30;
-	free(str1);
-	SDL_FreeSurface(message);
-		str1 = ft_itoa(doom->map.sectors[doom->player.sector].ceil_plane.h);
-	message = TTF_RenderText_Solid(doom->editor.font.text_font, str1, doom->editor.font.text_color);
-	SDL_BlitSurface(message, NULL, doom->editor.sdl.surface, &doom->editor.font.text_rect);
-	doom->editor.font.text_rect.y += 31;
-	free(str1);
-	SDL_FreeSurface(message);
 }
 
 void	ft_render_interface(t_doom *doom)

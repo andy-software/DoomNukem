@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 14:46:39 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 21:25:09 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,17 @@
 # define MIDDLE 2
 # define TOP 3
 
+# define FLOOR_A doom->map.sectors[doom->player.sector].floor_plane.a
+# define FLOOR_B doom->map.sectors[doom->player.sector].floor_plane.b
+# define FLOOR_H doom->map.sectors[doom->player.sector].floor_plane.h
+# define CEIL_A doom->map.sectors[doom->player.sector].ceil_plane.a
+# define CEIL_B doom->map.sectors[doom->player.sector].ceil_plane.b
+# define CEIL_H doom->map.sectors[doom->player.sector].ceil_plane.h
+
+
 # define NUM_TEXT 5
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
+# define NUM_VERTEX doom->map.sectors[i].num_vert
 
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
@@ -1021,6 +1030,7 @@ void			ft_draw_axis(t_doom *doom);
 void			ft_prepare_editor(t_doom *doom);
 int				ft_prepare_to_write(t_doom *doom);
 void			ft_prepare_read(t_doom *doom);
+void			ft_prepare_read2(t_doom *doom, int j);
 int				ft_specify_coor(int nbr);
 void			ft_refresh_photo(t_doom *doom, SDL_Event *event);
 void			ft_null_items(t_doom *doom, int i, int num);
@@ -1039,6 +1049,7 @@ void			editor_wall_texture(t_doom *doom, const Uint8 *state);
 void			editor_scale_x(t_doom *doom, const Uint8 *state);
 void			editor_scale_y(t_doom *doom, const Uint8 *state);
 void			info_f_c_w_s(t_doom *doom, int ind);
+void			lie_point(t_doom *doom, int k, int x, int y);
 /*  titles */
 void			ft_put_text(char *str, int nb, char *str1);
 void			ft_error(int nb);

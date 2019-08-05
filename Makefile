@@ -6,7 +6,7 @@
 #    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/05 17:38:57 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/05 21:34:05 by myuliia          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		sprites.c sorting.c editor.c editor2.c brezen.c threads.c sound.c\
 		interface.c changes.c menus.c keys.c painting.c sprite_render.c\
 		sprite_events.c paint_events.c game_mod_for_map_editor.c \
-		map_editor_first_person_view.c editor_check.c 
+		map_editor_first_person_view.c editor_check.c editor_floor_ceil.c \
+		editor_prepare.c editor_write_read.c editor_render.c
 
 INC = includes/doom.h
 
