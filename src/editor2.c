@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 14:31:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 17:49:46 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		ft_write_changes_to_file(t_doom *doom, int fd) //norm
 	write(fd, &doom->map.fog, sizeof(int));
 	write(fd, &doom->map.fog_color, sizeof(Uint32));
 	write(fd, &doom->map.num_sect, sizeof(Uint32));
-	// write(fd, &doom->map.num_vert, sizeof(Uint32));
 
 	i = -1;
 	while (++i < (int)doom->map.num_sect)
@@ -122,7 +121,7 @@ int		ft_create_window(t_doom *doom, char *name) //norm
 
 void	key_editor_change(t_doom *doom, const Uint8 *state)
 {
-	if (state[SDL_SCANCODE_L] && state[SDL_SCANCODE_TAB] && doom->map.sectors[doom->player.sector].light_lvl > -50)
+	if (state[SDL_SCANCODE_L] && state[SDL_SCANCODE_TAB] && doom->map.sectors[doom->player.sector].light_lvl > 0)
 		doom->map.sectors[doom->player.sector].light_lvl--;
 	else if (state[SDL_SCANCODE_L] && doom->map.sectors[doom->player.sector].light_lvl < 90)
 		doom->map.sectors[doom->player.sector].light_lvl++;
@@ -564,6 +563,40 @@ void	editor_fc_texture(t_doom *doom, const Uint8 *state)
 
 }
 
+void	editor_start_z(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].start_z += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+}
+
+void	editor_end_z(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].end_z += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+}
+
+void	editor_sp_width(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].width += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+	
+}
+
+void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+	{
+		if (doom->map.sprites[sp].num_sheet == 8)
+			doom->map.sprites[sp].num_sheet = 7;
+		else
+			doom->map.sprites[sp].num_sheet = 8;
+	}
+}
+
 void	editor_player_events(t_doom *doom)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -578,12 +611,13 @@ void	editor_player_events(t_doom *doom)
 			{
 				editor_wall_texture(doom, state);
 				editor_fc_texture(doom, state);
+				editor_sprites_texture(doom, state);
 			}
-			if (doom->ev.key.keysym.sym == SDLK_COMMA) // scale change by X
+			else if (doom->ev.key.keysym.sym == SDLK_COMMA) // scale change by X
 				editor_scale_x(doom, state);
-			if (doom->ev.key.keysym.sym == SDLK_PERIOD) // scale change by Y
+			else if (doom->ev.key.keysym.sym == SDLK_PERIOD) // scale change by Y
 				editor_scale_y(doom, state);
-			if (doom->ev.key.keysym.sym == SDLK_r)
+			else if (doom->ev.key.keysym.sym == SDLK_r)
 			{
 				if (doom->editor.fl_or_ceil == CEIL)
 				{
@@ -593,8 +627,14 @@ void	editor_player_events(t_doom *doom)
 						doom->map.sectors[doom->player.sector].render_ceil = 1;
 				}
 			}
-			if (doom->ev.key.keysym.sym == SDLK_m)
+			else if (doom->ev.key.keysym.sym == SDLK_m)
 				doom->map.editing = 0;
+			else if (doom->ev.key.keysym.sym == SDLK_z)
+				editor_start_z(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_x)
+				editor_end_z(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_c)
+				editor_sp_width(doom, state);
 			if (doom->ev.key.keysym.sym == SDLK_PAGEUP || doom->ev.key.keysym.sym == SDLK_PAGEDOWN) // change wall/sprites/ceil
 			{
 				if (doom->ev.key.keysym.sym == SDLK_PAGEDOWN && doom->editor.fl_or_ceil > 1 &&  (doom->editor.fl_or_ceil--))

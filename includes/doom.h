@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 14:34:11 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 14:46:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include "../frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h"
 # include <errno.h>
 # include <stdio.h>
-//add network
 
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 800
@@ -53,8 +52,8 @@
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 2
 # define COUNT_OF_PAINT_EVENTS 6
-# define MAX_RANGE_SPRITE_CLICKING 2
-
+# define MAX_RANGE_SPRITE_CLICKING 2.5
+# define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
 
 # define HFOV (WIN_WIDTH / 2 * 1.455) //tg 55.5 make fov =~ 69 grad
@@ -63,9 +62,9 @@
 # define STRAFE 2
 # define min(a,b)				(((a) < (b)) ? (a) : (b))
 # define max(a,b)				(((a) > (b)) ? (a) : (b))
-# define clamp(a, mi,ma)		min(max(a,mi),ma) //put a between min and max
-# define vxs(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0)) //cross vector product
-# define dvp(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1)) //dot vector product
+# define clamp(a, mi,ma)		min(max(a,mi),ma)
+# define vxs(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0))
+# define dvp(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1))
 # define Overlap(a0,a1,b0,b1)	\
 	(min(a0,a1) <= max(b0,b1) && min(b0,b1) <= max(a0,a1))
 
@@ -75,7 +74,6 @@
 # define PointSide(px,py, x0,y0, x1,y1) \
 	(vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
 
-//CROSS_THE_LINE
 #define CTL(x0, y0, x1, y1, x2, y2, x3, y3) \
 	(IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && \
 		PointSide(x1, y1, x2, y2, x3, y3) < 0)
@@ -144,12 +142,12 @@ typedef struct s_rend_sector	t_rend_sector;
 typedef struct s_texture	t_texture;
 typedef struct s_skybox		t_skybox;
 typedef struct s_sprite		t_sprite;
-typedef struct	s_sprite_render	t_sprite_render;
-typedef struct	s_sprite_list	t_sprite_list;
-typedef	struct	s_painting		t_painting;
-typedef	struct	s_font			t_font;
-typedef	struct	s_sound			t_sound;
-typedef	struct	s_menu			t_menu;
+typedef struct s_sprite_render	t_sprite_render;
+typedef struct s_sprite_sheet	t_sprite_sheet;
+typedef	struct s_painting		t_painting;
+typedef	struct s_font			t_font;
+typedef	struct s_sound			t_sound;
+typedef	struct s_menu			t_menu;
 
 /* EDITOR */
 typedef struct s_editor	t_editor;
@@ -271,13 +269,16 @@ struct	s_sprite
 
 	int			key;
 	int			key_state;
+	int			changes;
 	int			event_num;
-	int			start_event_time;
+	float		speed;
+	int			num_sheet;
+
+	int			num_of_sound;
 };
 
 struct	s_painting
 {
-	// int			pnt_num;
 	int			text_no;
 	t_vector	v1;
 	t_vector	v2;
@@ -287,18 +288,24 @@ struct	s_painting
 
 	int			key;
 	int			key_state;
+	int			changes;
 	int			event_num;
-	int			start_event_time;
-	int			draw;
+	int			draw; //is it drawable
+	float		speed; //if its a lift
+	float		high_point;
+	float		low_point;
+	int			num_of_sect_to_lift;
+	float		charge; //if its a first aid or recharge point
+	int			click;
+	int			num_sheet;
 };
 
-struct	s_sprite_list
+struct	s_sprite_sheet
 {
 	SDL_Surface				**sprites;
-	int						c_sprt;
+	int						c_sprt; // c
 	int						w;
 	int						h;
-	struct	s_sprite_list	*next;
 };
 
 struct	s_sprite_render
@@ -306,7 +313,7 @@ struct	s_sprite_render
 	t_sector		*curr_sect;
 	t_rend_sector	*begin;
 	t_rend_sector	*tmp;
-	t_sprite		*sprites; //to sort by y-distance //all sprites thats need to be rendered
+	t_sprite		*sprites;
 	int				c_paint;
 	t_painting		*paint;
 	t_map			*map;
@@ -380,8 +387,6 @@ struct	s_sprite_render
 
 struct	s_map
 {
-	Uint32			num_vert;
-	t_vertex		*vertex; //delete this doesnt useful
 	Uint32			num_sect;
 	t_sector		*sectors;
 	Uint32			num_sprites;
@@ -398,8 +403,6 @@ struct	s_sdl
 {
 	SDL_Window		*window;
 	SDL_Surface		*surface;
-	SDL_Renderer	*render;
-	SDL_Texture		*texture;
 };
 
 struct	s_game
@@ -421,6 +424,7 @@ struct	s_game
 	int				pause;
 	int				hp_level;
 	int				damage;
+	int				kills;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -483,7 +487,7 @@ struct	s_floor_cal
 	t_plane		rotated;
 	t_vector	random_vector;
 	SDL_Surface	*surr;
-	float			y;
+	float		y;
 };
 
 struct	s_render
@@ -593,7 +597,7 @@ struct	s_ui
 	int				gun_num;
 	int				start_saw;
 	int				idle;
-	int				ammo_1;	
+	int				ammo_1;
 };
 
 struct	s_menu
@@ -610,7 +614,6 @@ struct	s_font
 };
 
 enum	font {
-
 	FPS_F = 0,
 	HP_F = 1,
 	AMMO_F = 2,
@@ -618,7 +621,6 @@ enum	font {
 };
 
 enum	mods {
-
 	START_MOD = 0,
 	GAME_MOD = 1,
 	PAUSE_MOD = 2,
@@ -628,17 +630,16 @@ enum	mods {
 struct	s_texture
 {
 	t_font			fonts[4];
-	t_sprite_list	*sprites;
-	SDL_Surface		**wall_tex;
-	SDL_Surface		**sky_box;
+	t_sprite_sheet	*sprt;  // mob has sheet
+	SDL_Surface		*wall_tex[6];
+	SDL_Surface		*sky_box[2];
+	SDL_Surface		*gun1[21];
+	SDL_Surface		*gun2[18];
+	SDL_Surface		*dude[34];
 	SDL_Surface		*pause;
 	SDL_Surface		*lose;
 	SDL_Surface		*start;
 	SDL_Surface		*visor;
-	SDL_Surface		**hp;
-	SDL_Surface		**gun1;
-	SDL_Surface		**gun2;
-	SDL_Surface		**dude;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
 	SDL_Rect		gun21_r;
@@ -654,6 +655,7 @@ struct	s_texture
 	int				armor_l;
 	int				len;
 	int				c_sprt;
+	Uint32			format;
 };
 
 struct	s_skybox
@@ -677,13 +679,6 @@ struct	s_vertex_int
 	int				y;
 };
 
-// enum	wall {
-
-// 	BOTTOM = 1,
-// 	MIDDLE = 2,
-// 	TOP = 3,
-// };
-
 struct	s_interface
 {
 	int				tmp_x1;
@@ -691,7 +686,7 @@ struct	s_interface
 	int				tmp_x2;
 	int				tmp_y2;
 	t_vertex_int	arr_vertex_map_coor[9999];
-	t_vertex			arr_vertex_real_coor[9999];
+	t_vertex		arr_vertex_real_coor[9999];
 	t_sector		sectors[2000];
 	int				nbr_vertex;
 	int				nbr_sectors;
@@ -699,7 +694,6 @@ struct	s_interface
 	int				is_drawing_interface;
 	int				start_new_sector;
 };
-
 
 struct	s_images
 {
@@ -777,6 +771,7 @@ struct	s_sound
 	Mix_Chunk		**gun2;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*hurt;
+	Mix_Music		*mobs_reaction[4];
 	int				n;
 };
 
@@ -817,6 +812,20 @@ struct	s_thread
 	float		float_y_text;
 	float		d_y_text;
 	Uint32		color;
+	float		zfloor;
+	float		zceil;
+	float		nzceil;
+	float		nzfloor;
+	float		doomy_y;
+	float		dummy_y;
+
+	float		u0;
+	float		u1;
+	float		u0_b;
+	float		u1_b;
+	float		u0_t;
+	float		u1_t;
+	t_vertex	mc;
 };
 
 typedef struct s_changes	t_changes;
@@ -826,7 +835,7 @@ typedef int	(*pnt_event_type)(t_doom *, t_painting *);
 
 struct	s_changes
 {
-	bots_move	moves[COUNT_OF_MOVES];
+	bots_move		moves[COUNT_OF_MOVES];
 	spr_event_type	spr_events[COUNT_OF_SPRITE_EVENTS];
 	pnt_event_type	pnt_events[COUNT_OF_PAINT_EVENTS];
 };
@@ -850,11 +859,9 @@ struct	s_doom
 	t_changes		changes;
 	t_menu			menu;
 };
-
 //friendly user stuff
 int			print_usage(void);
 int			error_message(char *message);
-
 //UI
 int			prepare_to_draw_ui(t_doom *doom);
 void		draw_fps(t_doom *d, int fps);
@@ -862,7 +869,6 @@ void		draw_fps(t_doom *d, int fps);
 //parser & initial
 int			read_file(t_doom *doom, char *file_name);
 int			init_sdl(t_sdl *sdl, t_option *options);
-
 
 //game loop
 void		player_events(t_doom *d);
@@ -883,14 +889,18 @@ void		lower_textline(int y1, int y2, t_render *r, t_thread *t);
 Uint32		get_fog_color(Uint32 color, Uint32 fog_color, float y);
 void		render_sprites(t_doom *d);
 void		render_painting(t_doom *d);
-void		draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *render);
+void		draw_line_of_sprite(t_sprite_render *sr, \
+										SDL_Surface *sprtext, t_render *render);
 //threads
 int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);
 void		*start_the_work(void *data);
+void		check_keys_state(t_doom *d);
 
-void		paint_vert_cal(t_vector *t1, t_vector *t2, t_painting *pnt, t_player p);
-
+void		paint_vert_cal(t_vector *t1, t_vector *t2, \
+										t_painting *pnt, t_player p);
+void		sprite_vert_cal(t_vector *t1, t_vector *t2, \
+										t_sprite *sprite, t_player p);
 //some math stuff
 float		get_z(t_plane plane, float x, float y);
 int			sign(float x);
@@ -902,7 +912,8 @@ int			rotate_vertex_xy(t_vertex *a, float psin, float pcos);
 t_plane		rotate_plane_xy(t_plane *plane, float psin, float pcos);
 float		fpercent(float start, float end, float current);
 float		v2dlenght(float vx, float vy);
-t_vertex	find_x_from_screen_coords(float xw, t_vertex start, t_vertex end, t_render *r);
+t_vertex	find_x_from_screen_coords(float xw, \
+									t_vertex start, t_vertex end, t_render *r);
 t_vertex	get_line_param(float x1, float y1, float x2, float y2);
 int			reverse_bits(int b);
 float		line_len(t_vertex start, t_vertex end);
@@ -910,73 +921,81 @@ Uint32		get_color_value(Uint32 start, Uint32 end, float perc);
 int			line_point_int(int start, int end, int p);
 Uint32		get_color_value_int(Uint32 start, Uint32 end, int perc);
 float		find_angle_2pi(float sin, float cos);
+t_vertex	vec_to_ver(t_vector v);
 /*
 **interface.c
 */
-void			draw_ui(t_doom *d);
-void			gun_anim(t_doom *d);
+void		draw_ui(t_doom *d);
+void		gun_anim(t_doom *d);
 /*
 **texturelaod.c
 */
 void		prepare_to_rendering(t_render *r, t_doom d);
+void		resize_surf(int w, int h, SDL_Surface **surf, t_doom *d);
+// SDL_Surface		*load_tex(char *path, t_sdl *sdl);
+// int				load_all(t_texture *t, t_sdl *sdl, t_doom *d);
+// int				load_ui(t_texture *texture, t_sdl *sdl, t_doom *d);
+// Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
+void		load_sprites(t_doom *d);
 /*
 **skybox.c
 */
-void			draw_skybox(t_doom *d);
-int				prepare_to_sky(t_doom *d);
-void			*sky_threads(void *data);
-SDL_Surface		*load_tex(char *path, Uint32 format);
-int				load_all(t_texture *t, Uint32 format, t_doom *d);
-int				load_ui(t_texture *texture, Uint32 format, t_doom *d);
-void			resize_surf(int w, int h, SDL_Surface** surf, t_doom *d);
-Uint32			pix_from_text(SDL_Surface *texture, int x, int y);
+void		draw_skybox(t_doom *d);
+int			prepare_to_sky(t_doom *d);
+void		*sky_threads(void *data);
+SDL_Surface	*load_tex(char *path, Uint32 format);
+int			load_all(t_texture *t, Uint32 format, t_doom *d);
+int			load_ui(t_texture *texture, Uint32 format, t_doom *d);
+void		resize_surf(int w, int h, SDL_Surface **surf, t_doom *d);
+Uint32		pix_from_text(SDL_Surface *texture, int x, int y);
 /*
-**sprites.c && load.c
+**sprites.c
 */
-int				translate_and_rotate_sprites(t_sprite *arr_spr,
-	int len, t_player p);
-int				sprite_sort(t_sprite *arr_spr, int len);
-void			load_sprites(t_texture *texture, Uint32 format);
-t_sprite_list	*split_image_to_sprites(SDL_Surface *surr, int w, int h);
-int				*copy_static_arr(int *arr, const int len);
-int				game_mod(char *file_name);
-void			move_mobs(t_doom *d);
-int				first_own_moves(t_doom *d, t_sprite *spr);
-int				mirror_own_moves(t_doom *d, t_sprite *spr);
-int				init_moves(t_doom *d);
+SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d);
+int			translate_and_rotate_sprites(t_sprite *arr_spr, \
+												int len, t_player p);
+/*
+**load.c
+*/
+int			sprite_sort(t_sprite *arr_spr, int len);
+// void		load_sprites(t_texture *texture, Uint32 format);
+int			*copy_static_arr(int *arr, const int len);
+int			game_mod(char *file_name);
+void		move_mobs(t_doom *d);
+int			first_own_moves(t_doom *d, t_sprite *spr);
+int			mirror_own_moves(t_doom *d, t_sprite *spr);
+int			init_moves(t_doom *d);
 
+int			lift_floor_event(t_doom *d, t_painting *paint);
+int			turn_light_event(t_doom *d, t_painting *paint);
+int			lift_ceil_event(t_doom *d, t_painting *paint);
+int			first_aid_event(t_doom *d, t_painting *paint);
+int			get_ammo_event(t_doom *d, t_painting *paint);
+int			win_spr_event(t_doom *d, t_sprite *sprite);
+int			talk_event(t_doom *d, t_sprite *sprite);
+int			win_pnt_event(t_doom *d, t_painting *paint);
 
-
-int				lift_floor_event(t_doom *d, t_painting *paint);
-int				turn_light_event(t_doom *d, t_painting *paint);
-int				lift_ceil_event(t_doom *d, t_painting *paint);
-int				first_aid_event(t_doom *d, t_painting *paint);
-int				get_ammo_event(t_doom *d, t_painting *paint);
-int				win_spr_event(t_doom *d, t_sprite *sprite);
-int				talk_event(t_doom *d, t_sprite *sprite);
-int				win_pnt_event(t_doom *d, t_painting *paint);
-
-void			check_painting_intersection(t_doom *d);
-void			check_keys_intersection(t_doom *d);
-void			sprite_vert_cal(t_vector *t1, t_vector *t2, t_sprite *sprite, t_player p);
+void		check_painting_intersection(t_doom *d);
+void		check_keys_intersection(t_doom *d);
+void		check_keys_state(t_doom *d);
 
 /*
-**sounds.c  
+**sounds.c
 */
-Mix_Chunk		*load_sound(char *path);
-Mix_Music		*load_music(char *path);
-void			move_sound(t_sound *sound);
-void			load_sounds(t_sound *sound);
-void			play_music(t_sound *sound, int n);
-void			switch_music(t_sound *sound, SDL_Event ev);
+Mix_Chunk	*load_sound(char *path);
+Mix_Music	*load_music(char *path);
+void		move_sound(t_sound *sound);
+void		load_sounds(t_sound *sound);
+void		play_music(t_sound *sound, int n);
+void		switch_music(t_sound *sound, SDL_Event ev);
 /*
-**menus.c  
+**menus.c
 */
-void    		show_pause(t_doom *d);
-void    		show_lose(t_doom *d);
-void			draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
-void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
-void			show_start(t_doom *d);
+void		show_pause(t_doom *d);
+void		show_lose(t_doom *d);
+void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
+void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
+void		show_start(t_doom *d);
 
 /* EDITOR */
 int				check_what_sprite_player_are_looking(t_doom *d);

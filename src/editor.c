@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 14:31:22 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 17:26:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,24 @@ void	ft_prepare_read(t_doom *doom)
 				doom->map.sectors[j].lines[l].y_t_shift = 0;
 			} 
 		}
+	j = -1;
+	while (++j < MAX_SPRITES_COUNT)
+	{
+		doom->map.sprites[j].text_no = 1;
+		doom->map.sprites[j].num_sheet = 7;
+		doom->map.sprites[j].width = 8;
+		doom->map.sprites[j].start_z = 0;
+		doom->map.sprites[j].end_z = 13;
+		doom->map.sprites[j].text_no = 1;
+		doom->map.sprites[j].mob = 1;
+		doom->map.sprites[j].angle = M_PI / 4;
+		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
+		doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
+		doom->map.sprites[j].move_speed = 0.03 * (j + 1);
+		doom->map.sprites[j].vision_forward = 5; //must be positive //could be same for all sprites
+		doom->map.sprites[j].vision_backward = -3; //must be negative //could be same for all sprites
+		
+	}
 }
 
 int     ft_read_map_edit(t_doom *doom, int fd) // exist int			read_file(t_doom *doom, char *file_name)
@@ -189,27 +207,13 @@ int		ft_prepare_to_write(t_doom *doom)
 	i = -1;
 	while (++i < (int)doom->map.num_sprites)
 	{
-		doom->map.sprites[i].spr_num = i;
-		doom->map.sprites[i].text_no = 1;
-		// doom->map.sprites[i].coord = (t_vector){40, 40, 10};
-		// doom->map.sprites[i].sector_no = -10+0.3*i < 0 ? 1 : -2;
 		doom->map.sprites[i].sector_no = is_in_sector(doom, (doom->map.sprites[i].coord.x * 10), (doom->map.sprites[i].coord.y * 10));
-		doom->map.sprites[i].width = 5;
-		doom->map.sprites[i].start_z = 0;
-		doom->map.sprites[i].end_z = 5;
-		doom->map.sprites[i].mob = 1;
-		doom->map.sprites[i].angle = M_PI / 4;
-		doom->map.sprites[i].anglecos = cos(doom->map.sprites[i].angle);
-		doom->map.sprites[i].anglesin = sin(doom->map.sprites[i].angle);
-		doom->map.sprites[i].own_moves = i;
-		doom->map.sprites[i].move_speed = 0.03 * (i + 1);
-		doom->map.sprites[i].draw = 1;
 		doom->map.sprites[i].live = 1;
-		doom->map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
-		doom->map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
+		doom->map.sprites[i].draw = 1;
+		doom->map.sprites[i].own_moves = i;
+		doom->map.sprites[i].spr_num = i;
 		doom->editor.images[2].im_x[i] = (doom->map.sprites[i].coord.x * 10) - 50;
 		doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
-
 	}
 
 	doom->map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
@@ -225,8 +229,8 @@ int		ft_prepare_to_write(t_doom *doom)
 
 	doom->editor.fl_or_ceil = 1;
 
-	doom->editor.images[1].im_x[1] = (doom->player.coord.x * 10) - 50;
-	doom->editor.images[1].im_y[1] = (doom->player.coord.y * 10) - 50;
+	doom->editor.images[1].im_x[1] = (doom->player.coord.x * 10) - 48;
+	doom->editor.images[1].im_y[1] = (doom->player.coord.y * 10) - 48;
 	doom->player.sector = is_in_sector(doom, (doom->player.coord.x * 10), (doom->player.coord.y * 10));
 	return (1);
 }
@@ -460,8 +464,8 @@ void	in_sector(t_doom *doom, SDL_Event *event)
 		}
 		if (event->button.button == SDL_BUTTON_RIGHT)
 		{
-			if (doom->map.sectors[doom->map.num_sect].vert[0].x == doom->map.sectors[doom->map.num_sect].vert[(doom->map.sectors[doom->map.num_sect].num_vert - 1)].x && doom->map.sectors[doom->map.num_sect].num_vert > 2 &&
-			doom->map.sectors[doom->map.num_sect].vert[0].y == doom->map.sectors[doom->map.num_sect].vert[(doom->map.sectors[doom->map.num_sect].num_vert - 1)].y)
+			if (doom->map.sectors[doom->map.num_sect].num_vert > 2 && (doom->map.sectors[doom->map.num_sect].vert[0].x == doom->map.sectors[doom->map.num_sect].vert[(doom->map.sectors[doom->map.num_sect].num_vert - 1)].x && doom->map.sectors[doom->map.num_sect].num_vert > 2 &&
+			doom->map.sectors[doom->map.num_sect].vert[0].y == doom->map.sectors[doom->map.num_sect].vert[(doom->map.sectors[doom->map.num_sect].num_vert - 1)].y))
 			{
 				doom->map.sectors[doom->map.num_sect].num_vert--;
 				if (convex(doom, -1))

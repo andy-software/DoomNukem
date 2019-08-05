@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 18:14:16 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/04 17:57:54 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 14:50:10 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 int		load_all(t_texture *t, Uint32 format, t_doom *d)
 {
-	if (!(t->wall_tex = ft_memalloc(sizeof(SDL_Surface*) * 6)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->sky_box = ft_memalloc(sizeof(SDL_Surface*) * 2)))
-		return (error_message("failed to malloc textures"));
+	d->texture.format = format;
 	if (!(t->fonts[FPS_F].text_font = TTF_OpenFont("fonts/doom.ttf", 30)))
 		return (error_message("failed to malloc textures"));
 	if (!(t->fonts[HP_F].text_font = TTF_OpenFont("fonts/doom.ttf", 40)))
@@ -37,11 +34,10 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
 	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
-	load_sprites(t, format);
 	load_sounds(&d->sound);
 	
 	load_ui(t, format, d);
-	
+	load_sprites(d);
 	return(1);
 }
 
@@ -50,12 +46,6 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->gun1_l = 21;
 	t->gun2_l = 18;
 	t->dude_l = 34;
-	if (!(t->dude = ft_memalloc(sizeof(SDL_Surface*) * t->dude_l)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->gun1 = ft_memalloc(sizeof(SDL_Surface*) * t->gun1_l)))
-		return (error_message("failed to malloc textures"));
-	if (!(t->gun2 = ft_memalloc(sizeof(SDL_Surface*) * t->gun2_l)))
-		return (error_message("failed to malloc textures"));
 	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", format);
 	t->start = load_tex("./materials/textures/ui/hud/start.jpg", format);
 	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", format);
@@ -159,35 +149,43 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 	i = -1;
 	while(++i < d->texture.len)
 	{
-		temp = surf[i];
-		surf[i] = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, d->editor.sdl.surface->format->format);
+		temp = surf[i]; 
+		surf[i] = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, d->texture.format);
 		SDL_BlitScaled(temp , 0, surf[i], 0);
 		SDL_FreeSurface(temp);
 	}
 }
 
-void	load_sprites(t_texture *texture, Uint32 format)
+void	load_sprites(t_doom *d)
 {
-	SDL_Surface	*surr;
-	t_sprite_list	*head; //it must read more then 1 sprite should right present it
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 9);
 
-	surr = load_tex("./materials/textures/sprites/images.png", format);
-	
-	SDL_SetColorKey(surr, SDL_TRUE, SDL_MapRGB(surr->format, 255, 255, 255));
-	texture->c_sprt = 12;
-	
-	head = split_image_to_sprites(surr, 3, 4);
-	SDL_FreeSurface(surr);
-	
-	surr = load_tex("./materials/textures/sprites/painting_flowers.jpg", format);
-	head->next = split_image_to_sprites(surr, 1, 1);
-	SDL_FreeSurface(surr);
-	if (head == 0)
-	{
-		error_message("Texture load error\n");
-		exit(1); // im too lazy to exit it right
-	}
-	texture->sprites = head;
+	d->texture.sprt[0].c_sprt = 1;
+	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/saw.png", d);
+	d->texture.sprt[1].c_sprt = 1;
+	d->texture.sprt[1].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
+	d->texture.sprt[2].c_sprt = 1;
+	d->texture.sprt[2].sprites = split_surf(1, 1, "./materials/textures/sprites/med.png", d);
+	d->texture.sprt[3].c_sprt = 1;
+	d->texture.sprt[3].sprites = split_surf(1, 1, "./materials/textures/sprites/ammo.png", d);
+	d->texture.sprt[4].c_sprt = 12;
+	d->texture.sprt[4].w = 3;
+	d->texture.sprt[4].h = 4;
+	d->texture.sprt[4].sprites = split_surf(3, 4, "./materials/textures/sprites/enemy.png", d);
+	d->texture.sprt[5].c_sprt = 3;
+	d->texture.sprt[5].w = 3;
+	d->texture.sprt[5].h = 1;
+	d->texture.sprt[5].sprites = split_surf(3, 1, "./materials/textures/sprites/keys.png", d);
+	d->texture.sprt[6].c_sprt = 1;
+	d->texture.sprt[6].sprites = split_surf(1, 1, "./materials/textures/sprites/painting.jpg", d);
+	d->texture.sprt[7].sprites = split_surf(10, 5, "./materials/textures/sprites/enemy1.png", d);
+	d->texture.sprt[7].c_sprt = 50;
+	d->texture.sprt[7].w = 10;
+	d->texture.sprt[7].h = 5;
+	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/enemy2.png", d);
+	d->texture.sprt[8].c_sprt = 30;
+	d->texture.sprt[8].w = 6;
+	d->texture.sprt[8].h = 5;
 }
 
 SDL_Surface	*load_tex(char *path, Uint32 format)
@@ -211,7 +209,7 @@ Uint32	pix_from_text(SDL_Surface *texture, int x, int y)
 {
 	Uint32 *ptr;
 
-	ptr = (Uint32 *)texture->pixels;
+	ptr = (Uint32 *)texture->pixels; //surface->pixel
 	return (ptr[(y * texture->w) + x]);
 }
 

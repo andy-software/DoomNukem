@@ -12,11 +12,6 @@
 
 #include "../includes/doom.h"
 
-void	go_next_line()
-{
-
-}
-
 void	vertical_line(int x, int y1, int y2, t_render *r, int color)
 {
 	y1 = clamp(y1, 0, WIN_HEIGHT - 1) - 1;
@@ -187,12 +182,12 @@ void	render_sector(t_render *r, t_doom *d)
 		r->w0_top = line_len(r->mc1, r->sect->vert[i]) * r->dummy_var + r->line.x_t_shift;
 		r->w1_top = line_len(r->mc2, r->sect->vert[i]) * r->dummy_var + r->line.x_t_shift;
 
-		r->d_alpha = 1 / (r->x2 - r->x1);
+		//r->d_alpha = 1 / (r->x2 - r->x1);
 		
-		r->d_dummy_var_x = -r->d_alpha / r->t1.y;
-		r->d_doomy_var_x = r->d_alpha / r->t2.y;
+		// r->d_dummy_var_x = -r->d_alpha / r->t1.y;
+		// r->d_doomy_var_x = r->d_alpha / r->t2.y;
 
-		//floor cal//same for all threads
+		//floor cal
 		r->floor_cal.random_vector = (t_vector){0, 0, get_z(r->fplane, r->p_x, r->p_y) - r->p_z};
 		r->floor_cal.rotated.a = r->fplane.a * r->psin - r->fplane.b * r->pcos;
 		r->floor_cal.rotated.b = r->fplane.a * r->pcos + r->fplane.b * r->psin;
@@ -201,7 +196,7 @@ void	render_sector(t_render *r, t_doom *d)
 		r->floor_cal.sect = r->sect;
 		r->floor_cal.surr = r->texture->wall_tex[r->sect->floor_tex];
 
-		//ceil cal//same for all threads
+		//ceil cal
 		r->ceil_cal.random_vector = (t_vector){0, 0, get_z(r->cplane, r->p_x, r->p_y) - r->p_z};
 		r->ceil_cal.rotated.a = r->cplane.a * r->psin - r->cplane.b * r->pcos;
 		r->ceil_cal.rotated.b = r->cplane.a * r->pcos + r->cplane.b * r->psin;
@@ -231,26 +226,25 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
-
 	if (y1 > y2)
 	{
-		t->d_betta = -1.0 / (t->zb - t->za); 
+		t->d_betta = -1.0 / (t->nza - t->za); 
 		t->win_y = clamp(y2, 0, WIN_HEIGHT - 1);
 		t->wall_end = clamp(y1 + 1, 0, WIN_HEIGHT - 1);
 	}
 	else
 	{
-		t->d_betta = 1.0 / (t->zb - t->za);
+		t->d_betta = 1.0 / (t->nza - t->za);
 		t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 		t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
 	}
 	t->betta = (t->win_y - t->za) * t->d_betta;
-	t->float_y_text = t->betta * (surr->h - 1);
-	t->d_y_text = (surr->h - 1) * t->d_betta;
-	while(t->win_y < t->wall_end)
+	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
+	t->d_y_text = -t->d_betta * t->u0_t+ t->d_betta * t->u1_t;
+	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_upper, (int)t->float_y_text % surr->h);
-				if (t->color != 0)
+		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
+		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else
 			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
@@ -270,18 +264,15 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
-
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
-	
-	t->d_betta = 1.0 / (t->zb - t->za);
-	t->betta = (float)(t->win_y - t->za) * t->d_betta; //not like this
-	
-	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta; //add some scaler
-	while(t->win_y < t->wall_end)
+	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	t->d_betta = 1.0 / (t->nza - t->za);
+	t->betta = (t->win_y - t->za) * t->d_betta;
+	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
+	t->d_y_text = -t->d_betta * t->u0_t+ t->d_betta * t->u1_t;
+	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_upper, (unsigned)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
 		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else
@@ -302,18 +293,15 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.bot];
-
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
-	
-	t->d_betta = 1.0 / (t->zb - t->za);
-	t->betta = (float)(t->win_y - t->za) * t->d_betta; //not like this
-	
-	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta; //add some scaler
-	while(t->win_y <= t->wall_end)
+	t->d_betta = 1.0 / (t->zb - t->nzb);
+	t->betta = (t->win_y - t->nzb) * t->d_betta;
+	t->float_y_text = (1 - t->betta) * t->u0_b + t->betta * t->u1_b;
+	t->d_y_text = -t->d_betta * t->u0_b + t->d_betta * t->u1_b;
+	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_lower, (unsigned)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, t->x_text_lower, (unsigned int)t->float_y_text % surr->h);
 		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else
@@ -321,7 +309,6 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 		if (r->map->fog)
 			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
 		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
-
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -344,12 +331,14 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
 	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
 	t->d_betta = 1.0 / (t->zb - t->za);
-	t->betta = (t->win_y - t->za) * t->d_betta; //not like this
-	t->float_y_text = t->betta * (surr->h - 1); //add some scaler
-	t->d_y_text = surr->h * t->d_betta; //add some scale
-	while (t->win_y < t->wall_end)
+	t->betta = (t->win_y - t->za) * t->d_betta;
+	t->float_y_text = ((1 - t->betta) * t->u0 + t->betta * t->u1);
+	
+	t->d_y_text = -t->d_betta * t->u0 + t->d_betta * t->u1;
+	
+	while (t->win_y <= t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text, (int)t->float_y_text);
+		t->color = pix_from_text(surr, t->x_text, (unsigned int)t->float_y_text % surr->h);
 		if (t->color != 0)
 			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
 		else

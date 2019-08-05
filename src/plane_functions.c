@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-int		get_normal_to_plane(t_vector *v, t_plane *p)
+int			get_normal_to_plane(t_vector *v, t_plane *p)
 {
 	v->x = p->a;
 	v->y = p->b;
@@ -20,7 +20,7 @@ int		get_normal_to_plane(t_vector *v, t_plane *p)
 	return (1);
 }
 
-t_plane	rotate_plane_xy(t_plane *plane, float psin, float pcos)
+t_plane		rotate_plane_xy(t_plane *plane, float psin, float pcos)
 {
 	t_vector	nrmplnvect;
 	t_plane		res;
@@ -31,11 +31,10 @@ t_plane	rotate_plane_xy(t_plane *plane, float psin, float pcos)
 	res.b = nrmplnvect.y;
 	res.c = nrmplnvect.z;
 	res.h = plane->h;
-
 	return (res);
 }
 
 float		get_z(t_plane plane, float x, float y)
 {
-	return ((-plane.h - plane.a * x - plane.b * y)); // sorry, Yulia :'( there is no varible c
+	return ((-plane.h - plane.a * x - plane.b * y));
 }

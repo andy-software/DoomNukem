@@ -3,26 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   sprite_render.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 16:27:02 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/29 16:27:03 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/05 15:27:06 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-void set_pos(t_doom *d, t_sprite_render *sr)
+void set_pos(t_doom *d, t_sprite_render *sr, int i)
 {
 	sr->time_from_loop_start += d->game.dt;
 	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
-		if (++sr->pos > 2)
+		if (++sr->pos > d->texture.sprt[sr->sprites[i].num_sheet].w - 1)
 		{
 			sr->pos = 0;
 			sr->time_from_loop_start -= sr->prev_frame;
 		}
 	sr->prev_frame = sr->time_from_loop_start;
 }
+
+// void set_pos(t_doom *d, t_sprite_render *sr)
+// {
+// 	sr->time_from_loop_start += d->game.dt;
+// 	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
+// 		if (++sr->pos > 2)
+// 		{
+// 			sr->pos = 0;
+// 			sr->time_from_loop_start -= sr->prev_frame;
+// 		}
+// 	sr->prev_frame = sr->time_from_loop_start;
+// }
 
 void	render_sprites(t_doom *d)
 {
@@ -31,11 +43,11 @@ void	render_sprites(t_doom *d)
 	sr = d->sr;
 	sr.c_sprt = d->map.num_sprites;
 
-	set_pos(d, &d->sr);
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
 	{
-		sr.surr = d->texture.sprites->sprites[sr.sprites[sr.i].text_no + sr.pos];
+		set_pos(d, &d->sr, sr.i);
+		sr.surr = d->texture.sprt[sr.sprites[sr.i].num_sheet].sprites[sr.sprites[sr.i].text_no + sr.pos];
 		sprite_vert_cal(&sr.t1, &sr.t2, sr.sprites + sr.i, d->player);
 
 		sr.v1 = sr.t1;

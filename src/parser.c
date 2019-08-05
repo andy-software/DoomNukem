@@ -14,13 +14,6 @@
 
 static void	Info_about_map(t_map *map)
 {
-
-	printf("sector count %i\nvertex count %i\n", map->num_sect, map->num_vert);
-
-	for (int v = 0; v < (int)map->num_vert; v++)
-		printf("vertex %i - {%f, %f}\n", v, map->vertex[v].x, map->vertex[v].y);
-
-
 	for (int s = 0; s < (int)map->num_sect; s++)
 	{
 		printf("sector num - %i\n", map->sectors[s].num);
@@ -70,10 +63,6 @@ int			read_file(t_doom *doom, char *file_name)
 	read(fd, &map->fog_color, sizeof(Uint32));
 
 	read(fd, &map->num_sect, sizeof(Uint32));
-	read(fd, &map->num_vert, sizeof(Uint32));
-
-	map->vertex = (t_vertex*)malloc(sizeof(t_vertex) * map->num_vert);
-	read(fd, map->vertex, sizeof(t_vertex) * map->num_vert);
 
 	map->sectors = (t_sector*)malloc(sizeof(t_sector) * map->num_sect);
 	i = -1;

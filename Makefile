@@ -6,7 +6,7 @@
 #    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/04 19:34:20 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/05 17:38:57 by myuliia          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ FLAGS =  -Wall -g -O3 -Wextra #-fsanitize=address  #-Werror
 
 NAME = doom-nukem
 
-SRC = main.c output.c init.c parser.c game_events.c player_events.c\
-	 game.c math.c main_render.c plane_functions.c textureload.c skybox.c\
-	  sprites.c sorting.c editor.c editor2.c brezen.c threads.c sound.c\
-	   interface.c changes.c menus.c keys.c painting.c sprite_render.c\
-	   sprite_events.c paint_events.c game_mod_for_map_editor.c map_editor_first_person_view.c\
-	   editor_check.c 
+SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
+		game.c math.c main_render.c plane_functions.c textureload.c skybox.c\
+		sprites.c sorting.c editor.c editor2.c brezen.c threads.c sound.c\
+		interface.c changes.c menus.c keys.c painting.c sprite_render.c\
+		sprite_events.c paint_events.c game_mod_for_map_editor.c \
+		map_editor_first_person_view.c editor_check.c 
 
 INC = includes/doom.h
 
