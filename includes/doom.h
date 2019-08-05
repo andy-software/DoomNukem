@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/03/09 16:26:43 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/05 14:34:11 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,27 @@
 # define FixMult(a, b) 			((((a) * (b)) >> 8))
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
 /* EDITOR */
-# define NB_BUTTONS 16
+# define NB_BUTTONS 17
 # define NB_IMAGES 8
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
 # define FLOOR 1
 # define CEIL 2
+# define WALL 3
+# define SPRITES 4
 # define p(x) printf(x)
 # define MAX_NUM_SECTORS 20
+# define MAX_SECTORS 100
+# define MAX_VERT 100
+
+# define BOTTOM 1 
+# define MIDDLE 2
+# define TOP 3
+
+# define NUM_TEXT 5
+# define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
+
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
 # define BDY doom->editor.brezen.dy
@@ -605,7 +617,7 @@ enum	font {
 	MENU_F = 3,
 };
 
-enum mods {
+enum	mods {
 
 	START_MOD = 0,
 	GAME_MOD = 1,
@@ -664,6 +676,13 @@ struct	s_vertex_int
 	int				x;
 	int				y;
 };
+
+// enum	wall {
+
+// 	BOTTOM = 1,
+// 	MIDDLE = 2,
+// 	TOP = 3,
+// };
 
 struct	s_interface
 {
@@ -742,6 +761,9 @@ struct	s_editor
 	int				fl_or_ceil;
 	int				is_portal; // 0 no; 1 yes
 	t_fline			fline;
+	t_sdl			sdl;
+	int				nb_vert; // nb of current vertex
+	int				which_wall;
 };
 /****/
 struct	s_sound
@@ -867,6 +889,8 @@ int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);
 void		*start_the_work(void *data);
 
+void		paint_vert_cal(t_vector *t1, t_vector *t2, t_painting *pnt, t_player p);
+
 //some math stuff
 float		get_z(t_plane plane, float x, float y);
 int			sign(float x);
@@ -955,32 +979,60 @@ void    		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 void			show_start(t_doom *d);
 
 /* EDITOR */
-int			game_mod_editor(t_doom *doom);
-int			game_loop_for_editor(t_doom *doom);
-void		change_text(t_doom *doom, SDL_Event *event);
-int			ft_map_editor(t_doom *doom, char *name);
-int			ft_create_window(t_doom *doom, char *name);
-int			ft_read_map_edit(t_doom *doom, int fd);
-int			ft_start_edit(t_doom *doom, int fd); // refresh
-int			ft_write_changes_to_file(t_doom *doom, int fd);
-int			write_changes_to_file(t_map map, int fd, t_player mplayer);
-void		ft_check_key(t_doom *doom, SDL_Event *event);
-void		ft_render_editor(t_doom *doom);
-void		ft_render_interface(t_doom *doom);
-void		ft_draw_pixel(t_doom *doom, int x, int y, int color);
-void		ft_render_other(t_doom *doom);
-void		ft_mouse_move_edit(t_doom *doom, SDL_Event *event);
-void		ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
-void		ft_render_previous(t_doom *doom);
-void		ft_draw_axis(t_doom *doom);
-void		ft_prepare_editor(t_doom *doom);
-int			ft_prepare_to_write(t_doom *doom);
-int			ft_specify_coor(int nbr);
-void		ft_refresh_photo(t_doom *doom, SDL_Event *event);
-void		key_floor_ceil(t_doom *doom);
-void		info_ceil_floor(t_doom *doom);
+int				check_what_sprite_player_are_looking(t_doom *d);
+int				check_what_paint_player_are_looking(t_doom *d);
+int				game_mod_editor(t_doom *doom);
+int				game_loop_for_editor(t_doom *doom);
+void			make_portal(t_doom *doom, SDL_Event *event);
+int				ft_map_editor(t_doom *doom, char *name);
+int				ft_create_window(t_doom *doom, char *name);
+int				ft_read_map_edit(t_doom *doom, int fd);
+int				ft_start_edit(t_doom *doom, int fd); // refresh
+int				ft_write_changes_to_file(t_doom *doom, int fd);
+int				write_changes_to_file(t_map map, int fd, t_player mplayer);
+void			ft_check_key(t_doom *doom, SDL_Event *event);
+void			ft_render_editor(t_doom *doom);
+void			ft_render_interface(t_doom *doom);
+void			ft_draw_pixel(t_doom *doom, int x, int y, int color);
+void			ft_render_other(t_doom *doom);
+void			ft_mouse_move_edit(t_doom *doom, SDL_Event *event);
+void			ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
+void			ft_render_previous(t_doom *doom);
+void			ft_draw_axis(t_doom *doom);
+void			ft_prepare_editor(t_doom *doom);
+int				ft_prepare_to_write(t_doom *doom);
+void			ft_prepare_read(t_doom *doom);
+int				ft_specify_coor(int nbr);
+void			ft_refresh_photo(t_doom *doom, SDL_Event *event);
+void			ft_null_items(t_doom *doom, int i, int num);
+void			key_floor_ceil(t_doom *doom);
+void			key_ceil(t_doom *doom, const Uint8 *state);
+void			info_ceil_floor(t_doom *doom);
+int				check_what_line_player_are_looking(t_doom *d);
+void			editor_player_events(t_doom *doom);
+void			editor_movement_keys(t_doom *d);
+void			key_texure_change(t_doom *doom, const Uint8 *state);
+void			key_editor_change(t_doom *doom, const Uint8 *state);
+
+
+void			editor_fc_texture(t_doom *doom, const Uint8 *state);
+void			editor_wall_texture(t_doom *doom, const Uint8 *state);
+void			editor_scale_x(t_doom *doom, const Uint8 *state);
+void			editor_scale_y(t_doom *doom, const Uint8 *state);
+void			info_f_c_w_s(t_doom *doom, int ind);
+/*  titles */
+void			ft_put_text(char *str, int nb, char *str1);
+void			ft_error(int nb);
+
+/* check */
+int				check_on_point(t_doom *doom);
+int				is_in_sector(t_doom *doom, int x, int y);
+int				convex(t_doom *doom, int j);
+t_vertex		*convex2(t_doom *doom);
+
 // brezen in editor
-void		ft_line(t_doom *doom);void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
+void			ft_line(t_doom *doom);
+void			ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 /***/
-int	init_game_params(t_doom *d);
+int				init_game_params(t_doom *d);
 #endif

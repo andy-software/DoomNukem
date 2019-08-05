@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textureload.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmasyush <mmasyush@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 18:14:16 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/05/02 18:14:16 by mmasyush         ###   ########.fr       */
+/*   Updated: 2019/08/04 17:57:54 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
 	load_sprites(t, format);
 	load_sounds(&d->sound);
+	
 	load_ui(t, format, d);
+	
 	return(1);
 }
 
@@ -158,7 +160,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 	while(++i < d->texture.len)
 	{
 		temp = surf[i];
-		surf[i] = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, d->sdl.surface->format->format);
+		surf[i] = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, d->editor.sdl.surface->format->format);
 		SDL_BlitScaled(temp , 0, surf[i], 0);
 		SDL_FreeSurface(temp);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   painting.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 16:25:50 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/29 16:25:50 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/01 19:36:24 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,18 @@ static void	pre_cycle_cal(t_sprite_render *sr, t_doom *d)
 	sr->d_y = (sr->t2.y - sr->t1.y) / (sr->x2 - sr->x1);
 	sr->y = (sr->begin_x - sr->x1) * sr->d_y + sr->t1.y;
 	sr->doomy = sr->v2.y / sr->v1.y;
+}
+
+void		paint_vert_cal(t_vector *t1, t_vector *t2, t_painting *pnt, t_player p)
+{
+	t1->x = pnt->v1.x - p.coord.x;
+	t1->y = pnt->v1.y - p.coord.y;
+	t2->x = pnt->v2.x - p.coord.x;
+	t2->y = pnt->v2.y - p.coord.y;
+	t1->z = pnt->v1.z - p.coord.z;
+	t2->z = pnt->v2.z - p.coord.z;
+	rotate_vector_xy(t1, p.anglesin, p.anglecos);
+	rotate_vector_xy(t2, p.anglesin, p.anglecos);
 }
 
 void		render_painting(t_doom *d)

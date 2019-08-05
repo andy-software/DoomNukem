@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 13:59:21 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/29 13:59:22 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/01 19:38:50 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,7 @@ void		check_painting_intersection(t_doom *d) //should do what sprites do right n
 		ev = d->changes.pnt_events[d->map.paint[i].event_num];
 		if (!d->map.paint[i].key)
 			continue ;
-		t1.x = d->map.paint[i].v1.x - d->player.coord.x;
-		t1.y = d->map.paint[i].v1.y - d->player.coord.y;
-		t2.x = d->map.paint[i].v2.x - d->player.coord.x;
-		t2.y = d->map.paint[i].v2.y - d->player.coord.y;
-		t1.z = d->map.paint[i].v1.z - d->player.coord.z;
-		t2.z = d->map.paint[i].v2.z - d->player.coord.z;
-		rotate_vector_xy(&t1, d->player.anglesin, d->player.anglecos);
-		rotate_vector_xy(&t2, d->player.anglesin, d->player.anglecos);
+		paint_vert_cal(&t1, &t2, d->map.paint + i, d->player);
 		if (d->map.paint[i].key_state && (ev == lift_floor_event || ev == lift_ceil_event))
 		{
 			printf("Im lifting\n");

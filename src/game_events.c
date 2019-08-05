@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_events.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/03/23 18:14:52 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/05 13:40:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,5 +206,6 @@ void		game_events(t_doom *d)
 		check_painting_intersection(d);
 		d->game.click = 0;
 	}
-	move_mobs(d);
+	if (!d->map.editing)
+		move_mobs(d);
 }

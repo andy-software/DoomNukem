@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   interface.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmasyush <mmasyush@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/07/02 14:58:28 by mmasyush         ###   ########.fr       */
+/*   Updated: 2019/08/01 17:23:16 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
 void	draw_ui(t_doom *d)
-{
+{	
 	gun_anim(d);
 	int i;
 	int temp;
