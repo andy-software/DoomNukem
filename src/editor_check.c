@@ -72,15 +72,18 @@ int			convex(t_doom *doom, int j)
 	polig = convex2(doom);
 	while (++j < NUM_VERT)
 	{
-		ab.x = j == 0 ? polig[j].x - polig[NUM_VERT - 1].x
-		: polig[j].x - polig[j - 1].x;
-		ab.y = j == 0 ? polig[j].y - polig[NUM_VERT - 1].y
-		: polig[j].x - polig[j - 1].x;
-		bc.x = polig[j + 1].x - polig[j].x;
-		bc.y = polig[j + 1].y - polig[j].y;
+		// ab.x = (j == 0) ? polig[j].x - polig[NUM_VERT - 1].x
+		// : polig[j].x - polig[j - 1].x;
+		// ab.y = (j == 0) ? polig[j].y - polig[NUM_VERT - 1].y
+		// : polig[j].x - polig[j - 1].x;
+		// bc.x = polig[j + 1].x - polig[j].x;
+		// bc.y = polig[j + 1].y - polig[j].y;
+		ab = polig[j];
+		bc = (j + 1 != NUM_VERT) ? polig[j + 1] : polig[0];
 		product = ab.x * bc.y - bc.x * ab.y;
 		if (product < 0 && (doom->editor.is_sector = 2))
 		{
+			printf("%i %f\n", j, product);
 			ft_putstr("\033[1;31m SECTOR ISN'T CONVEX\033[0m\n");
 			return (0);
 		}

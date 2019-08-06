@@ -98,7 +98,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
 	map.sectors[0].light_lvl = 0;
-	map.sectors[0].render_ceil = 1;
+	map.sectors[0].render_ceil = 0;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
