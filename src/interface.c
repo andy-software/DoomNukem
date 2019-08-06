@@ -13,7 +13,7 @@
 #include "../includes/doom.h"
 
 void	draw_ui(t_doom *d)
-{	
+{
 	gun_anim(d);
 	int i;
 	int temp;
@@ -73,6 +73,7 @@ void    gun_anim(t_doom *d)
 		}
 		else if (d->ui.fire > 0)
 		{
+			// printf("fgdhdf11114h\n");
 			if (d->ui.ammo_1 >= 0)
 			{
 				ft_strcpy(d->ui.masage, "- / ");

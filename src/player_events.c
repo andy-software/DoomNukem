@@ -160,23 +160,14 @@ void		player_events(t_doom *d)
 			else if (d->ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
-				{
 					d->game.pause = 1;
-					SDL_ShowCursor(SDL_ENABLE);
-					SDL_SetRelativeMouseMode(SDL_DISABLE);
-					SDL_SetWindowGrab(d->sdl.window, 0);
-				}
 				else
-				{
-						d->game.pause = 0;
-					// SDL_ShowCursor(SDL_DISABLE);  das useless
-					SDL_SetWindowGrab(d->sdl.window, 1);
-					SDL_SetRelativeMouseMode(SDL_ENABLE);
-					SDL_GetRelativeMouseState(NULL, NULL);
-				}
+					d->game.pause = 0;
+				set_mouse(d);
 			}
 		}
-		else if (d->ev.type == SDL_MOUSEBUTTONDOWN && d->ev.button.button == SDL_BUTTON_LEFT)
+		else if (d->ev.type == SDL_MOUSEBUTTONDOWN &&
+			d->ev.button.button == SDL_BUTTON_LEFT && d->game.start != 1)
 		{
 			if(d->ui.fire == 0)
 			{

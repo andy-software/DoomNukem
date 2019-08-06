@@ -415,6 +415,8 @@ struct	s_game
 	int				click;
 	t_vector		velocity;
 	float			acceleration;
+	int				dificulty;
+	int				start;
 	int				ground;
 	int				falling;
 	int				moving;
@@ -425,6 +427,7 @@ struct	s_game
 	int				hp_level;
 	int				damage;
 	int				kills;
+	int				play;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -602,8 +605,8 @@ struct	s_ui
 
 struct	s_menu
 {
-	SDL_Surface *m[3];
-	SDL_Rect pos[3];
+	SDL_Surface *m[4];
+	SDL_Rect pos[4];
 };
 
 struct	s_font
@@ -868,7 +871,7 @@ void		draw_fps(t_doom *d, int fps);
 
 //parser & initial
 int			read_file(t_doom *doom, char *file_name);
-int			init_sdl(t_sdl *sdl, t_option *options);
+int			init_sdl(t_sdl *sdl);
 
 //game loop
 void		player_events(t_doom *d);
@@ -960,7 +963,7 @@ int			translate_and_rotate_sprites(t_sprite *arr_spr, \
 int			sprite_sort(t_sprite *arr_spr, int len);
 // void		load_sprites(t_texture *texture, Uint32 format);
 int			*copy_static_arr(int *arr, const int len);
-int			game_mod(char *file_name);
+int			game_mod(t_doom *doom, char *file_name);
 void		move_mobs(t_doom *d);
 int			first_own_moves(t_doom *d, t_sprite *spr);
 int			mirror_own_moves(t_doom *d, t_sprite *spr);
@@ -993,9 +996,14 @@ void		switch_music(t_sound *sound, SDL_Event ev);
 */
 void		show_pause(t_doom *d);
 void		show_lose(t_doom *d);
+void 		show_start(t_doom *d);
 void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
 void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
-void		show_start(t_doom *d);
+
+void		set_mouse(t_doom *doom);
+/*
+**start.c
+*/
 
 /* EDITOR */
 int				check_what_sprite_player_are_looking(t_doom *d);

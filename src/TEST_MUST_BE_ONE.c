@@ -223,7 +223,7 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 1;
+	map.num_sprites = 2;
 	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].spr_num = i;
