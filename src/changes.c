@@ -137,14 +137,6 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 	return (1);
 }
 
-void		check_sprites_intersect_with_player(t_sprite *spr, t_doom *d, t_player *p)
-{
-	t_vertex	v1;
-	t_vertex	v2;
-
-
-}
-
 void		chase(t_doom *d, t_sprite *spr)
 {
 	t_vertex	move_vector;
