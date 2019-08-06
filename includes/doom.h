@@ -631,7 +631,7 @@ struct	s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
-	SDL_Surface		*wall_tex[6];
+	SDL_Surface		*wall_tex[14];
 	SDL_Surface		*sky_box[2];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];

@@ -159,7 +159,6 @@ void		chase(t_doom *d, t_sprite *spr)
 
 	move_sprites(d, spr->speed_x, spr->speed_y, spr);
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
-	printf("%f\n%f\n", spr->coord.z, d->player.coord.z - EYE_HEIGHT);
 	if (((int)d->player.coord.y == (int)spr->coord.y) && ((int)d->player.coord.x == (int)spr->coord.x) && ((int)(d->player.coord.z - EYE_HEIGHT) == (int)spr->coord.z))
 	{
 		if (!(Mix_Playing(6)))
