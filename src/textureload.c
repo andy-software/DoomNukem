@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textureload.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmasyush <mmasyush@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 18:14:16 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/05/02 18:14:16 by mmasyush         ###   ########.fr       */
+/*   Updated: 2019/08/05 14:50:10 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
 	load_sounds(&d->sound);
+	
 	load_ui(t, format, d);
 	load_sprites(d);
 	return(1);

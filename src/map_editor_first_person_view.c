@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_editor_first_person_view.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/01 14:01:16 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/01 14:01:17 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/05 14:48:28 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

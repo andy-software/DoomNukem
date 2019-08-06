@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/02 18:15:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/05 17:49:46 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void	ft_draw_pixel(t_doom *doom, int x, int y, int color)
 	}
 }
 
-int		ft_write_changes_to_file(t_doom *doom, int fd)
+int		ft_write_changes_to_file(t_doom *doom, int fd) //norm
 {
-	
 	p("\nIN FT_WRITE_CHANGES_TO_FILE\n");
 	int i;
 
@@ -62,12 +61,11 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	write(fd, &doom->map.num_sprites, sizeof(Uint32));
 	write(fd, doom->map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
 	write(fd, &doom->map.num_paint, sizeof(Uint32));
-	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint); //*//
-	//printf("Количесвто вертексов в сеторе 0: %d\n", doom->map.sectors[0].num_vert);
+	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
 	return (1);
 }
 
-int		ft_create_window(t_doom *doom, char *name)
+int		ft_create_window(t_doom *doom, char *name) //norm
 {
 	char	*str;
 	char	*str1;
@@ -79,8 +77,8 @@ int		ft_create_window(t_doom *doom, char *name)
 		return (error_message((char *)SDL_GetError()));
 	if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) != (IMG_INIT_PNG | IMG_INIT_JPG))
 		return (error_message((char *)SDL_GetError()));
-	if (!(doom->editor.sdl.window = SDL_CreateWindow("DOOM", SDL_WINDOWPOS_CENTERED, \
-		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, \
+	if (!(doom->editor.sdl.window = SDL_CreateWindow("DOOM", 1500, \
+		5, WIN_WIDTH, \
 		WIN_HEIGHT, SDL_WINDOW_SHOWN)))
 		return (error_message((char *)SDL_GetError()));
 	if (!(doom->editor.sdl.surface = SDL_GetWindowSurface(doom->editor.sdl.window)))
@@ -121,19 +119,44 @@ int		ft_create_window(t_doom *doom, char *name)
 	return (1);
 }
 
-void	key_editor_change(t_doom *doom, Uint8 *state)
+void	key_editor_change(t_doom *doom, const Uint8 *state)
 {
-	if (state[SDL_SCANCODE_L] && state[SDL_SCANCODE_TAB] && doom->map.sectors[doom->player.sector].light_lvl > -50)
+	if (state[SDL_SCANCODE_L] && state[SDL_SCANCODE_TAB] && doom->map.sectors[doom->player.sector].light_lvl > 0)
 		doom->map.sectors[doom->player.sector].light_lvl--;
 	else if (state[SDL_SCANCODE_L] && doom->map.sectors[doom->player.sector].light_lvl < 90)
 		doom->map.sectors[doom->player.sector].light_lvl++;
 }
 
-void	key_texure_change(t_doom *doom, Uint8 *state)
+void	key_texure_change(t_doom *doom, const Uint8 *state)
 {
 }
 
-void	key_floor_ceil(t_doom *doom) // a, b, h - меняется на 0,1
+void	key_ceil(t_doom *doom, const Uint8 *state)
+{
+	if (doom->editor.fl_or_ceil == CEIL)
+	{
+		if (!state[SDL_SCANCODE_TAB])
+		{
+			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.a += 0.01;
+			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.b += 0.01;
+			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.h += 0.1;
+		}
+		else if (state[SDL_SCANCODE_TAB])
+		{
+			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.a -= 0.01;
+			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.b -= 0.01;
+			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
+				doom->map.sectors[doom->player.sector].ceil_plane.h -= 0.1;
+		}
+	}
+}
+
+void	key_floor_ceil(t_doom *doom) // a, b, h - меняется на 0,1 
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
@@ -158,27 +181,7 @@ void	key_floor_ceil(t_doom *doom) // a, b, h - меняется на 0,1
 				doom->map.sectors[doom->player.sector].floor_plane.h -= 0.1;
 			}
 	}
-	if (doom->editor.fl_or_ceil == CEIL)
-	{
-		if (!state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.a += 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.b += 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.h += 0.1;
-		}
-		else if (state[SDL_SCANCODE_TAB])
-		{
-			if (state[SDL_SCANCODE_KP_1] && doom->map.sectors[doom->player.sector].ceil_plane.a < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.a -= 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && doom->map.sectors[doom->player.sector].ceil_plane.b < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.b -= 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && doom->map.sectors[doom->player.sector].ceil_plane.h < 50)
-				doom->map.sectors[doom->player.sector].ceil_plane.h -= 0.1;
-		}
-	}
+	key_ceil(doom, state);
 }
 
 void	ft_check_key(t_doom *doom, SDL_Event *event)
@@ -376,7 +379,7 @@ void	ft_render_interface(t_doom *doom)
 	}
 	ft_draw_axis(doom);
 	bigger.y = 20;
-	while (++it[0] < (NB_BUTTONS - 12))
+	while (++it[0] < (NB_BUTTONS - 12)) // minus
 	{
 		exist = doom->editor.images[it[0]].exist;
 		bigger.x = 700 + (it[0] * 100);
@@ -394,8 +397,10 @@ void	ft_render_interface(t_doom *doom)
 				}
 			}
 		}
-		while (exist != 0)
+		while (exist != -1)
 		{
+			if (it[0] == 1 && exist == 0)
+				break ;
 			it[2] = 10;
 			while (++it[2] < doom->editor.images[it[0]].image->w - 10)
 			{
@@ -442,13 +447,155 @@ void	ft_mouse_move_edit(t_doom *doom, SDL_Event *event)
 	exist = doom->editor.images[doom->editor.ind_img].exist;
 	doom->editor.brezen.x2 = event->button.x;
 	doom->editor.brezen.y2 = event->button.y;
-	if (doom->editor.img_press != 0)
+	if (doom->editor.img_press != 0 && (event->button.x > 30 && event->button.x < WIN_WIDTH - 30) &&(event->button.y > 30 && event->button.y < WIN_HEIGHT - 30))
 	{
 		doom->editor.images[doom->editor.ind_img].im_x[exist] = (doom->editor.ind_img == 1 && exist == 4) ? doom->editor.images[doom->editor.ind_img].im_x[exist] : event->button.x - 50;
 		doom->editor.images[doom->editor.ind_img].im_y[exist] = (doom->editor.ind_img == 1 && exist == 4) ? doom->editor.images[doom->editor.ind_img].im_y[exist] : event->button.y - 50;
 	}
 }
 
+void	info_f_c_w_s(t_doom *doom, int ind)
+{
+	if (ind == 1) // floor, ceil..
+	{
+		if (doom->editor.fl_or_ceil == FLOOR && (doom->editor.press.ind_action = 8))
+			ft_putstr("\x1B[34m\n   FLOOR\x1B[0m\n");
+		else if (doom->editor.fl_or_ceil == CEIL && (doom->editor.press.ind_action = 8))
+			ft_putstr("\x1B[34m\n   CEILING\x1B[0m\n");
+		else if (doom->editor.fl_or_ceil == WALL && (doom->editor.press.ind_action = 7) && (doom->editor.which_wall = MIDDLE))
+			ft_putstr("\x1B[34m\n   WALL\n          middle wall\x1B[0m\n");
+		else if (doom->editor.fl_or_ceil == SPRITES && (doom->editor.press.ind_action = 6))
+			ft_putstr("\x1B[34m\n   SPRITES\x1B[0m\n");
+	}
+	else // wall
+	{	
+		if (doom->editor.which_wall == BOTTOM)
+			ft_putstr("\x1B[34m          bottom wall \x1B[0m\n");
+		else if (doom->editor.which_wall == MIDDLE)
+			ft_putstr("\x1B[34m          middle wall \x1B[0m\n");
+		else if (doom->editor.which_wall == TOP)
+			ft_putstr("\x1B[34m          top    wall \x1B[0m\n");
+	}
+	
+}
+
+void	editor_scale_y(t_doom *doom, const Uint8 *state)
+{
+	if (doom->editor.fl_or_ceil == WALL)
+	{
+		doom->editor.nb_vert = check_what_line_player_are_looking(doom);
+		if (doom->editor.which_wall == MIDDLE)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].y_w_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+		else if (doom->editor.which_wall == BOTTOM)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].y_b_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+		else if (doom->editor.which_wall == TOP)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].y_t_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+	}
+	if (doom->editor.fl_or_ceil == CEIL)
+		doom->map.sectors[doom->player.sector].y_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+	if (doom->editor.fl_or_ceil == FLOOR)
+		doom->map.sectors[doom->player.sector].y_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+}
+
+void	editor_scale_x(t_doom *doom, const Uint8 *state)
+{
+	if (doom->editor.fl_or_ceil == WALL)
+	{
+		doom->editor.nb_vert = check_what_line_player_are_looking(doom);
+		if (doom->editor.which_wall == MIDDLE)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].x_w_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+		else if (doom->editor.which_wall == BOTTOM)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].x_b_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+		else if (doom->editor.which_wall == TOP)
+			doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].x_t_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+	}
+	if (doom->editor.fl_or_ceil == CEIL)
+		doom->map.sectors[doom->player.sector].x_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+	if (doom->editor.fl_or_ceil == FLOOR)
+		doom->map.sectors[doom->player.sector].x_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+}
+
+void	editor_wall_texture(t_doom *doom, const Uint8 *state)
+{
+	if (doom->editor.fl_or_ceil == WALL)
+	{
+		doom->editor.nb_vert = check_what_line_player_are_looking(doom);
+		if (doom->editor.which_wall == MIDDLE)
+		{
+			if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall != 0)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall--;
+			else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall != NUM_TEXT)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall++;
+		}
+		else if (doom->editor.which_wall == TOP)
+		{
+			if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].top != 0)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].top--;
+			else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].top != NUM_TEXT)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].top++;
+		}
+		else if (doom->editor.which_wall == BOTTOM)
+		{
+			if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].bot != 0)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].bot--;
+			else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].bot != NUM_TEXT)
+				doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].bot++;
+		}
+	}
+}
+
+void	editor_fc_texture(t_doom *doom, const Uint8 *state)
+{
+	if (doom->editor.fl_or_ceil == FLOOR)
+	{
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].floor_tex != 0)
+			doom->map.sectors[doom->player.sector].floor_tex--;
+		else if ( !(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].floor_tex != 5)
+			doom->map.sectors[doom->player.sector].floor_tex++;
+	}
+	else if (doom->editor.fl_or_ceil == CEIL)
+	{
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].ceil_tex != 0)
+			doom->map.sectors[doom->player.sector].ceil_tex--;
+		else if ( !(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].ceil_tex != 5)
+			doom->map.sectors[doom->player.sector].ceil_tex++;
+	}
+
+}
+
+void	editor_start_z(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].start_z += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+}
+
+void	editor_end_z(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].end_z += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+}
+
+void	editor_sp_width(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+		doom->map.sprites[sp].width += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+	
+}
+
+void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
+{
+	int sp = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == SPRITES)
+	{
+		if (doom->map.sprites[sp].num_sheet == 8)
+			doom->map.sprites[sp].num_sheet = 7;
+		else
+			doom->map.sprites[sp].num_sheet = 8;
+	}
+}
 
 void	editor_player_events(t_doom *doom)
 {
@@ -460,90 +607,51 @@ void	editor_player_events(t_doom *doom)
 		key_editor_change(doom, state);
 		if (doom->ev.type == SDL_KEYDOWN)
 		{
-			
 			if (doom->ev.key.keysym.sym == SDLK_t)
 			{
-				if (doom->editor.fl_or_ceil == WALL)
-				{
-					doom->editor.nb_vert = check_what_line_player_are_looking(doom);
-					if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall != 0)
-						doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall--;
-					else if ( !(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall != 5)
-						doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].wall++;
-				}
-				else if (doom->editor.fl_or_ceil == FLOOR)
-				{
-					if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].floor_tex != 0)
-						doom->map.sectors[doom->player.sector].floor_tex--;
-					else if ( !(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].floor_tex != 5)
-						doom->map.sectors[doom->player.sector].floor_tex++;
-				}
-				else if (doom->editor.fl_or_ceil == CEIL)
-				{
-					if ((state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].ceil_tex != 0)
-						doom->map.sectors[doom->player.sector].ceil_tex--;
-					else if ( !(state[SDL_SCANCODE_TAB]) && doom->map.sectors[doom->player.sector].ceil_tex != 5)
-						doom->map.sectors[doom->player.sector].ceil_tex++;
-				}
+				editor_wall_texture(doom, state);
+				editor_fc_texture(doom, state);
+				editor_sprites_texture(doom, state);
 			}
-			if (doom->ev.key.keysym.sym == SDLK_COMMA) // scale change by X
+			else if (doom->ev.key.keysym.sym == SDLK_COMMA) // scale change by X
+				editor_scale_x(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_PERIOD) // scale change by Y
+				editor_scale_y(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_r)
 			{
-				if (doom->editor.fl_or_ceil == WALL)
-				{
-					doom->editor.nb_vert = check_what_line_player_are_looking(doom);
-					doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].x_w_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
-				}
 				if (doom->editor.fl_or_ceil == CEIL)
-					doom->map.sectors[doom->player.sector].x_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
-				if (doom->editor.fl_or_ceil == FLOOR)
-					doom->map.sectors[doom->player.sector].x_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
-			}
-
-			if (doom->ev.key.keysym.sym == SDLK_PERIOD) // scale change by Y
-			{
-				if (doom->editor.fl_or_ceil == WALL)
 				{
-					doom->editor.nb_vert = check_what_line_player_are_looking(doom);
-					doom->map.sectors[doom->player.sector].lines[doom->editor.nb_vert].y_w_scale += (state[SDL_SCANCODE_TAB]) ? -0.1 : 0.1;
+					if (doom->map.sectors[doom->player.sector].render_ceil == 1)
+						doom->map.sectors[doom->player.sector].render_ceil = 0;
+					else
+						doom->map.sectors[doom->player.sector].render_ceil = 1;
 				}
-				if (doom->editor.fl_or_ceil == CEIL)
-					doom->map.sectors[doom->player.sector].y_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
-				if (doom->editor.fl_or_ceil == FLOOR)
-					doom->map.sectors[doom->player.sector].y_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
 			}
-
-
-			if (doom->ev.key.keysym.sym == SDLK_r)
-			{
-				if (doom->map.sectors[doom->player.sector].render_ceil == 1)
-					doom->map.sectors[doom->player.sector].render_ceil = 0;
-				else
-					doom->map.sectors[doom->player.sector].render_ceil = 1;
-			}
-			if (doom->ev.key.keysym.sym == SDLK_m)
+			else if (doom->ev.key.keysym.sym == SDLK_m)
 				doom->map.editing = 0;
+			else if (doom->ev.key.keysym.sym == SDLK_z)
+				editor_start_z(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_x)
+				editor_end_z(doom, state);
+			else if (doom->ev.key.keysym.sym == SDLK_c)
+				editor_sp_width(doom, state);
 			if (doom->ev.key.keysym.sym == SDLK_PAGEUP || doom->ev.key.keysym.sym == SDLK_PAGEDOWN) // change wall/sprites/ceil
 			{
-				if (doom->ev.key.keysym.sym == SDLK_PAGEDOWN)
-				{
-					if (doom->editor.fl_or_ceil > 1)
-						doom->editor.fl_or_ceil--;
-				}
-				else
-					if (doom->editor.fl_or_ceil < 4)
-						doom->editor.fl_or_ceil++;
-				if (doom->editor.fl_or_ceil == FLOOR && (doom->editor.press.ind_action = 8))
-					ft_putstr("\x1B[34m\n   FLOOR\x1B[0m\n");
-				else if (doom->editor.fl_or_ceil == CEIL && (doom->editor.press.ind_action = 8))
-					ft_putstr("\x1B[34m\n   CEILING\x1B[0m\n");
-				else if (doom->editor.fl_or_ceil == WALL && (doom->editor.press.ind_action = 7))
-					ft_putstr("\x1B[34m\n   WALL\x1B[0m\n");
-				else if (doom->editor.fl_or_ceil == SPRITES && (doom->editor.press.ind_action = 6))
-					ft_putstr("\x1B[34m\n   SPRITES\x1B[0m\n");
+				if (doom->ev.key.keysym.sym == SDLK_PAGEDOWN && doom->editor.fl_or_ceil > 1 &&  (doom->editor.fl_or_ceil--))
+					info_f_c_w_s(doom, 1);
+				else if (doom->ev.key.keysym.sym == SDLK_PAGEUP && doom->editor.fl_or_ceil < 4 && (doom->editor.fl_or_ceil++))
+					info_f_c_w_s(doom, 1);
 					
+			}
+			else if (doom->editor.fl_or_ceil == WALL && (doom->ev.key.keysym.sym == 1073741898 || doom->ev.key.keysym.sym == 1073741901))
+			{
+				if (doom->ev.key.keysym.sym == 1073741901 && doom->editor.which_wall > BOTTOM && (doom->editor.which_wall--))
+					info_f_c_w_s(doom, 2);
+				else if (doom->ev.key.keysym.sym ==  1073741898 && doom->editor.which_wall < TOP && (doom->editor.which_wall++))
+					info_f_c_w_s(doom, 2);
 			}
 		}
 	}
-	ft_render_editor(doom);
-	SDL_UpdateWindowSurface(doom->editor.sdl.window);
+		ft_render_editor(doom);
+		SDL_UpdateWindowSurface(doom->editor.sdl.window);
 }

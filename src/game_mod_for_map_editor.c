@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_mod_for_map_editor.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 14:04:01 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/31 14:04:02 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/04 16:25:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		init_game_window_for_editor(t_sdl *sdl)
 {
-	if (!(sdl->window = SDL_CreateWindow("DOOM", SDL_WINDOWPOS_CENTERED, \
+	if (!(sdl->window = SDL_CreateWindow("DOOM", 100, \
 		SDL_WINDOWPOS_CENTERED, WIN_WIDTH, \
 		WIN_HEIGHT, SDL_WINDOW_SHOWN)))
 		return (error_message((char *)SDL_GetError()));
@@ -74,7 +74,9 @@ int			game_loop_for_editor(t_doom *doom)
 			prepare_to_rendering(&doom->render, *doom);
 			draw_skybox(doom);
 			draw_screen(doom);
-			draw_ui(doom);
+			SDL_Rect bigger = (SDL_Rect){(WIN_WIDTH / 2) - 15, (WIN_HEIGHT / 2) - 15, 0, 0};
+			SDL_BlitSurface(doom->editor.images[16].image, NULL, doom->sdl.surface, &bigger);
+			// draw_ui(doom);
 		}
 		// else if (doom->game.pause == 1 && doom->game.hp_level > 0)
 		// 	show_pause(&doom);

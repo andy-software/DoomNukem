@@ -76,6 +76,26 @@ static void	mouse_rotation(t_doom *d)
 
 void		player_events(t_doom *d)
 {
+	if (d->map.editing)
+	{
+		movement_keys(d);
+		mouse_rotation(d);
+		editor_player_events(d);
+ 		/*********   FIX EDITOR (MAKE JUMP POSIBLE) ***************/
+		if (d->ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
+		{
+			if (d->game.ground || d->game.flying)
+			{
+				if (d->game.velocity.z < MAX_SPEED_UPWARD)
+					d->game.velocity.z += 0.6;
+				else
+					d->game.velocity.z = MAX_SPEED_UPWARD;					
+				d->game.falling = 1;
+			}
+		}
+	}
+	else
+	{
 	if (!d->game.pause)
 	{
 		movement_keys(d);
@@ -155,21 +175,6 @@ void		player_events(t_doom *d)
 					SDL_GetRelativeMouseState(NULL, NULL);
 				}
 			}
-			else if (d->ev.key.keysym.sym == SDLK_o)
-			{
-				// if (d->map.editing)
-				// {
-					ft_putnbr(check_what_paint_player_are_looking(d));
-					ft_putchar('\n');
-				// }
-			}
-			else if (d->ev.key.keysym.sym == SDLK_m)
-			{
-				if (d->map.editing)
-				{
-					d->map.editing = 0;
-				}
-			}
 		}
 		else if (d->ev.type == SDL_MOUSEBUTTONDOWN && d->ev.button.button == SDL_BUTTON_LEFT)
 		{
@@ -187,5 +192,6 @@ void		player_events(t_doom *d)
 		else if (d->ev.type == SDL_QUIT)
 			d->game.quit = 1;
 		switch_music(&d->sound, d->ev);
-	}
+		
+	}}
 }
