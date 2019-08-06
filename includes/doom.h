@@ -55,6 +55,7 @@
 # define MAX_RANGE_SPRITE_CLICKING 2.5
 # define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
+# define ATTACK_RANGE 1.5
 
 # define HFOV (WIN_WIDTH / 2 * 1.455) //tg 55.5 make fov =~ 69 grad
 # define VFOV (0.2 * WIN_HEIGHT)

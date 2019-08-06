@@ -137,6 +137,13 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 	return (1);
 }
 
+void		check_sprites_intersect_with_player(t_sprite *spr, t_doom *d, t_player *p)
+{
+	t_vertex	v1;
+	t_vertex	v2;
+
+
+}
 
 void		chase(t_doom *d, t_sprite *spr)
 {
@@ -148,22 +155,25 @@ void		chase(t_doom *d, t_sprite *spr)
 	move_vector = (t_vertex){d->player.coord.x - spr->coord.x, d->player.coord.y - spr->coord.y};
 	len = v2dlenght(move_vector.x, move_vector.y);
 	move_vector.x /= len;
-	move_vector.y /= len; //normillize vector to unit vector
+	move_vector.y /= len;
 
 	spr->anglecos = move_vector.x;
 	spr->anglesin = move_vector.y;
 	spr->angle = find_angle_2pi(spr->anglesin, spr->anglecos);
 
-	spr->speed_x = spr->anglecos * spr->move_speed;
-	spr->speed_y = spr->anglesin * spr->move_speed;
-
-	move_sprites(d, spr->speed_x, spr->speed_y, spr);
-	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
-	if (((int)d->player.coord.y == (int)spr->coord.y) && ((int)d->player.coord.x == (int)spr->coord.x) && ((int)(d->player.coord.z - EYE_HEIGHT) == (int)spr->coord.z))
+	if (len > ATTACK_RANGE)
 	{
-		if (!(Mix_Playing(6)))
-			Mix_PlayChannel(6, d->sound.hurt, 0);
-		d->game.hp_level -= (rand() % 10);
+		spr->speed_x = spr->anglecos * spr->move_speed;
+		spr->speed_y = spr->anglesin * spr->move_speed;
+		move_sprites(d, spr->speed_x, spr->speed_y, spr);
+		spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
+	}
+	else
+	{
+		if (comp_real(d->player.coord.z + d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == d->player.sector)
+			if (!(Mix_Playing(6)))
+				Mix_PlayChannel(6, d->sound.hurt, 0);
+			d->game.hp_level -= 1;
 	}
 }
 
@@ -206,18 +216,14 @@ void		move_mobs(t_doom *d)
 			coord.y -= spr[m].coord.y;
 
 			rotate_vector_xy(&coord, spr[m].anglesin, spr[m].anglecos);
-			if (coord.y < spr[m].vision_forward && coord.y > spr[m].vision_backward) // max vision rate forward and min backward // should also check if not a wall
+			if (coord.y < spr[m].vision_forward && coord.y > spr[m].vision_backward)
 				chase(d, spr + m);
-			if (spr[m].own_moves > -1)
+			else if (spr[m].own_moves > -1)
 				d->changes.moves[spr[m].own_moves](d, spr + m);
 			
 		}
 		else if (spr[m].mob && !spr[m].live)
-		{
-			printf("THIS boyy is DEAD, yo!\n");
-			printf("%d\n", m);
 			d->game.kills++;
-		}
 		get_sprite_for_mob(spr + m, d);
 	}
 }
