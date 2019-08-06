@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/01 17:23:16 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/06 20:02:14 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	draw_ui(t_doom *d)
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.hp_r);
 	SDL_FreeSurface(d->ui.message);
 	SDL_BlitSurface(d->texture.visor, 0, d->sdl.surface, 0);
-	SDL_BlitSurface(d->texture.sprt[4].sprites[3], 0, d->sdl.surface, 0);
 }
 
 void    gun_anim(t_doom *d)

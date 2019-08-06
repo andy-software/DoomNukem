@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:41:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/03/23 15:41:52 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/06 15:56:27 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int			read_file(t_doom *doom, char *file_name)
 
 	read(fd, player, sizeof(t_player));
 	read(fd, &map->num_sprites, sizeof(Uint32));
-	read(fd, map->sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	read(fd, map->sprites, sizeof(t_sprite) * map->num_sprites);
 	read(fd, &map->num_paint, sizeof(Uint32));
 	map->paint = (t_painting*)ft_memalloc(sizeof(t_painting) * map->num_paint);
 	read(fd, map->paint, sizeof(t_painting) * map->num_paint);

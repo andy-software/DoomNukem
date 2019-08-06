@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 21:17:04 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/06 19:51:29 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	ft_prepare_read(t_doom *doom)
 	j = -1;
 	while (++j < MAX_SPRITES_COUNT)
 	{
-		doom->map.sprites[j].text_no = 1;
-		doom->map.sprites[j].num_sheet = 7;
+		doom->map.sprites[j].text_no = 0;        
+		doom->map.sprites[j].num_sheet = 6;
 		doom->map.sprites[j].width = 8;
 		doom->map.sprites[j].start_z = 0;
 		doom->map.sprites[j].end_z = 13;
@@ -86,5 +86,21 @@ void	ft_prepare_read(t_doom *doom)
 		doom->map.sprites[j].move_speed = 0.03 * (j + 1);
 		doom->map.sprites[j].vision_forward = 5;
 		doom->map.sprites[j].vision_backward = -3;
+	}
+	
+	doom->map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * MAX_PAINTINGS);
+	doom->map.num_paint = 0;
+	j = -1;
+	while (++j < MAX_PAINTINGS)
+	{
+		doom->map.paint[j].sector_no = 0; //
+		doom->map.paint[j].num_sheet = 6;
+		doom->map.paint[j].v1.z = 80;
+		doom->map.paint[j].v2.z = 10;
+		doom->map.paint[j].text_no = 0;
+		doom->map.paint[j].low_point = -10;
+		doom->map.paint[j].high_point = -40;
+		doom->map.paint[j].speed = 5;
+		doom->map.paint[j].num_of_sect_to_lift = 0;
 	}
 }

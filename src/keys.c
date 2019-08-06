@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 13:59:21 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 14:51:32 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/06 18:53:36 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void		check_painting_intersection(t_doom *d)
 		if (inter.y > 0 && inter.y < MAX_RANGE_SPRITE_CLICKING)
 			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t2.y * d->player.angle_z < 0)
 			{
+				printf("i got it\n");
 				d->map.paint->click = 1;
 				ev(d, d->map.paint + i);
 			}

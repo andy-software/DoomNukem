@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 20:46:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 21:07:46 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/06 21:37:20 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,21 @@ void	key_floor_ceil(t_doom *doom)
 	{
 		if (!state[SDL_SCANCODE_TAB])
 		{
-			if (state[SDL_SCANCODE_KP_1] && FLOOR_A < 50)
+			if (state[SDL_SCANCODE_KP_1] && FLOOR_A < 2)
 				FLOOR_A += 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && FLOOR_B < 50)
+			else if (state[SDL_SCANCODE_KP_2] && FLOOR_B < 2)
 				FLOOR_B += 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && FLOOR_H < 50)
-				FLOOR_H += 0.1;
+			else if (state[SDL_SCANCODE_KP_3] && FLOOR_H < 1000)
+				FLOOR_H += 0.6;
 		}
 		else if (state[SDL_SCANCODE_TAB])
 		{
-			if (state[SDL_SCANCODE_KP_1] && FLOOR_A < 50)
+			if (state[SDL_SCANCODE_KP_1] && FLOOR_A > -2)
 				FLOOR_A -= 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && FLOOR_B < 50)
+			else if (state[SDL_SCANCODE_KP_2] && FLOOR_B > -2)
 				FLOOR_B -= 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && FLOOR_H < 50)
-				FLOOR_H -= 0.1;
+			else if (state[SDL_SCANCODE_KP_3] && FLOOR_H > -1000)
+				FLOOR_H -= 0.6;
 		}
 	}
 	key_ceil(doom, state);
@@ -85,21 +85,36 @@ void	key_ceil(t_doom *doom, const Uint8 *state)
 	{
 		if (!state[SDL_SCANCODE_TAB])
 		{
-			if (state[SDL_SCANCODE_KP_1] && CEIL_A < 50)
+			if (state[SDL_SCANCODE_KP_1] && CEIL_A < 2)
 				CEIL_A += 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && CEIL_B < 50)
+			else if (state[SDL_SCANCODE_KP_2] && CEIL_B < 2)
 				CEIL_B += 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && CEIL_H < 50)
-				CEIL_H += 0.1;
+			else if (state[SDL_SCANCODE_KP_3] && CEIL_H < 1000)
+				CEIL_H += 0.6;
 		}
 		else if (state[SDL_SCANCODE_TAB])
 		{
-			if (state[SDL_SCANCODE_KP_1] && CEIL_A < 50)
+			if (state[SDL_SCANCODE_KP_1] && CEIL_A > -2)
 				CEIL_A -= 0.01;
-			else if (state[SDL_SCANCODE_KP_2] && CEIL_B < 50)
+			else if (state[SDL_SCANCODE_KP_2] && CEIL_B > -2)
 				CEIL_B -= 0.01;
-			else if (state[SDL_SCANCODE_KP_3] && CEIL_H < 50)
-				CEIL_H -= 0.1;
+			else if (state[SDL_SCANCODE_KP_3] && CEIL_H > -1000)
+				CEIL_H -= 0.6;
 		}
 	}
+}
+
+void	change_floor_ceil(t_doom *doom, SDL_Event *event)
+{
+	if ((event->button.x > 850 && event->button.x < 1150)
+	&& (event->button.y > 230 && event->button.y < 530))
+	{
+		if (doom->editor.fl_or_ceil == FLOOR)
+			doom->editor.fl_or_ceil = CEIL;
+		else
+			doom->editor.fl_or_ceil = FLOOR;
+	}
+	if (is_in_sector(doom, event->button.x, event->button.y) != -1)
+		doom->player.sector =
+		is_in_sector(doom, event->button.x, event->button.y);
 }

@@ -6,45 +6,32 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/05 21:35:01 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/06 21:39:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-void	ft_error(int nb)
-{
-	if (nb == 1)
-		ft_putstr("Error\n");
-	if (nb == 2)
-		ft_putstr("\x1B[31mWrong file or to many sectors\x1B[0m\n");
-	exit(0);
-}
-
-void	ft_put_text(char *str, int nb, char *str1)
-{
-	ft_putstr(str);
-	ft_putnbr(nb);
-	ft_putstr(str1);
-	// free(str);
-	// free(str1);
-}
 
 int		ft_map_editor(t_doom *doom, char *name)
 {
 	p("\nIN FT_MAP_EDITOR\n");
 	int		fd;
-	
+	char	*name_m;
+
+	name_m = ft_strjoin("maps/", name);
 	ft_prepare_read(doom);
-	if (open(name, O_EXCL) > 0)
+	if (open(name_m, O_EXCL) > 0)
 	{
-		fd = open(name, O_RDONLY);
+		fd = open(name_m, O_RDONLY);
 		ft_read_map_edit(doom, fd);
+		printf("doom->map.paint[0].event: %d, \n", doom->map.paint[0].event_num);
+		printf("doom->map.paint[0].key: %d, \n", doom->map.paint[0].key);
 		close(fd);
-		fd = open(name, O_WRONLY);
+		fd = open(name_m, O_WRONLY);
 	}
 	else
-		fd = open(name, O_CREAT | O_WRONLY);
+		fd = open(name_m, O_CREAT | O_WRONLY);
 	if (fd < 0)
 		return (error_message("fd is bad :(\n") + 1);
 	if (doom->editor.save_del != 2)
@@ -56,19 +43,19 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_start_edit(doom, fd);
 	if (doom->editor.save_del == 2)
 		remove(name);
+	free(name_m);
 	close(fd);
 	return (0);
 }
 
 int		ft_prepare_to_write(t_doom *doom)
 {
-	p("\nIN FT_PREAPARE_TO_WRITE\n");
 	int		i;
 
 	i = -1;
 	if (!doom->map.num_sect || !doom->player.coord.y)
 	{
-		printf("Nothing to store;(\n");
+		ft_putstr("Nothing to store:(\n");
 		return (0);
 	}
 	doom->player.coord.z = 10;
@@ -86,37 +73,15 @@ int		ft_prepare_to_write(t_doom *doom)
 		doom->map.sprites[i].draw = 1;
 		doom->map.sprites[i].own_moves = i;
 		doom->map.sprites[i].spr_num = i;
-		doom->editor.images[2].im_x[i] = (doom->map.sprites[i].coord.x * 10) - 50;
-		doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
+		// doom->editor.images[2].im_x[i] = (doom->map.sprites[i].coord.x * 10) - 50;
+		// doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
 	}
 
-	doom->map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
-	doom->map.num_paint = 1;
-	doom->map.paint[0].sector_no = 1;
-	doom->map.paint[0].num_sheet = 6;
-	doom->map.paint[0].v1.x = 40;
-	doom->map.paint[0].v1.y = 30;
-	doom->map.paint[0].v1.z = 0;
-	doom->map.paint[0].v2.x = 43;
-	doom->map.paint[0].v2.y = 30;
-	doom->map.paint[0].v2.z = 0;
-	doom->map.paint[0].text_no = 0;
-	doom->map.paint[0].key = 1;
-	doom->map.paint[0].low_point = -10;
-	doom->map.paint[0].high_point = -40;
-	doom->map.paint[0].speed = 5;
-	doom->map.paint[0].num_of_sect_to_lift = 0;
 	doom->editor.fl_or_ceil = 1;
 	doom->editor.images[1].im_x[1] = (doom->player.coord.x * 10) - 48;
 	doom->editor.images[1].im_y[1] = (doom->player.coord.y * 10) - 48;
 	doom->player.sector = is_in_sector(doom, (doom->player.coord.x * 10), (doom->player.coord.y * 10));
 	return (1);
-}
-
-void	ft_null_items(t_doom *doom, int i, int num)
-{
-	doom->editor.images[i].im_x[num] = 700 + (i * 100); // обнулить
-	doom->editor.images[i].im_y[num] = 20;
 }
 
 void	ft_prepare_editor(t_doom *doom)
@@ -164,6 +129,13 @@ void	ft_prepare_editor(t_doom *doom)
 			doom->editor.images[2].im_x[i] = (doom->map.sprites[i].coord.x * 10) - 50;
 			doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
 		}
+		i = -1;
+		printf("(int)doom->map.num_paint): %d\n", (int)doom->map.num_paint);
+		while (++i < (int)doom->map.num_paint)
+		{
+			doom->editor.images[3].im_x[i] = (doom->map.paint[i].v1.x * 10) - 50;
+			doom->editor.images[3].im_y[i] = (doom->map.paint[i].v1.y * 10) - 50;
+		}
 	}
 	doom->editor.fline.num_line1 = -1;
 	doom->editor.fline.num_line2 = -1;
@@ -175,7 +147,6 @@ void	ft_prepare_editor(t_doom *doom)
 
 int		ft_start_edit(t_doom *doom, int fd)
 {
-	p("\nIN FT_START_EDIT\n");
 	SDL_Event event;
 	while (doom->game.quit != 1)
 	{
@@ -225,7 +196,6 @@ void	rec_action(t_doom *doom, SDL_Event *event)
 		doom->editor.press.ind_action--;
 		if (doom->editor.press.ind_action == 4)
 			doom->editor.press.ind_action = 8;
-		
 	}
 	if (event->button.x >= WIN_WIDTH - 50)
 	{	
@@ -293,7 +263,7 @@ void	add_items(t_doom *doom, SDL_Event *event)
 		{
 			if (doom->editor.ind_img != 0)
 			{
-				if (is_in_sector(doom, event->button.x, event->button.y) == -1)
+				if (doom->editor.ind_img != 3 && is_in_sector(doom, event->button.x, event->button.y) == -1)
 				{
 						if (doom->editor.images[doom->editor.ind_img].exist != 0)
 							doom->editor.images[doom->editor.ind_img].exist--;
@@ -303,19 +273,42 @@ void	add_items(t_doom *doom, SDL_Event *event)
 				{
 					ft_null_items(doom, doom->editor.ind_img, EXIST + 1);
 					if (doom->editor.ind_img == 2)
-					{
-						printf("zapisalo  %d\n", doom->editor.images[doom->editor.ind_img].exist);
 						doom->map.sprites[doom->editor.images[doom->editor.ind_img].exist - 1].coord = (t_vector){event->button.x / 10, event->button.y / 10, 10};
-					}
 					if (doom->editor.ind_img == 1)
 					{
-						if (doom->editor.images[doom->editor.ind_img].exist == 1)
+						if (doom->editor.images[1].exist == 1)
 							if (doom->editor.ind_img == 1)
 							{
 								doom->player.coord.x = event->button.x / 10;
 								doom->player.coord.y = event->button.y / 10;
 							}
 						doom->editor.images[doom->editor.ind_img].exist = 1;
+					}
+					if (doom->editor.ind_img == 3)
+					{
+						lie_point(doom, -1, event->button.x, event->button.y);
+						if (doom->editor.fline.sec2 == -1 && doom->editor.fline.sec1 != -1)
+						{
+							doom->map.paint[doom->editor.images[3].exist - 1].sector_no = doom->editor.fline.sec1;
+							doom->map.num_paint = doom->editor.images[3].exist;
+							printf("EBANYTSA\n\n\n(int)doom->map.num_paint) %d\n", (int)doom->map.num_paint);
+							// doom->map.paint[doom->editor.images[3].exist - 1].v1.x = event->button.x / 10;
+							// doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 10;
+								doom->map.paint[doom->editor.images[3].exist - 1].v1.x = event->button.x / 10;
+								doom->map.paint[doom->editor.images[3].exist - 1].v1.y = event->button.y / 10;
+								doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 3;
+								doom->map.paint[doom->editor.images[3].exist - 1].v2.y = event->button.y / 10 + 3;
+						}
+						else
+						{
+							if (doom->editor.images[doom->editor.ind_img].exist != 0)
+								doom->editor.images[doom->editor.ind_img].exist--;
+							doom->editor.img_press = 1;
+						}
+						
+						// doom->editor.fline.num_line1 = i;
+						// doom->editor.fline.num_line2 = -1;
+						// doom->editor.fline.sec1 = k;
 					}
 					doom->editor.ind_img = 0;
 				}
@@ -348,7 +341,7 @@ void	add_items(t_doom *doom, SDL_Event *event)
 
 void	del_save_play(t_doom *doom, SDL_Event *event)
 {
-	if (event->button.x <= 65 && (doom->editor.save_del = 2)) // delete FIX
+	if (event->button.x <= 65 && (doom->editor.save_del = 2))
 		doom->game.quit = 1;
 	else if (event->button.x >= 65 && event->button.x <= 115)
 		doom->editor.save_del = 1;
@@ -356,45 +349,19 @@ void	del_save_play(t_doom *doom, SDL_Event *event)
 		doom->editor.save_del = 3;
 }
 
-void	change_floor_ceil(t_doom *doom, SDL_Event *event)
-{
-	if ((event->button.x > 850 && event->button.x < 1150) &&  (event->button.y > 230 && event->button.y < 530))
-	{
-		if (doom->editor.fl_or_ceil == FLOOR)
-			doom->editor.fl_or_ceil = CEIL;
-		else
-			doom->editor.fl_or_ceil = FLOOR;
-	}
-	if (is_in_sector(doom, event->button.x, event->button.y) != -1)
-		doom->player.sector = is_in_sector(doom, event->button.x, event->button.y);
-}
-
-void	ft_mouse_press_edit(t_doom *doom, SDL_Event *event)
-{
-	if ((event->button.y >= 130 && event->button.y <= 180) && (event->button.x >= 800 && event->button.x <= 1200))
-		rec_action(doom, event);
-	if ((event->button.y >= 750 && event->button.y <= 785) && (event->button.x >= 25 && event->button.x <= 140))
-		del_save_play(doom, event);
-	else if (doom->editor.press.ind_action == 5)
-		in_sector(doom, event);
-	if (doom->editor.press.ind_action == 6)
-		add_items(doom, event);
-	if (doom->editor.press.ind_action == 7)
-		make_portal(doom, event);
-	if (doom->editor.press.ind_action == 8)
-		change_floor_ceil(doom, event);
-}
-
 void	make_portal(t_doom *doom, SDL_Event *event)
 {
-	if ((event->button.x >= 850 && event->button.x <= 1170) && (event->button.y >= 420 && event->button.y <= 470))
+	if ((event->button.x >= 850 && event->button.x <= 1170)
+	&& (event->button.y >= 420 && event->button.y <= 470))
 	{
 		if (doom->editor.fline.sec1 != -1 && doom->editor.fline.sec2 != -1)
 		{
 			if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
 			{
-				doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] = doom->editor.fline.sec2;
-				doom->map.sectors[doom->editor.fline.sec2].neighbors[doom->editor.fline.num_line2] = doom->editor.fline.sec1;
+				doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1]
+				= doom->editor.fline.sec2;
+				doom->map.sectors[doom->editor.fline.sec2].neighbors[doom->editor.fline.num_line2]
+				= doom->editor.fline.sec1;
 				doom->editor.is_portal = 1;
 			}
 			else
@@ -407,7 +374,6 @@ void	make_portal(t_doom *doom, SDL_Event *event)
 	}
 	if (event->button.x < WIN_WIDTH - 400)
 		lie_point(doom, -1, event->button.x, event->button.y);
-	printf("\033[1;34m   sec1: %d     num_line1: %d     sec2: %d     num_line2: %d\033[0m\n\n", doom->editor.fline.sec1, doom->editor.fline.num_line1, doom->editor.fline.sec2, doom->editor.fline.num_line2);
 }
 
 void	lie_point(t_doom *doom, int k, int x, int y)
@@ -447,7 +413,15 @@ void	lie_point(t_doom *doom, int k, int x, int y)
 				doom->editor.fline.num_line2 = i;
 				doom->editor.fline.sec2 = k;
 			}
+			else if (more == 0)
+			{
+				doom->editor.fline.num_line1 = -1;
+				doom->editor.fline.num_line2 = -1;
+				doom->editor.fline.sec1 = -1;
+				doom->editor.fline.sec2 = -1;
+			}
+			
 		}
 	}
-
+	printf("\033[1;34m   num_line1: %d\n   num_line2: %d\n   sec1: %d\n   sec2: %d \033[0m\n\n", doom->editor.fline.num_line1, doom->editor.fline.num_line2, doom->editor.fline.sec1, doom->editor.fline.sec2);
 }

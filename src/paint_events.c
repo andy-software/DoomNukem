@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paint_events.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 12:09:40 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/31 12:09:41 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/06 20:46:07 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int			turn_light_event(t_doom *d, t_painting *paint)
 	{
 		d->map.sectors[paint->sector_no].light_lvl = 60;
 		paint->key_state = 0;
-	}
-	else
-	{
-		d->map.sectors[paint->sector_no].light_lvl = 20;
-		paint->key_state = 1;
-	}
+		}
+		else
+		{
+			d->map.sectors[paint->sector_no].light_lvl = 20;
+			paint->key_state = 1;
+		}
 	return (0);
 }
 
