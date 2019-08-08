@@ -93,33 +93,31 @@ void	draw_menu(t_doom *d, int opt, char **title, SDL_Color *col)
 	int			y;
 
 	i = -1;
-	// while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
-	// {
-		if (d->ev.type == SDL_MOUSEMOTION)
-			menu_mouse(d, opt, title, col);
-		else if (d->ev.type == SDL_MOUSEBUTTONUP)
+	if (d->ev.type == SDL_MOUSEMOTION)
+		menu_mouse(d, opt, title, col);
+	else if (d->ev.type == SDL_MOUSEBUTTONUP)
+	{
+		SDL_GetMouseState(&x, &y);
+		while (++i < opt)
 		{
-			SDL_GetMouseState(&x, &y);
-			while (++i < opt)
-			{
-				if (x >= d->menu.pos[i].x &&
-					x <= d->menu.pos[i].x + d->menu.m[i]->w &&
-					y >= d->menu.pos[i].y &&
-					y <= d->menu.pos[i].y + d->menu.m[i]->h)
+			if (x >= d->menu.pos[i].x &&
+				x <= d->menu.pos[i].x + d->menu.m[i]->w &&
+				y >= d->menu.pos[i].y &&
+				y <= d->menu.pos[i].y + d->menu.m[i]->h)
+				{
+					if (i == opt - 1)
+						exit(1);
+					else if (i == 0 && d->game.start == 1)
 					{
-						if (i == opt - 1)
-							exit(1);
-						else if (i == 0 && d->game.start == 1)
-						{
-							d->game.start = 0;
-							set_mouse(d);
-						}
+						d->game.start = 0;
+						set_mouse(d);
 					}
-			}
+				}
 		}
-		else if (d->ev.type == SDL_KEYDOWN && d->ev.key.keysym.sym == PAUSE)
-			while (++i <= opt)
-				SDL_FreeSurface(d->menu.m[i]);
+	}
+	else if (d->ev.type == SDL_KEYDOWN && d->ev.key.keysym.sym == PAUSE)
+		while (++i <= opt)
+			SDL_FreeSurface(d->menu.m[i]);
 	// }
 	i = -1;
 	while (++i <= opt)

@@ -98,7 +98,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
 	map.sectors[0].light_lvl = 0;
-	map.sectors[0].render_ceil = 1;
+	map.sectors[0].render_ceil = 0;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
@@ -274,7 +274,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].changes = 0;
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
-		map.sprites[i].event_num = 1;
+		map.sprites[i].event_num = 2;
 	}
 
 	player.coord.x = -5;
