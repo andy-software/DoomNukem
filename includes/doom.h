@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 14:46:39 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 19:39:30 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
 /* EDITOR */
 # define NB_BUTTONS 17
-# define NB_IMAGES 8
+# define NB_IMAGES 6
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
@@ -93,17 +93,42 @@
 # define CEIL 2
 # define WALL 3
 # define SPRITES 4
+# define PAINTINGS 5
 # define p(x) printf(x)
 # define MAX_NUM_SECTORS 20
 # define MAX_SECTORS 100
 # define MAX_VERT 100
+# define MAX_PAINTINGS 100
 
 # define BOTTOM 1 
 # define MIDDLE 2
 # define TOP 3
 
-# define NUM_TEXT 5
+# define FLOOR_A doom->map.sectors[doom->player.sector].floor_plane.a
+# define FLOOR_B doom->map.sectors[doom->player.sector].floor_plane.b
+# define FLOOR_H doom->map.sectors[doom->player.sector].floor_plane.h
+# define CEIL_A doom->map.sectors[doom->player.sector].ceil_plane.a
+# define CEIL_B doom->map.sectors[doom->player.sector].ceil_plane.b
+# define CEIL_H doom->map.sectors[doom->player.sector].ceil_plane.h
+
+# define SECTOR_PL doom->map.sectors[doom->player.sector]
+
+# define NUM_TEXT 14
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
+# define NUM_VERTEX doom->map.sectors[i].num_vert
+# define NUM_SECT doom->map.num_sect
+# define SECTOR doom->editor.sector
+# define IMG doom->editor.images
+# define SDL_SURF doom->editor.sdl.surface
+
+/** action **/
+# define NUM_ACT 5
+# define TURN_LIG 0
+# define LIFT_FL 1
+# define LIFT_CEIL 2
+# define FIRST_AID 3
+# define GET_AMMO 4
+# define WIN_PNT 5
 
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
@@ -426,7 +451,7 @@ struct	s_game
 	int				falling;
 	int				moving;
 	int				ducking;
-	int				flying; //new feature
+	int				flying;
 	int				quit;
 	int				pause;
 	int				hp_level;
@@ -639,7 +664,7 @@ struct	s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
-	SDL_Surface		*wall_tex[14];
+	SDL_Surface		*wall_tex[15];
 	SDL_Surface		*sky_box[2];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
@@ -693,9 +718,7 @@ struct	s_interface
 	int				tmp_y1;
 	int				tmp_x2;
 	int				tmp_y2;
-	t_vertex_int	arr_vertex_map_coor[9999];
-	t_vertex		arr_vertex_real_coor[9999];
-	t_sector		sectors[2000];
+	t_sector		sectors[100];
 	int				nbr_vertex;
 	int				nbr_sectors;
 	int				iterator_num_vertex;
@@ -748,24 +771,26 @@ struct	s_editor
 {
 	t_brezen		brezen;
 	t_interface		interface;
-	t_images		images[9999]; // consist of different images for editor
-	t_images		sector[9999];
+	t_images		images[18];
+	t_images		sector[9];
 	t_font			font;
-	int				ind_img; // number of image
-	int				img_press; // press on image
+	int				ind_img;
+	int				img_press;
 	int				is_drawing;
 	int				zoom;
 	int				but1_press;
 	int				is_sector;
-	int				ind_text; // started from 5
+	int				ind_text;
 	t_buttons		press;
 	int				save_del;
 	int				fl_or_ceil;
-	int				is_portal; // 0 no; 1 yes
+	int				is_portal;
 	t_fline			fline;
 	t_sdl			sdl;
-	int				nb_vert; // nb of current vertex
+	int				nb_vert;
 	int				which_wall;
+	int				fog_colors[9];
+	int				ind_fog;
 };
 /****/
 struct	s_sound
@@ -1024,10 +1049,14 @@ int				ft_create_window(t_doom *doom, char *name);
 int				ft_read_map_edit(t_doom *doom, int fd);
 int				ft_start_edit(t_doom *doom, int fd); // refresh
 int				ft_write_changes_to_file(t_doom *doom, int fd);
-int				write_changes_to_file(t_map map, int fd, t_player mplayer);
+void			ft_write_changes_to_file2(t_doom *doom, int fd, int i);
 void			ft_check_key(t_doom *doom, SDL_Event *event);
 void			ft_render_editor(t_doom *doom);
 void			ft_render_interface(t_doom *doom);
+void			ft_render_interface2(t_doom *doom, SDL_Rect bigger);
+void			ft_render_interface3(t_doom *doom, SDL_Rect bigger);
+void			ft_render_prev_butt(t_doom *doom, SDL_Rect bigger, int exist);
+void			ft_render_other_butt(t_doom *doom, int exist, int *it, SDL_Rect bigger);
 void			ft_draw_pixel(t_doom *doom, int x, int y, int color);
 void			ft_render_other(t_doom *doom);
 void			ft_mouse_move_edit(t_doom *doom, SDL_Event *event);
@@ -1037,24 +1066,39 @@ void			ft_draw_axis(t_doom *doom);
 void			ft_prepare_editor(t_doom *doom);
 int				ft_prepare_to_write(t_doom *doom);
 void			ft_prepare_read(t_doom *doom);
+void			ft_prepare_read2(t_doom *doom, int j);
 int				ft_specify_coor(int nbr);
 void			ft_refresh_photo(t_doom *doom, SDL_Event *event);
 void			ft_null_items(t_doom *doom, int i, int num);
 void			key_floor_ceil(t_doom *doom);
 void			key_ceil(t_doom *doom, const Uint8 *state);
 void			info_ceil_floor(t_doom *doom);
+void			info_action(t_doom *doom, int pain);
+void			info_f_c_w_s(t_doom *doom, int ind);
+void			info_f_c_w_s2(t_doom *doom);
 int				check_what_line_player_are_looking(t_doom *d);
 void			editor_player_events(t_doom *doom);
+void			editor_player_events2(t_doom *doom, const Uint8 *state);
+void			editor_events_down_up(t_doom *doom);
 void			editor_movement_keys(t_doom *d);
 void			key_texure_change(t_doom *doom, const Uint8 *state);
 void			key_editor_change(t_doom *doom, const Uint8 *state);
-
+void			add_items(t_doom *doom, SDL_Event *event);
+void			del_save_play(t_doom *doom, SDL_Event *event);
+void			change_floor_ceil(t_doom *doom, SDL_Event *event);
+void			rec_action(t_doom *doom, SDL_Event *event);
+void			editor_action(t_doom *doom, const Uint8 *state);
+void			editor_start_z(t_doom *doom, const Uint8 *state);
+void			editor_end_z(t_doom *doom, const Uint8 *state);
+void			editor_sp_width(t_doom *doom, const Uint8 *state);
+void			editor_sprites_texture(t_doom *doom, const Uint8 *state);
 
 void			editor_fc_texture(t_doom *doom, const Uint8 *state);
 void			editor_wall_texture(t_doom *doom, const Uint8 *state);
 void			editor_scale_x(t_doom *doom, const Uint8 *state);
 void			editor_scale_y(t_doom *doom, const Uint8 *state);
-void			info_f_c_w_s(t_doom *doom, int ind);
+void			lie_point(t_doom *doom, int k, int x, int y);
+void			in_sector(t_doom *doom, SDL_Event *event);
 /*  titles */
 void			ft_put_text(char *str, int nb, char *str1);
 void			ft_error(int nb);

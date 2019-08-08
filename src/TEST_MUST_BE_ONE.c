@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_neightbors_ceil.c                             :+:      :+:    :+:   */
+/*   TEST_MUST_BE_ONE.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/27 15:39:11 by apavlov           #+#    #+#             */
-/*   Updated: 2019/04/27 15:39:14 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/05 18:05:04 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,7 +406,7 @@ int		main(int argc, char **argv)
 
 	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
 	map.num_paint = 1;
-	map.paint[0].sector_no = 1;
+	map.paint[0].sector_no = 0;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;
 	map.paint[0].v1.z = 40;
@@ -425,7 +425,7 @@ int		main(int argc, char **argv)
 	map.paint[0].num_of_sect_to_lift = 0;
 	map.paint[0].click = 0;
 	map.editing = 0;
-	map.paint[0].num_sheet = 6;
+	map.paint[0].num_sheet = 3;
 
 	// map.paint[1].sector_no = 0;
 	// map.paint[1].v1.x = 0;

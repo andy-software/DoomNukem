@@ -9,7 +9,11 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/doom-nukem",
+<<<<<<< HEAD
             "args": ["edit", "40"],
+=======
+            "args": ["edit", "12345"],
+>>>>>>> e1eddad3f705ee48db2dc6c209032a15355a9a03
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
