@@ -24,8 +24,9 @@ static void	change_move(t_vertex *move, t_doom *d, int str, int dir)
 		move->x += d->player.anglesin * MOVE_SPEED * dir;
 		move->y -= d->player.anglecos * MOVE_SPEED * dir;
 	}
-	if(!d->game.flying)
-		move_sound(&d->sound);
+	if(d->game.ground)
+		if (!(Mix_Playing(-1)))
+			Mix_PlayChannel(-1, d->sound.steps, 0);
 }
 
 static void	movement_keys(t_doom *d)
@@ -111,12 +112,17 @@ void		player_events(t_doom *d)
 			{
 				if (d->game.ground || d->game.flying)
 				{
+					if (!(Mix_Playing(0)))
+						Mix_PlayChannel(0, d->sound.fly, 0);
 					if (d->game.velocity.z < MAX_SPEED_UPWARD)
 						d->game.velocity.z += 0.6;
 					else
-						d->game.velocity.z = MAX_SPEED_UPWARD;
-					
+						d->game.velocity.z = MAX_SPEED_UPWARD;	
 					d->game.falling = 1;
+					d->game.fuel -= 1;
+					if (d->game.fuel == 0)
+						d->game.flying = 0;
+					printf("%d\n", d->game.fuel);
 				}
 				if (!(Mix_Playing(1)) && !d->game.flying)
 					Mix_PlayChannel(1, d->sound.jump, 0);

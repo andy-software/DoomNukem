@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-void set_pos(t_doom *d, t_sprite_render *sr, int i)
+void set_pos(t_doom *d, t_sprite_render *sr)
 {
 	sr->time_from_loop_start += d->game.dt;
 	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
@@ -32,6 +32,24 @@ void set_pos(t_doom *d, t_sprite_render *sr, int i)
 // 	sr->prev_frame = sr->time_from_loop_start;
 // }
 
+SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, t_sprite_render *sr, int i, t_doom *d)
+{
+	int			pos;
+
+	if (sr->sprites[i].mob && sr->sprites[i].live)
+		pos = sr->sprites[i].text_no + sr->pos % sheet->w;		 
+	else if (sr->sprites[i].mob && !sr->sprites[i].live)
+	{
+		pos = sr->sprites[i].text_no + min((d->ui.prevTime - sr->sprites[i].death_time) / 150, (Uint32)(sheet->w - 1));
+		printf("%d\n", pos);
+		if (pos == sr->sprites[i].text_no + sheet->w - 1)
+			d->map.sprites[sr->sprites[i].spr_num].draw = 0;
+	}
+	else
+		pos = sr->sprites[i].text_no;
+	return (sheet->sprites[pos]);
+}
+
 void	render_sprites(t_doom *d)
 {
 	t_sprite_render	sr;
@@ -40,14 +58,15 @@ void	render_sprites(t_doom *d)
 	sr = d->sr;
 	sr.c_sprt = d->map.num_sprites;
 
+	set_pos(d, &d->sr);
 	sr.i = -1;
 	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0)
 	{
 		if (sr.sprites[sr.i].draw == 0)
 			continue ;
 		sheet = d->texture.sprt + sr.sprites[sr.i].num_sheet;
-		set_pos(d, &d->sr, sr.i);
-		sr.surr = sheet->sprites[sr.sprites[sr.i].text_no + (sr.sprites[sr.i].mob ? (sr.pos % (sheet->w)) : 0)];
+		
+		sr.surr = choose_texture_for_mob(sheet, &sr, sr.i, d);
 		sprite_vert_cal(&sr.t1, &sr.t2, sr.sprites + sr.i, d->player);
 
 		sr.v1 = sr.t1;
@@ -141,5 +160,4 @@ void	render_sprites(t_doom *d)
 				sr.tmp = d->render.queue;
 		}
 	}
-	
 }

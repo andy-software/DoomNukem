@@ -115,7 +115,7 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 			spr->coord.y = vertex.y;
 			wall_vector = (t_vertex){vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y};
 			len = v2dlenght(wall_vector.x, wall_vector.y);
-			norm_to_wall = (t_vertex){wall_vector.y / len, -wall_vector.x / len}; // does it need to be lenght 1?
+			norm_to_wall = (t_vertex){wall_vector.y / len, -wall_vector.x / len};
 			prev_cos = spr->anglecos;
 			prev_sin = spr->anglesin;
 			scalar_prod = 2 * (prev_cos * norm_to_wall.x + prev_sin * norm_to_wall.y);
@@ -163,8 +163,8 @@ void		chase(t_doom *d, t_sprite *spr)
 	else
 	{
 		if (comp_real(d->player.coord.z + d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == d->player.sector)
-			if (!(Mix_Playing(6)))
-				Mix_PlayChannel(6, d->sound.hurt, 0);
+			if (!(Mix_Playing(2)))
+				Mix_PlayChannel(2, d->sound.hurt, 0);
 			d->game.hp_level -= 1;
 	}
 }
@@ -216,8 +216,11 @@ void		move_mobs(t_doom *d)
 		}
 		else if (spr[m].mob && !spr[m].live)
 		{
-			printf("dead\n");
+			if (spr[m].death_time == 0)
+			{
+				spr[m].text_no = d->texture.sprt[spr[m].num_sheet].w * 4;
+				spr[m].death_time = d->ui.prevTime;
+			}
 		}
-		
 	}
 }

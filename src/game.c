@@ -50,6 +50,7 @@ int		init_game_params(t_doom *d)
 	d->game.dt = 0;
 	d->game.damage = 30;
 	d->ui.ammo_1 = 10;
+	d->game.fuel = 100;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);

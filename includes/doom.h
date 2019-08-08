@@ -30,7 +30,7 @@
 # define SKY_H 2048
 # define WALL_TEXT_W 256	
 # define WALL_TEXT_H 512
-# define SPEED_ROTATION 0.03f
+# define SPEED_ROTATION 0.01f
 # define SPEED_ROTATION_Z 0.05f
 # define MAX_Z_ANGLE 5
 # define MOVE_SPEED 0.2f
@@ -278,6 +278,7 @@ struct	s_sprite
 	int			num_sheet;
 
 	int			num_of_sound;
+	Uint32		death_time;
 };
 
 struct	s_painting
@@ -415,6 +416,7 @@ struct	s_game
 	int				mouse_x;
 	int				mouse_y;
 	int				fire;
+	int				fuel;
 	int				click;
 	t_vector		velocity;
 	float			acceleration;
@@ -770,14 +772,16 @@ struct	s_sound
 {
 	Mix_Music		*music[3];
 	Mix_Chunk		*steps;
-	Mix_Chunk		*hover;
-	Mix_Chunk		*jump;
-	Mix_Chunk		**gun1;
-	Mix_Chunk		*win;
-	Mix_Chunk		**gun2;
 	Mix_Chunk		*fly;
+	Mix_Chunk		*jump;
+	Mix_Chunk		*gun1[3];
+	Mix_Chunk		*win;
+	Mix_Chunk		*death;
+	Mix_Chunk		*mobdeath[2];
+	Mix_Chunk		*mobsound[2];
+	Mix_Chunk		*pickup[4];
+	Mix_Chunk		*gun2[3];
 	Mix_Chunk		*hurt;
-	Mix_Music		*mobs_reaction[4];
 	int				n;
 };
 
