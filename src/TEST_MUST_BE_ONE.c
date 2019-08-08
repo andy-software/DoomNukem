@@ -85,11 +85,11 @@ int		main(int argc, char **argv)
 	map.sectors[0].floor_plane.c = 1;
 	map.sectors[0].floor_plane.h = -20;
 
-	map.sectors[0].ceil_tex = rand() % 6;
-	map.sectors[0].floor_tex = 0;
+	map.sectors[0].ceil_tex = 10;
+	map.sectors[0].floor_tex = 10;
 
-	map.sectors[0].x_c_scale = 1;
-	map.sectors[0].y_c_scale = 1;
+	map.sectors[0].x_c_scale = 1/ 10.0;
+	map.sectors[0].y_c_scale = 1/ 10.0;
 	map.sectors[0].x_c_shift = 0;
 	map.sectors[0].y_c_shift = 0;
 
@@ -98,7 +98,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].x_f_shift = 0;
 	map.sectors[0].y_f_shift = 0;
 	map.sectors[0].light_lvl = 0;
-	map.sectors[0].render_ceil = 1;
+	map.sectors[0].render_ceil = 0;
 
 	map.sectors[0].neighbors = (char*)malloc(sizeof(char) * map.sectors->num_vert);
 	map.sectors[0].vert = (t_vertex*)malloc(sizeof(t_vertex) * map.sectors->num_vert);
@@ -115,12 +115,12 @@ int		main(int argc, char **argv)
 	map.sectors[0].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[0].num_vert);
 	for (int i = 0; i < map.sectors->num_vert; i++)
 	{
-		map.sectors[0].lines[0].wall = 1;
-		map.sectors[0].lines[1].wall = 2;
-		map.sectors[0].lines[2].wall = 5;
-		map.sectors[0].lines[3].wall = 4;
-		map.sectors[0].lines[i].top = 4;
-		map.sectors[0].lines[i].bot = 4;
+		map.sectors[0].lines[0].wall = 13;
+		map.sectors[0].lines[1].wall = 13;
+		map.sectors[0].lines[2].wall = 13;
+		map.sectors[0].lines[3].wall = 13;
+		map.sectors[0].lines[i].top = 10;
+		map.sectors[0].lines[i].bot = 10;
 
 		map.sectors[0].lines[i].x_w_scale = 5;
 		map.sectors[0].lines[i].x_b_scale = 1;
@@ -134,7 +134,7 @@ int		main(int argc, char **argv)
 		map.sectors[0].lines[i].y_b_scale = 10;
 		map.sectors[0].lines[i].y_t_scale = 10;
 
-		map.sectors[0].lines[i].y_w_shift = 0;
+		map.sectors[0].lines[i].y_w_shift = 450;
 		map.sectors[0].lines[i].y_b_shift = 0;
 		map.sectors[0].lines[i].y_t_shift = 0;
 	}
@@ -159,10 +159,10 @@ int		main(int argc, char **argv)
 	map.sectors[1].floor_plane.c = 1;
 	map.sectors[1].floor_plane.h = -20;
 	map.sectors[1].light_lvl = 70;
-	map.sectors[1].ceil_tex = 4;
-	map.sectors[1].floor_tex = 0;
-	map.sectors[1].x_c_scale = 1.0 / 10;
-	map.sectors[1].y_c_scale = 1.0 / 10;
+	map.sectors[1].ceil_tex = 12;
+	map.sectors[1].floor_tex = 13;
+	map.sectors[1].x_c_scale = 1;
+	map.sectors[1].y_c_scale = 1;
 	map.sectors[1].x_c_shift = (rand() % 100);
 	map.sectors[1].y_c_shift = (rand() % 100);
 
@@ -186,12 +186,12 @@ int		main(int argc, char **argv)
 	map.sectors[1].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[1].num_vert);
 	for (int i = 0; i < map.sectors[1].num_vert; i++)
 	{
-		map.sectors[1].lines[0].wall = 1;
-		map.sectors[1].lines[1].wall = 3;
-		map.sectors[1].lines[2].wall = 3;
-		map.sectors[1].lines[3].wall = 1;
-		map.sectors[1].lines[i].top = rand() % 6;
-		map.sectors[1].lines[i].bot = rand() % 6;
+		map.sectors[1].lines[0].wall = 10;
+		map.sectors[1].lines[1].wall = 10;
+		map.sectors[1].lines[2].wall = 10;
+		map.sectors[1].lines[3].wall = 10;
+		map.sectors[1].lines[i].top = 10;
+		map.sectors[1].lines[i].bot = 10;
 
 		map.sectors[1].lines[i].x_w_scale = 1;
 		map.sectors[1].lines[i].x_b_scale = 1;
@@ -249,6 +249,34 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 1;
+		map.sprites[i].death_time = 0;
+	}
+	for (int i = 0; i < 1; i++)
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 5;
+		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
+		map.sprites[i].sector_no = 1;
+		map.sprites[i].width = 4;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 14;
+		map.sprites[i].mob = 1;
+		map.sprites[i].angle = M_PI / 4;
+		map.sprites[i].anglecos = cos(map.sprites[i].angle);
+		map.sprites[i].anglesin = sin(map.sprites[i].angle);
+		map.sprites[i].own_moves = i;
+		map.sprites[i].move_speed = 0.03 * (i + 1);
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 1;
+		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = -3; //must be negative //could be same for all sprites
+		map.sprites[i].key = 1;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 2;
+		map.sprites[i].death_time = 0;
 	}
 
 	player.coord.x = -5;

@@ -81,8 +81,6 @@ void		player_events(t_doom *d)
 		movement_keys(d);
 		mouse_rotation(d);
 		editor_player_events(d);
-
-		
 	}
 	else
 	{

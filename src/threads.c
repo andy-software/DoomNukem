@@ -104,12 +104,7 @@ void	*start_the_work(void *data)
 		render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
 
 		if (r->sect->render_ceil)
-		{
-			if (r->ztop[t->win_x] > t->c_zb)
-				render_ceil_line(t->c_za, t->c_zb, r, t);
-			else
-				render_ceil_line(t->c_za, r->ztop[t->win_x], r, t);
-		}
+			render_ceil_line(t->c_za, min(t->c_zb, r->ztop[t->win_x]), r, t);
 
 		if(r->neighbor >= 0)
 		{

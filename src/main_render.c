@@ -114,7 +114,6 @@ void	render_sector(t_render *r, t_doom *d)
 				r->t2 = r->i2;
 		}
 
-		
 		r->xscale1 = HFOV / r->t1.y;
 		r->xscale2 = HFOV / r->t2.y;
 		r->zscale1 = VFOV / r->t1.y;
@@ -229,14 +228,14 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	if (y1 > y2)
 	{
 		t->d_betta = -1.0 / (t->nza - t->za); 
-		t->win_y = clamp(y2, 0, WIN_HEIGHT - 1);
-		t->wall_end = clamp(y1 + 1, 0, WIN_HEIGHT - 1);
+		t->win_y = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = clamp(y1 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	}
 	else
 	{
 		t->d_betta = 1.0 / (t->nza - t->za);
-		t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-		t->wall_end = clamp(y2 + 1, 0, WIN_HEIGHT - 1);
+		t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = clamp(y2 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	}
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
@@ -264,8 +263,8 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
-	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->nza - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
@@ -293,8 +292,8 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.bot];
-	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->zb - t->nzb);
 	t->betta = (t->win_y - t->nzb) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_b + t->betta * t->u1_b;
@@ -328,8 +327,8 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.wall];
-	t->win_y = clamp(y1, 0, WIN_HEIGHT - 1);
-	t->wall_end = clamp(y2, 0, WIN_HEIGHT - 1);
+	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = ((1 - t->betta) * t->u0 + t->betta * t->u1);

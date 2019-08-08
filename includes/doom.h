@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/08 16:53:10 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 19:39:30 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 2
+# define COUNT_OF_SPRITE_EVENTS 3
 # define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 2.5
 # define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
+# define ATTACK_RANGE 1.5
 
 # define HFOV (WIN_WIDTH / 2 * 1.455) //tg 55.5 make fov =~ 69 grad
 # define VFOV (0.2 * WIN_HEIGHT)
@@ -300,6 +301,7 @@ struct	s_sprite
 	int			num_sheet;
 
 	int			num_of_sound;
+	Uint32		death_time;
 };
 
 struct	s_painting
@@ -998,6 +1000,7 @@ int			first_aid_event(t_doom *d, t_painting *paint);
 int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
+int			radio_event(t_doom *d, t_sprite *sprite);
 int			win_pnt_event(t_doom *d, t_painting *paint);
 
 void		check_painting_intersection(t_doom *d);

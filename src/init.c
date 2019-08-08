@@ -46,6 +46,7 @@ int		init_moves(t_doom *d)
 	d->changes.pnt_events[5] = win_pnt_event;
 	d->changes.spr_events[0] = win_spr_event;
 	d->changes.spr_events[1] = talk_event;
+	d->changes.spr_events[2] = radio_event;
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/07 20:41:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 20:27:27 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,31 @@ void	editor_player_events2(t_doom *doom, const Uint8 *state)
 		fog_change(doom);
 }
 
+void	editor_painitngs_texture(t_doom *doom, const Uint8 *state)
+{
+	int		pain;
+
+	pain = check_what_sprite_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == PAINTINGS)
+	{
+		p("here 1\n");
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[pain].num_sheet != 0)
+		{p("here 2\n");
+		printf("%d\n", doom->map.sprites[pain].num_sheet);
+			doom->map.sprites[pain].num_sheet--;
+		}
+		else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sprites[pain].num_sheet != 6)
+		{
+			p("here 3\n");
+			doom->map.sprites[pain].num_sheet++;
+		}
+		// if (doom->map.sprites[pain].num_sheet == 6)
+		// 	doom->map.sprites[pain].num_sheet = 5;
+		// else
+		// 	doom->map.sprites[pain].num_sheet = 6;
+	}
+}
+
 void	editor_player_events(t_doom *doom)
 {
 	const Uint8	*state;
@@ -89,6 +114,7 @@ void	editor_player_events(t_doom *doom)
 				editor_wall_texture(doom, state);
 				editor_fc_texture(doom, state);
 				editor_sprites_texture(doom, state);
+				editor_painitngs_texture(doom, state);
 			}
 			else if (doom->ev.key.keysym.sym == SDLK_COMMA)
 				editor_scale_x(doom, state);

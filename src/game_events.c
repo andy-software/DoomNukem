@@ -138,6 +138,37 @@ static void	move(t_player *p, t_map	m, t_game *g)
 	g->dy = g->velocity.y;
 }
 
+void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
+{
+	int		i;
+	t_vector	t1;
+	t_vector	t2;
+	t_vertex	next_step;
+
+	i = -1;
+	while (++i < (int)d->map.num_sprites)
+		if (d->sr.sprites[i].coord.y < 0)
+			break ;
+	
+	next_step.x = g->dx;
+	next_step.y = g->dy;
+	rotate_vertex_xy(&next_step, p->anglesin, p->anglecos);
+
+	while (--i >= 0)
+	{
+		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);
+		if (CTL(0, 0, next_step.x, next_step.y, t1.x, t1.y, t2.x, t2.y) && \
+		(d->player.coord.z - g->eye_height > d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
+			&& d->player.coord.z - g->eye_height < d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
+				{
+					project_vector2d(&next_step.x, &next_step.y, t2.x - t1.x, t2.y - t1.y);
+					rotate_vertex_xy(&next_step, p->anglesin, -p->anglecos);
+					g->dx = next_step.x;
+					g->dy = next_step.y;
+				}
+	}
+}
+
 void		check_sprite_intersection(t_doom *d)
 {
 	int			i;
@@ -185,6 +216,7 @@ void		game_events(t_doom *d)
 	g = &d->game;
 	g->eye_height = g->ducking ? SIT_EYE_HEIGHT : EYE_HEIGHT;
 	g->ground = !g->falling;
+	sprite_sort_cal(d);
 	if (g->falling)
 		fall(&d->player, d->map, &d->game);
 	if (g->ground)
@@ -192,9 +224,9 @@ void		game_events(t_doom *d)
 	if (g->moving)
 	{
 		move(&d->player, d->map, &d->game);
+		check_mobs_while_movement(&d->player, d, &d->game);
 		move_player(d, g->dx, g->dy);
 	}
-	sprite_sort_cal(d);
 	if (d->game.fire == 1)
 	{
 		check_sprite_intersection(d);
@@ -207,6 +239,5 @@ void		game_events(t_doom *d)
 		d->game.click = 0;
 	}
 	check_keys_state(d);
-	if (!d->map.editing)
-		move_mobs(d);
+	move_mobs(d);
 }
