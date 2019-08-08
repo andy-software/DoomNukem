@@ -16,11 +16,7 @@ void set_pos(t_doom *d, t_sprite_render *sr, int i)
 {
 	sr->time_from_loop_start += d->game.dt;
 	if (sr->time_from_loop_start / 250 > sr->prev_frame / 250)
-		if (++sr->pos > d->texture.sprt[sr->sprites[i].num_sheet].w - 1)
-		{
-			sr->pos = 0;
-			sr->time_from_loop_start -= sr->prev_frame;
-		}
+		++sr->pos;
 	sr->prev_frame = sr->time_from_loop_start;
 }
 
@@ -39,15 +35,19 @@ void set_pos(t_doom *d, t_sprite_render *sr, int i)
 void	render_sprites(t_doom *d)
 {
 	t_sprite_render	sr;
+	t_sprite_sheet	*sheet;
 
 	sr = d->sr;
 	sr.c_sprt = d->map.num_sprites;
 
 	sr.i = -1;
-	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0 && sr.sprites[sr.i].draw)
+	while (++sr.i < sr.c_sprt && sr.sprites[sr.i].coord.y > 0)
 	{
+		if (sr.sprites[sr.i].draw == 0)
+			continue ;
+		sheet = d->texture.sprt + sr.sprites[sr.i].num_sheet;
 		set_pos(d, &d->sr, sr.i);
-		sr.surr = d->texture.sprt[sr.sprites[sr.i].num_sheet].sprites[sr.sprites[sr.i].text_no + sr.pos];
+		sr.surr = sheet->sprites[sr.sprites[sr.i].text_no + (sr.sprites[sr.i].mob ? (sr.pos % (sheet->w)) : 0)];
 		sprite_vert_cal(&sr.t1, &sr.t2, sr.sprites + sr.i, d->player);
 
 		sr.v1 = sr.t1;

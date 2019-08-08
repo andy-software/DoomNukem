@@ -212,10 +212,12 @@ void		move_mobs(t_doom *d)
 				chase(d, spr + m);
 			else if (spr[m].own_moves > -1)
 				d->changes.moves[spr[m].own_moves](d, spr + m);
-			
+			get_sprite_for_mob(spr + m, d);
 		}
 		else if (spr[m].mob && !spr[m].live)
-			d->game.kills++;
-		get_sprite_for_mob(spr + m, d);
+		{
+			printf("dead\n");
+		}
+		
 	}
 }

@@ -223,12 +223,12 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 2;
+	map.num_sprites = 5;
 	for (int i = 0; i < 1; i++)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
-		map.sprites[i].num_sheet = 8;
+		map.sprites[i].num_sheet = 6;
 		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
 		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 3;
@@ -249,13 +249,14 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 1;
+		map.sprites[i].hp = 20;
 	}
-	for (int i = 0; i < 1; i++)
+	for (int i = 1; i < 2; i++)
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 5;
-		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
+		map.sprites[i].coord = (t_vector){-4, -6, get_z(map.sectors[0].floor_plane, -4, -6)};
 		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 4;
 		map.sprites[i].start_z = 0;
@@ -275,6 +276,91 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 2;
+		map.sprites[i].hp = 60;
+	}
+	for (int i = 2; i < 3; i++)
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 1;
+		map.sprites[i].coord = (t_vector){-3, -3, get_z(map.sectors[0].floor_plane, -3, -3)};
+		map.sprites[i].sector_no = 1;
+		map.sprites[i].width = 1;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 4;
+		map.sprites[i].mob = 0;
+		map.sprites[i].angle = 0;
+		map.sprites[i].anglecos = 0;
+		map.sprites[i].anglesin = 0;
+		map.sprites[i].own_moves = 0;
+		map.sprites[i].move_speed = 0;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 0;
+		map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+		map.sprites[i].key = 0;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 0;
+		map.sprites[i].hp = 0;
+		map.sprites[i].pick = 1;
+	}
+	for (int i = 3; i < 4; i++)
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 2;
+		map.sprites[i].coord = (t_vector){-6, -6, get_z(map.sectors[0].floor_plane, -6, -6)};
+		map.sprites[i].sector_no = 1;
+		map.sprites[i].width = 1;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 2;
+		map.sprites[i].mob = 0;
+		map.sprites[i].angle = 0;
+		map.sprites[i].anglecos = 0;
+		map.sprites[i].anglesin = 0;
+		map.sprites[i].own_moves = 0;
+		map.sprites[i].move_speed = 0;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 0;
+		map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+		map.sprites[i].key = 0;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 0;
+		map.sprites[i].hp = 0;
+		map.sprites[i].pick = 1;
+	}
+	for (int i = 4; i < 5; i++)
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 1;
+		map.sprites[i].num_sheet = 3;
+		map.sprites[i].coord = (t_vector){-10, -10, get_z(map.sectors[0].floor_plane, -10, -10)};
+		map.sprites[i].sector_no = 1;
+		map.sprites[i].width = 0.5;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 1;
+		map.sprites[i].mob = 0;
+		map.sprites[i].angle = 0;
+		map.sprites[i].anglecos = 0;
+		map.sprites[i].anglesin = 0;
+		map.sprites[i].own_moves = 0;
+		map.sprites[i].move_speed = 0;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 0;
+		map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+		map.sprites[i].key = 0;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 0;
+		map.sprites[i].hp = 0;
+		map.sprites[i].pick = 1;
 	}
 
 	player.coord.x = -5;

@@ -157,10 +157,19 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 	while (--i >= 0)
 	{
 		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);
+		if (d->sr.sprites[i].draw == 0)
+			continue;
 		if (CTL(0, 0, next_step.x, next_step.y, t1.x, t1.y, t2.x, t2.y) && \
-		(d->player.coord.z - g->eye_height > d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
-			&& d->player.coord.z - g->eye_height < d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
+		(d->player.coord.z - g->eye_height >= d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
+			&& d->player.coord.z - g->eye_height <= d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
 				{
+					if (d->sr.sprites[i].num_sheet == 1 && d->sr.sprites[i].pick == 1)
+					{
+						d->game.hp_level += 30;
+						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
+						if (d->game.hp_level > 100)
+							d->game.hp_level = 100;
+					}
 					project_vector2d(&next_step.x, &next_step.y, t2.x - t1.x, t2.y - t1.y);
 					rotate_vertex_xy(&next_step, p->anglesin, -p->anglecos);
 					g->dx = next_step.x;
@@ -189,7 +198,9 @@ void		check_sprite_intersection(t_doom *d)
 		{
 			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
 			{
-				d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
+				d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
+				if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
+					d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
 				break ;
 			}
 		}

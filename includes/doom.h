@@ -255,6 +255,7 @@ struct	s_sprite
 	int			sector_no;
 	int			mob;
 	int			draw;
+	int			pick;
 	int			live; //only if mob affected
 	float		anglesin;
 	float		anglecos;
@@ -272,6 +273,7 @@ struct	s_sprite
 	int			key_state;
 	int			changes;
 	int			event_num;
+	int			hp;
 	float		speed;
 	int			num_sheet;
 
