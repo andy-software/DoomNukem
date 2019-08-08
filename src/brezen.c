@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/28 16:06:26 by arudyi            #+#    #+#             */
-/*   Updated: 2019/08/06 21:33:24 by myuliia          ###   ########.fr       */
+/*   Created: 2019/08/08 13:54:29 by myuliia           #+#    #+#             */
+/*   Updated: 2019/08/08 13:54:33 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,28 @@ void	ft_line(t_doom *doom)
 		ft_print_line_low(doom);
 	else
 		ft_print_line_high(doom);
+}
+
+void	ft_draw_axis(t_doom *doom)
+{
+	doom->editor.interface.tmp_x1 = doom->editor.brezen.x1;
+	doom->editor.interface.tmp_y1 = doom->editor.brezen.y1;
+	doom->editor.interface.tmp_x2 = doom->editor.brezen.x2;
+	doom->editor.interface.tmp_y2 = doom->editor.brezen.y2;
+	doom->editor.brezen.x1 = 400;
+	doom->editor.brezen.y1 = 0;
+	doom->editor.brezen.x2 = 400;
+	doom->editor.brezen.y2 = 798;
+	doom->editor.brezen.color = 0x333333;
+	ft_line(doom);
+	doom->editor.brezen.x1 = 0;
+	doom->editor.brezen.y1 = WIN_HEIGHT / 2;
+	doom->editor.brezen.x2 = WIN_WIDTH - 400;
+	doom->editor.brezen.y2 = WIN_HEIGHT / 2;
+	doom->editor.brezen.color = 0x333333;
+	ft_line(doom);
+	doom->editor.brezen.x1 = doom->editor.interface.tmp_x1;
+	doom->editor.brezen.y1 = doom->editor.interface.tmp_y1;
+	doom->editor.brezen.x2 = doom->editor.interface.tmp_x2;
+	doom->editor.brezen.y2 = doom->editor.interface.tmp_y2;
 }

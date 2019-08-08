@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 17:56:30 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/01 16:13:01 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 17:22:13 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int		game_loop(t_doom doom)
 	if (!init_game_params(&doom))
 		return (0);
 	init_moves(&doom);
+	doom.map.editing = 0;
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prevTime = SDL_GetTicks();

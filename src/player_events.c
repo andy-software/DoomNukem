@@ -81,18 +81,8 @@ void		player_events(t_doom *d)
 		movement_keys(d);
 		mouse_rotation(d);
 		editor_player_events(d);
- 		/*********   FIX EDITOR (MAKE JUMP POSIBLE) ***************/
-		if (d->ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
-		{
-			if (d->game.ground || d->game.flying)
-			{
-				if (d->game.velocity.z < MAX_SPEED_UPWARD)
-					d->game.velocity.z += 0.6;
-				else
-					d->game.velocity.z = MAX_SPEED_UPWARD;					
-				d->game.falling = 1;
-			}
-		}
+
+		
 	}
 	else
 	{

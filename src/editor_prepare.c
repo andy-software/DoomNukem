@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/06 19:51:29 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 15:49:51 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,14 @@ void	ft_prepare_read(t_doom *doom)
 	while (++j < MAX_PAINTINGS)
 	{
 		doom->map.paint[j].sector_no = 0; //
-		doom->map.paint[j].num_sheet = 6;
-		doom->map.paint[j].v1.z = 80;
-		doom->map.paint[j].v2.z = 10;
+		doom->map.paint[j].num_sheet = 4;
+		doom->map.paint[j].v1.z = 40;
+		doom->map.paint[j].v2.z = 20;
 		doom->map.paint[j].text_no = 0;
 		doom->map.paint[j].low_point = -10;
 		doom->map.paint[j].high_point = -40;
 		doom->map.paint[j].speed = 5;
 		doom->map.paint[j].num_of_sect_to_lift = 0;
 	}
+	doom->map.fog = 0;
 }

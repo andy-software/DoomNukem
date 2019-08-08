@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/06 21:39:00 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/08 18:52:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_prepare_editor(doom);
 	ft_start_edit(doom, fd);
 	if (doom->editor.save_del == 2)
-		remove(name);
+		remove(name_m);
 	free(name_m);
 	close(fd);
 	return (0);
@@ -102,7 +102,7 @@ void	ft_prepare_editor(t_doom *doom)
 	doom->editor.save_del = 0;
 	doom->editor.fl_or_ceil = 1;
 	if (doom->editor.save_del == 2)
-		doom->editor.save_del = 0;	
+		doom->editor.save_del = 0;
 	doom->editor.interface.is_drawing_interface = 0;
 	doom->editor.interface.start_new_sector = 0;
 	while (++i < NB_BUTTONS)
@@ -113,8 +113,17 @@ void	ft_prepare_editor(t_doom *doom)
 		ft_null_items(doom, i, 1);
 		doom->editor.images[i].exist = 0;
 	}
-	doom->map.fog = 0;
-	doom->map.fog_color = 0x00FF00;
+	/***** fog ****/
+	doom->editor.ind_fog = 0; 
+	doom->editor.fog_colors[0] = 0x00FF00;
+	doom->editor.fog_colors[1] = 0xFF0000;
+	doom->editor.fog_colors[2] = 0x0000FF;
+	doom->editor.fog_colors[3] = 0x00FFFF;
+	doom->editor.fog_colors[4] = 0xFFFFFF;
+	doom->editor.fog_colors[5] = 0xAAB200;
+	doom->editor.fog_colors[6] = 0x45361E;
+	doom->editor.fog_colors[7] = 0X303B2F;
+	doom->editor.fog_colors[8] = 0;
 	/****   To make objects visible on map (player, sprite..)  *****/
 	if (doom->player.coord.x && doom->player.coord.y)
 	{
@@ -130,12 +139,20 @@ void	ft_prepare_editor(t_doom *doom)
 			doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
 		}
 		i = -1;
-		printf("(int)doom->map.num_paint): %d\n", (int)doom->map.num_paint);
+		doom->editor.images[3].exist = doom->map.num_paint;
+		ft_null_items(doom, 3, doom->map.num_paint);
 		while (++i < (int)doom->map.num_paint)
 		{
 			doom->editor.images[3].im_x[i] = (doom->map.paint[i].v1.x * 10) - 50;
 			doom->editor.images[3].im_y[i] = (doom->map.paint[i].v1.y * 10) - 50;
 		}
+		// doom->editor.images[4].exist = doom->map.num_;
+		// ft_null_items(doom, 4, doom->map.num_);
+		// while (++i < (int)doom->map.num_)
+		// {
+		// 	doom->editor.images[4].im_x[i] = (doom->map.paint[i].v1.x * 10) - 50;
+		// 	doom->editor.images[4].im_y[i] = (doom->map.paint[i].v1.y * 10) - 50;
+		// }
 	}
 	doom->editor.fline.num_line1 = -1;
 	doom->editor.fline.num_line2 = -1;
@@ -289,15 +306,57 @@ void	add_items(t_doom *doom, SDL_Event *event)
 						lie_point(doom, -1, event->button.x, event->button.y);
 						if (doom->editor.fline.sec2 == -1 && doom->editor.fline.sec1 != -1)
 						{
+							t_painting	*p = &doom->map.paint[doom->editor.images[3].exist - 1];
+							t_vertex	line_param;
+							const float 		width = 5;
+							
+							t_vertex dot_1 = doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1];
+							t_vertex dot_2;
+							if (doom->editor.fline.num_line1 + 1 != (int)doom->map.sectors[doom->editor.fline.sec1].num_vert)
+								dot_2 = doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1 + 1];
+							else
+								dot_2 = doom->map.sectors[doom->editor.fline.sec1].vert[0];
+							
+							line_param = get_line_param(dot_1.x, dot_1.y, dot_2.x, dot_2.y);
+							if (!comp_real(dot_1.x, dot_2.x, 0.0001))
+							{
+								if (dot_1.x < dot_2.x)
+								{
+									p->v1.x = event->button.x / 10 - width / (2 * sqrt(1 + line_param.x * line_param.x));
+									p->v2.x = event->button.x / 10 + width / (2 * sqrt(1 + line_param.x * line_param.x));
+									p->v1.y = p->v1.x * line_param.x + line_param.y;
+									p->v2.y = p->v2.x * line_param.x + line_param.y;
+								}
+								else
+								{
+									p->v1.x = event->button.x / 10 + width / (2 * sqrt(1 + line_param.x * line_param.x));
+									p->v2.x = event->button.x / 10 - width / (2 * sqrt(1 + line_param.x * line_param.x));
+									p->v1.y = p->v1.x * line_param.x + line_param.y;
+									p->v2.y = p->v2.x * line_param.x + line_param.y;
+								}
+							}
+							else
+							{
+								p->v1.x = event->button.x / 10;
+								p->v2.x = event->button.x / 10;
+								if (dot_1.y < dot_2.y)
+								{
+									p->v1.y = event->button.y / 10 - width;
+									p->v2.y = event->button.y / 10 + width;
+								}
+								else
+								{
+									p->v1.y = event->button.y / 10 + width;
+									p->v2.y = event->button.y / 10 - width;
+								}
+							}
 							doom->map.paint[doom->editor.images[3].exist - 1].sector_no = doom->editor.fline.sec1;
 							doom->map.num_paint = doom->editor.images[3].exist;
-							printf("EBANYTSA\n\n\n(int)doom->map.num_paint) %d\n", (int)doom->map.num_paint);
+							printf("doom->editor.images[3].exist: %d\n", doom->editor.images[3].exist);
 							// doom->map.paint[doom->editor.images[3].exist - 1].v1.x = event->button.x / 10;
-							// doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 10;
-								doom->map.paint[doom->editor.images[3].exist - 1].v1.x = event->button.x / 10;
-								doom->map.paint[doom->editor.images[3].exist - 1].v1.y = event->button.y / 10;
-								doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 3;
-								doom->map.paint[doom->editor.images[3].exist - 1].v2.y = event->button.y / 10 + 3;
+							// doom->map.paint[doom->editor.images[3].exist - 1].v1.y = event->button.y / 10;
+							// doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 3;
+							// doom->map.paint[doom->editor.images[3].exist - 1].v2.y = event->button.y / 10 + 3;
 						}
 						else
 						{
@@ -351,8 +410,8 @@ void	del_save_play(t_doom *doom, SDL_Event *event)
 
 void	make_portal(t_doom *doom, SDL_Event *event)
 {
-	if ((event->button.x >= 850 && event->button.x <= 1170)
-	&& (event->button.y >= 420 && event->button.y <= 470))
+	if ((event->button.x >= 840 && event->button.x <= 1160)
+	&& (event->button.y >= 630 && event->button.y <= 680))
 	{
 		if (doom->editor.fline.sec1 != -1 && doom->editor.fline.sec2 != -1)
 		{
@@ -420,8 +479,29 @@ void	lie_point(t_doom *doom, int k, int x, int y)
 				doom->editor.fline.sec1 = -1;
 				doom->editor.fline.sec2 = -1;
 			}
-			
 		}
 	}
 	printf("\033[1;34m   num_line1: %d\n   num_line2: %d\n   sec1: %d\n   sec2: %d \033[0m\n\n", doom->editor.fline.num_line1, doom->editor.fline.num_line2, doom->editor.fline.sec1, doom->editor.fline.sec2);
 }
+
+    //  {
+    //   "name": "(lldb) Launch",
+    //   "type": "cppdbg",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/doom-nukem",
+    //   "args": ["${workspaceFolder}edit"],
+    //     // "args": [
+    //     //     "edit",
+    //     //     "${workspaceFolder}50000"
+    //     // ],
+    //   "stopAtEntry": false,
+    //   "cwd": "${workspaceFolder}",
+    //   "environment": [
+    //       {
+    //           "name" : "DYLD",
+    //           "value": "${workspaceFolder}frameworks/"
+    //       }
+    //   ],
+    //   "externalConsole": false,
+    //   "MIMode": "lldb"
+    //  },
