@@ -249,6 +249,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 1;
+		map.sprites[i].death_time = 0;
 	}
 	for (int i = 0; i < 1; i++)
 	{
@@ -275,6 +276,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 2;
+		map.sprites[i].death_time = 0;
 	}
 
 	player.coord.x = -5;

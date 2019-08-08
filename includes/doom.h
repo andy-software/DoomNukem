@@ -276,6 +276,7 @@ struct	s_sprite
 	int			num_sheet;
 
 	int			num_of_sound;
+	Uint32		death_time;
 };
 
 struct	s_painting

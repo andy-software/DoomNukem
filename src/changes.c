@@ -115,7 +115,7 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 			spr->coord.y = vertex.y;
 			wall_vector = (t_vertex){vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y};
 			len = v2dlenght(wall_vector.x, wall_vector.y);
-			norm_to_wall = (t_vertex){wall_vector.y / len, -wall_vector.x / len}; // does it need to be lenght 1?
+			norm_to_wall = (t_vertex){wall_vector.y / len, -wall_vector.x / len};
 			prev_cos = spr->anglecos;
 			prev_sin = spr->anglesin;
 			scalar_prod = 2 * (prev_cos * norm_to_wall.x + prev_sin * norm_to_wall.y);
@@ -212,10 +212,15 @@ void		move_mobs(t_doom *d)
 				chase(d, spr + m);
 			else if (spr[m].own_moves > -1)
 				d->changes.moves[spr[m].own_moves](d, spr + m);
-			
+			get_sprite_for_mob(spr + m, d);
 		}
 		else if (spr[m].mob && !spr[m].live)
-			d->game.kills++;
-		get_sprite_for_mob(spr + m, d);
+		{
+			if (spr[m].death_time == 0)
+			{
+				spr[m].text_no = d->texture.sprt[spr->num_sheet].w * 4;
+				spr[m].death_time = d->ui.prevTime;
+			}
+		}
 	}
 }
