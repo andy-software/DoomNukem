@@ -163,12 +163,19 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 		(d->player.coord.z - g->eye_height >= d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
 			&& d->player.coord.z - g->eye_height <= d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
 				{
-					if (d->sr.sprites[i].num_sheet == 1 && d->sr.sprites[i].pick == 1)
+					if (d->sr.sprites[i].num_sheet == 1 && d->game.hp_level < 100 && d->sr.sprites[i].pick == 1)
 					{
 						d->game.hp_level += 30;
 						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
 						if (d->game.hp_level > 100)
 							d->game.hp_level = 100;
+					}
+					else if (d->sr.sprites[i].num_sheet == 2 && d->ui.ammo_1 < 60 && d->sr.sprites[i].pick == 1 )
+					{
+						d->ui.ammo_1 += 15;
+						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
+						if (d->ui.ammo_1 > 60)
+							d->ui.ammo_1 = 60;
 					}
 					project_vector2d(&next_step.x, &next_step.y, t2.x - t1.x, t2.y - t1.y);
 					rotate_vertex_xy(&next_step, p->anglesin, -p->anglecos);
