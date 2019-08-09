@@ -32,12 +32,6 @@ Mix_Chunk	*load_sound(char *path)
 	return (load);
 }
 
-void	move_sound(t_sound *sound)
-{
-	if (!(Mix_Playing(-1)))
-		Mix_PlayChannel(-1, sound->steps, 0);
-}
-
 void		switch_music(t_sound *sound, SDL_Event ev)
 {
 	if (ev.type == SDL_KEYDOWN)
@@ -76,24 +70,25 @@ void		play_music(t_sound *sound, int n)
 void	load_sounds(t_sound *sound)
 {
     sound->n = 0;
-    if (!(sound->gun2 = ft_memalloc(sizeof(Mix_Chunk*) * 3)))
-		error_message("\033[22;31mERROR: failed to malloc textures");
-	if (!(sound->gun1 = ft_memalloc(sizeof(Mix_Chunk*) * 3)))
-		error_message("\033[22;31mERROR: failed to malloc textures");
-	sound->win = load_sound("./materials/sounds/win.wav"); // 5
-    sound->steps = load_sound("./materials/sounds/step.wav"); // -1chanell
+	sound->win = load_sound("./materials/sounds/win.wav"); // 2
+    sound->steps = load_sound("./materials/sounds/step.wav"); // -1
 	sound->jump = load_sound("./materials/sounds/jump.wav"); // 1 chanel
-	sound->hover = load_sound("./materials/sounds/hover.wav"); // 1
-	sound->hurt = load_sound("./materials/sounds/hurt.wav"); // 6
-    sound->gun1[0] = load_sound("./materials/sounds/gun1.wav"); // 2
+	sound->fly = load_sound("./materials/sounds/fly.wav"); // 1
+	sound->hurt = load_sound("./materials/sounds/hurt.wav"); // 2
+	sound->death = load_sound("./materials/sounds/death.wav"); // 2
+    sound->gun1[0] = load_sound("./materials/sounds/gun1.wav"); // 3
 	sound->gun1[1] = load_sound("./materials/sounds/gun1_short.wav"); // 3
-	sound->gun1[2] = load_sound("./materials/sounds/gun1_empty.wav"); // 4
-    sound->gun2[0] = load_sound("./materials/sounds/saw_start.wav"); // 2
+	sound->gun1[2] = load_sound("./materials/sounds/gun1_empty.wav"); // 3
+    sound->gun2[0] = load_sound("./materials/sounds/saw_start.wav"); // 3
     sound->gun2[1] = load_sound("./materials/sounds/saw_idle.wav"); // 3 
-    sound->gun2[2] = load_sound("./materials/sounds/saw_atac.wav"); // 4 
+    sound->gun2[2] = load_sound("./materials/sounds/saw_atac.wav"); // 3
+	sound->mobdeath[0] = load_sound("./materials/sounds/enemy1_d.wav"); // 4
+	sound->mobdeath[1] = load_sound("./materials/sounds/enemy2_d.wav"); // 4
+	sound->mobsound[0] = load_sound("./materials/sounds/enemy1_s.wav"); // 4   
+	sound->mobsound[1] = load_sound("./materials/sounds/enemy2_s.wav"); // 4   
+	sound->pickup[0] = load_sound("./materials/sounds/heal.wav"); // 5
+	sound->pickup[1] = load_sound("./materials/sounds/ammo.wav"); // 5
+	sound->pickup[2] = load_sound("./materials/sounds/key.wav"); // 5  
+	sound->pickup[3] = load_sound("./materials/sounds/pick.wav"); // 5   
     sound->music[0] = load_music("./materials/sounds/classic.mp3");
-	sound->mobs_reaction[0] = load_music("./materials/sounds/phrases/groot.mp3");
-	sound->mobs_reaction[1] = load_music("./materials/sounds/phrases/groot.mp3");
-	sound->mobs_reaction[2] = load_music("./materials/sounds/phrases/groot.mp3");
-	sound->mobs_reaction[3] = load_music("./materials/sounds/phrases/groot.mp3");
 }

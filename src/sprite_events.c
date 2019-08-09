@@ -53,7 +53,7 @@ int			radio_event(t_doom *d, t_sprite *sprite)
 int			talk_event(t_doom *d, t_sprite *sprite)
 {
 	if (sprite->num_of_sound > -1)
-		play_phrase(d->sound.mobs_reaction[sprite->num_of_sound], 10); // sound of speech
+		play_phrase(d->sound.mobsound[sprite->num_of_sound], 10); // sound of speech
 	return (0);
 }
 
