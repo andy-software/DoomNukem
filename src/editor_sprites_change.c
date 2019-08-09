@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:06:54 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 13:13:40 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:06:15 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 	sp = check_what_sprite_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 	{
-		// if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].num_sheet != 0)
-		// 	doom->map.sprites[sp].num_sheet--;
-		// else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].num_sheet != 6)
-		// 	doom->map.sprites[sp].num_sheet++;
-		if (doom->map.sprites[sp].num_sheet == 6)
-			doom->map.sprites[sp].num_sheet = 5;
-		else
-			doom->map.sprites[sp].num_sheet = 6;
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].num_sheet != 0)
+			doom->map.sprites[sp].num_sheet--;
+		else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].num_sheet != 6)
+			doom->map.sprites[sp].num_sheet++;
+		// if (doom->map.sprites[sp].num_sheet == 6)
+		// 	doom->map.sprites[sp].num_sheet = 5;
+		// else
+		// 	doom->map.sprites[sp].num_sheet = 6;
 	}
 }
 

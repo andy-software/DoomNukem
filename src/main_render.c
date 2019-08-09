@@ -344,7 +344,7 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
 		if (r->map->fog)
 			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
-		r->pix[t->win_y * WIN_WIDTH + t->win_x] = ~t->color;
+		r->pix[t->win_y * WIN_WIDTH + t->win_x] = t->color;
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -409,7 +409,7 @@ void	render_ceil_line(int start, int end, t_render *r, t_thread *t)
 			cc.color = r->pix[cc.screen_y * WIN_WIDTH + t->win_x];
 		if (r->map->fog)
 			cc.color =  get_fog_color(cc.color, r->map->fog_color, cc.y);
-		r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = ~cc.color;
+		r->pix[cc.screen_y * WIN_WIDTH + t->win_x] = cc.color;
 		cc.screen_y--;
 	}
 }
@@ -441,7 +441,7 @@ void	render_floor_line(int start, int end, t_render *r, t_thread *t)
 			fc.color = r->pix[fc.screen_y * WIN_WIDTH + t->win_x];
 		if (r->map->fog)
 			fc.color = get_fog_color(fc.color, r->map->fog_color, fc.y);
-		r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = ~fc.color;	
+		r->pix[fc.screen_y * WIN_WIDTH + t->win_x] = fc.color;	
 		fc.screen_y++;
 	}
 }
