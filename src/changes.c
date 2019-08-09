@@ -160,7 +160,7 @@ void		chase(t_doom *d, t_sprite *spr)
 		move_sprites(d, spr->speed_x, spr->speed_y, spr);
 		spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	}
-	else
+	else if (comp_real(d->player.coord.z - d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == d->player.sector)
 	{
 		if (!(Mix_Playing(2)))
 			Mix_PlayChannel(2, d->sound.hurt, 0);
