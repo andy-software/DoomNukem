@@ -29,6 +29,7 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 
 	write(fd, &map.fog, sizeof(int));
 	write(fd, &map.fog_color, sizeof(Uint32));
+	write(fd, &map.inverse_colors, sizeof(int));
 
 	write(fd, &map.num_sect, sizeof(Uint32));
 
@@ -373,7 +374,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].num_sheet = 7;
 		map.sprites[i].coord = (t_vector){-5, -5, get_z(map.sectors[0].floor_plane, -5, -5)};
 		map.sprites[i].sector_no = 1;
-		map.sprites[i].width = 2;
+		map.sprites[i].width = 1;
 		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 5;
 		map.sprites[i].mob = 0;
@@ -427,6 +428,8 @@ int		main(int argc, char **argv)
 	map.editing = 0;
 	map.paint[0].num_sheet = 3;
 
+
+	map.inverse_colors = 0;
 	// map.paint[1].sector_no = 0;
 	// map.paint[1].v1.x = 0;
 	// map.paint[1].v1.y = -3.5;

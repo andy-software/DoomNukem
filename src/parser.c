@@ -61,6 +61,7 @@ int			read_file(t_doom *doom, char *file_name)
 
 	read(fd, &map->fog, sizeof(int));
 	read(fd, &map->fog_color, sizeof(Uint32));
+	read(fd, &map->inverse_colors, sizeof(int));
 
 	read(fd, &map->num_sect, sizeof(Uint32));
 

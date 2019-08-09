@@ -426,6 +426,7 @@ struct	s_map
 	int				fog;
 	Uint32			fog_color;
 	int				editing;
+	int				inverse_colors;
 };
 
 struct	s_sdl

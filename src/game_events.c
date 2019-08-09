@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/06 18:53:26 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 15:33:23 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,5 +271,6 @@ void		game_events(t_doom *d)
 		d->game.click = 0;
 	}
 	check_keys_state(d);
-	move_mobs(d);
+	if (!d->map.editing)
+		move_mobs(d);
 }
