@@ -85,11 +85,11 @@ void		player_events(t_doom *d)
 	}
 	else
 	{
-	if (!d->game.pause)
-	{
+		if (!d->game.pause)
+		{
 		movement_keys(d);
 		mouse_rotation(d);
-	}
+		}
 	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 	{
 		if (d->ev.type == SDL_KEYDOWN)
