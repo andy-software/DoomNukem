@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 13:51:28 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/08 17:21:53 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 17:12:50 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		editor_mod(t_doom *doom, char *file_name)
 {
-	ft_map_editor(&doom, file_name);
+	ft_map_editor(doom, file_name);
 	return (0);
 }
 

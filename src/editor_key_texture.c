@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 13:19:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:59:46 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	editor_wall_texture(t_doom *doom, const Uint8 *state)
 	if (doom->editor.fl_or_ceil == WALL)
 	{
 		doom->editor.nb_vert = check_what_line_player_are_looking(doom);
-		p("here\n");
 		if (doom->editor.which_wall == MIDDLE && doom->editor.nb_vert != -1)
 		{
 			if ((state[SDL_SCANCODE_TAB])

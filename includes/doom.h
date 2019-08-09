@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/09 14:12:14 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 17:26:23 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -874,6 +874,7 @@ struct	s_changes
 	bots_move		moves[COUNT_OF_MOVES];
 	spr_event_type	spr_events[COUNT_OF_SPRITE_EVENTS];
 	pnt_event_type	pnt_events[COUNT_OF_PAINT_EVENTS];
+	int				fog_colors[9];
 };
 
 struct	s_doom

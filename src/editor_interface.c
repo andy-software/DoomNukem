@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/07 20:33:58 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:42:29 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void	ft_render_interface(t_doom *doom)
 		NULL, SDL_SURF, &bigger);
 	if (doom->game.pause == 1 && i < 1)
 	{
-		SDL_Rect bigger = (SDL_Rect){0, 0, 0, 0};
+		bigger = (SDL_Rect){0, 0, 0, 0};
 		SDL_BlitSurface(SECTOR[5].image, NULL, doom->sdl.surface, &bigger);
 		i++;
 	}

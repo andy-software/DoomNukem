@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:33:50 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/07 20:32:17 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:54:16 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	ft_render_previous2(t_doom *doom)
 	int		it;
 
 	it = 0;
-	if (doom->editor.is_drawing == 0)
-		doom->map.sectors[doom->map.num_sect].num_vert = 0;
 	while (++it < NUM_VERT)
 	{
 		doom->editor.brezen.x1 =
