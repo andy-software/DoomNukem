@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 13:56:52 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:19:33 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,5 @@ void	ft_prepare_read(t_doom *doom)
 	doom->map.fog = 0;
 	doom->player.coord.x = 0;
 	doom->player.coord.y = 0;
+	doom->map.inverse_colors = 1;
 }

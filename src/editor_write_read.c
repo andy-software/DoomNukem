@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:17:49 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/08 16:48:11 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 16:17:20 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int		ft_read_map_edit(t_doom *doom, int fd)
 	read(fd, &doom->map.editing, sizeof(int));
 	read(fd, &doom->map.fog, sizeof(int));
 	read(fd, &doom->map.fog_color, sizeof(Uint32));
+	read(fd, &doom->map.inverse_colors, sizeof(int));
 	read(fd, &doom->map.num_sect, sizeof(Uint32));
 	if (doom->map.num_sect > MAX_NUM_SECTORS)
 		ft_error(2);
@@ -91,6 +92,7 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 	write(fd, &doom->map.editing, sizeof(int));
 	write(fd, &doom->map.fog, sizeof(int));
 	write(fd, &doom->map.fog_color, sizeof(Uint32));
+	write(fd, &doom->map.inverse_colors, sizeof(int));
 	write(fd, &doom->map.num_sect, sizeof(Uint32));
 	int i = -1;
 	while (++i < (int)doom->map.num_sect)
