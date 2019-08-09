@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:06:54 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/08 20:19:55 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 13:13:40 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	editor_sp_width(t_doom *doom, const Uint8 *state)
 	int		sp;
 
 	sp = check_what_sprite_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == SPRITES)
+	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 		doom->map.sprites[sp].width += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
 }
 
@@ -52,7 +52,7 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 	int		sp;
 
 	sp = check_what_sprite_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == SPRITES)
+	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 	{
 		// if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].num_sheet != 0)
 		// 	doom->map.sprites[sp].num_sheet--;

@@ -224,7 +224,8 @@ int		main(int argc, char **argv)
 	player.anglesin = sinf(player.angle);
 
 	map.num_sprites = 6;
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 1; i++) // mob small
+	
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
@@ -252,7 +253,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].hp = 20;
 		map.sprites[i].death_time = 0;
 	}
-	for (int i = 1; i < 2; i++)
+	for (int i = 1; i < 2; i++) //mob big
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
@@ -280,7 +281,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].hp = 60;
 		map.sprites[i].death_time = 0;
 	}
-	for (int i = 2; i < 3; i++)
+	for (int i = 2; i < 3; i++) //med
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
@@ -308,7 +309,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].hp = 0;
 		map.sprites[i].pick = 1;
 	}
-	for (int i = 3; i < 4; i++)
+	for (int i = 3; i < 4; i++) //ammo
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
@@ -336,7 +337,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].hp = 0;
 		map.sprites[i].pick = 1;
 	}
-	for (int i = 4; i < 5; i++)
+	for (int i = 4; i < 5; i++) // key
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 1;
@@ -365,14 +366,14 @@ int		main(int argc, char **argv)
 		map.sprites[i].pick = 1;
 		map.sprites[i].death_time = 0;
 	}
-	for (int i = 5; i < 6; i++)
+	for (int i = 5; i < 6; i++)  // jetpack
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 7;
 		map.sprites[i].coord = (t_vector){-5, -5, get_z(map.sectors[0].floor_plane, -5, -5)};
 		map.sprites[i].sector_no = 1;
-		map.sprites[i].width = 3;
+		map.sprites[i].width = 2;
 		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 5;
 		map.sprites[i].mob = 0;
@@ -404,9 +405,8 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	// map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
 	map.num_paint = 1;
-	map.paint[0].sector_no = 0;
+	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;
 	map.paint[0].v1.z = 40;

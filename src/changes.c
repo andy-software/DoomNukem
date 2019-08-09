@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   changes.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 18:04:00 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/17 18:04:01 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/09 12:42:51 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,10 +162,9 @@ void		chase(t_doom *d, t_sprite *spr)
 	}
 	else
 	{
-		if (comp_real(d->player.coord.z + d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == d->player.sector)
-			if (!(Mix_Playing(2)))
-				Mix_PlayChannel(2, d->sound.hurt, 0);
-			d->game.hp_level -= 1;
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.hurt, 0);
+		d->game.hp_level -= 1;
 	}
 }
 

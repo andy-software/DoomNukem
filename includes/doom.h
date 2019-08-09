@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/08 19:39:30 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 14:12:14 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 3
 # define COUNT_OF_PAINT_EVENTS 6
-# define MAX_RANGE_SPRITE_CLICKING 2.5
+# define MAX_RANGE_SPRITE_CLICKING 5
 # define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
@@ -422,7 +422,7 @@ struct	s_map
 	t_sprite		sprites[MAX_SPRITES_COUNT]; //it will be a little bigger then real count of sprites to add things like grenade or projectiles
 												// but still static
 	Uint32			num_paint;
-	t_painting		*paint; //always same count
+	t_painting		paint[MAX_PAINTINGS]; //always same count
 	int				fog;
 	Uint32			fog_color;
 	int				editing;

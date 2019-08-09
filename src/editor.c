@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/08 18:52:26 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 14:11:55 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,6 +353,7 @@ void	add_items(t_doom *doom, SDL_Event *event)
 							doom->map.paint[doom->editor.images[3].exist - 1].sector_no = doom->editor.fline.sec1;
 							doom->map.num_paint = doom->editor.images[3].exist;
 							printf("doom->editor.images[3].exist: %d\n", doom->editor.images[3].exist);
+							printf("sheet: %d\n", doom->map.paint[0].num_sheet);
 							// doom->map.paint[doom->editor.images[3].exist - 1].v1.x = event->button.x / 10;
 							// doom->map.paint[doom->editor.images[3].exist - 1].v1.y = event->button.y / 10;
 							// doom->map.paint[doom->editor.images[3].exist - 1].v2.x = (event->button.x / 10) + 3;
@@ -469,6 +470,7 @@ void	lie_point(t_doom *doom, int k, int x, int y)
 			}
 			else if (more == 1 && comp_real(point.y, (point.x * koef + c), 2))
 			{
+			printf("-----  %f\n --------%f", doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1].x, doom->map.sectors[k].vert[i].x);
 				doom->editor.fline.num_line2 = i;
 				doom->editor.fline.sec2 = k;
 			}
@@ -483,25 +485,3 @@ void	lie_point(t_doom *doom, int k, int x, int y)
 	}
 	printf("\033[1;34m   num_line1: %d\n   num_line2: %d\n   sec1: %d\n   sec2: %d \033[0m\n\n", doom->editor.fline.num_line1, doom->editor.fline.num_line2, doom->editor.fline.sec1, doom->editor.fline.sec2);
 }
-
-    //  {
-    //   "name": "(lldb) Launch",
-    //   "type": "cppdbg",
-    //   "request": "launch",
-    //   "program": "${workspaceFolder}/doom-nukem",
-    //   "args": ["${workspaceFolder}edit"],
-    //     // "args": [
-    //     //     "edit",
-    //     //     "${workspaceFolder}50000"
-    //     // ],
-    //   "stopAtEntry": false,
-    //   "cwd": "${workspaceFolder}",
-    //   "environment": [
-    //       {
-    //           "name" : "DYLD",
-    //           "value": "${workspaceFolder}frameworks/"
-    //       }
-    //   ],
-    //   "externalConsole": false,
-    //   "MIMode": "lldb"
-    //  },

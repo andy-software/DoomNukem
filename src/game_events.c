@@ -216,6 +216,9 @@ void		check_sprite_intersection(t_doom *d)
 				d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
 				if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
 				{
+					if (d->sr.sprites[i].num_sheet == 5)
+						Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
+					else if (d->sr.sprites[i].num_sheet == 6)
 						Mix_PlayChannel(4, d->sound.mobdeath[1], 0);
 					d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
 				}
