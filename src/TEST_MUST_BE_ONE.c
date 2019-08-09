@@ -58,7 +58,7 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 
 	write(fd, &mplayer, sizeof(t_player));
 	write(fd, &map.num_sprites, sizeof(Uint32));
-	write(fd, map.sprites, sizeof(t_sprite) * MAX_SPRITES_COUNT);
+	write(fd, map.sprites, sizeof(t_sprite) * map.num_sprites);
 	write(fd, &map.num_paint, sizeof(Uint32));
 	write(fd, map.paint, sizeof(t_painting) * map.num_paint);
 	close(fd);
@@ -404,7 +404,7 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
+	// map.paint = (t_painting*)ft_memalloc(sizeof(t_painting) * 1);
 	map.num_paint = 1;
 	map.paint[0].sector_no = 0;
 	map.paint[0].v1.x = -6;
