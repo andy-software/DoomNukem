@@ -24,8 +24,9 @@ static void	change_move(t_vertex *move, t_doom *d, int str, int dir)
 		move->x += d->player.anglesin * MOVE_SPEED * dir;
 		move->y -= d->player.anglecos * MOVE_SPEED * dir;
 	}
-	if(!d->game.flying)
-		move_sound(&d->sound);
+	if(d->game.ground)
+		if (!(Mix_Playing(-1)))
+			Mix_PlayChannel(-1, d->sound.steps, 0);
 }
 
 static void	movement_keys(t_doom *d)
@@ -84,11 +85,11 @@ void		player_events(t_doom *d)
 	}
 	else
 	{
-	if (!d->game.pause)
-	{
+		if (!d->game.pause)
+		{
 		movement_keys(d);
 		mouse_rotation(d);
-	}
+		}
 	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 	{
 		if (d->ev.type == SDL_KEYDOWN)
@@ -99,12 +100,17 @@ void		player_events(t_doom *d)
 			{
 				if (d->game.ground || d->game.flying)
 				{
+					if (!(Mix_Playing(0)))
+						Mix_PlayChannel(0, d->sound.fly, 0);
 					if (d->game.velocity.z < MAX_SPEED_UPWARD)
 						d->game.velocity.z += 0.6;
 					else
-						d->game.velocity.z = MAX_SPEED_UPWARD;
-					
+						d->game.velocity.z = MAX_SPEED_UPWARD;	
 					d->game.falling = 1;
+					d->game.fuel -= 1;
+					if (d->game.fuel == 0)
+						d->game.flying = 0;
+					printf("%d\n", d->game.fuel);
 				}
 				if (!(Mix_Playing(1)) && !d->game.flying)
 					Mix_PlayChannel(1, d->sound.jump, 0);
@@ -148,23 +154,14 @@ void		player_events(t_doom *d)
 			else if (d->ev.key.keysym.sym == PAUSE)
 			{
 				if (d->game.pause == 0)
-				{
 					d->game.pause = 1;
-					SDL_ShowCursor(SDL_ENABLE);
-					SDL_SetRelativeMouseMode(SDL_DISABLE);
-					SDL_SetWindowGrab(d->sdl.window, 0);
-				}
 				else
-				{
-						d->game.pause = 0;
-					// SDL_ShowCursor(SDL_DISABLE);  das useless
-					SDL_SetWindowGrab(d->sdl.window, 1);
-					SDL_SetRelativeMouseMode(SDL_ENABLE);
-					SDL_GetRelativeMouseState(NULL, NULL);
-				}
+					d->game.pause = 0;
+				set_mouse(d);
 			}
 		}
-		else if (d->ev.type == SDL_MOUSEBUTTONDOWN && d->ev.button.button == SDL_BUTTON_LEFT)
+		else if (d->ev.type == SDL_MOUSEBUTTONDOWN &&
+			d->ev.button.button == SDL_BUTTON_LEFT && d->game.start != 1)
 		{
 			if(d->ui.fire == 0)
 			{

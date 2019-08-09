@@ -37,6 +37,7 @@ int		init_game_params(t_doom *d)
 {
 	int	i;
 
+	d->game.start = 1;
 	d->game.quit = 0;
 	d->game.pause = 0;
 	d->game.ducking = 0;
@@ -47,8 +48,10 @@ int		init_game_params(t_doom *d)
 	d->game.acceleration = 0.2f;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
-	d->game.kills = 0;
+	d->game.damage = 30;
 	d->ui.ammo_1 = 10;
+	d->game.fuel = 100;
+	d->ui.gun_num = 0;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
@@ -89,31 +92,54 @@ int		game_loop(t_doom doom)
 	{
 		doom.ui.prevTime = SDL_GetTicks();
 		player_events(&doom);
-		if (doom.game.pause == 0 && doom.game.hp_level > 0)
+		if (doom.game.start == 1)
 		{
-			game_events(&doom);
-			prepare_to_rendering(&doom.render, doom);
-			draw_skybox(&doom);
-			draw_screen(&doom);
-			draw_ui(&doom);
+			set_mouse(&doom);
+			show_start(&doom);
 		}
-		else if (doom.game.pause == 1 && doom.game.hp_level > 0)
-			show_pause(&doom);
-		else if (doom.game.hp_level <= 0)
+		else
 		{
-			SDL_ShowCursor(SDL_ENABLE);
-			SDL_SetRelativeMouseMode(SDL_DISABLE);
-			SDL_SetWindowGrab(doom.sdl.window, 0);
-			show_lose(&doom);
+			if (doom.game.pause == 0 && doom.game.hp_level > 0)
+			{
+				game_events(&doom);
+				prepare_to_rendering(&doom.render, doom);
+				draw_skybox(&doom);
+				draw_screen(&doom);
+				draw_ui(&doom);
+			}
+			else if (doom.game.pause == 1 && doom.game.hp_level > 0)
+				show_pause(&doom);
+			else if (doom.game.hp_level <= 0)
+			{
+				set_mouse(&doom);
+				show_lose(&doom);
+			}
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6)
-			;
-		doom.ui.currTime = SDL_GetTicks();
-		doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
-		doom.ui.fps = doom.game.dt / 1000.0;
-		if (doom.game.pause == 0 && doom.game.hp_level > 0)
-			draw_fps(&doom, (int)(1.0 / doom.ui.fps));
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6);
+			doom.ui.currTime = SDL_GetTicks();
+			doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
+			doom.ui.fps = doom.game.dt / 1000.0;
+			if (doom.game.pause == 0 &&
+				doom.game.hp_level > 0 && doom.game.start != 1)
+				draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
 	}
 	return (1);
+}
+
+void	set_mouse(t_doom *doom)
+{
+	if (doom->game.hp_level <= 0 ||
+		doom->game.pause == 1 || doom->game.start == 1)
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+		SDL_SetRelativeMouseMode(SDL_DISABLE);
+		SDL_SetWindowGrab(doom->sdl.window, 0);
+	}
+	else
+	{
+		SDL_SetWindowGrab(doom->sdl.window, 1);
+		SDL_SetRelativeMouseMode(SDL_ENABLE);
+		SDL_GetRelativeMouseState(NULL, NULL);
+	}
 }

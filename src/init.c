@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-int		init_sdl(t_sdl *sdl, t_option *options)
+int		init_sdl(t_sdl *sdl)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return (error_message((char *)SDL_GetError()));
