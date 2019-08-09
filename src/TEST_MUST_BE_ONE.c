@@ -290,7 +290,7 @@ int		main(int argc, char **argv)
 	player.anglesin = sinf(player.angle);
 
 	map.num_paint = 1;
-	map.paint[0].sector_no = 0;
+	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;
 	map.paint[0].v1.z = 40;
@@ -302,7 +302,7 @@ int		main(int argc, char **argv)
 	map.paint[0].draw = 1;
 	map.paint[0].key_state = 1;
 	map.paint[0].changes = 0;
-	map.paint[0].event_num = 1;
+	map.paint[0].event_num = 6;
 	map.paint[0].speed = 5;
 	map.paint[0].high_point = -40;
 	map.paint[0].low_point = -10;

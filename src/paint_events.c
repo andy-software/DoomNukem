@@ -12,18 +12,33 @@
 
 #include "../includes/doom.h"
 
+int			inverse_colors_event(t_doom *d, t_painting *paint)
+{
+	if (paint->key_state == 1)
+	{
+		d->map.inverse_colors = !d->map.inverse_colors;
+		paint->key_state = 0;
+	}
+	else
+	{
+		d->map.inverse_colors = !d->map.inverse_colors;
+		paint->key_state = 1;
+	}
+	return (0);
+}
+
 int			turn_light_event(t_doom *d, t_painting *paint)
 {
 	if (paint->key_state == 1)
 	{
 		d->map.sectors[paint->sector_no].light_lvl = 60;
 		paint->key_state = 0;
-		}
-		else
-		{
-			d->map.sectors[paint->sector_no].light_lvl = 20;
-			paint->key_state = 1;
-		}
+	}
+	else
+	{
+		d->map.sectors[paint->sector_no].light_lvl = 20;
+		paint->key_state = 1;
+	}
 	return (0);
 }
 
