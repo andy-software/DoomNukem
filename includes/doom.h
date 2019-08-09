@@ -51,7 +51,7 @@
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 3
-# define COUNT_OF_PAINT_EVENTS 6
+# define COUNT_OF_PAINT_EVENTS 7
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
@@ -1006,6 +1006,7 @@ int			init_moves(t_doom *d);
 int			lift_floor_event(t_doom *d, t_painting *paint);
 int			turn_light_event(t_doom *d, t_painting *paint);
 int			lift_ceil_event(t_doom *d, t_painting *paint);
+int			inverse_colors_event(t_doom *d, t_painting *paint);
 int			first_aid_event(t_doom *d, t_painting *paint);
 int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
