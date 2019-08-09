@@ -629,6 +629,7 @@ struct	s_ui
 	float			fps;
 	int				fire;
 	int				gun_num;
+	int				gun_anim;
 	int				start_saw;
 	int				idle;
 	int				ammo_1;

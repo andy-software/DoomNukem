@@ -198,11 +198,18 @@ void		check_sprite_intersection(t_doom *d)
 	int			i;
 	t_vector	t1;
 	t_vector	t2;
+	float		attack_range;
 
 	i = -1;
 	while (++i < (int)d->map.num_sprites)
 		if (d->sr.sprites[i].coord.y < 0)
 			break ;
+	if ( d->ui.gun_num == 0)
+		attack_range = 100;
+	else if (d->ui.gun_num == 1)
+		attack_range = 2;
+	else
+		return ;
 
 	while (--i >= 0)
 	{
@@ -211,18 +218,25 @@ void		check_sprite_intersection(t_doom *d)
 		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);
 		if (t1.x > 0 && t2.x < 0 && d->ui.ammo_1 >= -2)
 		{
-			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
+			if (t1.y < attack_range)
 			{
-				d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
-				if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
+				if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
 				{
-					if (d->sr.sprites[i].num_sheet == 5)
-						Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
-					else if (d->sr.sprites[i].num_sheet == 6)
-						Mix_PlayChannel(4, d->sound.mobdeath[1], 0);
-					d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
+					if (d->ui.gun_num == 0)
+						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
+					else
+						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage / 10;
+					printf("%d\n", d->map.sprites[d->sr.sprites[i].spr_num].hp);
+					if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
+					{
+						if (d->sr.sprites[i].num_sheet == 5)
+							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
+						else if (d->sr.sprites[i].num_sheet == 6)
+							Mix_PlayChannel(4, d->sound.mobdeath[1], 0);
+						d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
+					}
+					break ;
 				}
-				break ;
 			}
 		}
 	}
@@ -261,6 +275,8 @@ void		game_events(t_doom *d)
 	}
 	if (d->game.fire == 1)
 	{
+		if (d->game.fire == 1)
+			printf("%d\n", d->game.fire);
 		check_sprite_intersection(d);
 		d->game.fire = 0;
 	}

@@ -42,6 +42,7 @@ void    gun_anim(t_doom *d)
 {
 	int i;
 	int temp;
+	int anim_gun;
 
 	temp = d->ui.ammo_1;
     if (d->ui.gun_num == 0)
@@ -71,9 +72,8 @@ void    gun_anim(t_doom *d)
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
 					" 0 / 0", d->texture.fonts[FPS_F].text_color);
 		}
-		else if (d->ui.fire > 0)
+		else if (d->ui.fire == 1)
 		{
-			// printf("fgdhdf11114h\n");
 			if (d->ui.ammo_1 >= 0)
 			{
 				ft_strcpy(d->ui.masage, "- / ");
@@ -94,22 +94,28 @@ void    gun_anim(t_doom *d)
 				}
 				if (!(Mix_Playing(3)))
 					Mix_PlayChannel(3, d->sound.gun1[0], 0);
-				SDL_BlitSurface(d->texture.gun1[d->ui.fire], 0, d->sdl.surface, &d->texture.gun1_r);
+				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font, d->ui.masage, d->texture.fonts[FPS_F].text_color);
-				d->ui.fire = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 21 + 1;
-				if (d->ui.fire > 20)
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 21 + 1;
+				if (d->ui.gun_anim > 20)
+				{
 					d->ui.fire = 0;
+					d->ui.gun_anim = 0;
+				}
 			}
 			else if (d->ui.ammo_1 == -2)
 			{
 				if (!(Mix_Playing(3)))
 					Mix_PlayChannel(3, d->sound.gun1[1], 0);
-				SDL_BlitSurface(d->texture.gun1[d->ui.fire], 0, d->sdl.surface, &d->texture.gun1_r);
+				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
 					" 0 / 0", d->texture.fonts[FPS_F].text_color);
-				d->ui.fire = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 3 + 1;
-				if (d->ui.fire > 2)
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 3 + 1;
+				if (d->ui.gun_anim > 2)
+				{
 					d->ui.fire = 0;
+					d->ui.gun_anim = 0;
+				}
 			}
 			else if (d->ui.ammo_1 < -2)
 			{
@@ -118,6 +124,7 @@ void    gun_anim(t_doom *d)
 				SDL_BlitSurface(d->texture.gun1[0], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
 					" 0 / 0", d->texture.fonts[FPS_F].text_color);
+				d->ui.gun_anim = 0;
 				d->ui.fire = 0;
 				d->ui.ammo_1 = -2;
 			}
@@ -127,7 +134,7 @@ void    gun_anim(t_doom *d)
 	}
 	else if (d->ui.gun_num == 1)
 	{
-		if (d->ui.start_saw  < 10)
+		if (d->ui.start_saw < 10)
 		{
 			SDL_BlitSurface(d->texture.gun2[d->ui.start_saw ], 0, d->sdl.surface, &d->texture.gun21_r);
 			d->ui.start_saw = (d->ui.currTime / 100) % 11;
@@ -136,6 +143,7 @@ void    gun_anim(t_doom *d)
 		}
 		else if (d->ui.start_saw == 10 && d->ui.fire == 1)
 		{
+			d->game.fire = 1;
 			if (d->ui.idle == 0)
 			{
 				SDL_BlitSurface(d->texture.gun2[14], 0, d->sdl.surface, &d->texture.gun22_r);

@@ -41,7 +41,6 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, t_sprite_render *sr,
 	else if (sr->sprites[i].mob && !sr->sprites[i].live)
 	{
 		pos = sr->sprites[i].text_no + min((d->ui.prevTime - sr->sprites[i].death_time) / 150, (Uint32)(sheet->w - 1));
-		printf("%d\n", pos);
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 			d->map.sprites[sr->sprites[i].spr_num].draw = 0;
 	}

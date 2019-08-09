@@ -38,8 +38,6 @@ void		switch_music(t_sound *sound, SDL_Event ev)
 	{
 		if (ev.key.keysym.sym == SDLK_m)
         {
-            printf("KGIUDHGNS");
-            printf("%d\n", sound->n);
 			play_music(sound, sound->n);
         }
         else if (ev.key.keysym.sym == GREATER && sound->n < 4)
@@ -71,9 +69,9 @@ void	load_sounds(t_sound *sound)
 {
     sound->n = 0;
 	sound->win = load_sound("./materials/sounds/win.wav"); // 2
-    sound->steps = load_sound("./materials/sounds/step.wav"); // -1
-	sound->jump = load_sound("./materials/sounds/jump.wav"); // 1 chanel
-	sound->fly = load_sound("./materials/sounds/fly.wav"); // 1
+    sound->steps = load_sound("./materials/sounds/step.wav"); // 1
+	sound->jump = load_sound("./materials/sounds/jump.wav"); // 0
+	sound->fly = load_sound("./materials/sounds/fly.wav"); // 0
 	sound->hurt = load_sound("./materials/sounds/hurt.wav"); // 2
 	sound->death = load_sound("./materials/sounds/death.wav"); // 2
     sound->gun1[0] = load_sound("./materials/sounds/gun1.wav"); // 3
