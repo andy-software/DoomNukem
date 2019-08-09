@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:41:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/06 15:56:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 13:31:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int			read_file(t_doom *doom, char *file_name)
 	read(fd, &map->num_sprites, sizeof(Uint32));
 	read(fd, map->sprites, sizeof(t_sprite) * map->num_sprites);
 	read(fd, &map->num_paint, sizeof(Uint32));
-	map->paint = (t_painting*)ft_memalloc(sizeof(t_painting) * map->num_paint);
 	read(fd, map->paint, sizeof(t_painting) * map->num_paint);
 	Info_about_map(map);
 	Info_about_player(player);

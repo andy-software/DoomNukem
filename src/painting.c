@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 16:25:50 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 14:51:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 14:08:41 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	first_part(t_sprite_render *sr, t_doom *d)
 {
-	sr->surr = d->texture.sprt[sr->paint->num_sheet].sprites[sr->paint[sr->i].text_no];
+	sr->surr = d->texture.sprt[sr->paint[sr->i].num_sheet].sprites[sr->paint[sr->i].text_no];
 	sr->t1.x = sr->paint[sr->i].v1.x - d->player.coord.x;
 	sr->t1.y = sr->paint[sr->i].v1.y - d->player.coord.y;
 	sr->t2.x = sr->paint[sr->i].v2.x - d->player.coord.x;

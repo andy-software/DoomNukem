@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/08 20:27:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 14:04:28 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,19 @@ void	editor_painitngs_texture(t_doom *doom, const Uint8 *state)
 {
 	int		pain;
 
-	pain = check_what_sprite_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == PAINTINGS)
+	pain = check_what_paint_player_are_looking(doom);
+	printf("pain    %d\n", pain);
+	if (doom->editor.fl_or_ceil == PAINTINGS && pain != -1)
 	{
-		p("here 1\n");
-		if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[pain].num_sheet != 0)
+		printf("%d\n", doom->map.paint[pain].num_sheet);
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_sheet != 0)
 		{p("here 2\n");
-		printf("%d\n", doom->map.sprites[pain].num_sheet);
-			doom->map.sprites[pain].num_sheet--;
+			doom->map.paint[pain].num_sheet--;
 		}
-		else if (!(state[SDL_SCANCODE_TAB]) && doom->map.sprites[pain].num_sheet != 6)
+		else if (!(state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_sheet != 6)
 		{
 			p("here 3\n");
-			doom->map.sprites[pain].num_sheet++;
+			doom->map.paint[pain].num_sheet++;
 		}
 		// if (doom->map.sprites[pain].num_sheet == 6)
 		// 	doom->map.sprites[pain].num_sheet = 5;
