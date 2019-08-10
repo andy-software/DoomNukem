@@ -50,7 +50,7 @@
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 3
+# define COUNT_OF_SPRITE_EVENTS 4
 # define COUNT_OF_PAINT_EVENTS 7
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define SUR_FORMAT 372645892
@@ -187,6 +187,12 @@ typedef struct s_title	t_title;
 typedef	struct s_fline	t_fline;
 typedef	struct s_thread	t_thread;
 /***/
+
+typedef	struct	s_int_vertex
+{
+	int				x;
+	int				y;
+}				t_int_vertex;
 
 struct	s_plane
 {
@@ -877,6 +883,8 @@ struct	s_changes
 	spr_event_type	spr_events[COUNT_OF_SPRITE_EVENTS];
 	pnt_event_type	pnt_events[COUNT_OF_PAINT_EVENTS];
 	int				fog_colors[9];
+	Uint32			map_fog_color_before;
+	int				start_inversion_type;
 };
 
 struct	s_doom
@@ -930,6 +938,7 @@ void		render_sprites(t_doom *d);
 void		render_painting(t_doom *d);
 void		draw_line_of_sprite(t_sprite_render *sr, \
 										SDL_Surface *sprtext, t_render *render);
+void		cool_simple_function(t_int_vertex v, t_render *r, Uint32 color, float y);
 //threads
 int			find_count_and_width_of_slice(t_render *r);
 int			fill_the_params(t_render *r, t_thread *t);
@@ -1012,6 +1021,7 @@ int			inverse_colors_event(t_doom *d, t_painting *paint);
 int			first_aid_event(t_doom *d, t_painting *paint);
 int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
+int			toxic_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
 int			radio_event(t_doom *d, t_sprite *sprite);
 int			win_pnt_event(t_doom *d, t_painting *paint);
