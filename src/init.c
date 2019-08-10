@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:54:32 by apavlov           #+#    #+#             */
-/*   Updated: 2019/03/23 15:54:33 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/09 17:32:51 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,15 @@ int		init_moves(t_doom *d)
 	d->changes.spr_events[0] = win_spr_event;
 	d->changes.spr_events[1] = talk_event;
 	d->changes.spr_events[2] = radio_event;
+	d->changes.fog_colors[0] = 0x00FF00;
+	d->changes.fog_colors[1] = 0xFF0000;
+	d->changes.fog_colors[2] = 0x0000FF;
+	d->changes.fog_colors[3] = 0x00FFFF;
+	d->changes.fog_colors[4] = 0xFFFFFF;
+	d->changes.fog_colors[5] = 0xAAB200;
+	d->changes.fog_colors[6] = 0x45361E;
+	d->changes.fog_colors[7] = 0X303B2F;
+	d->changes.fog_colors[8] = 0;
 	return (1);
 }
 

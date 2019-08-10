@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 17:12:05 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 16:47:45 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	fog_change(t_doom *doom)
 	if (doom->map.fog == 1)
 	{
 		doom->editor.ind_fog += doom->editor.ind_fog < 8 ? 1 : -8;
-		doom->map.fog_color = doom->editor.fog_colors[doom->editor.ind_fog];
+		doom->map.fog_color = doom->changes.fog_colors[doom->editor.ind_fog];
 	}
 }
 
@@ -50,16 +50,13 @@ void	editor_player_events2(t_doom *doom, const Uint8 *state)
 {
 	if (doom->ev.key.keysym.sym == SDLK_r)
 	{
-		if (doom->editor.fl_or_ceil == CEIL)
-		{
 			if (doom->map.sectors[doom->player.sector].render_ceil == 1)
 				doom->map.sectors[doom->player.sector].render_ceil = 0;
 			else
 				doom->map.sectors[doom->player.sector].render_ceil = 1;
-		}
 	}
 	editor_events_down_up(doom);
-	if (doom->ev.key.keysym.sym == SDLK_m)
+	if (doom->ev.key.keysym.sym == SDLK_m || doom->ev.key.keysym.sym == SDLK_q)
 		doom->map.editing = 0;
 	else if (doom->ev.key.keysym.sym == SDLK_z)
 		editor_start_z(doom, state);
@@ -78,23 +75,16 @@ void	editor_painitngs_texture(t_doom *doom, const Uint8 *state)
 	int		pain;
 
 	pain = check_what_paint_player_are_looking(doom);
-	printf("pain    %d\n", pain);
 	if (doom->editor.fl_or_ceil == PAINTINGS && pain != -1)
 	{
-		printf("%d\n", doom->map.paint[pain].num_sheet);
 		if ((state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_sheet != 0)
-		{p("here 2\n");
+		{
 			doom->map.paint[pain].num_sheet--;
 		}
 		else if (!(state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_sheet != 6)
 		{
-			p("here 3\n");
 			doom->map.paint[pain].num_sheet++;
 		}
-		// if (doom->map.sprites[pain].num_sheet == 6)
-		// 	doom->map.sprites[pain].num_sheet = 5;
-		// else
-		// 	doom->map.sprites[pain].num_sheet = 6;
 	}
 }
 
@@ -121,6 +111,13 @@ void	editor_player_events(t_doom *doom)
 			else if (doom->ev.key.keysym.sym == SDLK_PERIOD)
 				editor_scale_y(doom, state);
 			editor_player_events2(doom, state);
+			if (doom->ev.key.keysym.sym == SDLK_i)
+			{
+				if (doom->map.inverse_colors == 1)
+					doom->map.inverse_colors = 0;
+				else
+					doom->map.inverse_colors = 1;
+			}
 			if (doom->ev.type == SDL_KEYDOWN)
 			{
 				if (doom->ev.key.keysym.sym == PAUSE)

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 17:00:21 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 12:29:06 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,34 @@ void	ft_prepare_read(t_doom *doom)
 	j = -1;
 	while (++j < MAX_SPRITES_COUNT)
 	{
+		doom->map.sprites[j].spr_num = j;
 		doom->map.sprites[j].text_no = 0;        
-		doom->map.sprites[j].num_sheet = 6;
+		doom->map.sprites[j].coord = (t_vector){40, 40, 0};
 		doom->map.sprites[j].width = 8;
-		doom->map.sprites[j].start_z = 0;
 		doom->map.sprites[j].end_z = 13;
-		doom->map.sprites[j].text_no = 1;
+		doom->map.sprites[j].start_z = 0;
+		doom->map.sprites[j].sector_no = 0;
 		doom->map.sprites[j].mob = 1;
+		doom->map.sprites[j].draw = 1;
+		doom->map.sprites[j].pick = 0;
+		doom->map.sprites[j].live = 1;
 		doom->map.sprites[j].angle = M_PI / 4;
-		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
 		doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
-		doom->map.sprites[j].move_speed = 0.03 * (j + 1);
+		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
+		doom->map.sprites[j].move_speed = 0.03;
+		doom->map.sprites[j].own_moves = 1;
 		doom->map.sprites[j].vision_forward = 5;
 		doom->map.sprites[j].vision_backward = -3;
+		doom->map.sprites[j].key = 0;
+		doom->map.sprites[j].key_state = 0;
+		doom->map.sprites[j].changes = 0;
+		doom->map.sprites[j].event_num = 0;
+		doom->map.sprites[j].hp = 20;  // FIX
+		// doom->map.sprites[j].speed = 20;
+		doom->map.sprites[j].num_sheet = 6;
+		doom->map.sprites[j].num_of_sound = 0;
+		// doom->map.sprites[j].speed = 20;
+		doom->map.sprites[j].death_time = 0;	
 	}
 	
 	doom->map.num_paint = 0;
@@ -117,4 +132,5 @@ void	ft_prepare_read(t_doom *doom)
 	doom->game.pause = 0;
 	doom->map.num_sect = 0;
 	doom->editor.fl_or_ceil = FLOOR;
+	doom->map.editing = 0;
 }

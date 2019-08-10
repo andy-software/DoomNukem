@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/doom-nukem",
-            "args": ["edit", "23"],
+            "args": ["edit", "debug"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [

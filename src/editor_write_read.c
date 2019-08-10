@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:17:49 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 16:17:20 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 20:01:24 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int		ft_read_map_edit(t_doom *doom, int fd)
 {
 	int		i;
-	p("\nIN FT_READ_MAP_EDIT\n");
 	read(fd, &doom->map.editing, sizeof(int));
 	read(fd, &doom->map.fog, sizeof(int));
 	read(fd, &doom->map.fog_color, sizeof(Uint32));
@@ -54,8 +53,8 @@ int		ft_read_map_edit(t_doom *doom, int fd)
 	read(fd, &doom->map.num_sprites, sizeof(Uint32));
 	read(fd, doom->map.sprites, sizeof(t_sprite) * doom->map.num_sprites);
 	read(fd, &doom->map.num_paint, sizeof(Uint32));
-	printf("read!!!!!!!!!!!!!!!!!!!          doom->map.num_paint: %d\n", (int)doom->map.num_paint);
 	read(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
+	close(fd);
 	return (0);
 }
 
@@ -87,8 +86,7 @@ int		ft_read_map_edit(t_doom *doom, int fd)
 
 int		ft_write_changes_to_file(t_doom *doom, int fd)
 {
-	printf("doom->map.paint[0].key: %d, \n", doom->map.paint[0].key);
-	p("\nIN FT_WRITE_CHANGES_TO_FILE\n");
+	fd = open(doom->editor.name_m, O_WRONLY);
 	write(fd, &doom->map.editing, sizeof(int));
 	write(fd, &doom->map.fog, sizeof(int));
 	write(fd, &doom->map.fog_color, sizeof(Uint32));
@@ -117,12 +115,11 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 		write(fd, &doom->map.sectors[i].y_f_shift, sizeof(int));
 		write(fd, &doom->map.sectors[i].light_lvl, sizeof(int));
 	}
-	//ft_write_changes_to_file2(doom, fd, -1);
 	write(fd, &doom->player, sizeof(t_player));
 	write(fd, &doom->map.num_sprites, sizeof(Uint32));
 	write(fd, doom->map.sprites, sizeof(t_sprite) * doom->map.num_sprites);
 	write(fd, &doom->map.num_paint, sizeof(Uint32));
-	printf("WRITE!!!!!!!!!!!!!!!!!!!          doom->map.num_paint: %d\n", (int)doom->map.num_paint);
 	write(fd, doom->map.paint, sizeof(t_painting) * doom->map.num_paint);
+	close(fd);
 	return (1);
 }

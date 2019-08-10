@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 13:59:21 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/09 13:41:59 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 11:41:12 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		check_keys_state(t_doom *d)
 			pnt_ev(d, d->map.paint + i);
 		}
 	i = -1;
-	while (++i < (int)d->map.num_paint)
+	while (++i < (int)d->map.num_sprites) /// FIX
 		if (d->map.sprites[i].key && d->map.sprites[i].changes)
 		{
 			spr_ev = d->changes.spr_events[d->sr.sprites[i].event_num];

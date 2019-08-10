@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/09 17:26:23 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 12:27:07 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ struct	s_sprite
 	int			changes;
 	int			event_num;
 	int			hp;
-	float		speed;
+	// float		speed;
 	int			num_sheet;
 
 	int			num_of_sound;
@@ -792,6 +792,7 @@ struct	s_editor
 	int				which_wall;
 	int				fog_colors[9];
 	int				ind_fog;
+	char			*name_m;
 };
 /****/
 struct	s_sound

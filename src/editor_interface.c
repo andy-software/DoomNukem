@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 16:42:29 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 11:51:54 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	ft_render_interface2(t_doom *doom, SDL_Rect bigger)
 		bigger = (SDL_Rect){840, 630, 0, 0};
 		if (doom->editor.is_portal == 0)
 			SDL_BlitSurface(IMG[12].image, NULL, SDL_SURF, &bigger);
-		if (doom->editor.is_portal == 1)
+		else if (doom->editor.is_portal == 1)
 			SDL_BlitSurface(IMG[13].image, NULL, SDL_SURF, &bigger);
 	}
 }
