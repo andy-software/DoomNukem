@@ -59,6 +59,8 @@ void	*sky_threads(void *data)
 		{
 			pix[sky.win_y + sky.win_x] = \
 				pix_from_text(surr, sky.text_x, sky.text_y);
+			if (sky.doom->map.inverse_colors)
+				pix[sky.win_y + sky.win_x] = ~pix[sky.win_y + sky.win_x];
 			sky.win_y += WIN_WIDTH;
 		}
 		sky.win_x++;

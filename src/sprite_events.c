@@ -64,3 +64,31 @@ int			win_pnt_event(t_doom *d, t_painting *paint)
 	exit(1);
 	return (0);
 }
+
+int			toxic_event(t_doom *d, t_sprite *sprite)
+{
+	static Uint32	start_time = 0;
+	static int		i = 0;
+	static Uint32	toxicity_rate = 20000;
+
+	if (start_time == 0)
+		d->map.inverse_colors = !d->map.inverse_colors;
+	if (start_time < toxicity_rate)
+	{
+		
+		d->map.sprites[sprite->spr_num].changes = 1;
+		if (((start_time + d->game.dt) / 200) > (start_time / 200))
+			d->map.fog_color = d->changes.fog_colors[i++ % 9];
+		start_time += d->game.dt;
+	}
+	else
+	{
+		d->map.sprites[sprite->spr_num].changes = 0;
+		d->map.inverse_colors = !d->map.inverse_colors;
+		i = 0;
+		start_time = 0;
+		d->map.fog_color = d->changes.map_fog_color_before;
+		toxicity_rate -= 2000;
+	}
+	return (0);
+}

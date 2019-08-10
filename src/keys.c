@@ -84,7 +84,7 @@ void		check_keys_state(t_doom *d)
 	while (++i < (int)d->map.num_sprites) /// FIX
 		if (d->map.sprites[i].key && d->map.sprites[i].changes)
 		{
-			spr_ev = d->changes.spr_events[d->sr.sprites[i].event_num];
+			spr_ev = d->changes.spr_events[d->map.sprites[i].event_num];
 			spr_ev(d, d->map.sprites + i);
 		}
 }

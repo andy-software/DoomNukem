@@ -48,6 +48,7 @@ int		init_moves(t_doom *d)
 	d->changes.spr_events[0] = win_spr_event;
 	d->changes.spr_events[1] = talk_event;
 	d->changes.spr_events[2] = radio_event;
+	d->changes.spr_events[3] = toxic_event;
 	d->changes.fog_colors[0] = 0x00FF00;
 	d->changes.fog_colors[1] = 0xFF0000;
 	d->changes.fog_colors[2] = 0x0000FF;
@@ -57,6 +58,7 @@ int		init_moves(t_doom *d)
 	d->changes.fog_colors[6] = 0x45361E;
 	d->changes.fog_colors[7] = 0X303B2F;
 	d->changes.fog_colors[8] = 0;
+	d->changes.map_fog_color_before = d->map.fog_color;
 	return (1);
 }
 
