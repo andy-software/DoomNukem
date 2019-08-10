@@ -243,13 +243,7 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	while (t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
-		if (t->color != 0)
-			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
-		else
-			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
-		if (r->map->fog)
-			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
-		r->pix[t->win_y * WIN_WIDTH + t->win_x] = r->map->inverse_colors ? ~t->color : t->color;
+		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -272,13 +266,7 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	while (t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
-		if (t->color != 0)
-			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
-		else
-			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
-		if (r->map->fog)
-			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
-		r->pix[t->win_y * WIN_WIDTH + t->win_x] = (r->map->inverse_colors) ? ~t->color : t->color;
+		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -301,13 +289,7 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	while (t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text_lower, (unsigned int)t->float_y_text % surr->h);
-		if (t->color != 0)
-			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
-		else
-			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
-		if (r->map->fog)
-			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
-		r->pix[t->win_y * WIN_WIDTH + t->win_x] = (r->map->inverse_colors) ? ~t->color : t->color;
+		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
@@ -338,17 +320,25 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	while (t->win_y <= t->wall_end)
 	{
 		t->color = pix_from_text(surr, t->x_text, (unsigned int)t->float_y_text % surr->h);
-		if (t->color != 0)
-			t->color = get_color_value_int(t->color, 0x0, t->r->sect->light_lvl);
-		else
-			t->color = r->pix[t->win_y * WIN_WIDTH + t->win_x];
-		if (r->map->fog)
-			t->color = get_fog_color(t->color, r->map->fog_color, t->y);
-		r->pix[t->win_y * WIN_WIDTH + t->win_x] = (r->map->inverse_colors) ? ~t->color : t->color;
+		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
 	}
+}
+
+void	cool_simple_function(t_int_vertex v, t_render *r, Uint32 color, float y)
+{
+	Uint32	*pixels;
+
+	pixels = r->pix + v.y * WIN_WIDTH + v.x;
+	if (color != 0)
+			color = get_color_value_int(color, 0x0, r->sect->light_lvl);
+		else
+			color = (r->map->inverse_colors) ? ~*pixels : *pixels;
+		if (r->map->fog)
+			color = get_fog_color(color, r->map->fog_color, y);
+	*pixels = (r->map->inverse_colors) ? ~color : color;
 }
 
 void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *render)
@@ -377,8 +367,6 @@ void	draw_line_of_sprite(t_sprite_render *sr, SDL_Surface *sprtext, t_render *re
 		}
 		sr->win_y++;
 		y_point += dy_point;
-		// if (y_point > 1)
-		// 	y_point = 1;
 	}
 }
 

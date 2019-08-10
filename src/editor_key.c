@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/10 16:47:45 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 18:22:54 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,31 @@ void	editor_events_down_up(t_doom *doom)
 	}
 }
 
+void	editor_action_sp(t_doom *doom, const Uint8 *state)
+{
+	int 	sp;
+	
+	sp = check_what_sprite_player_are_looking(doom);
+
+			printf("1       event %d\n", doom->map.sprites[sp].event_num);
+	if (doom->editor.fl_or_ceil == SPRITES && (sp != -1))
+	{
+		doom->map.sprites[sp].key = 1;
+		if ((state[SDL_SCANCODE_TAB]) && doom->map.sprites[sp].event_num != 0)
+		{
+			doom->map.sprites[sp].event_num--;
+			printf("event %d\n", doom->map.sprites[sp].event_num);
+			// info_action(doom, sp);
+		}
+		else if (!(state[SDL_SCANCODE_TAB])
+		&& doom->map.sprites[sp].event_num != (COUNT_OF_SPRITE_EVENTS - 1))
+		{
+			doom->map.sprites[sp].event_num++;
+			// info_action(doom, pain);
+		}
+	}
+}
+
 void	editor_player_events2(t_doom *doom, const Uint8 *state)
 {
 	if (doom->ev.key.keysym.sym == SDLK_r)
@@ -65,7 +90,10 @@ void	editor_player_events2(t_doom *doom, const Uint8 *state)
 	else if (doom->ev.key.keysym.sym == SDLK_c)
 		editor_sp_width(doom, state);
 	else if (doom->ev.key.keysym.sym == SDLK_e)
+	{
+		editor_action_sp(doom, state);
 		editor_action(doom, state);
+	}
 	else if (doom->ev.key.keysym.sym == SDLK_1)
 		fog_change(doom);
 }
