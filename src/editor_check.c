@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/04 18:06:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/08 19:39:56 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 18:17:12 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,43 +87,45 @@ int			convex(t_doom *doom, int j)
 	return (1);
 }
 
+static	int	is_in_sector_chek(t_doom *doom, int sec, t_vertex point)
+{
+	INIINSEC(i, product, vert, vert2);
+	while (++i < (int)doom->map.sectors[sec].num_vert)
+	{
+		vert = (t_vertex){(doom->map.sectors[sec].vert[i].x - point.x),\
+			(doom->map.sectors[sec].vert[i].y - point.y)};
+		vert2 = (i == (int)doom->map.sectors[sec].num_vert - 1) ? \
+			(t_vertex){(doom->map.sectors[sec].vert[0].x - point.x), \
+			(doom->map.sectors[sec].vert[0].y - point.y)} : \
+			(t_vertex){(doom->map.sectors[sec].vert[i + 1].x - point.x)\
+				, (doom->map.sectors[sec].vert[i + 1].y - point.y)};
+		product = vert.x * vert2.y - vert2.x * vert.y;
+		if (product < 0 && (i = -1))
+		{
+			if (++sec == (int)doom->map.num_sect)
+			{
+				ft_putstr("\033[1;31m POINT NOT IN THE SECTOR\033[0m\n");
+				return (-1);
+			}
+		}
+		if (i == (int)doom->map.sectors[sec].num_vert - 1)
+		{
+			ft_put_text("\033[1;32m POINT IN THE SECTOR:  ", sec, "\033[0m\n");
+			return (sec);
+		}
+	}
+}
+
 int			is_in_sector(t_doom *doom, int x, int y)
 {
-	int			i;
 	int			sec;
-	double		product;
-	t_vertex	vert;
-	t_vertex	vert2;
 	t_vertex	point;
 
 	if (x < WIN_WIDTH - 400 && (sec = -1))
 	{
 		point = (t_vertex){(x / 10), (y / 10)};
 		while (++sec < (int)doom->map.num_sect)
-		{		
-			i = -1;
-			while (++i < (int)doom->map.sectors[sec].num_vert)	
-			{
-				vert = (t_vertex){(doom->map.sectors[sec].vert[i].x - point.x), (doom->map.sectors[sec].vert[i].y - point.y)};
-				vert2 = (i == (int)doom->map.sectors[sec].num_vert - 1) ? (t_vertex){(doom->map.sectors[sec].vert[0].x - point.x), (doom->map.sectors[sec].vert[0].y - point.y)}
-					: (t_vertex){(doom->map.sectors[sec].vert[i + 1].x - point.x), (doom->map.sectors[sec].vert[i + 1].y - point.y)};
-				product = vert.x * vert2.y - vert2.x * vert.y;
-				if (product < 0 && (i = -1))
-				{
-					sec++;
-					if (sec == (int)doom->map.num_sect)
-					{
-						ft_putstr("\033[1;31m POINT NOT IN THE SECTOR\033[0m\n");
-						return (-1);
-					}
-				}
-				if (i == (int)doom->map.sectors[sec].num_vert - 1)
-				{
-					ft_put_text("\033[1;32m POINT IN THE SECTOR:  ", sec, "\033[0m\n");
-					return (sec);
-				}
-			}
-		}
+			return (is_in_sector_chek(doom, sec, point));
 	}
 	return (-1);
 }
