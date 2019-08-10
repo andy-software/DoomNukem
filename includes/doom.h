@@ -883,6 +883,7 @@ struct	s_changes
 	pnt_event_type	pnt_events[COUNT_OF_PAINT_EVENTS];
 	int				fog_colors[9];
 	Uint32			map_fog_color_before;
+	int				start_inversion_type;
 };
 
 struct	s_doom

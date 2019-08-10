@@ -59,6 +59,7 @@ int		init_moves(t_doom *d)
 	d->changes.fog_colors[7] = 0X303B2F;
 	d->changes.fog_colors[8] = 0;
 	d->changes.map_fog_color_before = d->map.fog_color;
+	d->changes.start_inversion_type = d->map.inverse_colors;
 	return (1);
 }
 
