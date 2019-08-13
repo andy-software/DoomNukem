@@ -1048,6 +1048,9 @@ void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
 void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
 
 void		set_mouse(t_doom *doom);
+
+void		free_file_data(t_map *map);
+void		free_game_params(t_doom *d);
 /*
 **start.c
 */
