@@ -43,6 +43,8 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, t_sprite_render *sr,
 		pos = sr->sprites[i].text_no + min((d->ui.prevTime - sr->sprites[i].death_time) / 150, (Uint32)(sheet->w - 1));
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 			d->map.sprites[sr->sprites[i].spr_num].draw = 0;
+		d->map.sprites[sr->sprites[i].spr_num].end_z -= d->map.sprites[sr->sprites[i].spr_num].start_z;
+		d->map.sprites[sr->sprites[i].spr_num].start_z = 0;
 	}
 	else
 		pos = sr->sprites[i].text_no;

@@ -50,7 +50,7 @@
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 3
+# define COUNT_OF_SPRITE_EVENTS 4
 # define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define SUR_FORMAT 372645892
@@ -441,6 +441,7 @@ struct	s_game
 	float			dy;
 	int				mouse_x;
 	int				mouse_y;
+	int				picked_key[3];
 	int				fire;
 	int				fuel;
 	int				click;
@@ -624,8 +625,7 @@ struct	s_ui
 	Uint32			prevTime;
 	Uint32			currTime;
 	Uint32			start;
-	char			masage[8];
-	char			*text0;
+	char			str[10];
 	float			fps;
 	int				fire;
 	int				gun_num;
@@ -675,13 +675,14 @@ struct	s_texture
 	SDL_Surface		*lose;
 	SDL_Surface		*start;
 	SDL_Surface		*visor;
+	SDL_Surface		*keys;
+	SDL_Rect		keys_r;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
 	SDL_Rect		gun21_r;
 	SDL_Rect		gun22_r;
 	SDL_Rect		cross_r;
 	SDL_Rect		hp_r;
-	SDL_Rect		armor_r;
 	SDL_Rect		ammo_r;
 	int				dude_l;
 	int				visor_l;
@@ -806,6 +807,7 @@ struct	s_sound
 	Mix_Chunk		*death;
 	Mix_Chunk		*mobdeath[2];
 	Mix_Chunk		*mobsound[2];
+	Mix_Chunk		*mobhurt[2];
 	Mix_Chunk		*pickup[4];
 	Mix_Chunk		*gun2[3];
 	Mix_Chunk		*hurt;
@@ -964,6 +966,8 @@ t_vertex	vec_to_ver(t_vector v);
 */
 void		draw_ui(t_doom *d);
 void		gun_anim(t_doom *d);
+void		fule_show(t_doom *d);
+void		show_keys(t_doom *d);
 /*
 **texturelaod.c
 */
@@ -1010,6 +1014,7 @@ int			first_aid_event(t_doom *d, t_painting *paint);
 int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
+int			give_event(t_doom *d, t_sprite *sprite);
 int			radio_event(t_doom *d, t_sprite *sprite);
 int			win_pnt_event(t_doom *d, t_painting *paint);
 

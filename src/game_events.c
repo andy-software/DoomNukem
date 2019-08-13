@@ -61,7 +61,6 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	if (g->falling)
 	{
 		p->coord.z += g->velocity.z;
-		//p->angle_z -= 0.3 * g->velocity.z; //optional
 		g->moving = 1;
 	}
 }
@@ -174,7 +173,7 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 					else if (d->sr.sprites[i].num_sheet == 2 && d->ui.ammo_1 < 60 && d->sr.sprites[i].pick == 1 )
 					{
 						Mix_PlayChannel(6, d->sound.pickup[1], 0);
-						d->ui.ammo_1 += 15;
+						d->ui.ammo_1 += 16;
 						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
 						if (d->ui.ammo_1 > 60)
 							d->ui.ammo_1 = 60;
@@ -183,6 +182,12 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 					{
 						Mix_PlayChannel(6, d->sound.pickup[3], 0);
 						d->game.flying = 1;
+						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
+					}
+					else if (d->sr.sprites[i].num_sheet == 3 && d->sr.sprites[i].pick == 1)
+					{
+						Mix_PlayChannel(6, d->sound.pickup[2], 0);
+						d->game.picked_key[d->sr.sprites[i].text_no] = 1;
 						d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
 					}
 					project_vector2d(&next_step.x, &next_step.y, t2.x - t1.x, t2.y - t1.y);
@@ -226,15 +231,50 @@ void		check_sprite_intersection(t_doom *d)
 						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
 					else
 						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage / 10;
-					printf("%d\n", d->map.sprites[d->sr.sprites[i].spr_num].hp);
 					if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
 					{
-						if (d->sr.sprites[i].num_sheet == 5)
-							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
-						else if (d->sr.sprites[i].num_sheet == 6)
-							Mix_PlayChannel(4, d->sound.mobdeath[1], 0);
 						d->map.sprites[d->sr.sprites[i].spr_num].live = 0;
+						if (d->sr.sprites[i].num_sheet == 5)
+							Mix_PlayChannel(4, d->sound.mobdeath[1], 0);
+						else if (d->sr.sprites[i].num_sheet == 6)
+							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
+						else if (d->sr.sprites[i].num_sheet == 8)
+						{
+							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
+							d->map.sprites[i].text_no = 1;
+							d->map.sprites[i].num_sheet = 3;
+							d->map.sprites[i].sector_no = 1;
+							d->map.sprites[i].width = 0.5;
+							d->map.sprites[i].start_z = 0;
+							d->map.sprites[i].end_z = 1;
+							d->map.sprites[i].mob = 0;
+							d->map.sprites[i].angle = 0;
+							d->map.sprites[i].anglecos = 0;
+							d->map.sprites[i].anglesin = 0;
+							d->map.sprites[i].own_moves = 0;
+							d->map.sprites[i].move_speed = 0;
+							d->map.sprites[i].draw = 1;
+							d->map.sprites[i].live = 0;
+							d->map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+							d->map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+							d->map.sprites[i].key = 0;
+							d->map.sprites[i].changes = 0;
+							d->map.sprites[i].key_state = 0;
+							d->map.sprites[i].num_of_sound = 0;
+							d->map.sprites[i].event_num = 0;
+							d->map.sprites[i].hp = 0;
+							d->map.sprites[i].pick = 1;
+						}
 					}
+					else
+					{
+						if (d->sr.sprites[i].num_sheet == 5)
+							Mix_PlayChannel(4, d->sound.mobhurt[1], 0);
+						else if (d->sr.sprites[i].num_sheet == 6)
+							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
+						else if (d->sr.sprites[i].num_sheet == 8)
+							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
+					}	
 					break ;
 				}
 			}
@@ -276,7 +316,6 @@ void		game_events(t_doom *d)
 	if (d->game.fire == 1)
 	{
 		if (d->game.fire == 1)
-			printf("%d\n", d->game.fire);
 		check_sprite_intersection(d);
 		d->game.fire = 0;
 	}

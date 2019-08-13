@@ -117,8 +117,6 @@ void		player_events(t_doom *d)
 				}
 				if (!(Mix_Playing(0)) && !d->game.flying && d->game.ground)
 					Mix_PlayChannel(0, d->sound.jump, 0);
-				// if (!d->game.ground)
-				// 	Mix_HaltChannel(1);
 			}
 			else if (d->ev.key.keysym.sym == SDLK_f && !d->game.pause)
 			{
@@ -176,8 +174,8 @@ void		player_events(t_doom *d)
 				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
 					d->ui.ammo_1 -= 2;
 			}
-			else if(d->ui.fire == 1)
-				d->ui.fire = 0;
+			// else if(d->ui.fire == 1)
+			// 	d->ui.fire = 0;
 		}
 		else if (d->ev.type == SDL_QUIT)
 			d->game.quit = 1;

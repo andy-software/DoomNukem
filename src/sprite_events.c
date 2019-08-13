@@ -23,8 +23,6 @@ int			win_spr_event(t_doom *d, t_sprite *sprite)
 void		play_phrase(Mix_Music *mus, int distance)
 {
 
-	if (!(Mix_PlayingMusic()))
-		Mix_PlayMusic(mus, 1);
 	//Mix_VolumeMusic(128);
 	// else if (Mix_PausedMusic())
 	// 	Mix_ResumeMusic();
@@ -53,7 +51,30 @@ int			radio_event(t_doom *d, t_sprite *sprite)
 int			talk_event(t_doom *d, t_sprite *sprite)
 {
 	if (sprite->num_of_sound > -1)
-		play_phrase(d->sound.mobsound[sprite->num_of_sound], 10); // sound of speech
+		if (!(Mix_Playing(4)))
+			Mix_PlayChannel(4, d->sound.mobsound[sprite->num_of_sound], 0);
+	return (0);
+}
+
+int			give_event(t_doom *d, t_sprite *sprite)
+{
+	static int click = 0;
+	if (sprite->num_of_sound > -1 && click == 0)
+	{
+		Mix_PlayChannel(4, d->sound.mobsound[sprite->num_of_sound], 0);
+		click++;
+	}
+	else if (click == 1 && d->game.picked_key[0] == 0)
+	{
+		d->game.picked_key[0] = 1;
+		Mix_PlayChannel(6, d->sound.pickup[2], 0);
+	}
+	else
+	{
+		d->game.picked_key[0] = 1;
+		if (!(Mix_Playing(4)))
+			Mix_PlayChannel(4, d->sound.mobsound[0], 0);
+	}
 	return (0);
 }
 
