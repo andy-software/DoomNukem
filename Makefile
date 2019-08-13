@@ -24,7 +24,8 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		map_editor_first_person_view.c editor_check.c editor_floor_ceil.c \
 		editor_prepare.c editor_write_read.c editor_render.c editor_key.c \
 		editor_key_texture.c editor_ft.c editor_mouse.c editor_sprites_change.c \
-		editor_change_scale.c editor_info_in_term.c editor_interface.c
+		editor_change_scale.c editor_info_in_term.c editor_interface.c \
+		free_game.c
 
 INC = includes/doom.h
 
