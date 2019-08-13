@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/10 12:27:07 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 18:29:41 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@
 # define UnFix(a) 				((a) / (float)(1LL<<8))
 # define FixMult(a, b) 			((((a) * (b)) >> 8))
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
+# define INIINSEC(a, b, c, d)	int a = -1; double b; t_vertex c; t_vertex d;
 /* EDITOR */
 # define NB_BUTTONS 17
 # define NB_IMAGES 6
