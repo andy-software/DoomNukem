@@ -82,10 +82,15 @@ void	load_sounds(t_sound *sound)
     sound->gun2[2] = load_sound("./materials/sounds/saw_atac.wav"); // 3
 	sound->mobdeath[0] = load_sound("./materials/sounds/enemy1_d.wav"); // 4
 	sound->mobdeath[1] = load_sound("./materials/sounds/enemy2_d.wav"); // 4
+	sound->mobdeath[2] = load_sound("./materials/sounds/enemy2_d.wav"); // 4// will change
 	sound->mobsound[0] = load_sound("./materials/sounds/enemy1_s.wav"); // 4   
-	sound->mobsound[1] = load_sound("./materials/sounds/enemy2_s.wav"); // 4 
+	sound->mobsound[1] = load_sound("./materials/sounds/enemy2_s.wav"); // 4
+	sound->mobsound[2] = load_sound("./materials/sounds/enemy2_s.wav"); // 4 // will change
+	sound->mobsound[3] = load_sound("./materials/sounds/npc_1.wav"); // 4   
+	sound->mobsound[4] = load_sound("./materials/sounds/npc_2.wav"); // 4  
 	sound->mobhurt[0] = load_sound("./materials/sounds/enemy1_h.wav"); // 4   
 	sound->mobhurt[1] = load_sound("./materials/sounds/enemy2_h.wav"); // 4     
+	sound->mobhurt[2] = load_sound("./materials/sounds/enemy2_h.wav"); // 4// will change
 	sound->pickup[0] = load_sound("./materials/sounds/heal.wav"); // 5
 	sound->pickup[1] = load_sound("./materials/sounds/ammo.wav"); // 5
 	sound->pickup[2] = load_sound("./materials/sounds/key.wav"); // 5  

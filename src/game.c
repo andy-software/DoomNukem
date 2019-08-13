@@ -109,8 +109,6 @@ int		game_loop(t_doom doom)
 		{
 			if (doom.game.pause == 0 && doom.game.hp_level > 0)
 			{
-				printf("PX:%f   PY;%f\n", doom.player.coord.x, doom.player.coord.y);
-				printf("X:%f   Y;%f\n", doom.map.sprites[7].coord.x, doom.map.sprites[7].coord.y);
 				game_events(&doom);
 				prepare_to_rendering(&doom.render, doom);
 				draw_skybox(&doom);
@@ -125,7 +123,7 @@ int		game_loop(t_doom doom)
 				show_lose(&doom);
 			}
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 4);
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6);
 			doom.ui.currTime = SDL_GetTicks();
 			doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 			doom.ui.fps = doom.game.dt / 1000.0;

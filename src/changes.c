@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 18:04:00 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/09 12:42:51 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/09 17:15:35 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void		chase(t_doom *d, t_sprite *spr)
 		move_sprites(d, spr->speed_x, spr->speed_y, spr);
 		spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	}
-	else if (comp_real(d->player.coord.z - d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == d->player.sector)
+	else if (comp_real(d->player.coord.z - d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == (int)d->player.sector)
 	{
 		if (!(Mix_Playing(2)))
 			Mix_PlayChannel(2, d->sound.hurt, 0);

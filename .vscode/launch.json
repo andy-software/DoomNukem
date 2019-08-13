@@ -9,7 +9,11 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/doom-nukem",
+<<<<<<< HEAD
             "args": ["play", "maps/level5"],
+=======
+            "args": ["edit", "debug"],
+>>>>>>> 6e5c8d4725e4ea682104aebba4f593980ef5664c
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [

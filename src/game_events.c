@@ -49,7 +49,7 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	{
 		p->coord.z = floor_z + g->eye_height;
 		if (g->velocity.z < -1)
-			printf("Ur welcome in hell\n"); //minus hit point
+			g->hp_level += g->velocity.z * 40;
 		g->velocity.z = 0;
 		g->falling = 0;
 	}
@@ -239,32 +239,7 @@ void		check_sprite_intersection(t_doom *d)
 						else if (d->sr.sprites[i].num_sheet == 6)
 							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
 						else if (d->sr.sprites[i].num_sheet == 8)
-						{
 							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
-							d->map.sprites[i].text_no = 1;
-							d->map.sprites[i].num_sheet = 3;
-							d->map.sprites[i].sector_no = 1;
-							d->map.sprites[i].width = 0.5;
-							d->map.sprites[i].start_z = 0;
-							d->map.sprites[i].end_z = 1;
-							d->map.sprites[i].mob = 0;
-							d->map.sprites[i].angle = 0;
-							d->map.sprites[i].anglecos = 0;
-							d->map.sprites[i].anglesin = 0;
-							d->map.sprites[i].own_moves = 0;
-							d->map.sprites[i].move_speed = 0;
-							d->map.sprites[i].draw = 1;
-							d->map.sprites[i].live = 0;
-							d->map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
-							d->map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
-							d->map.sprites[i].key = 0;
-							d->map.sprites[i].changes = 0;
-							d->map.sprites[i].key_state = 0;
-							d->map.sprites[i].num_of_sound = 0;
-							d->map.sprites[i].event_num = 0;
-							d->map.sprites[i].hp = 0;
-							d->map.sprites[i].pick = 1;
-						}
 					}
 					else
 					{

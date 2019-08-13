@@ -124,18 +124,21 @@ void		player_events(t_doom *d)
 				d->game.flying = !d->game.flying;
 			}
 			else if (d->ev.key.keysym.sym == SDLK_1)
-			{	
+			{
+				Mix_HaltChannel(-1);	
 				d->ui.fire = 0;
 				d->ui.gun_num = 0;
 			}
 			else if (d->ev.key.keysym.sym == SDLK_2)
 			{
+				Mix_HaltChannel(-1);
 				d->ui.start_saw = 0;
 				d->ui.fire = 0;
 				d->ui.gun_num = 1;
 			}
 			else if (d->ev.key.keysym.sym == SDLK_3)
 			{
+				Mix_HaltChannel(-1);
 				d->ui.fire = 0;
 				d->ui.gun_num = 2;
 			}
@@ -173,9 +176,14 @@ void		player_events(t_doom *d)
 				d->ui.start = d->ui.prevTime;
 				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
 					d->ui.ammo_1 -= 2;
+				if (d->ui.gun_num == 1)
+					Mix_HaltChannel(3);
 			}
-			// else if(d->ui.fire == 1)
-			// 	d->ui.fire = 0;
+			else if(d->ui.fire == 1)
+			{
+				d->ui.fire = 0;
+				Mix_HaltChannel(3);
+			}
 		}
 		else if (d->ev.type == SDL_QUIT)
 			d->game.quit = 1;

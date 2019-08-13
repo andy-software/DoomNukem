@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 14:11:55 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/10 15:32:35 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,20 @@ int		ft_map_editor(t_doom *doom, char *name)
 {
 	p("\nIN FT_MAP_EDITOR\n");
 	int		fd;
-	char	*name_m;
 
-	name_m = ft_strjoin("maps/", name);
+	doom->editor.name_m = ft_strjoin("maps/", name);
 	ft_prepare_read(doom);
-	if (open(name_m, O_EXCL) > 0)
+	if (open(doom->editor.name_m, O_EXCL) > 0)
 	{
-		fd = open(name_m, O_RDONLY);
+		fd = open(doom->editor.name_m, O_RDONLY);
 		ft_read_map_edit(doom, fd);
 		printf("doom->map.paint[0].event: %d, \n", doom->map.paint[0].event_num);
 		printf("doom->map.paint[0].key: %d, \n", doom->map.paint[0].key);
 		close(fd);
-		fd = open(name_m, O_WRONLY);
+		fd = open(doom->editor.name_m, O_WRONLY);
 	}
 	else
-		fd = open(name_m, O_CREAT | O_WRONLY);
+		fd = open(doom->editor.name_m, O_CREAT | O_WRONLY);
 	if (fd < 0)
 		return (error_message("fd is bad :(\n") + 1);
 	if (doom->editor.save_del != 2)
@@ -42,8 +41,8 @@ int		ft_map_editor(t_doom *doom, char *name)
 	ft_prepare_editor(doom);
 	ft_start_edit(doom, fd);
 	if (doom->editor.save_del == 2)
-		remove(name_m);
-	free(name_m);
+		remove(doom->editor.name_m);
+	free(doom->editor.name_m);
 	close(fd);
 	return (0);
 }
@@ -64,7 +63,8 @@ int		ft_prepare_to_write(t_doom *doom)
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);
 
-	doom->map.num_sprites = doom->editor.images[2].exist;
+	doom->map.num_sprites = doom->editor.images[2].exist + doom->editor.images[4].exist;
+	//printf(" doom->editor.images[2].exist:  %d +   doom->editor.images[4].exist:  %d = doom->map.num_sprites   %d\n\n", doom->editor.images[2].exist, doom->editor.images[4].exist, doom->map.num_sprites);
 	i = -1;
 	while (++i < (int)doom->map.num_sprites)
 	{
@@ -72,7 +72,7 @@ int		ft_prepare_to_write(t_doom *doom)
 		doom->map.sprites[i].live = 1;
 		doom->map.sprites[i].draw = 1;
 		doom->map.sprites[i].own_moves = i;
-		doom->map.sprites[i].spr_num = i;
+		// doom->map.sprites[i].spr_num = i;
 		// doom->editor.images[2].im_x[i] = (doom->map.sprites[i].coord.x * 10) - 50;
 		// doom->editor.images[2].im_y[i] = (doom->map.sprites[i].coord.y * 10) - 50;
 	}
@@ -81,6 +81,8 @@ int		ft_prepare_to_write(t_doom *doom)
 	doom->editor.images[1].im_x[1] = (doom->player.coord.x * 10) - 48;
 	doom->editor.images[1].im_y[1] = (doom->player.coord.y * 10) - 48;
 	doom->player.sector = is_in_sector(doom, (doom->player.coord.x * 10), (doom->player.coord.y * 10));
+	// remove(doom->editor.name_m);
+	// int fd = open(doom->editor.name_m, O_CREAT | O_WRONLY);
 	return (1);
 }
 
@@ -115,15 +117,6 @@ void	ft_prepare_editor(t_doom *doom)
 	}
 	/***** fog ****/
 	doom->editor.ind_fog = 0; 
-	doom->editor.fog_colors[0] = 0x00FF00;
-	doom->editor.fog_colors[1] = 0xFF0000;
-	doom->editor.fog_colors[2] = 0x0000FF;
-	doom->editor.fog_colors[3] = 0x00FFFF;
-	doom->editor.fog_colors[4] = 0xFFFFFF;
-	doom->editor.fog_colors[5] = 0xAAB200;
-	doom->editor.fog_colors[6] = 0x45361E;
-	doom->editor.fog_colors[7] = 0X303B2F;
-	doom->editor.fog_colors[8] = 0;
 	/****   To make objects visible on map (player, sprite..)  *****/
 	if (doom->player.coord.x && doom->player.coord.y)
 	{
@@ -185,7 +178,7 @@ int		ft_start_edit(t_doom *doom, int fd)
 		}
 		ft_render_editor(doom);
 		SDL_UpdateWindowSurface(doom->editor.sdl.window);
-		if (doom->editor.save_del == 1) //saving
+		if (doom->editor.save_del == 1)
 		{
 			if (ft_prepare_to_write(doom))
 				ft_write_changes_to_file(doom, fd);
@@ -197,6 +190,7 @@ int		ft_start_edit(t_doom *doom, int fd)
 			{
 				doom->map.editing = 1;
 				game_mod_editor(doom);
+				doom->map.editing = 0;
 				ft_prepare_to_write(doom);
 				ft_write_changes_to_file(doom, fd);
 			}
@@ -289,9 +283,26 @@ void	add_items(t_doom *doom, SDL_Event *event)
 				else
 				{
 					ft_null_items(doom, doom->editor.ind_img, EXIST + 1);
+					// if (doom->editor.ind_img == 2)
+					// 	doom->map.sprites[doom->editor.images[doom->editor.ind_img].exist - 1].coord = (t_vector){event->button.x / 10, event->button.y / 10, 10};
 					if (doom->editor.ind_img == 2)
-						doom->map.sprites[doom->editor.images[doom->editor.ind_img].exist - 1].coord = (t_vector){event->button.x / 10, event->button.y / 10, 10};
-					if (doom->editor.ind_img == 1)
+					{
+						if (doom->editor.images[4].exist > -1)
+						{
+							doom->map.sprites[(doom->editor.images[2].exist + doom->editor.images[4].exist) - 1].coord = (t_vector){event->button.x / 10, event->button.y / 10, 10};
+							doom->map.sprites[(doom->editor.images[2].exist + doom->editor.images[4].exist) - 1].pick = 0;
+						}
+					}
+					else if (doom->editor.ind_img == 4)
+					{
+						if (doom->editor.images[2].exist > -1)
+						{
+							doom->map.sprites[(doom->editor.images[2].exist + doom->editor.images[4].exist) - 1].coord = (t_vector){event->button.x / 10, event->button.y / 10, 10};
+							doom->map.sprites[(doom->editor.images[2].exist + doom->editor.images[4].exist) - 1].pick = 1;
+							doom->map.sprites[(doom->editor.images[2].exist + doom->editor.images[4].exist) - 1].mob = 0;
+						}
+					}
+					else if (doom->editor.ind_img == 1)
 					{
 						if (doom->editor.images[1].exist == 1)
 							if (doom->editor.ind_img == 1)
@@ -301,7 +312,7 @@ void	add_items(t_doom *doom, SDL_Event *event)
 							}
 						doom->editor.images[doom->editor.ind_img].exist = 1;
 					}
-					if (doom->editor.ind_img == 3)
+					else if (doom->editor.ind_img == 3)
 					{
 						lie_point(doom, -1, event->button.x, event->button.y);
 						if (doom->editor.fline.sec2 == -1 && doom->editor.fline.sec1 != -1)
@@ -443,44 +454,123 @@ void	lie_point(t_doom *doom, int k, int x, int y)
 	double		koef;
 	double		c;
 	int			i;
+	t_vertex	*v1;
+	t_vertex	*v2;
 
 	more = 0;
 	k = -1;
 	point = (t_vertex){(x / 10), (y / 10)};
+	//	printf("x: %d            y: %d\n", x, y);
 	while (++k < (int)doom->map.num_sect)
 	{
 		i = -1;
 		while (++i < (int)doom->map.sectors[k].num_vert)
 		{
-			koef = (doom->map.sectors[k].vert[i + 1].y - doom->map.sectors[k].vert[i].y) / (doom->map.sectors[k].vert[i + 1].x - doom->map.sectors[k].vert[i].x);
-			c = doom->map.sectors[k].vert[i].y - (koef * doom->map.sectors[k].vert[i].x);
-			if (more == 0 && comp_real(point.y, (point.x * koef + c), 1))
-			{
-				ft_putstr("\033[1;32m Line coincides\033[0m\n");
-				doom->editor.fline.num_line1 = i;
-				doom->editor.fline.num_line2 = -1;
-				doom->editor.fline.sec1 = k;
-				doom->editor.fline.sec2 = -1;
-				if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
-					doom->editor.is_portal = 0;
+	// 			if (comp_real(doom->map.sectors[k].vert[i + 1].x, doom->map.sectors[k].vert[i].x, 2))
+	// 			{
+	// 					ft_putstr("\033[1;32m Line coincides2\033[0m\n");
+	// 				if (comp_real(point.x, doom->map.sectors[k].vert[i].x, 2))
+	// 					ft_putstr("\033[1;32m Line coincides3\033[0m\n");
+	// 				if (point.y >= min(doom->map.sectors[k].vert[i].y, doom->map.sectors[k].vert[i + 1].y))
+	// 					ft_putstr("\033[1;32m Line coincides5\033[0m\n");
+	// 				if (doom->map.sectors[k].vert[i].x <= max(doom->map.sectors[k].vert[i].y, doom->map.sectors[k].vert[i + 1].y))
+	// 				{
+	// // pritnf(doom->map.sectors[k].vert[i].x);
+	// 					ft_putstr("\033[1;32m Line coincides6\033[0m\n\n");
+	// 				}
+					
+	// 			}
+
+				if (i + 1 < (int)doom->map.sectors[k].num_vert)
+				{
+					v2 = doom->map.sectors[k].vert + i + 1;
+					v1 = doom->map.sectors[k].vert + i;
+				}
 				else
-					doom->editor.is_portal = 1;
-				more++;
-				break ;
-			}
-			else if (more == 1 && comp_real(point.y, (point.x * koef + c), 2))
-			{
-			printf("-----  %f\n --------%f", doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1].x, doom->map.sectors[k].vert[i].x);
-				doom->editor.fline.num_line2 = i;
-				doom->editor.fline.sec2 = k;
-			}
-			else if (more == 0)
-			{
-				doom->editor.fline.num_line1 = -1;
-				doom->editor.fline.num_line2 = -1;
-				doom->editor.fline.sec1 = -1;
-				doom->editor.fline.sec2 = -1;
-			}
+				{
+					v2 = doom->map.sectors[k].vert;
+					v1 = doom->map.sectors[k].vert + i;
+				}
+
+
+				
+				if (comp_real(v2->x, v1->x, 2) && comp_real(point.x, v1->x, 2)) //configurate
+				{
+					printf("im on vertical line\n");
+					if (more == 0 && comp_real(clamp(point.y, min(v2->y, v1->y), max(v2->y, v1->y)), point.y, 0.001))
+					{
+						printf("first if\n");
+						ft_putstr("\033[1;32m Line coincides\033[0m\n");
+						doom->editor.fline.num_line1 = i;
+						doom->editor.fline.num_line2 = -1;
+						doom->editor.fline.sec1 = k;
+						doom->editor.fline.sec2 = -1;
+						doom->editor.is_portal = 2;
+						more++;
+						break ;
+					}
+					else if (more == 1 && comp_real(clamp(point.y, min(v2->y, v1->y), max(v2->y, v1->y)), point.y, 0.001))
+					{
+						printf("second if\n");
+						if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
+							doom->editor.is_portal = 0;
+						else
+							doom->editor.is_portal = 1;
+						doom->editor.fline.num_line2 = i;
+						doom->editor.fline.sec2 = k;
+					}
+					else if (more == 0)
+					{
+						printf("third if\n");
+						doom->editor.fline.num_line1 = -1;
+						doom->editor.fline.num_line2 = -1;
+						doom->editor.fline.sec1 = -1;
+						doom->editor.fline.sec2 = -1;
+						doom->editor.is_portal = 2;
+					}
+				}
+				else
+				{
+					koef = (v2->y - v1->y) / (v2->x - v1->x);
+					c = v1->y - (koef * v1->x);
+				
+					if (more == 0 && comp_real(point.y, (point.x * koef + c), 1) &&
+					(point.x > min(v1->x, v2->x)) &&
+					(point.x < max(v1->x, v2->x)) &&
+					(point.y > min(v1->y, v2->y)) &&
+					(point.y < max(v1->y, v2->y))) //make a boundary check
+					{
+						ft_putstr("\033[1;32m Line coincides\033[0m\n");
+						doom->editor.fline.num_line1 = i;
+						doom->editor.fline.num_line2 = -1;
+						doom->editor.fline.sec1 = k;
+						doom->editor.fline.sec2 = -1;
+						doom->editor.is_portal = 2;
+						more++;
+						break ;
+					}
+					else if (more == 1 && comp_real(point.y, (point.x * koef + c), 2) &&
+					(point.x > min(v1->x, v2->x)) &&
+					(point.x < max(v1->x, v2->x)) &&
+					(point.y > min(v1->y, v2->y)) &&
+					(point.y < max(v1->y, v2->y)))
+					{
+						if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
+							doom->editor.is_portal = 0;
+						else
+							doom->editor.is_portal = 1;
+						doom->editor.fline.num_line2 = i;
+						doom->editor.fline.sec2 = k;
+					}
+					else if (more == 0)
+					{
+						doom->editor.fline.num_line1 = -1;
+						doom->editor.fline.num_line2 = -1;
+						doom->editor.fline.sec1 = -1;
+						doom->editor.fline.sec2 = -1;
+						doom->editor.is_portal = 2;
+					}
+				}
 		}
 	}
 	printf("\033[1;34m   num_line1: %d\n   num_line2: %d\n   sec1: %d\n   sec2: %d \033[0m\n\n", doom->editor.fline.num_line1, doom->editor.fline.num_line2, doom->editor.fline.sec1, doom->editor.fline.sec2);
