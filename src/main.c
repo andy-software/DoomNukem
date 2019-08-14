@@ -18,17 +18,44 @@ int		editor_mod(t_doom *doom, char *file_name)
 	return (0);
 }
 
-int		game_mod(t_doom *doom, char *file_name)
+
+int		game_mod(t_doom *doom)
 {
-	if (read_file(doom, file_name) == 0)
+	start_loop(doom);	
+	if (read_file(doom, &doom->file_name) == 0)
 		return (error_message("Error with file") + 1);
-	if (init_sdl(&doom->sdl) == 0)
-		return (error_message("Error with SDL init") + 1);
-	if (load_all(&doom->texture, doom->sdl.surface->format->format, doom) == 0)
-		return (error_message("Error with textures") + 1);
 	if (game_loop(*doom) == 0)
 		return (error_message("Something really sad is happened") + 1);
 	return (0);
+}
+
+void 	start_loop(t_doom *doom)
+{
+	set_mouse(doom);
+	doom->start_quit = 0;
+	show_start(doom);
+	while (doom->start_quit == 0)
+	{
+		draw_menu(doom);
+		start_events(doom);
+		SDL_UpdateWindowSurface(doom->sdl.window);
+	}
+	doom->start_quit = 0;
+	chose_level(doom);
+	while (ft_strlen(doom->file_name) == 0)
+	{
+		draw_menu(doom);
+		level_events(doom);
+		SDL_UpdateWindowSurface(doom->sdl.window);
+	}
+	doom->start_quit = 0;
+	chose_dificulty(doom);
+	while (doom->start_quit == 0)
+	{
+		draw_menu(doom);
+		dificulty_events(doom);
+		SDL_UpdateWindowSurface(doom->sdl.window);
+	}
 }
 
 int		main(int argc, char **argv)
@@ -39,7 +66,13 @@ int		main(int argc, char **argv)
 	if (argc == 3 || argc == 2)
 	{
 		if (ft_strcmp(argv[1], "play") == 0)
-			return (game_mod(&doom, argv[2]));
+		{
+			if (init_sdl(&doom.sdl) == 0)
+				return (error_message("Error with SDL init") + 1);
+			if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
+				return (error_message("Error with textures") + 1);
+			return (game_mod(&doom));
+		}
 		else if (ft_strcmp(argv[1], "edit") == 0)
 			return (editor_mod(&doom, argv[2]));
 		else

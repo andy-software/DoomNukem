@@ -646,6 +646,9 @@ struct	s_menu
 {
 	SDL_Surface *m[4];
 	SDL_Rect pos[4];
+	SDL_Color col[2];
+	char *title[4];
+	int opt;
 };
 
 struct	s_font
@@ -893,6 +896,9 @@ struct	s_changes
 struct	s_doom
 {
 	SDL_Event		ev;
+	char			file_name[12];
+	int				difficulty;
+	int				start_quit;
 	t_thread		threads[NUM_OF_THRD];
 	t_sprite_render	sr;
 	t_render		render;
@@ -924,6 +930,7 @@ int			init_sdl(t_sdl *sdl);
 void		player_events(t_doom *d);
 void		game_events(t_doom *d);
 int			game_loop(t_doom doom);
+void		start_loop(t_doom *doom);
 int			*intset(int *b, int c, size_t len);
 
 //render
@@ -1013,7 +1020,7 @@ int			translate_and_rotate_sprites(t_sprite *arr_spr, \
 int			sprite_sort(t_sprite *arr_spr, int len);
 // void		load_sprites(t_texture *texture, Uint32 format);
 int			*copy_static_arr(int *arr, const int len);
-int			game_mod(t_doom *doom, char *file_name);
+int			game_mod(t_doom *doom);
 void		move_mobs(t_doom *d);
 int			first_own_moves(t_doom *d, t_sprite *spr);
 int			mirror_own_moves(t_doom *d, t_sprite *spr);
@@ -1051,8 +1058,15 @@ void		switch_music(t_sound *sound, SDL_Event ev);
 void		show_pause(t_doom *d);
 void		show_lose(t_doom *d);
 void 		show_start(t_doom *d);
-void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
-void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
+void	    chose_level(t_doom *d);
+void	    chose_dificulty(t_doom *d);
+void		draw_menu(t_doom *d);
+void		menu_mouse(t_doom *d);
+void		start_events(t_doom *d);
+void		level_events(t_doom *d);
+void		dificulty_events(t_doom *d);
+void		pause_event(t_doom *d);
+void		lose_event(t_doom *d);
 
 void		set_mouse(t_doom *doom);
 

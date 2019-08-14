@@ -90,8 +90,8 @@ void		player_events(t_doom *d)
 	{
 		if (!d->game.pause)
 		{
-		movement_keys(d);
-		mouse_rotation(d);
+			movement_keys(d);
+			mouse_rotation(d);
 		}
 	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 	{
@@ -189,5 +189,7 @@ void		player_events(t_doom *d)
 			d->game.quit = 1;
 		switch_music(&d->sound, d->ev);
 		
-	}}
+	}
+	}
+
 }
