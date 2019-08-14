@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/doom-nukem",
-            "args": ["play", "maps/65"],
+            "args": ["edit", "mapa123"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [

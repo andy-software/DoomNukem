@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprite_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 12:09:33 by apavlov           #+#    #+#             */
-/*   Updated: 2019/07/31 12:09:34 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/13 19:03:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int			win_spr_event(t_doom *d, t_sprite *sprite)
 void		play_phrase(Mix_Music *mus, int distance)
 {
 
-	if (!(Mix_PlayingMusic()))
-		Mix_PlayMusic(mus, 1);
+	// if (!(Mix_PlayingMusic()))
+	// 	Mix_PlayMusic(mus, 1);
 	//Mix_VolumeMusic(128);
 	// else if (Mix_PausedMusic())
 	// 	Mix_ResumeMusic();

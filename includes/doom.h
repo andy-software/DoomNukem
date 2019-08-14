@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/10 12:27:07 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 07:33:43 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@
 # define UnFix(a) 				((a) / (float)(1LL<<8))
 # define FixMult(a, b) 			((((a) * (b)) >> 8))
 # define FixDiv(a, b) 			((((a) << 8) / (b)))
+# define INIINSEC(a, b, c, d)	int a = -1; double b; t_vertex c; t_vertex d;
 /* EDITOR */
 # define NB_BUTTONS 17
 # define NB_IMAGES 6
@@ -95,10 +96,22 @@
 # define SPRITES 4
 # define PAINTINGS 5
 # define p(x) printf(x)
-# define MAX_NUM_SECTORS 20
+# define MAX_NUM_SECTORS 50
 # define MAX_SECTORS 100
 # define MAX_VERT 100
 # define MAX_PAINTINGS 100
+# define SCL 5.0
+# define IS_DRW doom->editor.is_drawing
+# define FT_R_OTH(a, b, c)  a = 0; b = 1; c = 0;
+# define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
+# define BUT_PRS doom->editor.but1_press
+# define FRE_STR(a, b, c) free(a); free(b); free(c);
+# define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
+# define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
+# define PR_TO_WR(a, b) a = 1; b = 1;
+# define MAP_SPRT doom->map.sprites
+# define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
+# define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
 
 # define BOTTOM 1 
 # define MIDDLE 2
@@ -121,7 +134,7 @@
 # define IMG doom->editor.images
 # define SDL_SURF doom->editor.sdl.surface
 
-/** action **/
+/** action paintings **/
 # define NUM_ACT 5
 # define TURN_LIG 0
 # define LIFT_FL 1
@@ -129,6 +142,15 @@
 # define FIRST_AID 3
 # define GET_AMMO 4
 # define WIN_PNT 5
+# define INV_COLORS 6
+
+/** action sprites **/
+# define WIN_SPRT 0
+# define TALK 1
+# define RADIO 2
+# define TOXIC 3
+
+
 
 /*  BREZEN NORM */
 # define BDX doom->editor.brezen.dx
@@ -726,11 +748,7 @@ struct	s_interface
 	int				tmp_x2;
 	int				tmp_y2;
 	t_sector		sectors[100];
-	int				nbr_vertex;
-	int				nbr_sectors;
-	int				iterator_num_vertex;
 	int				is_drawing_interface;
-	int				start_new_sector;
 };
 
 struct	s_images
@@ -799,6 +817,9 @@ struct	s_editor
 	int				fog_colors[9];
 	int				ind_fog;
 	char			*name_m;
+	int				more;
+	// t_vertex		*v1;
+	// t_vertex		*v2;
 };
 /****/
 struct	s_sound
@@ -1077,8 +1098,8 @@ void			ft_mouse_move_edit(t_doom *doom, SDL_Event *event);
 void			ft_mouse_release_edit(t_doom *doom, SDL_Event *event);
 void			ft_render_previous(t_doom *doom);
 void			ft_draw_axis(t_doom *doom);
-void			ft_prepare_editor(t_doom *doom);
-int				ft_prepare_to_write(t_doom *doom);
+void			ft_prepare_editor(t_doom *doom, int i);
+int				ft_prepare_to_write(t_doom *doom, int i);
 void			ft_prepare_read(t_doom *doom);
 void			ft_prepare_read2(t_doom *doom, int j);
 int				ft_specify_coor(int nbr);
@@ -1088,29 +1109,38 @@ void			key_floor_ceil(t_doom *doom);
 void			key_ceil(t_doom *doom, const Uint8 *state);
 void			info_ceil_floor(t_doom *doom);
 void			info_action(t_doom *doom, int pain);
+void			info_action_sprites(t_doom *doom, int sp);
 void			info_f_c_w_s(t_doom *doom, int ind);
 void			info_f_c_w_s2(t_doom *doom);
 int				check_what_line_player_are_looking(t_doom *d);
 void			editor_player_events(t_doom *doom);
 void			editor_player_events2(t_doom *doom, const Uint8 *state);
+void			editor_player_events3(t_doom *doom, const Uint8 *state);
 void			editor_events_down_up(t_doom *doom);
+void			editor_events_texture(t_doom *doom, const Uint8 *state);
 void			editor_movement_keys(t_doom *d);
-void			key_texure_change(t_doom *doom, const Uint8 *state);
+void			key_texture_change(t_doom *doom, const Uint8 *state);
 void			key_editor_change(t_doom *doom, const Uint8 *state);
+void			fog_change(t_doom *doom);
 void			add_items(t_doom *doom, SDL_Event *event);
 void			del_save_play(t_doom *doom, SDL_Event *event);
 void			change_floor_ceil(t_doom *doom, SDL_Event *event);
 void			rec_action(t_doom *doom, SDL_Event *event);
 void			editor_action(t_doom *doom, const Uint8 *state);
+void			editor_action_sp(t_doom *doom, const Uint8 *state);
+void			editor_action(t_doom *doom, const Uint8 *state);
+void			editor_painitngs_texture(t_doom *doom, const Uint8 *state);
 void			editor_start_z(t_doom *doom, const Uint8 *state);
 void			editor_end_z(t_doom *doom, const Uint8 *state);
 void			editor_sp_width(t_doom *doom, const Uint8 *state);
 void			editor_sprites_texture(t_doom *doom, const Uint8 *state);
-
+void			check_save_del(t_doom *doom, int fd);
 void			editor_fc_texture(t_doom *doom, const Uint8 *state);
 void			editor_wall_texture(t_doom *doom, const Uint8 *state);
 void			editor_scale_x(t_doom *doom, const Uint8 *state);
 void			editor_scale_y(t_doom *doom, const Uint8 *state);
+void			editor_shift_x(t_doom *doom, const Uint8 *state);
+void			editor_shift_y(t_doom *doom, const Uint8 *state);
 void			lie_point(t_doom *doom, int k, int x, int y);
 void			in_sector(t_doom *doom, SDL_Event *event);
 /*  titles */

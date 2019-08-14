@@ -87,8 +87,8 @@ void		player_events(t_doom *d)
 	{
 		if (!d->game.pause)
 		{
-		movement_keys(d);
-		mouse_rotation(d);
+			movement_keys(d);
+			mouse_rotation(d);
 		}
 	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 	{

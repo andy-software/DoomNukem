@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/10 11:51:54 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 04:25:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ void	ft_render_other_butt(t_doom *doom, int exist, int *it, SDL_Rect bigger)
 void	ft_render_interface(t_doom *doom)
 {
 	SDL_Rect	bigger;
-	static int i = 0;
+	static int	i;
 
+	i = 0;
 	doom->editor.interface.is_drawing_interface = 1;
 	ft_draw_axis(doom);
 	bigger = (SDL_Rect){840, 630, 0, 0};
@@ -140,11 +141,5 @@ void	ft_render_interface(t_doom *doom)
 	if (doom->editor.is_sector != 0)
 		SDL_BlitSurface(SECTOR[doom->editor.is_sector].image,
 		NULL, SDL_SURF, &bigger);
-	if (doom->game.pause == 1 && i < 1)
-	{
-		bigger = (SDL_Rect){0, 0, 0, 0};
-		SDL_BlitSurface(SECTOR[5].image, NULL, doom->sdl.surface, &bigger);
-		i++;
-	}
 	doom->editor.interface.is_drawing_interface = 0;
 }

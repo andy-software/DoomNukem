@@ -6,11 +6,30 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/09 16:59:46 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 02:18:38 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
+
+void	editor_events_texture(t_doom *doom, const Uint8 *state)
+{
+	if (doom->ev.key.keysym.sym == SDLK_t)
+	{
+		editor_wall_texture(doom, state);
+		editor_fc_texture(doom, state);
+		editor_sprites_texture(doom, state);
+		editor_painitngs_texture(doom, state);
+	}
+	else if (doom->ev.key.keysym.sym == SDLK_COMMA)
+		editor_scale_x(doom, state);
+	else if (doom->ev.key.keysym.sym == SDLK_PERIOD)
+		editor_scale_y(doom, state);
+	else if (doom->ev.key.keysym.sym == SDLK_LEFTBRACKET)
+		editor_shift_x(doom, state);
+	else if (doom->ev.key.keysym.sym == SDLK_RIGHTBRACKET)
+		editor_shift_y(doom, state);
+}
 
 void	editor_wal_texture_bt(t_doom *doom, const Uint8 *state)
 {
