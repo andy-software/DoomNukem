@@ -166,8 +166,8 @@ void		player_events(t_doom *d)
 				set_mouse(d);
 			}
 		}
-		else if (d->ev.type == SDL_MOUSEBUTTONDOWN &&
-			d->ev.button.button == SDL_BUTTON_LEFT && d->game.start != 1)
+		else if (d->ev.type == SDL_MOUSEBUTTONUP &&
+			d->ev.button.button == SDL_BUTTON_LEFT && d->start_quit != 0)
 		{
 			if(d->ui.fire == 0)
 			{

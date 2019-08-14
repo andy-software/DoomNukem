@@ -109,25 +109,25 @@ int		game_loop(t_doom doom)
 			draw_screen(&doom);
 			draw_ui(&doom);
 		}
-		else if (doom.game.pause == 1 && doom.game.hp_level > 0)
+		else if (doom.game.pause == 1)
 		{
 			show_pause(&doom);
+			pause_events(&doom);
 			draw_menu(&doom);
-			pause_event(&doom);
 		}
 		else if (doom.game.hp_level <= 0)
 		{
-			show_lose(&doom);
 			set_mouse(&doom);
+			show_lose(&doom);
+			lose_events(&doom);
 			draw_menu(&doom);
-			pause_event(&doom);
 		}
 		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6);
 			doom.ui.currTime = SDL_GetTicks();
 			doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 			doom.ui.fps = doom.game.dt / 1000.0;
 			if (doom.game.pause == 0 &&
-				doom.game.hp_level > 0 && doom.game.start != 1)
+				doom.game.hp_level > 0 && doom.start_quit == 1)
 				draw_fps(&doom, (int)(1.0 / doom.ui.fps));
 		SDL_UpdateWindowSurface(doom.sdl.window);
 	}
@@ -142,13 +142,11 @@ void	set_mouse(t_doom *doom)
 		SDL_ShowCursor(SDL_ENABLE);
 		SDL_SetRelativeMouseMode(SDL_DISABLE);
 		SDL_SetWindowGrab(doom->sdl.window, 0);
-		printf("WEHERE\n\n\n\n");
 	}
 	else
 	{
-		printf("WE RFINALY HERE\n\n\n\n");
 		SDL_SetWindowGrab(doom->sdl.window, 1);
 		SDL_SetRelativeMouseMode(SDL_ENABLE);
-		SDL_GetRelativeMouseState(NULL, NULL);
+		//SDL_GetRelativeMouseState(NULL, NULL);
 	}
 }

@@ -41,6 +41,7 @@ void 	start_loop(t_doom *doom)
 		SDL_UpdateWindowSurface(doom->sdl.window);
 	}
 	doom->start_quit = 0;
+	doom->file_name[0] = 0;
 	chose_level(doom);
 	while (ft_strlen(doom->file_name) == 0)
 	{
@@ -56,25 +57,28 @@ void 	start_loop(t_doom *doom)
 		dificulty_events(doom);
 		SDL_UpdateWindowSurface(doom->sdl.window);
 	}
+
 }
 
 int		main(int argc, char **argv)
 {
-	t_doom	doom;
+	t_doom	*doom;
+
+	doom = (t_doom*)malloc(sizeof(t_doom) + 1);
 
 	srand(time(NULL));
 	if (argc == 3 || argc == 2)
 	{
 		if (ft_strcmp(argv[1], "play") == 0)
 		{
-			if (init_sdl(&doom.sdl) == 0)
+			if (init_sdl(&doom->sdl) == 0)
 				return (error_message("Error with SDL init") + 1);
-			if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
+			if (load_all(&doom->texture, doom->sdl.surface->format->format, doom) == 0)
 				return (error_message("Error with textures") + 1);
-			return (game_mod(&doom));
+			return (game_mod(doom));
 		}
 		else if (ft_strcmp(argv[1], "edit") == 0)
-			return (editor_mod(&doom, argv[2]));
+			return (editor_mod(doom, argv[2]));
 		else
 			print_usage();
 	}

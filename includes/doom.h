@@ -1065,8 +1065,8 @@ void		menu_mouse(t_doom *d);
 void		start_events(t_doom *d);
 void		level_events(t_doom *d);
 void		dificulty_events(t_doom *d);
-void		pause_event(t_doom *d);
-void		lose_event(t_doom *d);
+void		pause_events(t_doom *d);
+void		lose_evens(t_doom *d);
 
 void		set_mouse(t_doom *doom);
 

@@ -172,7 +172,7 @@ void	start_events(t_doom *d)
 	}
 }
 
-void	pause_event(t_doom *d)
+void	pause_events(t_doom *d)
 {
 	int			x;
 	int			y;
@@ -187,11 +187,12 @@ void	pause_event(t_doom *d)
 				exit(1);
 		if (ev.type == SDL_QUIT)
 				exit(1);
-		if (ev.type == SDL_MOUSEBUTTONUP)
+		if (ev.type == SDL_MOUSEBUTTONDOWN)
 		{
 			SDL_GetMouseState(&x, &y);
 			while (++i < d->menu.opt)
 			{
+				printf("%d\n", i);
 				if (x >= d->menu.pos[i].x &&
 					x <= d->menu.pos[i].x + d->menu.m[i]->w &&
 					y >= d->menu.pos[i].y &&
@@ -209,7 +210,7 @@ void	pause_event(t_doom *d)
 	}
 }
 
-void	lose_event(t_doom *d)
+void	lose_events(t_doom *d)
 {
 	int			x;
 	int			y;
