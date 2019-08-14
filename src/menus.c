@@ -272,7 +272,7 @@ void  	level_events(t_doom *d)
 					{
 						if (i == 0)
 						{
-							ft_strcpy(d->file_name, "maps/level6");
+							ft_strcpy(d->file_name, "maps/level1");
 						}
 						else if (i == 1)
 						{

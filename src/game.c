@@ -48,11 +48,11 @@ int		init_game_params(t_doom *d)
 	d->game.ground = 0;
 	d->game.falling = 1;
 	d->game.flying = 0;
-	d->game.acceleration = 0.2f;
+	d->game.acceleration = 0.5f;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
-	d->game.damage = 30;
-	d->ui.ammo_1 = 10;
+	d->game.damage = 60 / d->difficulty;
+	d->ui.ammo_1 = 10 * d->difficulty;
 	d->game.fuel = 100;
 	d->game.picked_key[0] = 0;
 	d->game.picked_key[1] = 0;

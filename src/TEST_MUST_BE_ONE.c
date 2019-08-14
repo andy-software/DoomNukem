@@ -86,11 +86,11 @@ int		main(int argc, char **argv)
 	map.sectors[0].floor_plane.c = 1;
 	map.sectors[0].floor_plane.h = -20;
 
-	map.sectors[0].ceil_tex = 10;
-	map.sectors[0].floor_tex = 10;
+	map.sectors[0].ceil_tex = 3;
+	map.sectors[0].floor_tex = 3;
 
-	map.sectors[0].x_c_scale = 1/ 10.0;
-	map.sectors[0].y_c_scale = 1/ 10.0;
+	map.sectors[0].x_c_scale = 1 / 10.0;
+	map.sectors[0].y_c_scale = 1 / 10.0;
 	map.sectors[0].x_c_shift = 0;
 	map.sectors[0].y_c_shift = 0;
 
@@ -116,12 +116,12 @@ int		main(int argc, char **argv)
 	map.sectors[0].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[0].num_vert);
 	for (int i = 0; i < map.sectors->num_vert; i++)
 	{
-		map.sectors[0].lines[0].wall = 13;
-		map.sectors[0].lines[1].wall = 13;
-		map.sectors[0].lines[2].wall = 13;
-		map.sectors[0].lines[3].wall = 13;
-		map.sectors[0].lines[i].top = 10;
-		map.sectors[0].lines[i].bot = 10;
+		map.sectors[0].lines[0].wall = 4;
+		map.sectors[0].lines[1].wall = 4;
+		map.sectors[0].lines[2].wall = 4;
+		map.sectors[0].lines[3].wall = 4;
+		map.sectors[0].lines[i].top = 3;
+		map.sectors[0].lines[i].bot = 3; 
 
 		map.sectors[0].lines[i].x_w_scale = 5;
 		map.sectors[0].lines[i].x_b_scale = 1;
@@ -187,12 +187,12 @@ int		main(int argc, char **argv)
 	map.sectors[1].lines = (t_line*)malloc(sizeof(t_line) * map.sectors[1].num_vert);
 	for (int i = 0; i < map.sectors[1].num_vert; i++)
 	{
-		map.sectors[1].lines[0].wall = 10;
-		map.sectors[1].lines[1].wall = 10;
-		map.sectors[1].lines[2].wall = 10;
-		map.sectors[1].lines[3].wall = 10;
-		map.sectors[1].lines[i].top = 10;
-		map.sectors[1].lines[i].bot = 10;
+		map.sectors[1].lines[0].wall = 4;
+		map.sectors[1].lines[1].wall = 4;
+		map.sectors[1].lines[2].wall = 4;
+		map.sectors[1].lines[3].wall = 4;
+		map.sectors[1].lines[i].top = 4;
+		map.sectors[1].lines[i].bot = 4;
 
 		map.sectors[1].lines[i].x_w_scale = 1;
 		map.sectors[1].lines[i].x_b_scale = 1;
@@ -448,7 +448,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
 		map.sprites[i].event_num = 1;
-		map.sprites[i].hp = 100;
+		map.sprites[i].hp = 300;
 		map.sprites[i].death_time = 0;
 	}
 

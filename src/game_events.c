@@ -228,7 +228,10 @@ void		check_sprite_intersection(t_doom *d)
 				if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t1.y * d->player.angle_z < 0)
 				{
 					if (d->ui.gun_num == 0)
+					{
 						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage;
+						printf("%d\n", d->sr.sprites[i].hp);
+					}
 					else
 						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage / 10;
 					if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
@@ -249,7 +252,7 @@ void		check_sprite_intersection(t_doom *d)
 							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
 						else if (d->sr.sprites[i].num_sheet == 8)
 							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
-					}	
+					}
 					break ;
 				}
 			}
