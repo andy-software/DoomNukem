@@ -49,6 +49,7 @@ int		init_moves(t_doom *d)
 	d->changes.spr_events[1] = talk_event;
 	d->changes.spr_events[2] = radio_event;
 	d->changes.spr_events[3] = toxic_event;
+	d->changes.spr_events[4] = give_event;
 	d->changes.fog_colors[0] = 0x00FF00;
 	d->changes.fog_colors[1] = 0xFF0000;
 	d->changes.fog_colors[2] = 0x0000FF;

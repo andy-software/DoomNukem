@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/27 15:39:11 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/05 18:05:04 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 16:28:15 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,15 +224,14 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 6;
+	map.num_sprites = 8;
 	for (int i = 0; i < 1; i++) // mob small
-	
 	{
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 6;
-		map.sprites[i].coord = (t_vector){-2, -3, get_z(map.sectors[0].floor_plane, -2, -3)};
-		map.sprites[i].sector_no = 1;
+		map.sprites[i].coord = (t_vector){10, 10, get_z(map.sectors[0].floor_plane, 10, 10)};
+		map.sprites[i].sector_no = 0;
 		map.sprites[i].width = 3;
 		map.sprites[i].start_z = 6;
 		map.sprites[i].end_z = 12;
@@ -241,7 +240,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
 		map.sprites[i].own_moves = i;
-		map.sprites[i].move_speed = 0.03 * (i + 1);
+		map.sprites[i].move_speed = 0.30;
 		map.sprites[i].draw = 1;
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
@@ -259,8 +258,8 @@ int		main(int argc, char **argv)
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 5;
-		map.sprites[i].coord = (t_vector){-4, -6, get_z(map.sectors[0].floor_plane, -4, -6)};
-		map.sprites[i].sector_no = 1;
+		map.sprites[i].coord = (t_vector){19, 10, get_z(map.sectors[0].floor_plane, 19, 10)};
+		map.sprites[i].sector_no = 0;
 		map.sprites[i].width = 4;
 		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 14;
@@ -269,7 +268,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
 		map.sprites[i].own_moves = i;
-		map.sprites[i].move_speed = 0.03 * (i + 1);
+		map.sprites[i].move_speed = 0.15;
 		map.sprites[i].draw = 1;
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
@@ -277,8 +276,8 @@ int		main(int argc, char **argv)
 		map.sprites[i].key = 1;
 		map.sprites[i].changes = 0;
 		map.sprites[i].key_state = 0;
-		map.sprites[i].num_of_sound = 0;
-		map.sprites[i].event_num = 3;
+		map.sprites[i].num_of_sound = 1;
+		map.sprites[i].event_num = 1;
 		map.sprites[i].hp = 60;
 		map.sprites[i].death_time = 0;
 	}
@@ -343,11 +342,11 @@ int		main(int argc, char **argv)
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 1;
 		map.sprites[i].num_sheet = 3;
-		map.sprites[i].coord = (t_vector){-10, -10, get_z(map.sectors[0].floor_plane, -10, -10)};
+		map.sprites[i].coord = (t_vector){-4, -4, get_z(map.sectors[0].floor_plane, -4, -4)};
 		map.sprites[i].sector_no = 1;
 		map.sprites[i].width = 0.5;
 		map.sprites[i].start_z = 0;
-		map.sprites[i].end_z = 1;
+		map.sprites[i].end_z = 2;
 		map.sprites[i].mob = 0;
 		map.sprites[i].angle = 0;
 		map.sprites[i].anglecos = 0;
@@ -372,8 +371,8 @@ int		main(int argc, char **argv)
 		map.sprites[i].spr_num = i;
 		map.sprites[i].text_no = 0;
 		map.sprites[i].num_sheet = 7;
-		map.sprites[i].coord = (t_vector){-5, -5, get_z(map.sectors[0].floor_plane, -5, -5)};
-		map.sprites[i].sector_no = 1;
+		map.sprites[i].coord = (t_vector){20, -5, get_z(map.sectors[0].floor_plane, 20, -5)};
+		map.sprites[i].sector_no = 0;
 		map.sprites[i].width = 1;
 		map.sprites[i].start_z = 0;
 		map.sprites[i].end_z = 5;
@@ -394,6 +393,62 @@ int		main(int argc, char **argv)
 		map.sprites[i].event_num = 0;
 		map.sprites[i].hp = 0;
 		map.sprites[i].pick = 1;
+		map.sprites[i].death_time = 0;
+	}
+	for (int i = 6; i < 7; i++) //npc
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 9;
+		map.sprites[i].coord = (t_vector){8, 8, get_z(map.sectors[0].floor_plane, 8, 8)};
+		map.sprites[i].sector_no = 0;
+		map.sprites[i].width = 2;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 11;
+		map.sprites[i].mob = 0;
+		map.sprites[i].angle = 0;
+		map.sprites[i].anglecos = 0;
+		map.sprites[i].anglesin = 0;
+		map.sprites[i].own_moves = 0;
+		map.sprites[i].move_speed = 0;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 0;
+		map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+		map.sprites[i].key = 1;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 1;
+		map.sprites[i].event_num = 4;
+		map.sprites[i].hp = 0;
+		map.sprites[i].pick = 0;
+	}
+	for (int i = 7; i < 8; i++) // boss small
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 8;
+		map.sprites[i].coord = (t_vector){11, 11, get_z(map.sectors[0].floor_plane, 11, 11)};
+		map.sprites[i].sector_no = 0;
+		map.sprites[i].width = 10;
+		map.sprites[i].start_z = 3;
+		map.sprites[i].end_z = 27;
+		map.sprites[i].mob = 1;
+		map.sprites[i].angle = M_PI / 4;
+		map.sprites[i].anglecos = cos(map.sprites[i].angle);
+		map.sprites[i].anglesin = sin(map.sprites[i].angle);
+		map.sprites[i].own_moves = 1;
+		map.sprites[i].move_speed = 0.15;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 1;
+		map.sprites[i].vision_forward = 10; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = -7; //must be negative //could be same for all sprites
+		map.sprites[i].key = 1;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 1;
+		map.sprites[i].hp = 100;
 		map.sprites[i].death_time = 0;
 	}
 

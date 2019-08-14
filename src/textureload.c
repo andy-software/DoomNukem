@@ -138,6 +138,8 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->dude[33] = load_tex("./materials/textures/ui/win/34.png", format);
 	
 	t->visor = load_tex("./materials/textures/ui/hud/visor.png", format);
+	SDL_SetColorKey(t->visor, SDL_TRUE, SDL_MapRGB(t->visor->format, 255, 255, 255));
+	t->keys = load_tex("./materials/textures/ui/hud/keys_ui.png", format);
 
 	t->len = t->gun1_l;
 	resize_surf(WIN_WIDTH / 3, WIN_HEIGHT / 3, t->gun1, d);
@@ -167,7 +169,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 8);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 10);
 
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
@@ -191,6 +193,12 @@ void	load_sprites(t_doom *d)
 	d->texture.sprt[6].h = 5;
 	d->texture.sprt[7].sprites = split_surf(1, 1, "./materials/textures/sprites/fly.png", d);
 	d->texture.sprt[7].c_sprt = 1;
+	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/boss.png", d);
+	d->texture.sprt[8].c_sprt = 30;
+	d->texture.sprt[8].w = 6;
+	d->texture.sprt[8].h = 5;
+	d->texture.sprt[9].sprites = split_surf(1, 1, "./materials/textures/sprites/npc.png", d);
+	d->texture.sprt[9].c_sprt = 1;
 }
 
 SDL_Surface	*load_tex(char *path, Uint32 format)

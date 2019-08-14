@@ -50,7 +50,7 @@
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 4
+# define COUNT_OF_SPRITE_EVENTS 5
 # define COUNT_OF_PAINT_EVENTS 7
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define SUR_FORMAT 372645892
@@ -469,6 +469,7 @@ struct	s_game
 	float			dy;
 	int				mouse_x;
 	int				mouse_y;
+	int				picked_key[3];
 	int				fire;
 	int				fuel;
 	int				click;
@@ -652,11 +653,11 @@ struct	s_ui
 	Uint32			prevTime;
 	Uint32			currTime;
 	Uint32			start;
-	char			masage[8];
-	char			*text0;
+	char			str[10];
 	float			fps;
 	int				fire;
 	int				gun_num;
+	int				gun_anim;
 	int				start_saw;
 	int				idle;
 	int				ammo_1;
@@ -666,6 +667,9 @@ struct	s_menu
 {
 	SDL_Surface *m[4];
 	SDL_Rect pos[4];
+	SDL_Color col[2];
+	char *title[4];
+	int opt;
 };
 
 struct	s_font
@@ -702,13 +706,14 @@ struct	s_texture
 	SDL_Surface		*lose;
 	SDL_Surface		*start;
 	SDL_Surface		*visor;
+	SDL_Surface		*keys;
+	SDL_Rect		keys_r;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
 	SDL_Rect		gun21_r;
 	SDL_Rect		gun22_r;
 	SDL_Rect		cross_r;
 	SDL_Rect		hp_r;
-	SDL_Rect		armor_r;
 	SDL_Rect		ammo_r;
 	int				dude_l;
 	int				visor_l;
@@ -831,8 +836,9 @@ struct	s_sound
 	Mix_Chunk		*gun1[3];
 	Mix_Chunk		*win;
 	Mix_Chunk		*death;
-	Mix_Chunk		*mobdeath[2];
-	Mix_Chunk		*mobsound[2];
+	Mix_Chunk		*mobdeath[3];
+	Mix_Chunk		*mobsound[5];
+	Mix_Chunk		*mobhurt[3];
 	Mix_Chunk		*pickup[4];
 	Mix_Chunk		*gun2[3];
 	Mix_Chunk		*hurt;
@@ -910,6 +916,9 @@ struct	s_changes
 struct	s_doom
 {
 	SDL_Event		ev;
+	char			file_name[12];
+	int				difficulty;
+	int				start_quit;
 	t_thread		threads[NUM_OF_THRD];
 	t_sprite_render	sr;
 	t_render		render;
@@ -941,6 +950,7 @@ int			init_sdl(t_sdl *sdl);
 void		player_events(t_doom *d);
 void		game_events(t_doom *d);
 int			game_loop(t_doom doom);
+void		start_loop(t_doom *doom);
 int			*intset(int *b, int c, size_t len);
 
 //render
@@ -995,6 +1005,8 @@ t_vertex	vec_to_ver(t_vector v);
 */
 void		draw_ui(t_doom *d);
 void		gun_anim(t_doom *d);
+void		fule_show(t_doom *d);
+void		show_keys(t_doom *d);
 /*
 **texturelaod.c
 */
@@ -1028,7 +1040,7 @@ int			translate_and_rotate_sprites(t_sprite *arr_spr, \
 int			sprite_sort(t_sprite *arr_spr, int len);
 // void		load_sprites(t_texture *texture, Uint32 format);
 int			*copy_static_arr(int *arr, const int len);
-int			game_mod(t_doom *doom, char *file_name);
+int			game_mod(t_doom *doom);
 void		move_mobs(t_doom *d);
 int			first_own_moves(t_doom *d, t_sprite *spr);
 int			mirror_own_moves(t_doom *d, t_sprite *spr);
@@ -1043,6 +1055,7 @@ int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			toxic_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
+int			give_event(t_doom *d, t_sprite *sprite);
 int			radio_event(t_doom *d, t_sprite *sprite);
 int			win_pnt_event(t_doom *d, t_painting *paint);
 
@@ -1065,10 +1078,20 @@ void		switch_music(t_sound *sound, SDL_Event ev);
 void		show_pause(t_doom *d);
 void		show_lose(t_doom *d);
 void 		show_start(t_doom *d);
-void		draw_menu(t_doom *d, int opt, char **title, SDL_Color *color);
-void		menu_mouse(t_doom *d, int opt, char **t, SDL_Color *col);
+void	    chose_level(t_doom *d);
+void	    chose_dificulty(t_doom *d);
+void		draw_menu(t_doom *d);
+void		menu_mouse(t_doom *d);
+void		start_events(t_doom *d);
+void		level_events(t_doom *d);
+void		dificulty_events(t_doom *d);
+void		pause_events(t_doom *d);
+void		lose_evens(t_doom *d);
 
 void		set_mouse(t_doom *doom);
+
+void		free_file_data(t_map *map);
+void		free_game_params(t_doom *d);
 /*
 **start.c
 */

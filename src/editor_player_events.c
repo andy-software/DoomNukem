@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 02:36:14 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 15:49:06 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	editor_player_events2(t_doom *doom, const Uint8 *state)
 		!doom->map.sectors[doom->player.sector].render_ceil;
 	editor_events_down_up(doom);
 	if (doom->ev.key.keysym.sym == SDLK_m || doom->ev.key.keysym.sym == SDLK_q)
+	{
 		doom->map.editing = 0;
+		write_sprites(doom);
+	}
 	else if (doom->ev.key.keysym.sym == SDLK_z)
 		editor_start_z(doom, state);
 	else if (doom->ev.key.keysym.sym == SDLK_x)
