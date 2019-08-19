@@ -40,7 +40,7 @@ void		switch_music(t_sound *sound, SDL_Event ev)
         {
 			play_music(sound, sound->n);
         }
-        else if (ev.key.keysym.sym == GREATER && sound->n < 4)
+        else if (ev.key.keysym.sym == GREATER && sound->n < 5)
 		{
 			Mix_HaltMusic();
 			sound->n += 1;
@@ -57,6 +57,7 @@ void		switch_music(t_sound *sound, SDL_Event ev)
 
 void		play_music(t_sound *sound, int n)
 {
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 1.5);
 	if (!(Mix_PlayingMusic()))
 		Mix_PlayMusic(sound->music[n], -1);
 	else if (Mix_PausedMusic())
@@ -82,15 +83,15 @@ void	load_sounds(t_sound *sound)
     sound->gun2[2] = load_sound("./materials/sounds/saw_atac.wav"); // 3
 	sound->mobdeath[0] = load_sound("./materials/sounds/enemy1_d.wav"); // 4
 	sound->mobdeath[1] = load_sound("./materials/sounds/enemy2_d.wav"); // 4
-	sound->mobdeath[2] = load_sound("./materials/sounds/enemy2_d.wav"); // 4// will change
+	sound->mobdeath[2] = load_sound("./materials/sounds/boss_d.wav"); // 4// will change
 	sound->mobsound[0] = load_sound("./materials/sounds/enemy1_s.wav"); // 4   
 	sound->mobsound[1] = load_sound("./materials/sounds/enemy2_s.wav"); // 4
-	sound->mobsound[2] = load_sound("./materials/sounds/mus_story.wav"); // 4
+	sound->mobsound[2] = load_sound("./materials/sounds/boss_s.wav"); // 4
 	sound->mobsound[3] = load_sound("./materials/sounds/npc_1.wav"); // 4   
 	sound->mobsound[4] = load_sound("./materials/sounds/npc_2.wav"); // 4  
 	sound->mobhurt[0] = load_sound("./materials/sounds/enemy1_h.wav"); // 4   
 	sound->mobhurt[1] = load_sound("./materials/sounds/enemy2_h.wav"); // 4     
-	sound->mobhurt[2] = load_sound("./materials/sounds/enemy2_h.wav"); // 4// will change
+	sound->mobhurt[2] = load_sound("./materials/sounds/boss_h.wav"); // 4// will change
 	sound->pickup[0] = load_sound("./materials/sounds/heal.wav"); // 5
 	sound->pickup[1] = load_sound("./materials/sounds/ammo.wav"); // 5
 	sound->pickup[2] = load_sound("./materials/sounds/key.wav"); // 5  

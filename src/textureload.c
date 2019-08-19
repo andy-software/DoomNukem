@@ -57,6 +57,7 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->dude_l = 34;
 	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", format);
 	t->start = load_tex("./materials/textures/ui/hud/start.jpg", format);
+	t->story = load_tex("./materials/textures/ui/hud/story.png", format);
 	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", format);
 	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", format);
 	t->gun1[1] = load_tex("./materials/textures/ui/gun1/2.png", format);

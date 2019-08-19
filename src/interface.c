@@ -112,8 +112,8 @@ void    gun_anim(t_doom *d)
 				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
 					" 0 / 0", d->texture.fonts[FPS_F].text_color);
-				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 3 + 1;
-				if (d->ui.gun_anim > 2)
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 2 + 1;
+				if (d->ui.gun_anim > 1)
 				{
 					d->ui.fire = 0;
 					d->ui.gun_anim = 0;

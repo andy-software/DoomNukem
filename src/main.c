@@ -40,6 +40,7 @@ void 	start_loop(t_doom *doom)
 		start_events(doom);
 		SDL_UpdateWindowSurface(doom->sdl.window);
 	}
+	free_menu(doom);
 	doom->start_quit = 0;
 	doom->file_name[0] = 0;
 	chose_level(doom);
@@ -49,6 +50,7 @@ void 	start_loop(t_doom *doom)
 		level_events(doom);
 		SDL_UpdateWindowSurface(doom->sdl.window);
 	}
+	free_menu(doom);
 	doom->start_quit = 0;
 	chose_dificulty(doom);
 	while (doom->start_quit == 0)
@@ -57,14 +59,12 @@ void 	start_loop(t_doom *doom)
 		dificulty_events(doom);
 		SDL_UpdateWindowSurface(doom->sdl.window);
 	}
-
+	free_menu(doom);
 }
 
 int		main(int argc, char **argv)
 {
 	t_doom	doom;
-
-	//doom = (t_doom*)malloc(sizeof(t_doom) + 1);
 
 	srand(time(NULL));
 	if (argc == 3 || argc == 2)
