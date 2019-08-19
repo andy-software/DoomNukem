@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 07:35:58 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/18 18:29:02 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ void	ft_prepare_editor(t_doom *doom, int i)
 		i = -1;
 		while (++i < (int)doom->map.num_sprites)
 		{
-			if (MAP_SPRT[i].pick == 0)
+			if (MAP_SPRT[i].mob == 1)
 			{
 				IMG[2].exist++;
 				IMG[2].im_x[IMG[2].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;
 				IMG[2].im_y[IMG[2].exist - 1] = (MAP_SPRT[i].coord.y * SCL) - 50;
 			}
-			if (MAP_SPRT[i].pick == 1)
+			if (MAP_SPRT[i].mob == 0)
 			{
 				IMG[4].exist++;
 				IMG[4].im_x[IMG[4].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;

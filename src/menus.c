@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 15:00:45 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/14 16:49:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/18 20:00:56 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,11 +276,12 @@ void  	level_events(t_doom *d)
 						}
 						else if (i == 1)
 						{
-							ft_strcpy(d->file_name, "maps/karta1");
+							// ft_strcpy(d->file_name, "maps/karta2");
+							ft_strcpy(d->file_name, "maps/level12");
 						}
 						else if (i == 2)
 						{
-							ft_strcpy(d->file_name, "maps/level6");
+							ft_strcpy(d->file_name, "maps/level12");
 						}
 					}
 			}

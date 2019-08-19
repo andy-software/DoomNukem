@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 04:25:44 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/18 20:03:06 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void	ft_render_interface(t_doom *doom)
 	ft_render_interface2(doom, bigger);
 	bigger.y = 20;
 	ft_render_prev_butt(doom, bigger, 0);
-	bigger = (SDL_Rect){900, 710, 0, 0};
+	bigger = (SDL_Rect){890, 710, 0, 0};
 	if (doom->editor.is_sector != 0)
 		SDL_BlitSurface(SECTOR[doom->editor.is_sector].image,
 		NULL, SDL_SURF, &bigger);
