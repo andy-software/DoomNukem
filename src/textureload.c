@@ -38,8 +38,8 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->wall_tex[12] = load_tex("./materials/textures/walls/13.png", format);
 	t->wall_tex[13] = load_tex("./materials/textures/walls/14.png", format);
 	t->wall_tex[14] = load_tex("./materials/textures/walls/15.png", format);
-	t->sky_box[0] = load_tex("./materials/textures/sky/sky0.jpg", format);
-	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.png", format);
+	t->sky_box[0] = load_tex("./materials/textures/sky/sky1.jpg", format);
+	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.jpg", format);
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
 	t->fonts[FPS_F].text_rect = (SDL_Rect){10, 15, 50, 10};
 	t->fonts[HP_F].text_color = (SDL_Color){0, 255, 0, 0};
@@ -52,7 +52,7 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 
 int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 {
-	t->gun1_l = 21;
+	t->gun1_l = 18;
 	t->gun2_l = 18;
 	t->dude_l = 34;
 	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", format);
@@ -76,9 +76,6 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->gun1[15] = load_tex("./materials/textures/ui/gun1/15.png", format);
 	t->gun1[16] = load_tex("./materials/textures/ui/gun1/16.png", format);
 	t->gun1[17] = load_tex("./materials/textures/ui/gun1/17.png", format);
-	t->gun1[18] = load_tex("./materials/textures/ui/gun1/18.png", format);
-	t->gun1[19] = load_tex("./materials/textures/ui/gun1/19.png", format);
-	t->gun1[20] = load_tex("./materials/textures/ui/gun1/20.png", format);
 	//CHAINSAW!!!!!!!!
 	t->gun2[0] = load_tex("./materials/textures/ui/gun2/1.png", format);
 	t->gun2[1] = load_tex("./materials/textures/ui/gun2/2.png", format);
@@ -142,7 +139,7 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->keys = load_tex("./materials/textures/ui/hud/keys_ui.png", format);
 
 	t->len = t->gun1_l;
-	resize_surf(WIN_WIDTH / 3, WIN_HEIGHT / 3, t->gun1, d);
+	resize_surf(WIN_WIDTH, WIN_HEIGHT / 1.1, t->gun1, d);
 	t->len = t->gun2_l;
 	resize_surf(WIN_WIDTH / 3, WIN_HEIGHT / 3, t->gun2, d);
 	t->len = 1;

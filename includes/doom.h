@@ -24,7 +24,7 @@
 # include <errno.h>
 # include <stdio.h>
 
-# define WIN_WIDTH 1200
+# define WIN_WIDTH 1280
 # define WIN_HEIGHT 800
 # define SKY_W 4096
 # define SKY_H 2048
@@ -473,6 +473,7 @@ struct	s_game
 	int				fire;
 	int				fuel;
 	int				click;
+	int				blood;
 	t_vector		velocity;
 	float			acceleration;
 	int				dificulty;
@@ -829,7 +830,7 @@ struct	s_editor
 /****/
 struct	s_sound
 {
-	Mix_Music		*music[3];
+	Mix_Music		*music[7];
 	Mix_Chunk		*steps;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*jump;

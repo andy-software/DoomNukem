@@ -36,6 +36,7 @@ void	show_pause(t_doom *d)
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
 	d->menu.pos[2].y = WIN_HEIGHT / 2 + (d->menu.m[2]->h * 3);
 	d->menu.pos[3].x = WIN_WIDTH / 2 - d->menu.m[3]->w / 2;
+	d->menu.pos[3].y = 0;
 	SDL_BlitScaled(d->texture.pause, 0, d->sdl.surface, 0);
 }
 
@@ -58,6 +59,7 @@ void	    show_start(t_doom *d)
 	d->menu.pos[1].x = WIN_WIDTH / 2 - d->menu.m[1]->w / 2;
 	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
+	d->menu.pos[2].y = 0;
 	SDL_BlitScaled(d->texture.start, 0, d->sdl.surface, 0);
 }
 
@@ -80,6 +82,7 @@ void	show_lose(t_doom *d)
 	d->menu.pos[1].x = WIN_WIDTH / 2 - d->menu.m[1]->w / 2;
 	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
+	d->menu.pos[2].y = 0;
 	SDL_BlitScaled(d->texture.lose, 0, d->sdl.surface, 0);
 }
 
@@ -107,6 +110,7 @@ void	    chose_level(t_doom *d)
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
 	d->menu.pos[2].y = WIN_HEIGHT / 2 + (d->menu.m[2]->h * 3);
 	d->menu.pos[3].x = WIN_WIDTH / 2 - d->menu.m[3]->w / 2;
+	d->menu.pos[3].y = 0;
 	SDL_BlitScaled(d->texture.start, 0, d->sdl.surface, 0);
 }
 
@@ -132,8 +136,10 @@ void	    chose_dificulty(t_doom *d)
 	d->menu.pos[1].x = WIN_WIDTH / 2 - d->menu.m[1]->w / 2;
 	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
+
 	d->menu.pos[2].y = WIN_HEIGHT / 2 + (d->menu.m[2]->h * 3);
 	d->menu.pos[3].x = WIN_WIDTH / 2 - d->menu.m[3]->w / 2;
+	d->menu.pos[3].y = 0;
 	SDL_BlitScaled(d->texture.start, 0, d->sdl.surface, 0);
 }
 
@@ -192,7 +198,6 @@ void	pause_events(t_doom *d)
 			SDL_GetMouseState(&x, &y);
 			while (++i < d->menu.opt)
 			{
-				printf("%d\n", i);
 				if (x >= d->menu.pos[i].x &&
 					x <= d->menu.pos[i].x + d->menu.m[i]->w &&
 					y >= d->menu.pos[i].y &&

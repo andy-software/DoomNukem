@@ -14,7 +14,7 @@
 
 void	init_hud(t_doom *d)
 {
-	d->texture.gun1_r.x = WIN_WIDTH / 2;
+	d->texture.gun1_r.x = WIN_WIDTH / 20;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
 
 	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
@@ -48,6 +48,7 @@ int		init_game_params(t_doom *d)
 	d->game.ground = 0;
 	d->game.falling = 1;
 	d->game.flying = 0;
+	d->game.blood = 0;
 	d->game.acceleration = 0.5f;
 	d->game.hp_level = 100;
 	d->game.dt = 0;

@@ -233,7 +233,10 @@ void		check_sprite_intersection(t_doom *d)
 						printf("%d\n", d->sr.sprites[i].hp);
 					}
 					else
+					{
 						d->map.sprites[d->sr.sprites[i].spr_num].hp -= d->game.damage / 10;
+						d->game.blood = 1;
+					}
 					if (d->map.sprites[d->sr.sprites[i].spr_num].hp <= 0)
 					{
 						d->map.sprites[d->sr.sprites[i].spr_num].live = 0;

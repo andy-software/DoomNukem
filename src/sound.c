@@ -85,7 +85,7 @@ void	load_sounds(t_sound *sound)
 	sound->mobdeath[2] = load_sound("./materials/sounds/enemy2_d.wav"); // 4// will change
 	sound->mobsound[0] = load_sound("./materials/sounds/enemy1_s.wav"); // 4   
 	sound->mobsound[1] = load_sound("./materials/sounds/enemy2_s.wav"); // 4
-	sound->mobsound[2] = load_sound("./materials/sounds/enemy2_s.wav"); // 4 // will change
+	sound->mobsound[2] = load_sound("./materials/sounds/mus_story.wav"); // 4
 	sound->mobsound[3] = load_sound("./materials/sounds/npc_1.wav"); // 4   
 	sound->mobsound[4] = load_sound("./materials/sounds/npc_2.wav"); // 4  
 	sound->mobhurt[0] = load_sound("./materials/sounds/enemy1_h.wav"); // 4   
@@ -95,5 +95,11 @@ void	load_sounds(t_sound *sound)
 	sound->pickup[1] = load_sound("./materials/sounds/ammo.wav"); // 5
 	sound->pickup[2] = load_sound("./materials/sounds/key.wav"); // 5  
 	sound->pickup[3] = load_sound("./materials/sounds/pick.wav"); // 5   
-    sound->music[0] = load_music("./materials/sounds/classic.mp3");
+    sound->music[0] = load_music("./materials/sounds/mus_old1.mp3");
+	sound->music[1] = load_music("./materials/sounds/mus_old2.mp3");
+	sound->music[2] = load_music("./materials/sounds/mus_old3.mp3");
+	sound->music[3] = load_music("./materials/sounds/mus_new1.mp3");
+	sound->music[4] = load_music("./materials/sounds/mus_new2.mp3");
+	sound->music[5] = load_music("./materials/sounds/mus_new3.mp3");
+	sound->music[6] = load_music("./materials/sounds/mus_menu1.mp3");
 }
