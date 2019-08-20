@@ -12,7 +12,7 @@
 
 CC = gcc
 
-FLAGS =  -Wall -Og -Wextra -Ofast -flto -pipe #-fsanitize=address  #-Werror
+FLAGS =  -Wall -O3 -Wextra -Ofast -flto -pipe #-fsanitize=address  #-Werror
 
 NAME = doom-nukem
 

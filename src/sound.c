@@ -75,6 +75,7 @@ void	load_sounds(t_sound *sound)
 	sound->fly = load_sound("./materials/sounds/fly.wav"); // 0
 	sound->hurt = load_sound("./materials/sounds/hurt.wav"); // 2
 	sound->death = load_sound("./materials/sounds/death.wav"); // 2
+	sound->click = load_sound("./materials/sounds/menu_click.wav"); // 2
     sound->gun1[0] = load_sound("./materials/sounds/gun1.wav"); // 3
 	sound->gun1[1] = load_sound("./materials/sounds/gun1_short.wav"); // 3
 	sound->gun1[2] = load_sound("./materials/sounds/gun1_empty.wav"); // 3

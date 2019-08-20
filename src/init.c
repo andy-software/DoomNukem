@@ -41,7 +41,7 @@ int		init_moves(t_doom *d)
 	d->changes.pnt_events[0] = turn_light_event;
 	d->changes.pnt_events[1] = lift_floor_event;
 	d->changes.pnt_events[2] = lift_ceil_event;
-	d->changes.pnt_events[3] = first_aid_event;
+	d->changes.pnt_events[3] = radio_event;
 	d->changes.pnt_events[4] = get_ammo_event;
 	d->changes.pnt_events[5] = win_pnt_event;
 	d->changes.pnt_events[6] = inverse_colors_event;

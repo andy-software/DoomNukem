@@ -42,6 +42,7 @@ int		init_game_params(t_doom *d)
 
 	d->game.start = 1;
 	d->game.quit = 0;
+	d->game.dead = 0;
 	d->game.pause = 0;
 	d->game.story = 0;
 	d->game.ducking = 0;
@@ -50,6 +51,7 @@ int		init_game_params(t_doom *d)
 	d->game.falling = 1;
 	d->game.flying = 0;
 	d->game.blood = 0;
+	d->game.rect_i = 0;
 	d->game.acceleration = 0.5f;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
@@ -108,9 +110,7 @@ int		game_loop(t_doom doom)
 		doom.ui.prevTime = SDL_GetTicks();
 		player_events(&doom);
 		if (doom.game.story == 1)
-		{
 			show_story(&doom);
-		}
 		else if (doom.game.pause == 0 && doom.game.hp_level > 0)
 		{
 			game_events(&doom);

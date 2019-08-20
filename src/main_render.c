@@ -74,6 +74,13 @@ void	render_sector(t_render *r, t_doom *d)
 	r->sect = d->map.sectors + r->now.num; //&d.map.sectors[r->now.num];
 	r->cplane = r->sect->ceil_plane;
 	r->fplane = r->sect->floor_plane;
+	if (r->sect->floor_tex == 3 &&
+		d->player.sector == r->sect->num && d->game.ground) // sorry that this is here i don't where to go with it :)
+	{
+		d->game.hp_level -= 1;
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.hurt, 0);
+	}
 	
 	i = -1;
 	while (++i < (int)r->sect->num_vert) // wall

@@ -152,7 +152,6 @@ void		chase(t_doom *d, t_sprite *spr)
 	spr->anglecos = move_vector.x;
 	spr->anglesin = move_vector.y;
 	spr->angle = find_angle_2pi(spr->anglesin, spr->anglecos);
-
 	if (len > ATTACK_RANGE)
 	{
 		spr->speed_x = spr->anglecos * spr->move_speed;
@@ -160,11 +159,16 @@ void		chase(t_doom *d, t_sprite *spr)
 		move_sprites(d, spr->speed_x, spr->speed_y, spr);
 		spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	}
-	else if (comp_real(d->player.coord.z - d->game.eye_height, spr->coord.z + spr->start_z, 1) && spr->sector_no == (int)d->player.sector)
+	else if (comp_real(d->player.coord.z - d->game.eye_height, spr->coord.z, 1) && spr->sector_no == (int)d->player.sector)
 	{
 		if (!(Mix_Playing(2)))
 			Mix_PlayChannel(2, d->sound.hurt, 0);
-		d->game.hp_level -= 1;
+		if (spr->num_sheet == 8)
+			d->game.hp_level -= 2 * d->difficulty;
+		else if (spr->num_sheet == 6)
+			d->game.hp_level -= 0.5 * d->difficulty;
+		else if (spr->num_sheet == 5)
+			d->game.hp_level -= 1 * d->difficulty;
 	}
 }
 

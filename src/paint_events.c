@@ -42,6 +42,28 @@ int			turn_light_event(t_doom *d, t_painting *paint)
 	return (0);
 }
 
+int			radio_event(t_doom *d, t_painting *paint)
+{
+	static int	mus_num = -1;
+
+	if (paint->key_state == 0)
+		paint->key_state = 1;
+	if (paint->key_state)
+	{
+		if (!(Mix_PlayingMusic()))
+			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+		else if ((Mix_PlayingMusic() && d->game.click))
+			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+		if (mus_num >= 6)
+		{
+			Mix_PauseMusic();
+			mus_num = -1;
+		}
+
+	}
+	return (1);
+}
+
 int			lift_floor_event(t_doom *d, t_painting *paint)
 {
 	float	dist;

@@ -72,7 +72,7 @@ void	    show_start(t_doom *d)
 	d->menu.pos[1].x = WIN_WIDTH / 2 - d->menu.m[1]->w / 2;
 	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h * 2;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
-	d->menu.pos[2].y = 0;
+	d->menu.pos[2].y = WIN_HEIGHT / 2;
 	SDL_BlitScaled(d->texture.start, 0, d->sdl.surface, 0);
 }
 
@@ -96,16 +96,21 @@ void	show_lose(t_doom *d)
 	d->menu.pos[1].y = WIN_HEIGHT / 2 + d->menu.m[1]->h;
 	d->menu.pos[2].x = WIN_WIDTH / 2 - d->menu.m[2]->w / 2;
 	d->menu.pos[2].y = 0;
+	if (!Mix_Playing(6) && d->game.dead == 0)
+	{
+		d->game.dead = 1;
+		Mix_PlayChannel(6, d->sound.death, 0);
+	}
 	SDL_BlitScaled(d->texture.lose, 0, d->sdl.surface, 0);
 }
 
 void	    chose_level(t_doom *d)
 {
 	d->menu.opt = 3;
-	d->menu.title[0] = "Level 1";
-	d->menu.title[1] = "Level 2";
-	d->menu.title[2] = "Level 3";
-	d->menu.title[3] = "DOOM-NUKEM 3D";
+	d->menu.title[0] = "Portal";
+	d->menu.title[1] = "Bridge";
+	d->menu.title[2] = "Towers";
+	d->menu.title[3] = "CHOOSE LEVEL";
 	d->menu.col[0] = (SDL_Color){255, 255, 255, 0};
  	d->menu.col[1] = (SDL_Color){200, 20, 10, 0};
 	d->menu.m[0] = TTF_RenderText_Solid(
@@ -133,7 +138,7 @@ void	    chose_dificulty(t_doom *d)
 	d->menu.title[0] = "Easy";
 	d->menu.title[1] = "Classic";
 	d->menu.title[2] = "SupaHard";
-	d->menu.title[3] = "DOOM-NUKEM 3D";
+	d->menu.title[3] = "CHOOSE DIFFICULTY";
 	d->menu.col[0] = (SDL_Color){255, 255, 255, 0};
  	d->menu.col[1] = (SDL_Color){200, 20, 10, 0};
 	d->menu.m[0] = TTF_RenderText_Solid(
@@ -176,6 +181,7 @@ void	start_events(t_doom *d)
 						d->start_quit = 1;
 					else if (i == 1)
 						exit(1);
+					Mix_PlayChannel(3, d->sound.click, 0);
 				}
 	}
 }
@@ -205,9 +211,8 @@ void	pause_events(t_doom *d)
 					exit(1);
 				}
 				else if (i == 2)
-				{
 					exit(1);
-				}
+				Mix_PlayChannel(3, d->sound.click, 0);
 			}
 }
 
@@ -235,6 +240,7 @@ void	lose_events(t_doom *d)
 				}
 				else if (i == 1)
 					exit(1);
+				Mix_PlayChannel(3, d->sound.click, 0);
 			}
 }
 
@@ -256,11 +262,12 @@ void  	level_events(t_doom *d)
 				if (in_rect(&d->menu, i) != 0)
 				{
 					if (i == 0)
-						ft_strcpy(d->file_name, "maps/level1");
+						ft_strcpy(d->file_name, "maps/portal");
 					else if (i == 1)
-						ft_strcpy(d->file_name, "maps/karta1");
+						ft_strcpy(d->file_name, "maps/level1"); //bridge
 					else if (i == 2)
-						ft_strcpy(d->file_name, "maps/level6");
+						ft_strcpy(d->file_name, "maps/towers");
+					Mix_PlayChannel(3, d->sound.click, 0);
 				}
 	}
 }
@@ -289,6 +296,7 @@ void	dificulty_events(t_doom *d)
 					else if (i == 2)
 						d->difficulty = 4;
 					d->start_quit = 1;
+					Mix_PlayChannel(3, d->sound.click, 0);
 				}
 	}
 }

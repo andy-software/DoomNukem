@@ -167,7 +167,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 10);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 13);
 
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
@@ -180,23 +180,29 @@ void	load_sprites(t_doom *d)
 	d->texture.sprt[3].h = 1;
 	d->texture.sprt[3].sprites = split_surf(3, 1, "./materials/textures/sprites/keys.png", d);
 	d->texture.sprt[4].c_sprt = 1;
-	d->texture.sprt[4].sprites = split_surf(1, 1, "./materials/textures/sprites/painting.jpg", d);
-	d->texture.sprt[5].sprites = split_surf(10, 5, "./materials/textures/sprites/enemy1.png", d);
+	d->texture.sprt[4].sprites = split_surf(1, 1, "./materials/textures/sprites/dude1.png", d);
 	d->texture.sprt[5].c_sprt = 50;
 	d->texture.sprt[5].w = 10;
 	d->texture.sprt[5].h = 5;
-	d->texture.sprt[6].sprites = split_surf(6, 5, "./materials/textures/sprites/enemy2.png", d);
+	d->texture.sprt[5].sprites = split_surf(10, 5, "./materials/textures/sprites/enemy1.png", d);
 	d->texture.sprt[6].c_sprt = 30;
 	d->texture.sprt[6].w = 6;
 	d->texture.sprt[6].h = 5;
-	d->texture.sprt[7].sprites = split_surf(1, 1, "./materials/textures/sprites/fly.png", d);
+	d->texture.sprt[6].sprites = split_surf(6, 5, "./materials/textures/sprites/enemy2.png", d);
 	d->texture.sprt[7].c_sprt = 1;
-	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/boss.png", d);
+	d->texture.sprt[7].sprites = split_surf(1, 1, "./materials/textures/sprites/fly.png", d);
 	d->texture.sprt[8].c_sprt = 30;
 	d->texture.sprt[8].w = 6;
 	d->texture.sprt[8].h = 5;
-	d->texture.sprt[9].sprites = split_surf(1, 1, "./materials/textures/sprites/npc.png", d);
+	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/boss.png", d);
 	d->texture.sprt[9].c_sprt = 1;
+	d->texture.sprt[9].sprites = split_surf(1, 1, "./materials/textures/sprites/npc.png", d);
+	d->texture.sprt[10].c_sprt = 1;
+	d->texture.sprt[10].sprites = split_surf(1, 1, "./materials/textures/sprites/painting1.jpg", d);
+	d->texture.sprt[11].c_sprt = 1;
+	d->texture.sprt[11].sprites = split_surf(1, 1, "./materials/textures/sprites/tree.png", d);
+	d->texture.sprt[12].c_sprt = 1;
+	d->texture.sprt[12].sprites = split_surf(1, 1, "./materials/textures/sprites/radio.png", d);
 }
 
 SDL_Surface	*load_tex(char *path, Uint32 format)

@@ -473,10 +473,12 @@ struct	s_game
 	int				fire;
 	int				fuel;
 	int				click;
+	int				rect_i;
 	int				blood;
 	t_vector		velocity;
 	float			acceleration;
 	int				dificulty;
+	int				dead;
 	int				start;
 	int				ground;
 	int				falling;
@@ -710,6 +712,8 @@ struct	s_texture
 	SDL_Surface		*story;
 	SDL_Surface		*visor;
 	SDL_Surface		*keys;
+	SDL_Surface		*radio;
+	SDL_Surface		*button;
 	SDL_Rect		keys_r;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
@@ -836,6 +840,7 @@ struct	s_sound
 	Mix_Chunk		*steps;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*jump;
+	Mix_Chunk		*click;
 	Mix_Chunk		*gun1[3];
 	Mix_Chunk		*win;
 	Mix_Chunk		*death;
@@ -1059,7 +1064,7 @@ int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			toxic_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
 int			give_event(t_doom *d, t_sprite *sprite);
-int			radio_event(t_doom *d, t_sprite *sprite);
+int			radio_event(t_doom *d, t_painting *paint);
 int			win_pnt_event(t_doom *d, t_painting *paint);
 
 void		check_painting_intersection(t_doom *d);
