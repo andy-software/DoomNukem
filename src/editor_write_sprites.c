@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_write_sprites.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 15:13:42 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 16:43:17 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 22:27:51 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	create_gribok(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 3;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
-
 }
 
 void	create_aptechka(t_doom *doom, int i)
@@ -107,7 +106,6 @@ void	create_aptechka(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
-	
 }
 
 void	create_get_ammo(t_doom *doom, int i)
@@ -126,7 +124,7 @@ void	create_get_ammo(t_doom *doom, int i)
 	doom->map.sprites[i].num_of_sound = 0;
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
-	doom->map.sprites[i].pick = 1;	
+	doom->map.sprites[i].pick = 1;
 }
 
 void	create_key1(t_doom *doom, int i)
@@ -196,7 +194,7 @@ void	create_npc(t_doom *doom, int i)
 void	write_sprites(t_doom *doom)
 {
 	int		i;
-	
+
 	// t_map &map = doom->map;
 	i = -1;
 	while (++i < (int)doom->map.num_sprites)
@@ -208,7 +206,7 @@ void	write_sprites(t_doom *doom)
 			else if (doom->map.sprites[i].num_sheet == 6)
 				create_small_mob(doom, i);
 			else if (doom->map.sprites[i].num_sheet == 8)
-				create_boss_mob(doom, i);	
+				create_boss_mob(doom, i);
 		}
 		else if (doom->map.sprites[i].mob == 0)
 		{

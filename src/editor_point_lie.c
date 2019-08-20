@@ -3,99 +3,127 @@
 /*                                                        :::      ::::::::   */
 /*   editor_point_lie.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 03:27:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 15:16:23 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 19:15:13 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-void	line_sec_save(t_doom *doom, int nb, int i, int k)
+static	void	line_sec_save(t_doom *doom, int nb)
 {
-    if (nb == 1)
-    {
-        ft_putstr("\033[1;32m Line coincides\033[0m\n");
-        doom->editor.fline.num_line1 = i;
-        doom->editor.fline.num_line2 = -1;
-        doom->editor.fline.sec1 = k;
-        doom->editor.fline.sec2 = -1;
-        doom->editor.is_portal = 2;
-    }
-    else
-    {
-        doom->editor.fline.num_line1 = -1;
-        doom->editor.fline.num_line2 = -1;
-        doom->editor.fline.sec1 = -1;
-        doom->editor.fline.sec2 = -1;
-        doom->editor.is_portal = 2;     
-    }
+	if (nb == 1)
+	{
+		ft_putstr("\033[1;32m Line coincides\033[0m\n");
+		DEDI.fline.num_line1 = DEDI.i;
+		DEDI.fline.num_line2 = -1;
+		DEDI.fline.sec1 = DEDI.k;
+		DEDI.fline.sec2 = -1;
+		DEDI.is_portal = 2;
+	}
+	else
+	{
+		DEDI.fline.num_line1 = -1;
+		DEDI.fline.num_line2 = -1;
+		DEDI.fline.sec1 = -1;
+		DEDI.fline.sec2 = -1;
+		DEDI.is_portal = 2;
+	}
 }
 
-void	lie_point(t_doom *doom, int k, int x, int y)
+static	int		point_on_y(t_doom *doom)
 {
-	t_vertex	*v1;
-	t_vertex	*v2;
-
-    LIE_POINT(point, i, koef, c);
-	k = -1;
-	doom->editor.more = 0;
-	point = (t_vertex){(x / SCL), (y / SCL)};
-	while (++k < (int)doom->map.num_sect)
+	if (DEDI.more == 0 && \
+		comp_real(clamp(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
+		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
 	{
-		i = -1;
-		while (++i < (int)doom->map.sectors[k].num_vert)
-		{
-		    v2 = (i + 1) < (int)doom->map.sectors[k].num_vert ? doom->map.sectors[k].vert + i + 1 : doom->map.sectors[k].vert;
-			v1 = doom->map.sectors[k].vert + i;
+		line_sec_save(doom, 1);
+		DEDI.more++;
+		return (0);
+	}
+	else if (DEDI.more == 1 && \
+		comp_real(clamp(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
+		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
+	{
+		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)
+			DEDI.is_portal = 0;
+		else
+			DEDI.is_portal = 1;
+		DEDI.fline.num_line2 = DEDI.i;
+		DEDI.fline.sec2 = DEDI.k;
+	}
+	else if (DEDI.more == 0)
+		line_sec_save(doom, 2);
+	return (1);
+}
 
-			if (comp_real(v2->x, v1->x, 2) && comp_real(point.x, v1->x, 2))
+static	int		point_true(t_doom *doom, int point_true)
+{
+	if (point_true == 1)
+	{
+		return (DEDI.more == 0 && \
+	comp_real(DEDI.point.y, (DEDI.point.x * DEDI.koef + DEDI.c), 1) && \
+	(DEDI.point.x > min(DEDI.v1->x, DEDI.v2->x)) && \
+	(DEDI.point.x < max(DEDI.v1->x, DEDI.v2->x)));
+	}
+	else
+	{
+		return (DEDI.more == 1 && \
+	comp_real(DEDI.point.y, (DEDI.point.x * DEDI.koef + DEDI.c), 2) &&
+	(DEDI.point.x > min(DEDI.v1->x, DEDI.v2->x)) &&
+	(DEDI.point.x < max(DEDI.v1->x, DEDI.v2->x)));
+	}
+}
+
+static	int		point_on_line(t_doom *doom)
+{
+	DEDI.koef = (DEDI.v2->y - DEDI.v1->y) / (DEDI.v2->x - DEDI.v1->x);
+	DEDI.c = DEDI.v1->y - (DEDI.koef * DEDI.v1->x);
+	if (point_true(doom, 1))
+	{
+		line_sec_save(doom, 1);
+		DEDI.more++;
+		return (0);
+	}
+	else if (point_true(doom, 0))
+	{
+		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)
+			DEDI.is_portal = 0;
+		else
+			DEDI.is_portal = 1;
+		DEDI.fline.num_line2 = DEDI.i;
+		DEDI.fline.sec2 = DEDI.k;
+	}
+	else if (DEDI.more == 0)
+		line_sec_save(doom, 2);
+	return (1);
+}
+
+void			lie_point(t_doom *doom, int x, int y)
+{
+	DEDI.k = -1;
+	DEDI.more = 0;
+	DEDI.point = (t_vertex){(x / SCL), (y / SCL)};
+	while (++DEDI.k < (int)doom->map.num_sect)
+	{
+		DEDI.i = -1;
+		while (++DEDI.i < (int)MAPSEC[DEDI.k].num_vert)
+		{
+			DEDI.v2 = (DEDI.i + 1) < (int)MAPSEC[DEDI.k].num_vert ? \
+			MAPSEC[DEDI.k].vert + DEDI.i + 1 : MAPSEC[DEDI.k].vert;
+			DEDI.v1 = MAPSEC[DEDI.k].vert + DEDI.i;
+			if (comp_real(DEDI.v2->x, DEDI.v1->x, 2) && \
+				comp_real(DEDI.point.x, DEDI.v1->x, 2))
 			{
-				if (doom->editor.more == 0 && comp_real(clamp(point.y, min(v2->y, v1->y), max(v2->y, v1->y)), point.y, 0.001))
-				{
-                    line_sec_save(doom, 1, i, k);
-                    doom->editor.more++;
+				if (point_on_y(doom) == 0)
 					break ;
-				}
-				else if (doom->editor.more == 1 && comp_real(clamp(point.y, min(v2->y, v1->y), max(v2->y, v1->y)), point.y, 0.001))
-				{
-					if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
-						doom->editor.is_portal = 0;
-					else
-						doom->editor.is_portal = 1;
-					doom->editor.fline.num_line2 = i;
-					doom->editor.fline.sec2 = k;
-				}
-				else if (doom->editor.more == 0)
-			        line_sec_save(doom, 2, i, k);
 			}
 			else
 			{
-				koef = (v2->y - v1->y) / (v2->x - v1->x);
-				c = v1->y - (koef * v1->x);
-			
-				if (doom->editor.more == 0 && comp_real(point.y, (point.x * koef + c), 1) &&
-				(point.x > min(v1->x, v2->x)) &&
-				(point.x < max(v1->x, v2->x)))
-				{
-				    line_sec_save(doom, 1, i, k);
-                    doom->editor.more++;
+				if (point_on_line(doom) == 0)
 					break ;
-				}
-				else if (doom->editor.more == 1 && comp_real(point.y, (point.x * koef + c), 2) &&
-				(point.x > min(v1->x, v2->x)) &&
-				(point.x < max(v1->x, v2->x)))
-				{
-					if (doom->map.sectors[doom->editor.fline.sec1].neighbors[doom->editor.fline.num_line1] == -1)
-						doom->editor.is_portal = 0;
-					else
-						doom->editor.is_portal = 1;
-					doom->editor.fline.num_line2 = i;
-					doom->editor.fline.sec2 = k;
-				}
-				else if (doom->editor.more == 0)
-			        line_sec_save(doom, 2, i, k);
 			}
 		}
 	}
