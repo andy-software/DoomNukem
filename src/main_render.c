@@ -74,6 +74,13 @@ void	render_sector(t_render *r, t_doom *d)
 	r->sect = d->map.sectors + r->now.num; //&d.map.sectors[r->now.num];
 	r->cplane = r->sect->ceil_plane;
 	r->fplane = r->sect->floor_plane;
+	if (r->sect->floor_tex == 3 &&
+		d->player.sector == r->sect->num && d->game.ground) // sorry that this is here i don't where to go with it :)
+	{
+		d->game.hp_level -= 1;
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.hurt, 0);
+	}
 	
 	i = -1;
 	while (++i < (int)r->sect->num_vert) // wall
@@ -242,7 +249,7 @@ void	reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	t->d_y_text = -t->d_betta * t->u0_t+ t->d_betta * t->u1_t;
 	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, (unsigned int)t->x_text_upper % surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
@@ -265,7 +272,7 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	t->d_y_text = -t->d_betta * t->u0_t+ t->d_betta * t->u1_t;
 	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_upper, (unsigned int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, (unsigned int)t->x_text_upper % surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
@@ -288,7 +295,7 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	t->d_y_text = -t->d_betta * t->u0_b + t->d_betta * t->u1_b;
 	while (t->win_y < t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text_lower, (unsigned int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, (unsigned int)t->x_text_lower % surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
@@ -319,7 +326,7 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	
 	while (t->win_y <= t->wall_end)
 	{
-		t->color = pix_from_text(surr, t->x_text, (unsigned int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, (unsigned int)t->x_text % surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;

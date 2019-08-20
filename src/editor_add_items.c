@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 21:32:23 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/20 22:34:40 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ static	void	add_items2(t_doom *doom, SDL_Event *event)
 			(t_vector){event->button.x / SCL, event->button.y / SCL, 10};
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].pick = 1;
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].mob = 0;
+			doom->map.sprites[(IMG[2].exist + EXIST) - 1].num_sheet = 0;
 		}
 	}
 }

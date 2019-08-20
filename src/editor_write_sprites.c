@@ -6,42 +6,26 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 15:13:42 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 22:27:51 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/20 22:35:33 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-/**
-		doom->map.sprites[j].spr_num = j;       
-		doom->map.sprites[j].coord = (t_vector){40, 40, 0};
-		doom->map.sprites[j].width = 8;
-		doom->map.sprites[j].end_z = 13;
-		doom->map.sprites[j].mob = 1;
-		doom->map.sprites[j].draw = 1;
-		doom->map.sprites[j].live = 1;
-		doom->map.sprites[j].angle = M_PI / 4;
-		doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
-		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
-		doom->map.sprites[j].move_speed = 0.03;
-		doom->map.sprites[j].own_moves = 1;
-		doom->map.sprites[j].vision_forward = 5;
-		doom->map.sprites[j].vision_backward = -3;
-		doom->map.sprites[j].hp = 20;  // FIX
-		// doom->map.sprites[j].speed = 20;
-		doom->map.sprites[j].num_sheet = 6;
-**/
-void	create_big_mob(t_doom *doom, int i)
+void	write_sprites2(t_doom *doom, int i)
 {
-	doom->map.sprites[i].text_no = 0;
-	doom->map.sprites[i].move_speed = 0.15;
-	doom->map.sprites[i].key = 1;
-	doom->map.sprites[i].changes = 0;
-	doom->map.sprites[i].key_state = 0;
-	doom->map.sprites[i].num_of_sound = 1;
-	doom->map.sprites[i].event_num = 1;
-	doom->map.sprites[i].hp = 60;
-	doom->map.sprites[i].death_time = 0;
+	if (doom->map.sprites[i].num_sheet == 0)
+		create_gribok(doom, i);
+	if (doom->map.sprites[i].num_sheet == 1)
+		create_aptechka(doom, i);
+	else if (doom->map.sprites[i].num_sheet == 2)
+		create_get_ammo(doom, i);
+	else if (doom->map.sprites[i].num_sheet == 3)
+		create_key1(doom, i);
+	else if (doom->map.sprites[i].num_sheet == 7)
+		create_jetpack(doom, i);
+	else if (doom->map.sprites[i].num_sheet == 9)
+		create_npc(doom, i);
 }
 
 void	create_small_mob(t_doom *doom, int i)
@@ -209,21 +193,6 @@ void	write_sprites(t_doom *doom)
 				create_boss_mob(doom, i);
 		}
 		else if (doom->map.sprites[i].mob == 0)
-		{
-			if (doom->map.sprites[i].num_sheet == 0)
-				create_gribok(doom, i);
-			if (doom->map.sprites[i].num_sheet == 1)
-				create_aptechka(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 2)
-				create_get_ammo(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 3)
-				create_key1(doom, i);
-			// else if (doom->map.sprites[i].num_sheet == 4)
-				// create_painting(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 7)
-				create_jetpack(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 9)
-				create_npc(doom, i);
-		}
+			write_sprites2(doom, i);	
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 18:14:16 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/08 19:39:39 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 03:37:56 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->wall_tex[12] = load_tex("./materials/textures/walls/13.png", format);
 	t->wall_tex[13] = load_tex("./materials/textures/walls/14.png", format);
 	t->wall_tex[14] = load_tex("./materials/textures/walls/15.png", format);
+	t->wall_tex[15] = load_tex("./materials/textures/walls/16.png", format);
+	t->wall_tex[16] = load_tex("./materials/textures/walls/17.png", format);
+	t->wall_tex[17] = load_tex("./materials/textures/walls/18.png", format);
+	t->wall_tex[18] = load_tex("./materials/textures/walls/19.png", format);
 	t->sky_box[0] = load_tex("./materials/textures/sky/sky1.jpg", format);
 	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.jpg", format);
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};
@@ -167,7 +171,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 10);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 13);
 
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
@@ -180,23 +184,29 @@ void	load_sprites(t_doom *d)
 	d->texture.sprt[3].h = 1;
 	d->texture.sprt[3].sprites = split_surf(3, 1, "./materials/textures/sprites/keys.png", d);
 	d->texture.sprt[4].c_sprt = 1;
-	d->texture.sprt[4].sprites = split_surf(1, 1, "./materials/textures/sprites/painting.jpg", d);
-	d->texture.sprt[5].sprites = split_surf(10, 5, "./materials/textures/sprites/enemy1.png", d);
+	d->texture.sprt[4].sprites = split_surf(1, 1, "./materials/textures/sprites/dude1.png", d);
 	d->texture.sprt[5].c_sprt = 50;
 	d->texture.sprt[5].w = 10;
 	d->texture.sprt[5].h = 5;
-	d->texture.sprt[6].sprites = split_surf(6, 5, "./materials/textures/sprites/enemy2.png", d);
+	d->texture.sprt[5].sprites = split_surf(10, 5, "./materials/textures/sprites/enemy1.png", d);
 	d->texture.sprt[6].c_sprt = 30;
 	d->texture.sprt[6].w = 6;
 	d->texture.sprt[6].h = 5;
-	d->texture.sprt[7].sprites = split_surf(1, 1, "./materials/textures/sprites/fly.png", d);
+	d->texture.sprt[6].sprites = split_surf(6, 5, "./materials/textures/sprites/enemy2.png", d);
 	d->texture.sprt[7].c_sprt = 1;
-	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/boss.png", d);
+	d->texture.sprt[7].sprites = split_surf(1, 1, "./materials/textures/sprites/fly.png", d);
 	d->texture.sprt[8].c_sprt = 30;
 	d->texture.sprt[8].w = 6;
 	d->texture.sprt[8].h = 5;
-	d->texture.sprt[9].sprites = split_surf(1, 1, "./materials/textures/sprites/npc.png", d);
+	d->texture.sprt[8].sprites = split_surf(6, 5, "./materials/textures/sprites/boss.png", d);
 	d->texture.sprt[9].c_sprt = 1;
+	d->texture.sprt[9].sprites = split_surf(1, 1, "./materials/textures/sprites/npc.png", d);
+	d->texture.sprt[10].c_sprt = 1;
+	d->texture.sprt[10].sprites = split_surf(1, 1, "./materials/textures/sprites/painting1.jpg", d);
+	d->texture.sprt[11].c_sprt = 1;
+	d->texture.sprt[11].sprites = split_surf(1, 1, "./materials/textures/sprites/tree.png", d);
+	d->texture.sprt[12].c_sprt = 1;
+	d->texture.sprt[12].sprites = split_surf(1, 1, "./materials/textures/sprites/radio.png", d);
 }
 
 SDL_Surface	*load_tex(char *path, Uint32 format)

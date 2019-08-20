@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/20 22:17:33 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/20 22:36:48 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@
 # define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
 # define BUT_PRS doom->editor.but1_press
 # define FRE_STR(a, b, c) free(a); free(b); free(c);
+<<<<<<< HEAD
 # define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
 // # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 // # define PR_TO_WR(a, b) a = 1; b = 1;
@@ -123,6 +124,14 @@
 # define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
 // # define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
 // # define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
+=======
+# define LIE_POINT(b, c, d) int b; double c; double d;
+# define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
+# define PR_TO_WR(a, b) a = 1; b = 1;
+# define MAP_SPRT doom->map.sprites
+# define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
+# define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
+>>>>>>> 1f447c4d56cc80a00753db6b9e4027b5e3eed71a
 
 # define BOTTOM 1 
 # define MIDDLE 2
@@ -136,8 +145,12 @@
 # define CEIL_H doom->map.sectors[doom->player.sector].ceil_plane.h
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
+<<<<<<< HEAD
 # define NUM_TEXT 14
 # define MAP_SPRT doom->map.sprites
+=======
+# define NUM_TEXT 18
+>>>>>>> 1f447c4d56cc80a00753db6b9e4027b5e3eed71a
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define SECTOR doom->editor.sector
@@ -216,6 +229,7 @@ typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
 
 /* EDITOR */
+<<<<<<< HEAD
 typedef struct s_editor			t_editor;
 typedef struct s_brezen			t_brezen;
 typedef struct s_interface		t_interface;
@@ -225,6 +239,18 @@ typedef	struct s_buttons		t_buttons;
 typedef struct s_title			t_title;
 typedef	struct s_fline			t_fline;
 typedef	struct s_thread			t_thread;
+=======
+typedef struct s_editor	t_editor;
+typedef struct s_brezen	t_brezen;
+typedef struct s_interface	t_interface;
+typedef struct s_vertex_int	t_vertex_int;
+typedef struct s_images	t_images;
+typedef	struct s_buttons	t_buttons;
+typedef struct s_title	t_title;
+typedef	struct s_fline	t_fline;
+typedef	struct s_lpoint	t_lpoint;
+typedef	struct s_thread	t_thread;
+>>>>>>> 1f447c4d56cc80a00753db6b9e4027b5e3eed71a
 /***/
 
 typedef	struct	s_int_vertex
@@ -491,10 +517,12 @@ struct	s_game
 	int				fire;
 	int				fuel;
 	int				click;
+	int				rect_i;
 	int				blood;
 	t_vector		velocity;
 	float			acceleration;
 	int				dificulty;
+	int				dead;
 	int				start;
 	int				ground;
 	int				falling;
@@ -717,7 +745,7 @@ struct	s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
-	SDL_Surface		*wall_tex[15];
+	SDL_Surface		*wall_tex[19];
 	SDL_Surface		*sky_box[2];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
@@ -728,6 +756,8 @@ struct	s_texture
 	SDL_Surface		*story;
 	SDL_Surface		*visor;
 	SDL_Surface		*keys;
+	SDL_Surface		*radio;
+	SDL_Surface		*button;
 	SDL_Rect		keys_r;
 	SDL_Rect		dude_r;
 	SDL_Rect		gun1_r;
@@ -818,6 +848,14 @@ struct	s_fline // for line
 	int		sec2;  // if line only in in one sector == -1
 };
 
+struct s_lpoint
+{
+	int				more;
+	t_vertex		point;
+	t_vertex		*v1;
+	t_vertex		*v2;
+};
+
 struct	s_editor
 {
 	t_brezen		brezen;
@@ -843,6 +881,7 @@ struct	s_editor
 	int				fog_colors[9];
 	int				ind_fog;
 	char			*name_m;
+<<<<<<< HEAD
 	int				more;
 
 	t_vertex		*v1;
@@ -852,6 +891,9 @@ struct	s_editor
 	int				k;
 	double			koef;
 	double			c;
+=======
+	t_lpoint		lp;
+>>>>>>> 1f447c4d56cc80a00753db6b9e4027b5e3eed71a
 };
 /****/
 struct	s_sound
@@ -860,6 +902,7 @@ struct	s_sound
 	Mix_Chunk		*steps;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*jump;
+	Mix_Chunk		*click;
 	Mix_Chunk		*gun1[3];
 	Mix_Chunk		*win;
 	Mix_Chunk		*death;
@@ -1083,7 +1126,7 @@ int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			toxic_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);
 int			give_event(t_doom *d, t_sprite *sprite);
-int			radio_event(t_doom *d, t_sprite *sprite);
+int			radio_event(t_doom *d, t_painting *paint);
 int			win_pnt_event(t_doom *d, t_painting *paint);
 
 void		check_painting_intersection(t_doom *d);
@@ -1206,6 +1249,16 @@ int				is_in_sector(t_doom *doom, int x, int y);
 int				convex(t_doom *doom, int j);
 t_vertex		*convex2(t_doom *doom);
 
+
+void			create_big_mob(t_doom *doom, int i);
+void			create_small_mob(t_doom *doom, int i);
+void			create_boss_mob(t_doom *doom, int i);
+void			create_gribok(t_doom *doom, int i);
+void			create_aptechka(t_doom *doom, int i);
+void			create_npc(t_doom *doom, int i);
+void			create_jetpack(t_doom *doom, int i);
+void			create_key1(t_doom *doom, int i);
+void			create_get_ammo(t_doom *doom, int i);
 // brezen in editor
 void			ft_line(t_doom *doom);
 void			ft_mouse_press_edit(t_doom *doom, SDL_Event *event);

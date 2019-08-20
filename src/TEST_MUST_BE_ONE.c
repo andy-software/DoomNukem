@@ -87,7 +87,7 @@ int		main(int argc, char **argv)
 	map.sectors[0].floor_plane.h = -20;
 
 	map.sectors[0].ceil_tex = 3;
-	map.sectors[0].floor_tex = 3;
+	map.sectors[0].floor_tex = 4;
 
 	map.sectors[0].x_c_scale = 1 / 10.0;
 	map.sectors[0].y_c_scale = 1 / 10.0;
@@ -224,7 +224,7 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
-	map.num_sprites = 8;
+	map.num_sprites = 9;
 	for (int i = 0; i < 1; i++) // mob small
 	{
 		map.sprites[i].spr_num = i;
@@ -240,7 +240,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
 		map.sprites[i].own_moves = i;
-		map.sprites[i].move_speed = 0.30;
+		map.sprites[i].move_speed = 0.25;
 		map.sprites[i].draw = 1;
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 5; //must be positive //could be same for all sprites
@@ -249,7 +249,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].changes = 0;
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 0;
-		map.sprites[i].event_num = 3;
+		map.sprites[i].event_num = 1;
 		map.sprites[i].hp = 20;
 		map.sprites[i].death_time = 0;
 	}
@@ -438,7 +438,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].anglecos = cos(map.sprites[i].angle);
 		map.sprites[i].anglesin = sin(map.sprites[i].angle);
 		map.sprites[i].own_moves = 1;
-		map.sprites[i].move_speed = 0.15;
+		map.sprites[i].move_speed = 0.10;
 		map.sprites[i].draw = 1;
 		map.sprites[i].live = 1;
 		map.sprites[i].vision_forward = 10; //must be positive //could be same for all sprites
@@ -451,6 +451,36 @@ int		main(int argc, char **argv)
 		map.sprites[i].hp = 300;
 		map.sprites[i].death_time = 0;
 	}
+	for (int i = 8; i < 9; i++)  // tree
+	{
+		map.sprites[i].spr_num = i;
+		map.sprites[i].text_no = 0;
+		map.sprites[i].num_sheet = 11;
+		map.sprites[i].coord = (t_vector){15, -5, get_z(map.sectors[0].floor_plane, 15, -5)};
+		map.sprites[i].sector_no = 0;
+		map.sprites[i].width = 5;
+		map.sprites[i].start_z = 0;
+		map.sprites[i].end_z = 30;
+		map.sprites[i].mob = 0;
+		map.sprites[i].angle = 0;
+		map.sprites[i].anglecos = 0;
+		map.sprites[i].anglesin = 0;
+		map.sprites[i].own_moves = 0;
+		map.sprites[i].move_speed = 0;
+		map.sprites[i].draw = 1;
+		map.sprites[i].live = 0;
+		map.sprites[i].vision_forward = 0; //must be positive //could be same for all sprites
+		map.sprites[i].vision_backward = 0; //must be negative //could be same for all sprites
+		map.sprites[i].key = 0;
+		map.sprites[i].changes = 0;
+		map.sprites[i].key_state = 0;
+		map.sprites[i].num_of_sound = 0;
+		map.sprites[i].event_num = 0;
+		map.sprites[i].hp = 0;
+		map.sprites[i].pick = 0;
+		map.sprites[i].death_time = 0;
+	}
+
 
 	player.coord.x = -5;
 	player.coord.y = -5;
@@ -461,6 +491,7 @@ int		main(int argc, char **argv)
 	player.anglecos = cosf(player.angle);
 	player.anglesin = sinf(player.angle);
 
+	//radio
 	map.num_paint = 1;
 	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
@@ -474,14 +505,14 @@ int		main(int argc, char **argv)
 	map.paint[0].draw = 1;
 	map.paint[0].key_state = 1;
 	map.paint[0].changes = 0;
-	map.paint[0].event_num = 6;
+	map.paint[0].event_num = 3;
 	map.paint[0].speed = 5;
 	map.paint[0].high_point = -40;
 	map.paint[0].low_point = -10;
 	map.paint[0].num_of_sect_to_lift = 0;
 	map.paint[0].click = 0;
 	map.editing = 0;
-	map.paint[0].num_sheet = 3;
+	map.paint[0].num_sheet = 12;
 
 
 	map.inverse_colors = 0;

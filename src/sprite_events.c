@@ -30,24 +30,6 @@ void		play_phrase(Mix_Music *mus, int distance)
 	// 	Mix_PauseMusic();
 }
 
-int			radio_event(t_doom *d, t_sprite *sprite)
-{
-	static int	mus_num = -1;
-
-	if (sprite->key_state == 0)
-		sprite->key_state = 1;
-	if (sprite->key_state)
-	{
-		if (!(Mix_PlayingMusic()))
-			Mix_PlayMusic(d->sound.music[++mus_num], 1);
-		else if ((Mix_PlayingMusic() && d->game.click))
-			Mix_PlayMusic(d->sound.music[++mus_num], 1);
-		if (mus_num >= 2)
-			mus_num = -1;
-	}
-	return (1);
-}
-
 int			talk_event(t_doom *d, t_sprite *sprite)
 {
 	if (sprite->num_of_sound > -1)

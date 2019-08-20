@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 12:09:40 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/13 19:07:00 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 19:14:29 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,28 @@ int			turn_light_event(t_doom *d, t_painting *paint)
 		paint->key_state = 1;
 	}
 	return (0);
+}
+
+int			radio_event(t_doom *d, t_painting *paint)
+{
+	static int	mus_num = -1;
+
+	if (paint->key_state == 0)
+		paint->key_state = 1;
+	if (paint->key_state)
+	{
+		if (!(Mix_PlayingMusic()))
+			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+		else if ((Mix_PlayingMusic() && d->game.click))
+			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+		if (mus_num >= 6)
+		{
+			Mix_PauseMusic();
+			mus_num = -1;
+		}
+
+	}
+	return (1);
 }
 
 int			lift_floor_event(t_doom *d, t_painting *paint)

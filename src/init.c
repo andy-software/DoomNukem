@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:54:32 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/13 22:34:44 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/15 20:29:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		init_moves(t_doom *d)
 	d->changes.pnt_events[0] = turn_light_event;
 	d->changes.pnt_events[1] = lift_floor_event;
 	d->changes.pnt_events[2] = lift_ceil_event;
-	d->changes.pnt_events[3] = first_aid_event;
+	d->changes.pnt_events[3] = radio_event;
 	d->changes.pnt_events[4] = get_ammo_event;
 	d->changes.pnt_events[5] = win_pnt_event;
 	d->changes.pnt_events[6] = inverse_colors_event;
