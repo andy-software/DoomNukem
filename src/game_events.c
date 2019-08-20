@@ -245,7 +245,7 @@ void		check_sprite_intersection(t_doom *d)
 						else if (d->sr.sprites[i].num_sheet == 6)
 							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
 						else if (d->sr.sprites[i].num_sheet == 8)
-							Mix_PlayChannel(4, d->sound.mobdeath[0], 0);
+							Mix_PlayChannel(4, d->sound.mobdeath[2], 0);
 					}
 					else
 					{
@@ -254,7 +254,7 @@ void		check_sprite_intersection(t_doom *d)
 						else if (d->sr.sprites[i].num_sheet == 6)
 							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
 						else if (d->sr.sprites[i].num_sheet == 8)
-							Mix_PlayChannel(4, d->sound.mobhurt[0], 0);
+							Mix_PlayChannel(4, d->sound.mobhurt[2], 0);
 					}
 					break ;
 				}

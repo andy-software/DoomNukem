@@ -33,4 +33,17 @@ void		free_game_params(t_doom *d)
 	free(d->render.ztop);
 	free(d->render.zbottom);
 	free(d->render.queue);
+	
+}
+
+void		free_menu(t_doom *d)
+{
+	int i;
+
+	i = -1;
+	while(i < d->menu.opt + 1)
+	{
+		SDL_FreeSurface(d->menu.m[i]);
+		i++;
+	}
 }

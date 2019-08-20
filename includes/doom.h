@@ -490,6 +490,7 @@ struct	s_game
 	int				damage;
 	int				kills;
 	int				play;
+	int				story;
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
@@ -707,6 +708,7 @@ struct	s_texture
 	SDL_Surface		*pause;
 	SDL_Surface		*lose;
 	SDL_Surface		*start;
+	SDL_Surface		*story;
 	SDL_Surface		*visor;
 	SDL_Surface		*keys;
 	SDL_Rect		keys_r;
@@ -1095,6 +1097,9 @@ void		level_events(t_doom *d);
 void		dificulty_events(t_doom *d);
 void		pause_events(t_doom *d);
 void		lose_evens(t_doom *d);
+int 		in_rect(t_menu *menu, int opt);
+void		show_story(t_doom *d);
+void		free_menu(t_doom *d);
 
 void		set_mouse(t_doom *doom);
 

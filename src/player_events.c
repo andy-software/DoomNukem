@@ -161,13 +161,15 @@ void		player_events(t_doom *d)
 			{
 				if (d->game.pause == 0)
 					d->game.pause = 1;
+				else if (d->game.story == 1)
+					d->game.story = 0;
 				else
 					d->game.pause = 0;
 				set_mouse(d);
 			}
 		}
 		else if (d->ev.type == SDL_MOUSEBUTTONUP &&
-			d->ev.button.button == SDL_BUTTON_LEFT && d->start_quit != 0)
+			d->ev.button.button == SDL_BUTTON_LEFT && d->start_quit != 0 && d->game.pause == 0)
 		{
 			if(d->ui.fire == 0)
 			{

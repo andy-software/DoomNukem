@@ -43,6 +43,7 @@ int		init_game_params(t_doom *d)
 	d->game.start = 1;
 	d->game.quit = 0;
 	d->game.pause = 0;
+	d->game.story = 0;
 	d->game.ducking = 0;
 	d->game.moving = 0;
 	d->game.ground = 0;
@@ -53,8 +54,11 @@ int		init_game_params(t_doom *d)
 	d->difficulty = 1;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
-	d->game.damage = 60 / d->difficulty;
-	d->ui.ammo_1 = 10 * d->difficulty;
+	if (!d->map.editing)
+	{
+		d->game.damage = 60 / d->difficulty;
+		d->ui.ammo_1 = 10 * d->difficulty;
+	}
 	d->game.fuel = 100;
 	d->game.picked_key[0] = 0;
 	d->game.picked_key[1] = 0;
@@ -89,6 +93,7 @@ int		init_game_params(t_doom *d)
 		d->map.sectors[i].ceil_plane.c = 1.0f;
 		i++;
 	}
+	show_pause(d);
 	return (1);
 }
 
@@ -98,13 +103,17 @@ int		game_loop(t_doom doom)
 		return (0);
 	init_moves(&doom);
 	doom.map.editing = 0;
+	set_mouse(&doom);
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prevTime = SDL_GetTicks();
 		player_events(&doom);
-		if (doom.game.pause == 0 && doom.game.hp_level > 0)
+		if (doom.game.story == 1)
 		{
-			set_mouse(&doom);
+			show_story(&doom);
+		}
+		else if (doom.game.pause == 0 && doom.game.hp_level > 0)
+		{
 			game_events(&doom);
 			prepare_to_rendering(&doom.render, doom);
 			draw_skybox(&doom);
@@ -113,7 +122,7 @@ int		game_loop(t_doom doom)
 		}
 		else if (doom.game.pause == 1)
 		{
-			show_pause(&doom);
+			SDL_BlitScaled(doom.texture.pause, 0, doom.sdl.surface, 0);
 			pause_events(&doom);
 			draw_menu(&doom);
 		}
@@ -145,10 +154,10 @@ void	set_mouse(t_doom *doom)
 		SDL_SetRelativeMouseMode(SDL_DISABLE);
 		SDL_SetWindowGrab(doom->sdl.window, 0);
 	}
-	else
+	else if (doom->game.pause == 0 && doom->game.hp_level > 0)
 	{
 		SDL_SetWindowGrab(doom->sdl.window, 1);
 		SDL_SetRelativeMouseMode(SDL_ENABLE);
-		//SDL_GetRelativeMouseState(NULL, NULL);
+		SDL_GetRelativeMouseState(NULL, NULL);
 	}
 }
