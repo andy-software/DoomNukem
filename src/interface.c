@@ -98,8 +98,8 @@ void    gun_anim(t_doom *d)
 					Mix_PlayChannel(3, d->sound.gun1[0], 0);
 				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font, d->ui.str, d->texture.fonts[FPS_F].text_color);
-				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 21 + 1;
-				if (d->ui.gun_anim > 20)
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 18 + 1;
+				if (d->ui.gun_anim > 17)
 				{
 					d->ui.fire = 0;
 					d->ui.gun_anim = 0;
@@ -148,12 +148,12 @@ void    gun_anim(t_doom *d)
 			d->game.fire = 1;
 			if (d->ui.idle == 0)
 			{
-				SDL_BlitSurface(d->texture.gun2[14], 0, d->sdl.surface, &d->texture.gun22_r);
+				SDL_BlitSurface(d->texture.gun2[14 + d->game.blood * 2], 0, d->sdl.surface, &d->texture.gun22_r);
 				d->ui.idle = 1;
 			}
 			else if (d->ui.idle == 1)
 			{
-				SDL_BlitSurface(d->texture.gun2[15], 0, d->sdl.surface, &d->texture.gun22_r);
+				SDL_BlitSurface(d->texture.gun2[15 + d->game.blood * 2], 0, d->sdl.surface, &d->texture.gun22_r);
 				d->ui.idle = 0;
 			}
 			if (!(Mix_Playing(3)))
@@ -163,12 +163,12 @@ void    gun_anim(t_doom *d)
 		{
 			if (d->ui.idle == 0)
 			{
-				SDL_BlitSurface(d->texture.gun2[10], 0, d->sdl.surface, &d->texture.gun21_r);
+				SDL_BlitSurface(d->texture.gun2[10 + d->game.blood * 2], 0, d->sdl.surface, &d->texture.gun21_r);
 				d->ui.idle = 1;
 			}
 			else if (d->ui.idle == 1)
 			{
-				SDL_BlitSurface(d->texture.gun2[11], 0, d->sdl.surface, &d->texture.gun21_r);
+				SDL_BlitSurface(d->texture.gun2[11 + d->game.blood * 2], 0, d->sdl.surface, &d->texture.gun21_r);
 				d->ui.idle = 0;
 			}
 			if (!(Mix_Playing(3)))

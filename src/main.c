@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 13:51:28 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/18 20:03:12 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/19 19:55:07 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int		game_mod(t_doom *doom)
 
 void 	start_loop(t_doom *doom)
 {
-	set_mouse(doom);
 	doom->start_quit = 0;
+	set_mouse(doom);
 	show_start(doom);
 	while (doom->start_quit == 0)
 	{
@@ -62,23 +62,23 @@ void 	start_loop(t_doom *doom)
 
 int		main(int argc, char **argv)
 {
-	t_doom	*doom;
+	t_doom	doom;
 
-	doom = (t_doom*)malloc(sizeof(t_doom) + 1);
+	//doom = (t_doom*)malloc(sizeof(t_doom) + 1);
 
 	srand(time(NULL));
 	if (argc == 3 || argc == 2)
 	{
 		if (ft_strcmp(argv[1], "play") == 0)
 		{
-			if (init_sdl(&doom->sdl) == 0)
+			if (init_sdl(&doom.sdl) == 0)
 				return (error_message("Error with SDL init") + 1);
-			if (load_all(&doom->texture, doom->sdl.surface->format->format, doom) == 0)
+			if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
 				return (error_message("Error with textures") + 1);
-			return (game_mod(doom));
+			return (game_mod(&doom));
 		}
 		else if (ft_strcmp(argv[1], "edit") == 0)
-			return (editor_mod(doom, argv[2]));
+			return (editor_mod(&doom, argv[2]));
 		else
 			print_usage();
 	}

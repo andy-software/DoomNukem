@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:33:50 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 04:25:57 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/19 20:07:27 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ void	ft_render_previous(t_doom *doom)
 			doom->editor.brezen.color = 0x66ff8a;
 			if (doom->map.sectors[i].neighbors[it] != -1)
 				doom->editor.brezen.color = 0xFF0001;
+			ft_draw_pixel(doom, doom->editor.brezen.x1, doom->editor.brezen.y1, 0xFF0000);
+			ft_draw_pixel(doom, doom->editor.brezen.x1 + 1, doom->editor.brezen.y1, 0xFF0000);
+			ft_draw_pixel(doom, doom->editor.brezen.x1 + 2, doom->editor.brezen.y1, 0xFF0000);
+			ft_draw_pixel(doom, doom->editor.brezen.x1 + 3, doom->editor.brezen.y1, 0xFF0000);
+			ft_draw_pixel(doom, doom->editor.brezen.x1 + 4, doom->editor.brezen.y1, 0xFF0000);
+			ft_draw_pixel(doom, doom->editor.brezen.x1 + 5, doom->editor.brezen.y1, 0xFF0000);
 			ft_line(doom);
 		}
 	}

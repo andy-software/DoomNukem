@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/18 18:29:02 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 01:54:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		ft_prepare_to_write(t_doom *doom, int i)
 	IMG[1].im_y[1] = (doom->player.coord.y * SCL) - 48;
 	doom->player.sector = is_in_sector(doom,
 	(doom->player.coord.x * SCL), (doom->player.coord.y * SCL));
+	doom->player.coord.z = -doom->map.sectors[doom->player.sector].floor_plane.h + 10;
 	if ((int)doom->player.sector < 0)
 		exit(0);
 	return (1);

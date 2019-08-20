@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/18 16:18:36 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 03:39:01 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@
 
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
-# define NUM_TEXT 14
+# define NUM_TEXT 18
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define NUM_SECT doom->map.num_sect
@@ -474,6 +474,7 @@ struct	s_game
 	int				fire;
 	int				fuel;
 	int				click;
+	int				blood;
 	t_vector		velocity;
 	float			acceleration;
 	int				dificulty;
@@ -698,7 +699,7 @@ struct	s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
-	SDL_Surface		*wall_tex[15];
+	SDL_Surface		*wall_tex[19];
 	SDL_Surface		*sky_box[2];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
@@ -836,7 +837,7 @@ struct	s_editor
 /****/
 struct	s_sound
 {
-	Mix_Music		*music[3];
+	Mix_Music		*music[7];
 	Mix_Chunk		*steps;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*jump;

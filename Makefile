@@ -6,13 +6,13 @@
 #    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/18 19:55:47 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/19 19:32:27 by myuliia          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-FLAGS =  -Wall -O3 -Wextra #-fsanitize=address  #-Werror
+FLAGS =  -Wall -Og -Wextra -Ofast -flto -pipe -g #-fsanitize=address  #-Werror
 
 NAME = doom-nukem
 
