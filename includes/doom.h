@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/14 07:33:43 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 03:39:01 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@
 # define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
 # define BUT_PRS doom->editor.but1_press
 # define FRE_STR(a, b, c) free(a); free(b); free(c);
-# define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
+# define LIE_POINT(b, c, d) int b; double c; double d;
 # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 # define PR_TO_WR(a, b) a = 1; b = 1;
 # define MAP_SPRT doom->map.sprites
@@ -126,7 +126,7 @@
 
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
-# define NUM_TEXT 14
+# define NUM_TEXT 18
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define NUM_SECT doom->map.num_sect
@@ -206,6 +206,7 @@ typedef struct s_images	t_images;
 typedef	struct s_buttons	t_buttons;
 typedef struct s_title	t_title;
 typedef	struct s_fline	t_fline;
+typedef	struct s_lpoint	t_lpoint;
 typedef	struct s_thread	t_thread;
 /***/
 
@@ -701,7 +702,7 @@ struct	s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
-	SDL_Surface		*wall_tex[15];
+	SDL_Surface		*wall_tex[19];
 	SDL_Surface		*sky_box[2];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
@@ -804,6 +805,14 @@ struct	s_fline // for line
 	int		sec2;  // if line only in in one sector == -1
 };
 
+struct s_lpoint
+{
+	int				more;
+	t_vertex		point;
+	t_vertex		*v1;
+	t_vertex		*v2;
+};
+
 struct	s_editor
 {
 	t_brezen		brezen;
@@ -829,9 +838,7 @@ struct	s_editor
 	int				fog_colors[9];
 	int				ind_fog;
 	char			*name_m;
-	int				more;
-	// t_vertex		*v1;
-	// t_vertex		*v2;
+	t_lpoint		lp;
 };
 /****/
 struct	s_sound
@@ -1187,6 +1194,16 @@ int				is_in_sector(t_doom *doom, int x, int y);
 int				convex(t_doom *doom, int j);
 t_vertex		*convex2(t_doom *doom);
 
+
+void			create_big_mob(t_doom *doom, int i);
+void			create_small_mob(t_doom *doom, int i);
+void			create_boss_mob(t_doom *doom, int i);
+void			create_gribok(t_doom *doom, int i);
+void			create_aptechka(t_doom *doom, int i);
+void			create_npc(t_doom *doom, int i);
+void			create_jetpack(t_doom *doom, int i);
+void			create_key1(t_doom *doom, int i);
+void			create_get_ammo(t_doom *doom, int i);
 // brezen in editor
 void			ft_line(t_doom *doom);
 void			ft_mouse_press_edit(t_doom *doom, SDL_Event *event);

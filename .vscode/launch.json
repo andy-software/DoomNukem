@@ -9,15 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/doom-nukem",
-<<<<<<< HEAD
-            "args": ["edit", "mapa123"],
-=======
-<<<<<<< HEAD
-            "args": ["play", "maps/level5"],
-=======
-            "args": ["edit", "debug"],
->>>>>>> 6e5c8d4725e4ea682104aebba4f593980ef5664c
->>>>>>> 1e4186dbced35d0fe867dea8118034049cab8503
+            "args": ["play"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
@@ -26,7 +18,7 @@
                     "value": "${workspaceFolder}/frameworks/"
                 }
             ],
-            "externalConsole": true,
+            "externalConsole": false,
             "MIMode": "lldb"
         },
     ]

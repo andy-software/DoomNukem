@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 07:35:58 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 01:54:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		ft_prepare_to_write(t_doom *doom, int i)
 	IMG[1].im_y[1] = (doom->player.coord.y * SCL) - 48;
 	doom->player.sector = is_in_sector(doom,
 	(doom->player.coord.x * SCL), (doom->player.coord.y * SCL));
+	doom->player.coord.z = -doom->map.sectors[doom->player.sector].floor_plane.h + 10;
 	if ((int)doom->player.sector < 0)
 		exit(0);
 	return (1);
@@ -60,13 +61,13 @@ void	ft_prepare_editor(t_doom *doom, int i)
 		i = -1;
 		while (++i < (int)doom->map.num_sprites)
 		{
-			if (MAP_SPRT[i].pick == 0)
+			if (MAP_SPRT[i].mob == 1)
 			{
 				IMG[2].exist++;
 				IMG[2].im_x[IMG[2].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;
 				IMG[2].im_y[IMG[2].exist - 1] = (MAP_SPRT[i].coord.y * SCL) - 50;
 			}
-			if (MAP_SPRT[i].pick == 1)
+			if (MAP_SPRT[i].mob == 0)
 			{
 				IMG[4].exist++;
 				IMG[4].im_x[IMG[4].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 18:14:16 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/08 19:39:39 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 03:37:56 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int		load_all(t_texture *t, Uint32 format, t_doom *d)
 	t->wall_tex[12] = load_tex("./materials/textures/walls/13.png", format);
 	t->wall_tex[13] = load_tex("./materials/textures/walls/14.png", format);
 	t->wall_tex[14] = load_tex("./materials/textures/walls/15.png", format);
+	t->wall_tex[15] = load_tex("./materials/textures/walls/16.png", format);
+	t->wall_tex[16] = load_tex("./materials/textures/walls/17.png", format);
+	t->wall_tex[17] = load_tex("./materials/textures/walls/18.png", format);
+	t->wall_tex[18] = load_tex("./materials/textures/walls/19.png", format);
 	t->sky_box[0] = load_tex("./materials/textures/sky/sky1.jpg", format);
 	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.jpg", format);
 	t->fonts[FPS_F].text_color = (SDL_Color){65, 166, 205, 0};

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 17:56:30 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/10 18:12:32 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/14 19:01:15 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int		init_game_params(t_doom *d)
 	d->game.blood = 0;
 	d->game.rect_i = 0;
 	d->game.acceleration = 0.5f;
+	d->difficulty = 1;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
 	if (!d->map.editing)
