@@ -61,7 +61,7 @@ void		check_painting_intersection(t_doom *d)
 		if (inter.y > 0 && inter.y < MAX_RANGE_SPRITE_CLICKING)
 			if (t1.z + t1.y * d->player.angle_z > 0 && t2.z + t2.y * d->player.angle_z < 0)
 			{
-				d->map.paint->click = 1;
+				d->map.paint[i].click = 1;
 				ev(d, d->map.paint + i);
 			}
 	}

@@ -133,6 +133,7 @@ void		player_events(t_doom *d)
 			{
 				Mix_HaltChannel(-1);
 				d->ui.start_saw = 0;
+				d->ui.clickTime = d->ui.prevTime;
 				d->ui.fire = 0;
 				d->ui.gun_num = 1;
 			}
@@ -175,13 +176,13 @@ void		player_events(t_doom *d)
 			{
 				d->ui.fire = 1;
 				d->game.fire = 1;
-				d->ui.start = d->ui.prevTime;
+				d->ui.clickTime = d->ui.prevTime;
 				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
 					d->ui.ammo_1 -= 2;
 				if (d->ui.gun_num == 1)
 					Mix_HaltChannel(3);
 			}
-			else if(d->ui.fire == 1)
+			else if(d->ui.fire == 1 && d->ui.gun_num == 1)
 			{
 				d->ui.fire = 0;
 				Mix_HaltChannel(3);

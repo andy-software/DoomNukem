@@ -69,6 +69,7 @@ int			lift_floor_event(t_doom *d, t_painting *paint)
 	float	dist;
 	float	*curr;
 
+		printf("we are here %f\n", *curr);
 	if (paint->click == 1)
 	{
 		paint->changes = 1;
@@ -81,12 +82,25 @@ int			lift_floor_event(t_doom *d, t_painting *paint)
 		dist = paint->speed * d->game.dt / 500.f * (paint->key_state - 0.5f);
 		*curr += dist;
 		paint->changes = 0;
-		if (*curr > paint->low_point)
+		if (*curr > paint->low_point  && paint->key_state == 1)
+		{
+			printf("Where are stoping at low point %f\n", *curr);
 			*curr = min(*curr, paint->low_point);
-		else if (*curr < paint->high_point)
+			printf("Where are stoping at low point %f\n", *curr);
+			fflush(stdout);
+		}
+		else if (*curr < paint->high_point && paint->key_state == 0)
+		{
+			printf("Where are stoping at high point %f\n", *curr);
 			*curr = max(*curr, paint->high_point);
+			printf("Where are stoping at high point %f\n", *curr);
+			fflush(stdout);
+		}
 		else
+		{
+			printf("Where are changes at high point %f\n", *curr);
 			paint->changes = 1;
+		}
 	}
 	return (1);
 }

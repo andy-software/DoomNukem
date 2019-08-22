@@ -492,7 +492,7 @@ int		main(int argc, char **argv)
 	player.anglesin = sinf(player.angle);
 
 	//radio
-	map.num_paint = 1;
+	map.num_paint = 2;
 	map.paint[0].sector_no = 1;
 	map.paint[0].v1.x = -6;
 	map.paint[0].v1.y = -10;
@@ -505,7 +505,7 @@ int		main(int argc, char **argv)
 	map.paint[0].draw = 1;
 	map.paint[0].key_state = 1;
 	map.paint[0].changes = 0;
-	map.paint[0].event_num = 3;
+	map.paint[0].event_num = 1;
 	map.paint[0].speed = 5;
 	map.paint[0].high_point = -40;
 	map.paint[0].low_point = -10;
@@ -513,6 +513,29 @@ int		main(int argc, char **argv)
 	map.paint[0].click = 0;
 	map.editing = 0;
 	map.paint[0].num_sheet = 12;
+
+	map.paint[0].sector_no = 0;
+	map.paint[0].v1.x = -6;
+	map.paint[0].v1.y = -10;
+	map.paint[0].v1.z = 40;
+	map.paint[0].v2.x = -3;
+	map.paint[0].v2.y = -10;
+	map.paint[0].v2.z = 30;
+	map.paint[0].text_no = 0;
+	map.paint[0].key = 1;
+	map.paint[0].draw = 1;
+	map.paint[0].key_state = 1;
+	map.paint[0].changes = 0;
+	map.paint[0].event_num = 1;
+	map.paint[0].speed = 5;
+	map.paint[0].high_point = -40;
+	map.paint[0].low_point = -10;
+	map.paint[0].num_of_sect_to_lift = 0;
+	map.paint[0].click = 0;
+	map.editing = 0;
+	map.paint[0].num_sheet = 12;
+
+
 
 
 	map.inverse_colors = 0;

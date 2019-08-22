@@ -657,6 +657,7 @@ struct	s_ui
 	SDL_Surface		*message;
 	Uint32			prevTime;
 	Uint32			currTime;
+	Uint32			clickTime;
 	Uint32			start;
 	char			str[10];
 	float			fps;
@@ -723,12 +724,12 @@ struct	s_texture
 	SDL_Rect		cross_r;
 	SDL_Rect		hp_r;
 	SDL_Rect		ammo_r;
-	int				dude_l;
-	int				visor_l;
-	int				gun1_l;
-	int				gun2_l;
-	int				armor_l;
-	int				len;
+	Uint32			dude_l;
+	Uint32			visor_l;
+	Uint32			gun1_l;
+	Uint32			gun2_l;
+	Uint32			armor_l;
+	Uint32			len;
 	int				c_sprt;
 	Uint32			format;
 };
