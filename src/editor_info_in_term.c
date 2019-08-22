@@ -6,13 +6,13 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/15 19:45:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 19:29:37 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-void	 info_action_sprites(t_doom *doom, int sp)
+void	info_action_sprites(t_doom *doom, int sp)
 {
 	if (doom->map.sprites[sp].event_num == WIN_SPRT)
 		ft_putstr("\x1B[33m          win sprite event\x1B[0m\n");
@@ -24,7 +24,6 @@ void	 info_action_sprites(t_doom *doom, int sp)
 		ft_putstr("\x1B[33m          toxic event\x1B[0m\n");
 	else if (doom->map.sprites[sp].event_num == 4)
 		ft_putstr("\x1B[33m          give event\x1B[0m\n");
-	
 }
 
 void	info_action(t_doom *doom, int pain)
@@ -80,4 +79,15 @@ void	info_f_c_w_s(t_doom *doom, int ind)
 		else if (doom->editor.which_wall == TOP)
 			ft_putstr("\x1B[34m          top    wall \x1B[0m\n");
 	}
+}
+
+void	info_lift(t_doom *doom, int pain)
+{
+	ft_putstr("\x1B[33m  Sector: ");
+	ft_putnbr(doom->map.paint[pain].num_of_sect_to_lift);
+	ft_putstr("  High point: ");
+	ft_putnbr(doom->map.paint[pain].high_point);
+	ft_putstr("  Low point: ");
+	ft_putnbr(doom->map.paint[pain].low_point);
+	ft_putstr(" \x1B[0m\n");
 }

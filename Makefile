@@ -6,13 +6,13 @@
 #    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/19 19:32:27 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/22 19:33:47 by myuliia          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-FLAGS =  -Wall -O3 -Wextra -Ofast -flto -pipe #-fsanitize=address  #-Werror
+FLAGS =  -Wall -O3 -Wextra -Ofast -flto -pipe -fsanitize=address  #-Werror
 
 NAME = doom-nukem
 
@@ -27,7 +27,8 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		editor_change_scale.c editor_info_in_term.c editor_interface.c \
 		editor_player_events.c editor_init_window.c editor_point_lie.c \
 		editor_save_del.c editor_add_items.c free_game.c editor_write_sprites.c \
-		editor_write_sprites2.c editor_write_sprites3.c
+		editor_write_sprites2.c editor_write_sprites3.c editor_add_pntgs.c \
+		editor_txt_chg.c
 
 INC = includes/doom.h
 

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 20:46:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 04:08:51 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 20:06:43 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ void	key_floor_ceil(t_doom *doom)
 			if (state[SDL_SCANCODE_KP_1] && FLOOR_A < 2)
 				FLOOR_A += 0.01;
 			else if (state[SDL_SCANCODE_KP_2] && FLOOR_B < 2)
-			{
 				FLOOR_B += 0.01;
-				printf("floor_b %f\n", FLOOR_B);
-			}
 			else if (state[SDL_SCANCODE_KP_3] && FLOOR_H < 1000)
 				FLOOR_H += 0.6;
 		}

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:17:49 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 02:15:21 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 20:07:42 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void	ft_write_changes_to_file2(t_doom *doom, int fd, int i)
 
 int		ft_write_changes_to_file(t_doom *doom, int fd)
 {
-	int i;
-// doom->map.num_sect--;
+	int		i;
+
 	fd = open(doom->editor.name_m, O_WRONLY);
 	write(fd, &doom->map.editing, sizeof(int));
 	write(fd, &doom->map.fog, sizeof(int));

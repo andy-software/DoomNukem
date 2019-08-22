@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/14 04:25:38 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 20:03:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ void	editor_painitngs_texture(t_doom *doom, const Uint8 *state)
 	pain = check_what_paint_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == PAINTINGS && pain != -1)
 	{
-		if ((state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_sheet != 0)
+		if (state[SDL_SCANCODE_TAB])
 		{
-			doom->map.paint[pain].num_sheet--;
+			if (doom->map.paint[pain].num_sheet == 12)
+				doom->map.paint[pain].num_sheet = 10;
 		}
-		else if (!(state[SDL_SCANCODE_TAB])
-		&& doom->map.paint[pain].num_sheet != 6)
+		else if (!(state[SDL_SCANCODE_TAB]))
 		{
-			doom->map.paint[pain].num_sheet++;
+			if (doom->map.paint[pain].num_sheet == 10)
+				doom->map.paint[pain].num_sheet = 12;
 		}
 	}
 }

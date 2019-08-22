@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/19 23:57:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 19:51:45 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,32 @@ void	editor_player_events3(t_doom *doom, const Uint8 *state)
 	}
 }
 
+void	editor_lift(t_doom *doom, const Uint8 *state)
+{
+	int		pain;
+
+	pain = check_what_paint_player_are_looking(doom);
+	if (doom->editor.fl_or_ceil == PAINTINGS &&
+	(PT.event_num == LIFT_FL ||
+	PT.event_num == LIFT_CEIL) && pain != -1)
+	{
+		if (doom->ev.key.keysym.sym == SDLK_KP_7)
+		{
+			if (state[SDL_SCANCODE_TAB] &&
+			PT.num_of_sect_to_lift > 0)
+				PT.num_of_sect_to_lift--;
+			else if (!(state[SDL_SCANCODE_TAB]) &&
+			PT.num_of_sect_to_lift < (int)(doom->map.num_sect - 1))
+				PT.num_of_sect_to_lift++;
+		}
+		if (doom->ev.key.keysym.sym == SDLK_KP_8)
+			PT.high_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+		if (doom->ev.key.keysym.sym == SDLK_KP_9)
+			PT.low_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+		info_lift(doom, pain);
+	}
+}
+
 void	editor_player_events(t_doom *doom)
 {
 	const Uint8	*state;
@@ -74,6 +100,7 @@ void	editor_player_events(t_doom *doom)
 			key_floor_ceil(doom);
 			key_editor_change(doom, state);
 			editor_player_events3(doom, state);
+			editor_lift(doom, state);
 		}
 	}
 	ft_render_editor(doom);
