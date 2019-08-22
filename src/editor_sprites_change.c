@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:06:54 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/18 18:15:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 19:36:28 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 	sp = check_what_sprite_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 	{
-		if (doom->map.sprites[sp].pick == 0)
+		// if (doom->map.sprites[sp].pick == 0)
+		if (doom->map.sprites[sp].mob == 1)
 		{
 			if (state[SDL_SCANCODE_TAB])
 			{
@@ -76,7 +77,8 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 			}
 			
 		}
-		else if (doom->map.sprites[sp].pick == 1)
+		// else if (doom->map.sprites[sp].pick == 1)
+		else if (doom->map.sprites[sp].mob == 0)
 		{
 			if (state[SDL_SCANCODE_TAB])
 			{
@@ -84,6 +86,8 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 					doom->map.sprites[sp].num_sheet = 7;
 				else if (doom->map.sprites[sp].num_sheet == 7)
 					doom->map.sprites[sp].num_sheet = 4;
+				else if (doom->map.sprites[sp].num_sheet == 11)
+					doom->map.sprites[sp].num_sheet = 9;
 				else if (doom->map.sprites[sp].num_sheet != 0)
 					doom->map.sprites[sp].num_sheet--;
 
@@ -94,6 +98,8 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 					doom->map.sprites[sp].num_sheet = 7;
 				else if (doom->map.sprites[sp].num_sheet == 7)
 					doom->map.sprites[sp].num_sheet = 9;
+				else if (doom->map.sprites[sp].num_sheet == 9)
+					doom->map.sprites[sp].num_sheet = 11;
 				else if (doom->map.sprites[sp].num_sheet < 4)
 					doom->map.sprites[sp].num_sheet++;
 
@@ -116,7 +122,7 @@ void	editor_action(t_doom *doom, const Uint8 *state)
 			info_action(doom, pain);
 		}
 		else if (!(state[SDL_SCANCODE_TAB])
-		&& doom->map.paint[pain].event_num != NUM_TEXT)
+		&& doom->map.paint[pain].event_num != INV_COLORS)
 		{
 			doom->map.paint[pain].event_num++;
 			info_action(doom, pain);

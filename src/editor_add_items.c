@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_add_items.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/18 17:37:13 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/20 22:34:40 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 void	add_paintings(t_doom *doom, SDL_Event *event)
 {
-	lie_point(doom, -1, event->button.x, event->button.y);
+	lie_point(doom, event->button.x, event->button.y);
 	if (doom->editor.fline.sec2 == -1 && doom->editor.fline.sec1 != -1)
 	{
-		t_painting	*p = &doom->map.paint[IMG[3].exist - 1];
-		t_vertex	line_param;
-		const float 		width = 5;
-		
+		t_painting		*p = &doom->map.paint[IMG[3].exist - 1];
+		t_vertex		line_param;
+		const float		width = 5;
 		t_vertex dot_1 = doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1];
 		t_vertex dot_2;
+
 		if (doom->editor.fline.num_line1 + 1 != (int)doom->map.sectors[doom->editor.fline.sec1].num_vert)
 			dot_2 = doom->map.sectors[doom->editor.fline.sec1].vert[doom->editor.fline.num_line1 + 1];
 		else
 			dot_2 = doom->map.sectors[doom->editor.fline.sec1].vert[0];
-		
 		line_param = get_line_param(dot_1.x, dot_1.y, dot_2.x, dot_2.y);
 		if (!comp_real(dot_1.x, dot_2.x, 0.0001))
 		{
@@ -72,11 +71,12 @@ void	add_paintings(t_doom *doom, SDL_Event *event)
 	}
 }
 
-void	add_del_items(t_doom *doom, SDL_Event *event)
+static	void	add_del_items(t_doom *doom, SDL_Event *event)
 {
 	if (event->button.x > (WIN_WIDTH - 400))
 	{
-		if ((event->button.y >= 20 && event->button.y <= 100) && event->button.button == SDL_BUTTON_LEFT)
+		if ((event->button.y >= 20 && event->button.y <= 100) && \
+			event->button.button == SDL_BUTTON_LEFT)
 		{
 			doom->editor.img_press = 1;
 			doom->editor.ind_img = ((event->button.x / 100) - 7);
@@ -97,7 +97,7 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 	}
 }
 
-void	add_items2(t_doom *doom, SDL_Event *event)
+static	void	add_items2(t_doom *doom, SDL_Event *event)
 {
 	if (doom->editor.ind_img == 2)
 	{
@@ -134,7 +134,7 @@ void	add_items(t_doom *doom, SDL_Event *event)
 				{
 						if (EXIST != 0)
 							EXIST--;
-							doom->editor.img_press = 1;
+						doom->editor.img_press = 1;
 				}
 				else
 				{
