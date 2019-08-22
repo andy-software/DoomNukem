@@ -43,68 +43,12 @@ void	editor_sp_width(t_doom *doom, const Uint8 *state)
 	int		sp;
 
 	sp = check_what_sprite_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == SPRITES && sp != -1 && doom->map.sprites[sp].width > 0)
+	if (doom->editor.fl_or_ceil == SPRITES
+	&& sp != -1 && doom->map.sprites[sp].width > 0)
 	{
 		doom->map.sprites[sp].width += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
 		if (state[SDL_SCANCODE_TAB] && doom->map.sprites[sp].width == 0)
 			doom->map.sprites[sp].width = 1;
-	}
-}
-
-void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
-{
-	int		sp;
-
-	sp = check_what_sprite_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
-	{
-		// if (doom->map.sprites[sp].pick == 0)
-		if (doom->map.sprites[sp].mob == 1)
-		{
-			if (state[SDL_SCANCODE_TAB])
-			{
-				if (doom->map.sprites[sp].num_sheet == 8)
-					doom->map.sprites[sp].num_sheet = 6;
-				else if (doom->map.sprites[sp].num_sheet == 6)
-				doom->map.sprites[sp].num_sheet = 5;
-			}
-			else if (!(state[SDL_SCANCODE_TAB]))
-			{
-				if (doom->map.sprites[sp].num_sheet == 5)
-					doom->map.sprites[sp].num_sheet = 6;
-				else if (doom->map.sprites[sp].num_sheet == 6)
-					doom->map.sprites[sp].num_sheet = 8;
-			}
-			
-		}
-		// else if (doom->map.sprites[sp].pick == 1)
-		else if (doom->map.sprites[sp].mob == 0)
-		{
-			if (state[SDL_SCANCODE_TAB])
-			{
-				if (doom->map.sprites[sp].num_sheet == 9)
-					doom->map.sprites[sp].num_sheet = 7;
-				else if (doom->map.sprites[sp].num_sheet == 7)
-					doom->map.sprites[sp].num_sheet = 4;
-				else if (doom->map.sprites[sp].num_sheet == 11)
-					doom->map.sprites[sp].num_sheet = 9;
-				else if (doom->map.sprites[sp].num_sheet != 0)
-					doom->map.sprites[sp].num_sheet--;
-
-			}
-			else if (!(state[SDL_SCANCODE_TAB]))
-			{
-				if (doom->map.sprites[sp].num_sheet == 4)
-					doom->map.sprites[sp].num_sheet = 7;
-				else if (doom->map.sprites[sp].num_sheet == 7)
-					doom->map.sprites[sp].num_sheet = 9;
-				else if (doom->map.sprites[sp].num_sheet == 9)
-					doom->map.sprites[sp].num_sheet = 11;
-				else if (doom->map.sprites[sp].num_sheet < 4)
-					doom->map.sprites[sp].num_sheet++;
-
-			}
-		}
 	}
 }
 

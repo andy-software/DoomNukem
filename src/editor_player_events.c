@@ -62,44 +62,28 @@ void	editor_player_events3(t_doom *doom, const Uint8 *state)
 	}
 }
 
-void	 info_lift(t_doom *doom, int pain)
-{
-	printf("\x1B[33m  Sector: %d ", doom->map.paint[pain].num_of_sect_to_lift);
-	printf("  High point: %f ", doom->map.paint[pain].high_point);
-	printf("  Low point: %f \x1B[0m\n", doom->map.paint[pain].low_point);
-}
-
 void	editor_lift(t_doom *doom, const Uint8 *state)
 {
 	int		pain;
-	
+
 	pain = check_what_paint_player_are_looking(doom);
-	if (doom->editor.fl_or_ceil == PAINTINGS && 
-	(doom->map.paint[pain].event_num == LIFT_FL ||
-	doom->map.paint[pain].event_num == LIFT_CEIL) && pain != -1)
+	if (doom->editor.fl_or_ceil == PAINTINGS &&
+	(PT.event_num == LIFT_FL ||
+	PT.event_num == LIFT_CEIL) && pain != -1)
 	{
 		if (doom->ev.key.keysym.sym == SDLK_KP_7)
 		{
-			if (state[SDL_SCANCODE_TAB] && doom->map.paint[pain].num_of_sect_to_lift > 0)
-				doom->map.paint[pain].num_of_sect_to_lift--;
-			else if (!(state[SDL_SCANCODE_TAB]) && doom->map.paint[pain].num_of_sect_to_lift < (int)doom->map.num_sect)
-				doom->map.paint[pain].num_of_sect_to_lift++;	
+			if (state[SDL_SCANCODE_TAB] &&
+			PT.num_of_sect_to_lift > 0)
+				PT.num_of_sect_to_lift--;
+			else if (!(state[SDL_SCANCODE_TAB]) &&
+			PT.num_of_sect_to_lift < (int)(doom->map.num_sect - 1))
+				PT.num_of_sect_to_lift++;
 		}
 		if (doom->ev.key.keysym.sym == SDLK_KP_8)
-		{
-			if (state[SDL_SCANCODE_TAB])
-				doom->map.paint[pain].high_point--;
-			else if (!(state[SDL_SCANCODE_TAB]))
-				doom->map.paint[pain].high_point++;
-		}
+			PT.high_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
 		if (doom->ev.key.keysym.sym == SDLK_KP_9)
-		{
-			if (state[SDL_SCANCODE_TAB])
-				doom->map.paint[pain].low_point--;
-			else if (!(state[SDL_SCANCODE_TAB]))
-				doom->map.paint[pain].low_point++;
-		}
-
+			PT.low_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
 		info_lift(doom, pain);
 	}
 }

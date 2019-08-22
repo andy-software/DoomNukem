@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 22:36:06 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/22 20:13:19 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,11 @@ void			ft_prepare_editor(t_doom *doom, int i)
 	}
 	INIT5(DEDI.fline.num_line1, -1, DEDI.fline.num_line2, -1, \
 		DEDI.fline.sec1, -1, DEDI.fline.sec2, 1, DEDI.which_wall, 1);
+}
+
+void	ft_render_editor(t_doom *doom)
+{
+	ft_render_interface(doom);
+	ft_render_previous(doom);
+	ft_render_other(doom);
 }

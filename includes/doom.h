@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/20 22:36:48 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/22 19:52:09 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@
 # define MAX_PAINTINGS 100
 # define SCL 5.0
 # define IS_DRW doom->editor.is_drawing
-
 # define FT_R_OTH(a, b, c)  a = 0; b = 1; c = 0;
 # define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
 # define BUT_PRS doom->editor.but1_press
@@ -127,8 +126,6 @@
 # define MAP_SPRT doom->map.sprites
 # define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
 # define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
-// # define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
-// # define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
 
 # define BOTTOM 1 
 # define MIDDLE 2
@@ -140,14 +137,28 @@
 # define CEIL_A doom->map.sectors[doom->player.sector].ceil_plane.a
 # define CEIL_B doom->map.sectors[doom->player.sector].ceil_plane.b
 # define CEIL_H doom->map.sectors[doom->player.sector].ceil_plane.h
+
+# define INT1(a) int a;
+# define INT2(a,b) int a,b;
+# define INT3(a,b,c) int a,b,c;
+# define INT4(a,b,c,d) int a,b,c,d;
+# define INT5(a,b,c,d,e) int a,b,c,d,e;
+
+# define INIT2(a,av,b,bv) a=av;b=bv;
+# define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
+# define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
+# define INIT5(a,av,b,bv,c,cv,d,dv,e,ev) a=av;b=bv;c=cv;d=dv;e=ev;
+# define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
+
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
-# define NUM_TEXT 14
+# define NUM_TEXT 18
 # define MAP_SPRT doom->map.sprites
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define SECTOR doom->editor.sector
 # define IMG doom->editor.images
+# define IMGS d->editor.images
 # define SDL_SURF doom->editor.sdl.surface
 # define DEDI	doom->editor
 # define MAPSEC	doom->map.sectors
@@ -155,6 +166,7 @@
 # define MAPS_NUM doom->map.sectors[doom->map.num_sect]
 # define DBRZ	doom->editor.brezen
 # define DEFLN doom->editor.fline
+# define PT doom->map.paint[pain]
 
 
 /** action paintings **/
@@ -176,7 +188,6 @@
 
 
 /*  BREZEN NORM */
-
 # define BDX doom->editor.brezen.dx
 # define BDY doom->editor.brezen.dy
 # define BSTARTX doom->editor.brezen.startx
@@ -192,28 +203,28 @@
 # define TWHY  "\x1B[37m"
 /***/
 
-typedef struct s_doom			t_doom;
+typedef struct s_doom		t_doom;
 
-typedef struct s_sdl			t_sdl;
-typedef struct s_option			t_option;
+typedef struct s_sdl		t_sdl;
+typedef struct s_option		t_option;
 
-typedef struct s_map			t_map;
-typedef struct s_vertex			t_vertex;
-typedef struct s_sector			t_sector;
-typedef struct s_player			t_player;
-typedef struct s_line			t_line;
-typedef struct s_game			t_game;
-typedef struct s_vector			t_vector;
-typedef struct s_render			t_render;
-typedef struct s_ceil_cal		t_ceil_cal;
-typedef struct s_floor_cal		t_floor_cal;
-typedef struct s_plane			t_plane;
-typedef struct s_ui				t_ui;
+typedef struct s_map		t_map;
+typedef struct s_vertex		t_vertex;
+typedef struct s_sector		t_sector;
+typedef struct s_player		t_player;
+typedef struct s_line		t_line;
+typedef struct s_game		t_game;
+typedef struct s_vector		t_vector;
+typedef struct s_render		t_render;
+typedef struct s_ceil_cal	t_ceil_cal;
+typedef struct s_floor_cal	t_floor_cal;
+typedef struct s_plane		t_plane;
+typedef struct s_ui			t_ui;
 typedef struct s_rend_sector	t_rend_sector;
 
-typedef struct s_texture		t_texture;
-typedef struct s_skybox			t_skybox;
-typedef struct s_sprite			t_sprite;
+typedef struct s_texture	t_texture;
+typedef struct s_skybox		t_skybox;
+typedef struct s_sprite		t_sprite;
 typedef struct s_sprite_render	t_sprite_render;
 typedef struct s_sprite_sheet	t_sprite_sheet;
 typedef	struct s_painting		t_painting;
@@ -864,7 +875,6 @@ struct	s_editor
 	int				ind_fog;
 	char			*name_m;
 	int				more;
-
 	t_vertex		*v1;
 	t_vertex		*v2;
 	t_vertex		point;
@@ -1149,6 +1159,7 @@ void		free_game_params(t_doom *d);
 */
 
 /* EDITOR */
+void			add_paintings(t_doom *doom, SDL_Event *ev);
 int				check_what_sprite_player_are_looking(t_doom *d);
 int				check_what_paint_player_are_looking(t_doom *d);
 int				game_mod_editor(t_doom *doom);
@@ -1187,6 +1198,7 @@ void			info_action(t_doom *doom, int pain);
 void			info_action_sprites(t_doom *doom, int sp);
 void			info_f_c_w_s(t_doom *doom, int ind);
 void			info_f_c_w_s2(t_doom *doom);
+void			info_lift(t_doom *doom, int pain);
 int				check_what_line_player_are_looking(t_doom *d);
 void			editor_player_events(t_doom *doom);
 void			editor_player_events2(t_doom *doom, const Uint8 *state);
@@ -1209,6 +1221,7 @@ void			editor_start_z(t_doom *doom, const Uint8 *state);
 void			editor_end_z(t_doom *doom, const Uint8 *state);
 void			editor_sp_width(t_doom *doom, const Uint8 *state);
 void			editor_sprites_texture(t_doom *doom, const Uint8 *state);
+void			editor_sprites_texture2(t_doom *doom, const Uint8 *state, int sp);
 void			check_save_del(t_doom *doom, int fd);
 void			editor_fc_texture(t_doom *doom, const Uint8 *state);
 void			editor_wall_texture(t_doom *doom, const Uint8 *state);
@@ -1218,6 +1231,7 @@ void			editor_shift_x(t_doom *doom, const Uint8 *state);
 void			editor_shift_y(t_doom *doom, const Uint8 *state);
 void			lie_point(t_doom *doom, int x, int y);
 void			in_sector(t_doom *doom, SDL_Event *event);
+void			write_sprites(t_doom *doom);
 /*  titles */
 void			ft_put_text(char *str, int nb, char *str1);
 void			ft_error(int nb);

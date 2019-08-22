@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   editor_prepare.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/20 22:35:09 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/22 20:21:42 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-static	void	init_map_sector_line(t_doom *doom, int j, int l)
+void	ft_prepare_read2(t_doom *doom, int j)
 {
+	int		l;
+
+	l = -1;
 	doom->map.sectors[j].lines = (t_line*)malloc(sizeof(t_line) * MAX_VERT);
 	while (++l < MAX_VERT)
 	{
@@ -29,33 +32,50 @@ static	void	init_map_sector_line(t_doom *doom, int j, int l)
 		doom->map.sectors[j].lines[l].y_w_scale = 1;
 		doom->map.sectors[j].lines[l].y_b_scale = 1;
 		doom->map.sectors[j].lines[l].y_t_scale = 1;
+		doom->map.sectors[j].lines[l].y_w_shift = 0;
+		doom->map.sectors[j].lines[l].y_b_shift = 0;
+		doom->map.sectors[j].lines[l].y_t_shift = 0;
 	}
 }
 
-static	void	init_map_sector(t_doom *doom, int j)
+void	ft_prepare_sectors(t_doom *doom, int j)
 {
-	doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * MAX_SECTORS);
 	while (++j < MAX_SECTORS)
 	{
 		doom->map.sectors[j].light_lvl = 1;
+		doom->map.sectors[j].num_vert = 0;
 		doom->map.sectors[j].num = j;
+		doom->map.sectors[j].ceil_plane.a = 0;
+		doom->map.sectors[j].ceil_plane.b = 0;
 		doom->map.sectors[j].ceil_plane.c = 1;
 		doom->map.sectors[j].ceil_plane.h = -80;
+		doom->map.sectors[j].floor_plane.a = 0;
+		doom->map.sectors[j].floor_plane.b = 0;
 		doom->map.sectors[j].floor_plane.c = 1;
 		doom->map.sectors[j].floor_plane.h = -10;
 		doom->map.sectors[j].ceil_tex = 4;
 		doom->map.sectors[j].floor_tex = 4;
 		doom->map.sectors[j].x_c_scale = 1;
 		doom->map.sectors[j].y_c_scale = 1;
+		doom->map.sectors[j].x_c_shift = 0;
+		doom->map.sectors[j].y_c_shift = 0;
 		doom->map.sectors[j].x_f_scale = 1.0 / 10;
 		doom->map.sectors[j].y_f_scale = 1.0 / 10;
+		doom->map.sectors[j].x_f_shift = 0;
+		doom->map.sectors[j].y_f_shift = 0;
 		doom->map.sectors[j].render_ceil = 1;
-		init_map_sector_line(doom, j, -1);
+		ft_prepare_read2(doom, j);
 	}
 }
 
-static	void	init_map_sprites(t_doom *doom, int j)
+void	ft_prepare_read(t_doom *doom)
 {
+	int		j;
+
+	ft_bzero(doom, sizeof(t_doom));
+	doom->map.sectors = (t_sector*)malloc(sizeof(t_sector) * MAX_SECTORS);
+	ft_prepare_sectors(doom, -1);
+	j = -1;
 	while (++j < MAX_SPRITES_COUNT)
 	{
 		doom->map.sprites[j].spr_num = j;
@@ -72,15 +92,11 @@ static	void	init_map_sprites(t_doom *doom, int j)
 		doom->map.sprites[j].own_moves = 1;
 		doom->map.sprites[j].vision_forward = 5;
 		doom->map.sprites[j].vision_backward = -3;
-		doom->map.sprites[j].hp = 20;// FIX
-		// doom->map.sprites[j].speed = 20;
+		doom->map.sprites[j].hp = 20;
 		doom->map.sprites[j].num_sheet = 6;
-		// doom->map.sprites[j].speed = 20;
 	}
-}
-
-static	void	init_map_paint(t_doom *doom, int j)
-{
+	doom->map.num_paint = 0;
+	j = -1;
 	while (++j < MAX_PAINTINGS)
 	{
 		doom->map.paint[j].v1.z = 40;
@@ -92,12 +108,4 @@ static	void	init_map_paint(t_doom *doom, int j)
 		doom->map.paint[j].low_point = -10;
 		doom->map.paint[j].num_sheet = 3;
 	}
-}
-
-void			ft_prepare_read(t_doom *doom)
-{
-	ft_bzero(doom, sizeof(t_doom));
-	init_map_sector(doom, -1);
-	init_map_sprites(doom, -1);
-	init_map_paint(doom, -1);
 }
