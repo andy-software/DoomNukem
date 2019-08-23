@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:41:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/19 19:54:53 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/23 18:29:16 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ static void Info_about_player(t_player *player)
 {
 	printf("player's coord = {%f, %f, %f}\n", player->coord.x, player->coord.y, player->coord.z);
 	printf("player's angles = {%f, %f}\n", player->angle, player->angle_z);
-	printf("player's sector %i\n", player->sector);
+	ft_putstr("player's sector");
+	ft_putnbr(player->sector);
+	ft_putstr("\n");
 }
 
 int			read_file(t_doom *doom, char *file_name)
@@ -58,13 +60,10 @@ int			read_file(t_doom *doom, char *file_name)
 		return (0);
 
 	read(fd, &map->editing, sizeof(int));
-
 	read(fd, &map->fog, sizeof(int));
 	read(fd, &map->fog_color, sizeof(Uint32));
 	read(fd, &map->inverse_colors, sizeof(int));
-
 	read(fd, &map->num_sect, sizeof(Uint32));
-
 	map->sectors = (t_sector*)malloc(sizeof(t_sector) * map->num_sect);
 	i = -1;
 	while (++i < map->num_sect)
@@ -103,7 +102,6 @@ int			read_file(t_doom *doom, char *file_name)
 	read(fd, map->paint, sizeof(t_painting) * map->num_paint);
 	Info_about_map(map);
 	Info_about_player(player);
-
 	close(fd);
 	return (1);
 }

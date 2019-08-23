@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/15 16:53:05 by apavlov           #+#    #+#             */
-/*   Updated: 2019/06/15 16:53:05 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/23 18:38:18 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,12 @@
 
 SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d)
 {
-	int			i;
-	int			j;
-	int			count;
 	SDL_Rect	rect;
 	SDL_Surface	**splited;
 	SDL_Surface *sheet;
 
-	i = -1;
-	count = 0;
+	INT3(i, j, count);
+	INIT2(i, -1, count, 0);
 	sheet = load_tex(path, d->texture.format);
 	SDL_SetColorKey(sheet, SDL_TRUE, SDL_MapRGB(sheet->format, 255, 255, 255));
 	splited = ft_memalloc(sizeof(SDL_Surface*) * (w * h));
