@@ -29,7 +29,7 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		editor_save_del.c editor_add_items.c free_game.c editor_write_sprites.c \
 		editor_write_sprites2.c editor_write_sprites3.c editor_add_pntgs.c \
 		editor_txt_chg.c sprite_render_1.c painting_2.c math_vertex.c math_bits.c math2.c \
-		menus_1.c menus_2.c
+		menus_1.c menus_2.c threads_2.c main_render_2.c
 
 INC = includes/doom.h
 

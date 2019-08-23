@@ -1028,7 +1028,9 @@ void		reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		textline_draw(int y1, int y2, t_render *r, t_thread *t);
 void		upper_textline(int y1, int y2, t_render *r, t_thread *t);
 void		lower_textline(int y1, int y2, t_render *r, t_thread *t);
+void		prepare_to_rendering(t_render *r, t_doom d);
 Uint32		get_fog_color(Uint32 color, Uint32 fog_color, float y);
+void		prepare_to_render_next_sector(t_render *r);
 void		render_sprites(t_doom *d);
 void		render_painting(t_doom *d);
 void		draw_line_of_sprite(t_sprite_render *sr, \
