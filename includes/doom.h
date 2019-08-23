@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/22 19:52:09 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/22 20:56:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@
 # define NB_BUTTONS 17
 # define NB_IMAGES 6
 # define EXIST doom->editor.images[doom->editor.ind_img].exist
+# define EXISTS d->editor.images[d->editor.ind_img].exist
 # define NUM_WALL 7 // 3
 # define ESC (key == SDLK_ESCAPE)
 # define FLOOR 1
@@ -152,6 +153,7 @@
 # define MAPS_NUM doom->map.sectors[doom->map.num_sect]
 # define DBRZ	doom->editor.brezen
 # define DEFLN doom->editor.fline
+# define DEFL d->editor.fline
 # define PT doom->map.paint[pain]
 
 

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 13:51:28 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/19 19:55:07 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/23 16:43:49 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ int		editor_mod(t_doom *doom, char *file_name)
 	return (0);
 }
 
-
 int		game_mod(t_doom *doom)
 {
-	start_loop(doom);	
+	start_loop(doom);
 	if (read_file(doom, &doom->file_name) == 0)
 		return (error_message("Error with file") + 1);
 	if (game_loop(*doom) == 0)
@@ -29,7 +28,7 @@ int		game_mod(t_doom *doom)
 	return (0);
 }
 
-void 	start_loop(t_doom *doom)
+void	start_loop(t_doom *doom)
 {
 	doom->start_quit = 0;
 	set_mouse(doom);
@@ -73,7 +72,8 @@ int		main(int argc, char **argv)
 		{
 			if (init_sdl(&doom.sdl) == 0)
 				return (error_message("Error with SDL init") + 1);
-			if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
+			if (load_all(&doom.texture,
+			doom.sdl.surface->format->format, &doom) == 0)
 				return (error_message("Error with textures") + 1);
 			return (game_mod(&doom));
 		}

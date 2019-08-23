@@ -6,13 +6,13 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 12:09:40 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/14 19:14:29 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/23 16:45:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-int			inverse_colors_event(t_doom *d, t_painting *paint)
+int		inverse_colors_event(t_doom *d, t_painting *paint)
 {
 	if (paint->key_state == 1)
 	{
@@ -27,7 +27,7 @@ int			inverse_colors_event(t_doom *d, t_painting *paint)
 	return (0);
 }
 
-int			turn_light_event(t_doom *d, t_painting *paint)
+int		turn_light_event(t_doom *d, t_painting *paint)
 {
 	if (paint->key_state == 1)
 	{
@@ -42,7 +42,7 @@ int			turn_light_event(t_doom *d, t_painting *paint)
 	return (0);
 }
 
-int			radio_event(t_doom *d, t_painting *paint)
+int		radio_event(t_doom *d, t_painting *paint)
 {
 	static int	mus_num = -1;
 
@@ -59,12 +59,11 @@ int			radio_event(t_doom *d, t_painting *paint)
 			Mix_PauseMusic();
 			mus_num = -1;
 		}
-
 	}
 	return (1);
 }
 
-int			lift_floor_event(t_doom *d, t_painting *paint)
+int		lift_floor_event(t_doom *d, t_painting *paint)
 {
 	float	dist;
 	float	*curr;
@@ -91,7 +90,7 @@ int			lift_floor_event(t_doom *d, t_painting *paint)
 	return (1);
 }
 
-int			lift_ceil_event(t_doom *d, t_painting *paint)
+int		lift_ceil_event(t_doom *d, t_painting *paint)
 {
 	float	dist;
 	float	*curr;
@@ -118,7 +117,7 @@ int			lift_ceil_event(t_doom *d, t_painting *paint)
 	return (1);
 }
 
-int			first_aid_event(t_doom *d, t_painting *paint)
+int		first_aid_event(t_doom *d, t_painting *paint)
 {
 	if (paint->charge > 0)
 	{
@@ -128,7 +127,7 @@ int			first_aid_event(t_doom *d, t_painting *paint)
 	return (0);
 }
 
-int			get_ammo_event(t_doom *d, t_painting *paint)
+int		get_ammo_event(t_doom *d, t_painting *paint)
 {
 	if (paint->charge > 0)
 	{
