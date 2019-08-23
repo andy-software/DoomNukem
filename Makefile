@@ -6,7 +6,7 @@
 #    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/23 18:42:33 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/23 19:48:10 by myuliia          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,7 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		editor_save_del.c editor_add_items.c free_game.c editor_write_sprites.c \
 		editor_write_sprites2.c editor_write_sprites3.c editor_add_pntgs.c \
 		editor_txt_chg.c math_vertex.c math_bits.c math2.c sounds_load.c \
-		textureload2.c textureload_all.c
-		
+		textureload2.c textureload_all.c menus_2.c menus_1.c
 
 INC = includes/doom.h
 
