@@ -29,7 +29,7 @@ void	prepare_to_render_next_sector(t_render *r)
 							(r->end_x - r->x1) * r->nkzb + r->nz1b);
 	*r->head = (t_rend_sector) {r->neighbor, r->begin_x, r->end_x, \
 		max1, max2, min1, min2};
-	if(++r->head == (r->queue + MAX_SECTORS_RENDERED))
+	if (++r->head == (r->queue + MAX_SECTORS_RENDERED))
 		r->head = r->queue;
 }
 
@@ -38,7 +38,7 @@ void	prepare_to_rendering(t_render *r, t_doom d)
 	int i;
 
 	r->now.num = d.player.sector;
-	r->sect = d.map.sectors + r->now.num; //&d.map.sectors[r->now.num];
+	r->sect = d.map.sectors + r->now.num;
 	r->now.sx1 = 0;
 	r->now.sx2 = WIN_WIDTH - 1;
 	r->pcos = d.player.anglecos;
@@ -72,11 +72,11 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	t->d_betta = 1.0 / (t->nza - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
-	t->d_y_text = -t->d_betta * t->u0_t+ t->d_betta * t->u1_t;
+	t->d_y_text = -t->d_betta * t->u0_t + t->d_betta * t->u1_t;
 	while (t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, (unsigned int)t->x_text_upper %\
-					 surr->w, (unsigned int)t->float_y_text % surr->h);
+					surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, \
 								t->r, t->color, t->y);
 		t->win_y++;
@@ -101,7 +101,7 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	while (t->win_y < t->wall_end)
 	{
 		t->color = pix_from_text(surr, (unsigned int)t->x_text_lower %\
-							 surr->w, (unsigned int)t->float_y_text % surr->h);
+							surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, \
 					t->r, t->color, t->y);
 		t->win_y++;
@@ -122,15 +122,13 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = ((1 - t->betta) * t->u0 + t->betta * t->u1);
-	
 	t->d_y_text = -t->d_betta * t->u0 + t->d_betta * t->u1;
-	
 	while (t->win_y <= t->wall_end)
 	{
-		t->color = pix_from_text(surr, (unsigned int)t->x_text %\
-						 surr->w, (unsigned int)t->float_y_text % surr->h);
+		t->color = pix_from_text(surr, (unsigned int)t->x_text % \
+						surr->w, (unsigned int)t->float_y_text % surr->h);
 		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, \
-											t->r, t->color, t->y);
+				t->r, t->color, t->y);
 		t->win_y++;
 		t->betta += t->d_betta;
 		t->float_y_text += t->d_y_text;
