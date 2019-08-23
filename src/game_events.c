@@ -48,8 +48,8 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 		nextz <= floor_z + g->eye_height)
 	{
 		p->coord.z = floor_z + g->eye_height;
-		if (g->velocity.z < -1)
-			g->hp_level += g->velocity.z * 40;
+		if (g->velocity.z < -1.2)
+			g->hp_level += g->velocity.z * 25;
 		g->velocity.z = 0;
 		g->falling = 0;
 	}

@@ -1095,6 +1095,12 @@ Uint32		pix_from_text(SDL_Surface *texture, int x, int y);
 SDL_Surface	**split_surf(int w, int h, char *path, t_doom *d);
 int			translate_and_rotate_sprites(t_sprite *arr_spr, \
 												int len, t_player p);
+int			sprite_render_cliping(t_sprite_render *sr);
+void		sprite_render_cycle(t_sprite_render *sr, t_doom *d);
+/*
+painting
+*/
+void		painting_render_cycle(t_sprite_render *sr, t_doom *d);
 /*
 **load.c
 */
