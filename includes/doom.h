@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/22 20:56:26 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/23 18:58:47 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@
 # define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
 // # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 // # define PR_TO_WR(a, b) a = 1; b = 1;
+# define INT_1(a) int a = -1;
+
+# define INTARR(a, b) int a[b] = {0};
+
 # define INT1(a) int a;
 # define INT2(a,b) int a,b;
 # define INT3(a,b,c) int a,b,c;
@@ -1138,9 +1142,9 @@ void		switch_music(t_sound *sound, SDL_Event ev);
 */
 void		show_pause(t_doom *d);
 void		show_lose(t_doom *d);
-void 		show_start(t_doom *d);
-void	    chose_level(t_doom *d);
-void	    chose_dificulty(t_doom *d);
+void		show_start(t_doom *d);
+void		chose_level(t_doom *d);
+void		chose_dificulty(t_doom *d);
 void		draw_menu(t_doom *d);
 void		menu_mouse(t_doom *d);
 void		start_events(t_doom *d);
