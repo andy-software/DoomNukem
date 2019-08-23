@@ -107,7 +107,21 @@
 # define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
 # define BUT_PRS doom->editor.but1_press
 # define FRE_STR(a, b, c) free(a); free(b); free(c);
-# define LIE_POINT(b, c, d) int b; double c; double d;
+# define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
+// # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
+// # define PR_TO_WR(a, b) a = 1; b = 1;
+# define INT1(a) int a;
+# define INT2(a,b) int a,b;
+# define INT3(a,b,c) int a,b,c;
+# define INT4(a,b,c,d) int a,b,c,d;
+# define INT5(a,b,c,d,e) int a,b,c,d,e;
+
+# define INIT2(a,av,b,bv) a=av;b=bv;
+# define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
+# define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
+# define INIT5(a,av,b,bv,c,cv,d,dv,e,ev) a=av;b=bv;c=cv;d=dv;e=ev;
+# define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
+
 # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 # define PR_TO_WR(a, b) a = 1; b = 1;
 # define MAP_SPRT doom->map.sprites
@@ -680,6 +694,7 @@ struct	s_ui
 	SDL_Surface		*message;
 	Uint32			prevTime;
 	Uint32			currTime;
+	Uint32			clickTime;
 	Uint32			start;
 	char			str[10];
 	float			fps;
@@ -746,12 +761,12 @@ struct	s_texture
 	SDL_Rect		cross_r;
 	SDL_Rect		hp_r;
 	SDL_Rect		ammo_r;
-	int				dude_l;
-	int				visor_l;
-	int				gun1_l;
-	int				gun2_l;
-	int				armor_l;
-	int				len;
+	Uint32			dude_l;
+	Uint32			visor_l;
+	Uint32			gun1_l;
+	Uint32			gun2_l;
+	Uint32			armor_l;
+	Uint32			len;
 	int				c_sprt;
 	Uint32			format;
 };

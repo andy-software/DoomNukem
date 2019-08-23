@@ -171,7 +171,7 @@ void	resize_surf(int w, int h, SDL_Surface** surf, t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 13);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 14);
 
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
@@ -207,6 +207,8 @@ void	load_sprites(t_doom *d)
 	d->texture.sprt[11].sprites = split_surf(1, 1, "./materials/textures/sprites/tree.png", d);
 	d->texture.sprt[12].c_sprt = 1;
 	d->texture.sprt[12].sprites = split_surf(1, 1, "./materials/textures/sprites/radio.png", d);
+	d->texture.sprt[13].c_sprt = 1;
+	d->texture.sprt[13].sprites = split_surf(1, 1, "./materials/textures/sprites/button.png", d);
 }
 
 SDL_Surface	*load_tex(char *path, Uint32 format)

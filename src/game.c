@@ -40,7 +40,6 @@ int		init_game_params(t_doom *d)
 {
 	int	i;
 
-	d->game.start = 1;
 	d->game.quit = 0;
 	d->game.dead = 0;
 	d->game.pause = 0;
@@ -56,6 +55,7 @@ int		init_game_params(t_doom *d)
 	d->difficulty = 1;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
+	d->ui.idle = 0;
 	if (!d->map.editing)
 	{
 		d->game.damage = 60 / d->difficulty;

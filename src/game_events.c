@@ -21,7 +21,7 @@ void		move_player(t_doom *d, float dx, float dy)
 	float hole_high = get_z(sect->ceil_plane, px + dx, py + dy);
 	float hole_low = get_z(sect->floor_plane, px + dx, py + dy);
 
-	if (hole_high > d->player.coord.z + HEAD_HEIGHT && hole_low < d->player.coord.z - EYE_HEIGHT + KNEE_HEIGHT)
+	if (hole_high > d->player.coord.z + d->game.eye_height && hole_low < d->player.coord.z - d->game.eye_height + KNEE_HEIGHT)
 	{
 		for(unsigned s = 0; s < sect->num_vert; s++)
 			if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
@@ -159,7 +159,7 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 		if (d->sr.sprites[i].draw == 0)
 			continue;
 		if (CTL(0, 0, next_step.x, next_step.y, t1.x, t1.y, t2.x, t2.y) && \
-		(d->player.coord.z - g->eye_height >= d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
+		(d->player.coord.z >= d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
 			&& d->player.coord.z - g->eye_height <= d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
 				{
 					if (d->sr.sprites[i].num_sheet == 1 && d->game.hp_level < 100 && d->sr.sprites[i].pick == 1)
@@ -305,6 +305,12 @@ void		game_events(t_doom *d)
 		check_keys_intersection(d);
 		check_painting_intersection(d);
 		d->game.click = 0;
+	}
+	if (d->map.sectors[d->player.sector].floor_tex == 3 && d->game.ground)
+	{
+		d->game.hp_level -= 1;
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.hurt, 0);
 	}
 	check_keys_state(d);
 	if (!d->map.editing)

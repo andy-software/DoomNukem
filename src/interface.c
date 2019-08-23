@@ -30,10 +30,7 @@ void	draw_ui(t_doom *d)
 			d->ui.str[1 - i] = temp % 10 + '0';
 		temp /= 10; 
 	}
-	if (d->game.hp_level == 100)
-		d->ui.str[3] = 0;
-	else
-		d->ui.str[2] = 0;
+	(d->game.hp_level == 100) ? (d->ui.str[3] = 0) : (d->ui.str[2] = 0);
 	d->ui.message = TTF_RenderText_Solid(d->texture.fonts[HP_F].text_font, d->ui.str, d->texture.fonts[HP_F].text_color);
 	SDL_BlitSurface(d->ui.message, 0, d->sdl.surface, &d->texture.hp_r);
 	SDL_FreeSurface(d->ui.message);
@@ -45,6 +42,7 @@ void    gun_anim(t_doom *d)
 {
 	int i;
 	int temp;
+	
 
 	temp = d->ui.ammo_1;
     if (d->ui.gun_num == 0)
@@ -57,7 +55,7 @@ void    gun_anim(t_doom *d)
 				i = 6;
 				while(--i > 3)
 				{
-						d->ui.str[i] = temp % 10 + '0';
+					d->ui.str[i] = temp % 10 + '0';
 					temp /= 10; 
 				}
 				d->ui.str[6] = 0;
@@ -98,7 +96,7 @@ void    gun_anim(t_doom *d)
 					Mix_PlayChannel(3, d->sound.gun1[0], 0);
 				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font, d->ui.str, d->texture.fonts[FPS_F].text_color);
-				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 18 + 1;
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
 				if (d->ui.gun_anim > 17)
 				{
 					d->ui.fire = 0;
@@ -112,7 +110,7 @@ void    gun_anim(t_doom *d)
 				SDL_BlitSurface(d->texture.gun1[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.gun1_r);
 				d->ui.message = TTF_RenderText_Solid(d->texture.fonts[AMMO_F].text_font,
 					" 0 / 0", d->texture.fonts[FPS_F].text_color);
-				d->ui.gun_anim = ((d->ui.prevTime - d->ui.start) * 400 / d->game.dt / 1000) % 2 + 1;
+				d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
 				if (d->ui.gun_anim > 1)
 				{
 					d->ui.fire = 0;
@@ -138,8 +136,8 @@ void    gun_anim(t_doom *d)
 	{
 		if (d->ui.start_saw < 10)
 		{
-			SDL_BlitSurface(d->texture.gun2[d->ui.start_saw ], 0, d->sdl.surface, &d->texture.gun21_r);
-			d->ui.start_saw = (d->ui.currTime / 100) % 11;
+			SDL_BlitSurface(d->texture.gun2[d->ui.start_saw], 0, d->sdl.surface, &d->texture.gun21_r);
+			d->ui.start_saw = ((d->ui.prevTime - d->ui.clickTime) / 50);
 			if (!(Mix_Playing(3)))
 				Mix_PlayChannel(3, d->sound.gun2[0], 0);
 		}
@@ -183,10 +181,13 @@ void    gun_anim(t_doom *d)
 		{
 			if (!(Mix_Playing(3)))
 				Mix_PlayChannel(3, d->sound.win, 0);
-			SDL_BlitSurface(d->texture.dude[d->ui.fire], 0, d->sdl.surface, &d->texture.dude_r);
-			d->ui.fire = ((d->ui.prevTime - d->ui.start) * 200 / d->game.dt / 1000) % 34 + 1;
-			if (d->ui.fire > 33)
+			SDL_BlitSurface(d->texture.dude[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.dude_r);
+			d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 80);
+			if (d->ui.gun_anim > 34)
+			{
 				d->ui.fire = 0;
+				d->ui.gun_anim = 0;
+			}
 		}
 	}
 }

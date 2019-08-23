@@ -264,7 +264,7 @@ void  	level_events(t_doom *d)
 					if (i == 0)
 						ft_strcpy(d->file_name, "maps/portal");
 					else if (i == 1)
-						ft_strcpy(d->file_name, "maps/level1"); //bridge
+						ft_strcpy(d->file_name, "maps/ff"); //bridge
 					else if (i == 2)
 						ft_strcpy(d->file_name, "maps/towers");
 					Mix_PlayChannel(3, d->sound.click, 0);
