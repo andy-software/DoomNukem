@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "doom.h": "c"
+        "doom.h": "c",
+        "algorithm": "c"
     }
 }
