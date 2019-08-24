@@ -39,7 +39,7 @@
 # define HEAD_HEIGHT 1
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
-# define MAX_SECTORS_RENDERED 32  //must be the power of 2
+# define MAX_SECTORS_RENDERED 128  //must be the power of 2
 # define COUNT_FPS_NUMBERS 4
 # define MAX_SPEED_UPWARD 1
 # define NUM_OF_THRD 4
@@ -531,6 +531,7 @@ struct	s_option
 struct	s_rend_sector
 {
 	Uint32			num;
+	t_rend_sector	*prev;
 	int				sx1;
 	int				sx2;
 	int				ztop1;

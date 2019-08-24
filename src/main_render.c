@@ -14,9 +14,6 @@
 
 static void		render_sector_second_part(t_render *r, t_doom *d, int i)
 {
-	r->neighbor = r->sect->neighbors[i];
-	r->begin_x = MAX(r->x1, r->now.sx1);
-	r->end_x = MIN(r->x2, r->now.sx2);
 	r->mc1 = r->t1;
 	rotate_vertex_xy(&r->mc1, r->psin, -r->pcos);
 	r->mc2 = r->t2;
@@ -140,6 +137,9 @@ void			render_sector(t_render *r, t_doom *d)
 		r->x2 = WIN_WIDTH / 2 - (r->t2.x * r->xscale2);
 		if (r->x1 >= r->x2 || r->x2 < r->now.sx1 || r->x1 > r->now.sx2)
 			continue ;
+		r->neighbor = r->sect->neighbors[i];
+		r->begin_x = MAX(r->x1, r->now.sx1);
+		r->end_x = MIN(r->x2, r->now.sx2);
 		render_sector_second_part(r, d, i);
 		render_sector_third_part(r, d, i);
 		render_sector_fourth_part(r, d, i);
