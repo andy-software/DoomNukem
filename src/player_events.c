@@ -73,7 +73,7 @@ static void	mouse_rotation(t_doom *d)
 		d->player.angle -= 2 * M_PI;
 	else if (d->player.angle < 0)
 		d->player.angle += 2 * M_PI;
-	d->player.angle_z = clamp(d->player.angle_z - y * SPEED_ROTATION_Z, -MAX_Z_ANGLE, MAX_Z_ANGLE);
+	d->player.angle_z = CLAMP(d->player.angle_z - y * SPEED_ROTATION_Z, -MAX_Z_ANGLE, MAX_Z_ANGLE);
 	d->player.anglesin = sinf(d->player.angle);
 	d->player.anglecos = cosf(d->player.angle);
 }

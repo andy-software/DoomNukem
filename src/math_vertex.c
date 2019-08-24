@@ -18,11 +18,11 @@ t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4)
 	float	n1;
 	float	n2;
 
-	n1 = vxs(d1.x, d1.y, d2.x, d2.y);
-	n2 = vxs(d3.x, d3.y, d4.x, d4.y);
-	lenght = vxs(d1.x - d2.x, d1.y - d2.y, d3.x - d4.x, d3.y - d4.y);
-	return ((t_vertex){vxs(n1, d1.x - d2.x, n2, d3.x - d4.x) / lenght,
-		vxs(n1, d1.y - d2.y, n2, d3.y - d4.y) / lenght});
+	n1 = VXS(d1.x, d1.y, d2.x, d2.y);
+	n2 = VXS(d3.x, d3.y, d4.x, d4.y);
+	lenght = VXS(d1.x - d2.x, d1.y - d2.y, d3.x - d4.x, d3.y - d4.y);
+	return ((t_vertex){VXS(n1, d1.x - d2.x, n2, d3.x - d4.x) / lenght,
+		VXS(n1, d1.y - d2.y, n2, d3.y - d4.y) / lenght});
 }
 
 t_vertex	vec_to_ver(t_vector v)

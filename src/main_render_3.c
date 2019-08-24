@@ -33,7 +33,7 @@ void		render_ceil_line(int start, int end, t_render *r, t_thread *t)
 	if (end > start)
 		return ;
 	cc = t->cc;
-	cc.screen_y = clamp(start, end, WIN_HEIGHT);
+	cc.screen_y = CLAMP(start, end, WIN_HEIGHT);
 	cc.x_multi = (WIN_WIDTH / 2 - t->win_x) / (HFOV);
 	cc.denomi = -WIN_HEIGHT / 2 + (cc.rotated.a * \
 						(-cc.x_multi) - cc.rotated.b + r->angle_z) * VFOV;
@@ -76,7 +76,7 @@ void		render_floor_line(int start, int end, t_render *r, t_thread *t)
 	if (end < start)
 		return ;
 	fc = r->floor_cal;
-	fc.screen_y = clamp(start, 0, end);
+	fc.screen_y = CLAMP(start, 0, end);
 	fc.x_multi = (WIN_WIDTH / 2 - t->win_x) / (HFOV);
 	fc.denomi = -WIN_HEIGHT / 2 + (fc.rotated.a * \
 				(-fc.x_multi) - fc.rotated.b + r->angle_z) * VFOV;

@@ -67,8 +67,8 @@ void	upper_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.top];
-	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
-	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->win_y = CLAMP(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = CLAMP(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->nza - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
@@ -92,8 +92,8 @@ void	lower_textline(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.bot];
-	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
-	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->win_y = CLAMP(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = CLAMP(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->zb - t->nzb);
 	t->betta = (t->win_y - t->nzb) * t->d_betta;
 	t->float_y_text = (1 - t->betta) * t->u0_b + t->betta * t->u1_b;
@@ -117,8 +117,8 @@ void	textline_draw(int y1, int y2, t_render *r, t_thread *t)
 	if (y2 == y1)
 		return ;
 	surr = r->texture->wall_tex[r->line.wall];
-	t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
-	t->wall_end = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->win_y = CLAMP(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->wall_end = CLAMP(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	t->d_betta = 1.0 / (t->zb - t->za);
 	t->betta = (t->win_y - t->za) * t->d_betta;
 	t->float_y_text = ((1 - t->betta) * t->u0 + t->betta * t->u1);

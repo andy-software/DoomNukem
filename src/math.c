@@ -16,7 +16,7 @@ int			project_vector2d(float *ax, float *ay, float bx, float by)
 {
 	float	k;
 
-	k = dvp(*ax, *ay, bx, by) / dvp(bx, by, bx, by);
+	k = DVP(*ax, *ay, bx, by) / DVP(bx, by, bx, by);
 	*ax = k * bx;
 	*ay = k * by;
 	return (1);

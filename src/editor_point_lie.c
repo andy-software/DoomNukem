@@ -36,7 +36,7 @@ static	void	line_sec_save(t_doom *doom, int nb)
 static	int		point_on_y(t_doom *doom)
 {
 	if (DEDI.more == 0 && \
-		comp_real(clamp(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
+		comp_real(CLAMP(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
 		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
 	{
 		line_sec_save(doom, 1);
@@ -44,7 +44,7 @@ static	int		point_on_y(t_doom *doom)
 		return (0);
 	}
 	else if (DEDI.more == 1 && \
-		comp_real(clamp(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
+		comp_real(CLAMP(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
 		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
 	{
 		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)

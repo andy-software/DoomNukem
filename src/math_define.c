@@ -19,7 +19,7 @@ int			ctl(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4)
 
 float		pointside(t_vertex vp, t_vertex v1, t_vertex v2)
 { 
-	return (vxs((v2.x)-(v1.x), (v2.y)-(v1.y), (vp.x)-(v1.x), (vp.y)-(v1.y)));
+	return (VXS((v2.x)-(v1.x), (v2.y)-(v1.y), (vp.x)-(v1.x), (vp.y)-(v1.y)));
 }
 
 int			intersectbox(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4)
