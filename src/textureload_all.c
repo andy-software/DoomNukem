@@ -6,13 +6,13 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:42:37 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 17:21:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:39:36 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-void	load_walls_sky(t_texture *t, Uint32 format, t_doom *d)
+void	load_walls_sky(t_texture *t, Uint32 format)
 {
 	t->wall_tex[0] = load_tex("./materials/textures/walls/1.png", format);
 	t->wall_tex[1] = load_tex("./materials/textures/walls/2.png", format);

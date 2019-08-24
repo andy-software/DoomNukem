@@ -65,14 +65,14 @@ static void	fill_params_for_reversed_textline(int y1, \
 	if (y1 > y2)
 	{
 		t->d_betta = -1.0 / (t->nza - t->za);
-		t->win_y = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
-		t->wall_end = clamp(y1 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->win_y = CLAMP(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = CLAMP(y1 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	}
 	else
 	{
 		t->d_betta = 1.0 / (t->nza - t->za);
-		t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
-		t->wall_end = clamp(y2 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->win_y = CLAMP(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = CLAMP(y2 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:04:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 17:38:04 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:39:05 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int			ctl(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4)
 
 float		pointside(t_vertex vp, t_vertex v1, t_vertex v2)
 {
-	return (vxs((v2.x) - (v1.x), (v2.y) \
-	- (v1.y), (vp.x) - (v1.x), (vp.y) - (v1.y)));
+	return (VXS(v2.x - v1.x, v2.y - v1.y, \
+							vp.x - v1.x, vp.y - v1.y));
 }
 
 int			intersectbox(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4)

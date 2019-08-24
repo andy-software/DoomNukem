@@ -98,8 +98,8 @@ static void	move(t_player *p, t_map	m, t_game *g)
 			{
 				nceil_p = m.sectors[(int)sect->neighbors[i]].ceil_plane;
 				nfloor_p = m.sectors[(int)sect->neighbors[i]].floor_plane;
-				hole_low = max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
-				hole_high = min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
+				hole_low = MAX(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
+				hole_high = MIN(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
 			}
 			if (hole_high > p->coord.z + HEAD_HEIGHT && \
 				hole_low < p->coord.z - g->eye_height + KNEE_HEIGHT)
@@ -121,9 +121,9 @@ static void	move(t_player *p, t_map	m, t_game *g)
 					if (j != i && ctl((t_vertex){p->coord.x, p->coord.y}, next, vert[j], vert[j + 1]))
 					{
 						hole_low  = sect->neighbors[i] < 0 ? BIG_VALUE : \
-							max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
+							MAX(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
 						hole_high = sect->neighbors[i] < 0 ? -BIG_VALUE : \
-							min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
+							MIN(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
 						if (!(hole_high > p->coord.z + HEAD_HEIGHT && \
 							hole_low < p->coord.z - g->eye_height + KNEE_HEIGHT))
 							{

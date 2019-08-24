@@ -60,31 +60,31 @@ static void	prerender_function_2(t_thread *t, t_render *r)
 	t->y = (t->win_x - r->x1) * r->kt + r->t1.y;
 	t->za = (t->win_x - r->x1) * r->kza + r->z1a;
 	t->zb = (t->win_x - r->x1) * r->kzb + r->z1b;
-	t->c_za = clamp(t->za, r->ztop[t->win_x], r->zbottom[t->win_x]);
-	t->c_zb = clamp(t->zb, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->c_za = CLAMP(t->za, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	t->c_zb = CLAMP(t->zb, r->ztop[t->win_x], r->zbottom[t->win_x]);
 }
 
 static void	render_function(t_thread *t, t_render *r)
 {
 	render_floor_line(t->c_zb, r->zbottom[t->win_x], r, t);
 	if (r->sect->render_ceil)
-		render_ceil_line(t->c_za, min(t->c_zb, r->ztop[t->win_x]), r, t);
+		render_ceil_line(t->c_za, MIN(t->c_zb, r->ztop[t->win_x]), r, t);
 	if (r->neighbor >= 0)
 	{
 		t->nza = (t->win_x - r->x1) * r->nkza + r->nz1a;
-		t->c_nza = clamp(t->nza, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->c_nza = CLAMP(t->nza, r->ztop[t->win_x], r->zbottom[t->win_x]);
 		t->nzb = (t->win_x - r->x1) * r->nkzb + r->nz1b;
-		t->c_nzb = clamp(t->nzb, r->ztop[t->win_x], r->zbottom[t->win_x]);
-		t->c_nza = min(t->c_nza, min(t->c_zb, t->c_nzb));
-		t->c_nzb = max(t->c_nzb, max(t->c_za, t->c_nza));
+		t->c_nzb = CLAMP(t->nzb, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->c_nza = MIN(t->c_nza, MIN(t->c_zb, t->c_nzb));
+		t->c_nzb = MAX(t->c_nzb, MAX(t->c_za, t->c_nza));
 		if (!r->sect->render_ceil)
 			reversed_textline_draw(t->c_za, t->c_nza, r, t);
 		else
 			upper_textline(t->c_za, t->c_nza + 1, r, t);
-		r->ztop[t->win_x] = clamp(max(t->c_za, t->c_nza), \
+		r->ztop[t->win_x] = CLAMP(MAX(t->c_za, t->c_nza), \
 								r->ztop[t->win_x], WIN_HEIGHT - 1);
 		lower_textline(t->c_nzb, t->c_zb, r, t);
-		r->zbottom[t->win_x] = clamp(min(t->c_zb, t->c_nzb), \
+		r->zbottom[t->win_x] = CLAMP(MIN(t->c_zb, t->c_nzb), \
 										0, r->zbottom[t->win_x]);
 	}
 	else

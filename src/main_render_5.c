@@ -36,8 +36,8 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 
 	if (sr->zb == sr->za)
 		return ;
-	sr->win_y = clamp(sr->za, sr->clmp_top, sr->clmp_bot) - 1;
-	wall_end = clamp(sr->zb, sr->clmp_top, sr->clmp_bot);
+	sr->win_y = CLAMP(sr->za, sr->clmp_top, sr->clmp_bot) - 1;
+	wall_end = CLAMP(sr->zb, sr->clmp_top, sr->clmp_bot);
 	dy_point = 1.0 / (sr->zb - sr->za);
 	y_point = (float)(sr->win_y - (int)sr->za) * dy_point;
 	while (++sr->win_y < wall_end)

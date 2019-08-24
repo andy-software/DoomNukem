@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 03:27:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/23 20:36:55 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 18:20:24 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static	int		point_on_line(t_doom *doom)
 	}
 	else if (point_true(doom, 0))
 	{
+		// if (comp_real(MAX(MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1], )))
 		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)
 			DEDI.is_portal = 0;
 		else

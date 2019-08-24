@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:40:44 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 17:05:48 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:39:49 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	load_dude_win(t_texture *t, Uint32 format)
 	t->dude[17] = load_tex("./materials/textures/ui/win/18.png", format);
 }
 
-void	load_dude_win(t_texture *t, Uint32 format)
+void	load_dude_win2(t_texture *t, Uint32 format)
 {
 	t->dude[18] = load_tex("./materials/textures/ui/win/19.png", format);
 	t->dude[19] = load_tex("./materials/textures/ui/win/20.png", format);

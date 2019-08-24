@@ -29,7 +29,7 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, \
 		pos = sr->sprites[i].text_no + sr->pos % sheet->w;
 	else if (sr->sprites[i].mob && !sr->sprites[i].live)
 	{
-		pos = sr->sprites[i].text_no + min((d->ui.prevTime - \
+		pos = sr->sprites[i].text_no + MIN((d->ui.prevTime - \
 			sr->sprites[i].death_time) / 150, (Uint32)(sheet->w - 1));
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 		{

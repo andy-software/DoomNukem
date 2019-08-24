@@ -18,7 +18,7 @@ void		resize_surf(int w, int h, SDL_Surface **surf, t_doom *d)
 	int				i;
 
 	i = -1;
-	while (++i < d->texture.len)
+	while (++i < (int)d->texture.len)
 	{
 		temp = surf[i];
 		surf[i] = SDL_CreateRGBSurfaceWithFormat(0,

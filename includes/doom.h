@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/24 17:19:48 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 18:11:11 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,11 @@
 # define VFOV (0.2 * WIN_HEIGHT)
 # define STRAIGHT 1
 # define STRAFE 2
-# define min(a,b)				(((a) < (b)) ? (a) : (b))
-# define max(a,b)				(((a) > (b)) ? (a) : (b))
-# define clamp(a, mi,ma)		min(max(a,mi),ma)
-# define vxs(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0))
-# define dvp(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1))
-
-// # define Overlap(a0,a1,b0,b1)	(min(a0,a1) <= max(b0,b1) && min(b0,b1) <= max(a0,a1))
-
-// # define IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) (Overlap(x0,x1,x2,x3) && Overlap(y0,y1,y2,y3))
-
-// # define PointSide(px,py, x0,y0, x1,y1) (vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
-
-// # define CTL(x0, y0, x1, y1, x2, y2, x3, y3) (IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && PointSide(x1, y1, x2, y2, x3, y3) < 0)
-
+# define MIN(a,b)				(((a) < (b)) ? (a) : (b))
+# define MAX(a,b)				(((a) > (b)) ? (a) : (b))
+# define CLAMP(a, mi,ma)		MIN(MAX(a,mi),ma)
+# define VXS(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0))
+# define DVP(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1))
 # define INIINSEC(a, b, c, d)	int a = -1; double b; t_vertex c; t_vertex d;
 /* EDITOR */
 # define NB_BUTTONS 17
@@ -1163,6 +1154,7 @@ void		lose_evens(t_doom *d);
 int 		in_rect(t_menu *menu, int opt);
 void		show_story(t_doom *d);
 void		free_menu(t_doom *d);
+void		lose_events(t_doom *d);
 
 void		set_mouse(t_doom *doom);
 
