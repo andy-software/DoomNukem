@@ -12,51 +12,6 @@
 
 #include "../includes/doom.h"
 
-static void	first_part(t_sprite_render *sr, t_doom *d)
-{
-	sr->surr = d->texture.sprt[sr->paint[sr->i].num_sheet].sprites[sr->paint[sr->i].text_no];
-	sr->t1.x = sr->paint[sr->i].v1.x - d->player.coord.x;
-	sr->t1.y = sr->paint[sr->i].v1.y - d->player.coord.y;
-	sr->t2.x = sr->paint[sr->i].v2.x - d->player.coord.x;
-	sr->t2.y = sr->paint[sr->i].v2.y - d->player.coord.y;
-	sr->z1 = sr->paint[sr->i].v1.z - d->player.coord.z;
-	sr->z2 = sr->paint[sr->i].v2.z - d->player.coord.z;
-	rotate_vector_xy(&sr->t1, d->player.anglesin, d->player.anglecos);
-	rotate_vector_xy(&sr->t2, d->player.anglesin, d->player.anglecos);
-	sr->v1 = sr->t1;
-	sr->v2 = sr->t2;
-	sr->t1_1_line = sr->t1.y < sr->t1.x * 1.455;
-	sr->t1_2_line = sr->t1.y < -sr->t1.x * 1.455;
-	sr->t2_1_line = sr->t2.y < sr->t2.x * 1.455;
-	sr->t2_2_line = sr->t2.y < -sr->t2.x * 1.455;
-}
-
-static void	skiping_lines(t_sprite_render *sr)
-{
-	if (sr->t1_1_line || sr->t1_2_line || sr->t2_1_line || sr->t2_2_line)
-	{
-		sr->i1 = intersect((t_vertex){sr->t1.x, sr->t1.y}, \
-	(t_vertex){sr->t2.x, sr->t2.y}, (t_vertex){0, 0}, (t_vertex){1, 1.455});
-		sr->i2 = intersect((t_vertex){sr->t1.x, sr->t1.y}, \
-	(t_vertex){sr->t2.x, sr->t2.y}, (t_vertex){0, 0}, (t_vertex){-1, 1.455});
-		if (sr->t1_1_line && sr->i1.y >= 0)
-			sr->t1 = (t_vector){sr->i1.x, sr->i1.y, sr->t1.z};
-		if (sr->t1_2_line && sr->i2.y >= 0)
-			sr->t1 = (t_vector){sr->i2.x, sr->i2.y, sr->t1.z};
-		if (sr->t2_1_line && sr->i1.y >= 0)
-			sr->t2 = (t_vector){sr->i1.x, sr->i1.y, sr->t2.z};
-		if (sr->t2_2_line && sr->i2.y >= 0)
-			sr->t2 = (t_vector){sr->i2.x, sr->i2.y, sr->t2.z};
-	}
-	sr->xscale1 = HFOV / sr->t1.y;
-	sr->xscale2 = HFOV / sr->t2.y;
-	sr->zscale1 = VFOV / sr->t1.y;
-	sr->zscale2 = VFOV / sr->t2.y;
-	sr->x1 = WIN_WIDTH / 2 - (sr->t1.x * sr->xscale1);
-	sr->x2 = WIN_WIDTH / 2 - (sr->t2.x * sr->xscale2);
-	sr->tmp = sr->begin;
-}
-
 static void	cycling(t_sprite_render *sr, t_doom *d)
 {
 	sr->x_text = (sr->surr->w * sr->percent) / \
@@ -85,10 +40,14 @@ static void	pre_cycle_cal(t_sprite_render *sr, t_doom *d)
 	sr->begin_x = max(sr->x1, sr->tmp->sx1);
 	sr->end_x = min(sr->x2, sr->tmp->sx2);
 	sr->win_x = sr->begin_x - 1;
-	sr->z1a = WIN_HEIGHT / 2 - ((sr->z1 + sr->t1.y * d->player.angle_z) * sr->zscale1);
-	sr->z1b = WIN_HEIGHT / 2 - ((sr->z2 + sr->t1.y * d->player.angle_z) * sr->zscale1);
-	sr->z2a = WIN_HEIGHT / 2 - ((sr->z1 + sr->t2.y * d->player.angle_z) * sr->zscale2);
-	sr->z2b = WIN_HEIGHT / 2 - ((sr->z2 + sr->t2.y * d->player.angle_z) * sr->zscale2);
+	sr->z1a = WIN_HEIGHT / 2 - ((sr->z1 + \
+		sr->t1.y * d->player.angle_z) * sr->zscale1);
+	sr->z1b = WIN_HEIGHT / 2 - ((sr->z2 + \
+		sr->t1.y * d->player.angle_z) * sr->zscale1);
+	sr->z2a = WIN_HEIGHT / 2 - ((sr->z1 + \
+		sr->t2.y * d->player.angle_z) * sr->zscale2);
+	sr->z2b = WIN_HEIGHT / 2 - ((sr->z2 + \
+		sr->t2.y * d->player.angle_z) * sr->zscale2);
 	sr->d_percent = 1.0 / (sr->x2_p - sr->x1_p);
 	sr->percent = (sr->begin_x - sr->x1_p) * sr->d_percent;
 	sr->d_za = (sr->z2a - sr->z1a) / (sr->x2 - sr->x1);
@@ -98,10 +57,10 @@ static void	pre_cycle_cal(t_sprite_render *sr, t_doom *d)
 	sr->percent_of_wall = fpercent(sr->tmp->sx1, sr->tmp->sx2, sr->begin_x);
 	sr->d_percent_of_wall = 1.0 / ((float)sr->tmp->sx2 - sr->tmp->sx1);
 	sr->d_y = (sr->t2.y - sr->t1.y) / (sr->x2 - sr->x1);
-	sr->y = (sr->begin_x - sr->x1) * sr->d_y + sr->t1.y;
-	sr->doomy = sr->v2.y / sr->v1.y;
 }
-void		paint_vert_cal(t_vector *t1, t_vector *t2, t_painting *pnt, t_player p)
+
+void		paint_vert_cal(t_vector *t1, t_vector *t2, \
+									t_painting *pnt, t_player p)
 {
 	t1->x = pnt->v1.x - p.coord.x;
 	t1->y = pnt->v1.y - p.coord.y;
@@ -113,36 +72,26 @@ void		paint_vert_cal(t_vector *t1, t_vector *t2, t_painting *pnt, t_player p)
 	rotate_vector_xy(t2, p.anglesin, p.anglecos);
 }
 
-void		render_painting(t_doom *d)
+void		painting_render_cycle(t_sprite_render *sr, t_doom *d)
 {
-	t_sprite_render sr;
-
-	sr = d->sr;
-	sr.paint = d->map.paint;
-	sr.c_paint = d->map.num_paint;
-	sr.i = -1;
-	while (++sr.i < sr.c_paint)
+	while (sr->tmp != d->render.tail)
 	{
-		first_part(&sr, d);
-		if ((sr.t1_1_line && sr.t2_1_line) || (sr.t1_2_line && sr.t2_2_line))
-			continue ;
-		skiping_lines(&sr);
-		while (sr.tmp != d->render.tail)
+		if ((int)sr->tmp->num == sr->paint[sr->i].sector_no)
 		{
-			if ((int)sr.tmp->num == sr.paint[sr.i].sector_no)
+			if (sr->x1 >= sr->x2 || \
+					sr->x2 < sr->tmp->sx1 || sr->x1 > sr->tmp->sx2)
 			{
-				if (sr.x1 >= sr.x2 || sr.x2 < sr.tmp->sx1 || sr.x1 > sr.tmp->sx2)
-				{
-					if (++sr.tmp == (d->render.queue + MAX_SECTORS_RENDERED))
-						sr.tmp = d->render.queue;
-					continue ;
-				}
-				pre_cycle_cal(&sr, d);
-				while (++sr.win_x <= sr.end_x)
-					cycling(&sr, d);
+				if (++sr->tmp == (d->render.queue + MAX_SECTORS_RENDERED))
+					sr->tmp = d->render.queue;
+				continue ;
 			}
-			if (++sr.tmp == (d->render.queue + MAX_SECTORS_RENDERED))
-				sr.tmp = d->render.queue;
+			pre_cycle_cal(sr, d);
+			sr->y = (sr->begin_x - sr->x1) * sr->d_y + sr->t1.y;
+			sr->doomy = sr->v2.y / sr->v1.y;
+			while (++sr->win_x <= sr->end_x)
+				cycling(sr, d);
 		}
+		if (++sr->tmp == (d->render.queue + MAX_SECTORS_RENDERED))
+			sr->tmp = d->render.queue;
 	}
 }
