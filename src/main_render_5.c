@@ -36,11 +36,11 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 
 	if (sr->zb == sr->za)
 		return ;
-	sr->win_y = CLAMP(sr->za, sr->clmp_top, sr->clmp_bot) - 1;
+	sr->win_y = CLAMP(sr->za, sr->clmp_top, sr->clmp_bot);
 	wall_end = CLAMP(sr->zb, sr->clmp_top, sr->clmp_bot);
 	dy_point = 1.0 / (sr->zb - sr->za);
 	y_point = (float)(sr->win_y - (int)sr->za) * dy_point;
-	while (++sr->win_y < wall_end)
+	while (sr->win_y < wall_end)
 	{
 		sr->y_text = y_point * (sprtext->h - 1);
 		sr->color = pix_from_text(sprtext, sr->x_text, sr->y_text);
@@ -53,6 +53,7 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 									sr->map->fog_color, (int)sr->y);
 			render->pix[sr->win_y * WIN_WIDTH + (int)sr->win_x] = sr->color;
 		}
+		sr->win_y++;
 		y_point += dy_point;
 	}
 }
