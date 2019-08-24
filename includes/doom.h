@@ -60,9 +60,9 @@
 # define VFOV (0.2 * WIN_HEIGHT)
 # define STRAIGHT 1
 # define STRAFE 2
-# define min(a,b)				(((a) < (b)) ? (a) : (b))
-# define max(a,b)				(((a) > (b)) ? (a) : (b))
-# define CLAMP(a, mi,ma)		min(max(a,mi),ma)
+# define MIN(a,b)				(((a) < (b)) ? (a) : (b))
+# define MAX(a,b)				(((a) > (b)) ? (a) : (b))
+# define CLAMP(a, mi,ma)		MIN(MAX(a,mi),ma)
 # define VXS(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0))
 # define DVP(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1))
 # define INIINSEC(a, b, c, d)	int a = -1; double b; t_vertex c; t_vertex d;

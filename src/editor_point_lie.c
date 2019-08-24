@@ -36,16 +36,16 @@ static	void	line_sec_save(t_doom *doom, int nb)
 static	int		point_on_y(t_doom *doom)
 {
 	if (DEDI.more == 0 && \
-		comp_real(CLAMP(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
-		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
+		comp_real(CLAMP(DEDI.point.y, MIN(DEDI.v2->y, DEDI.v1->y), \
+		MAX(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
 	{
 		line_sec_save(doom, 1);
 		DEDI.more++;
 		return (0);
 	}
 	else if (DEDI.more == 1 && \
-		comp_real(CLAMP(DEDI.point.y, min(DEDI.v2->y, DEDI.v1->y), \
-		max(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
+		comp_real(CLAMP(DEDI.point.y, MIN(DEDI.v2->y, DEDI.v1->y), \
+		MAX(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
 	{
 		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)
 			DEDI.is_portal = 0;
@@ -65,15 +65,15 @@ static	int		point_true(t_doom *doom, int point_true)
 	{
 		return (DEDI.more == 0 && \
 	comp_real(DEDI.point.y, (DEDI.point.x * DEDI.koef + DEDI.c), 1) && \
-	(DEDI.point.x > min(DEDI.v1->x, DEDI.v2->x)) && \
-	(DEDI.point.x < max(DEDI.v1->x, DEDI.v2->x)));
+	(DEDI.point.x > MIN(DEDI.v1->x, DEDI.v2->x)) && \
+	(DEDI.point.x < MAX(DEDI.v1->x, DEDI.v2->x)));
 	}
 	else
 	{
 		return (DEDI.more == 1 && \
 	comp_real(DEDI.point.y, (DEDI.point.x * DEDI.koef + DEDI.c), 2) &&
-	(DEDI.point.x > min(DEDI.v1->x, DEDI.v2->x)) &&
-	(DEDI.point.x < max(DEDI.v1->x, DEDI.v2->x)));
+	(DEDI.point.x > MIN(DEDI.v1->x, DEDI.v2->x)) &&
+	(DEDI.point.x < MAX(DEDI.v1->x, DEDI.v2->x)));
 	}
 }
 

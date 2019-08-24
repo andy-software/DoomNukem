@@ -52,8 +52,8 @@ static void	sprite_render_cycle_2(t_sprite_render *sr, t_doom *d)
 			sr->tmp->ztop2, sr->percent_of_wall);
 		sr->clmp_bot = line_point(sr->tmp->zbot1, \
 			sr->tmp->zbot2, sr->percent_of_wall);
-		sr->clmp_top = max(sr->clmp_top, 0);
-		sr->clmp_bot = min(sr->clmp_bot, WIN_HEIGHT - 1);
+		sr->clmp_top = MAX(sr->clmp_top, 0);
+		sr->clmp_bot = MIN(sr->clmp_bot, WIN_HEIGHT - 1);
 		draw_line_of_sprite(sr, sr->surr, &d->render);
 		sr->za += sr->d_za;
 		sr->zb += sr->d_zb;
@@ -71,8 +71,8 @@ static void	before_sprite_cycle(t_sprite_render *sr, t_doom *d)
 	sr->xscale2_p = HFOV / sr->v2.y;
 	sr->x1_p = WIN_WIDTH / 2 - (sr->v1.x * sr->xscale1_p);
 	sr->x2_p = WIN_WIDTH / 2 - (sr->v2.x * sr->xscale2_p);
-	sr->begin_x = max(sr->x1, sr->tmp->sx1);
-	sr->end_x = min(sr->x2, sr->tmp->sx2);
+	sr->begin_x = MAX(sr->x1, sr->tmp->sx1);
+	sr->end_x = MIN(sr->x2, sr->tmp->sx2);
 	sr->win_x = sr->begin_x;
 	sr->z1a = WIN_HEIGHT / 2 - (int)((sr->t1.z + \
 		sr->t1.y * d->player.angle_z) * sr->zscale1);

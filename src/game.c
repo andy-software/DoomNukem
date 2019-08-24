@@ -71,7 +71,7 @@ int		init_game_params(t_doom *d)
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
-	d->render.max_sector_rendered = min(MAX_SECTORS_RENDERED, d->map.num_sect);
+	d->render.max_sector_rendered = MIN(MAX_SECTORS_RENDERED, d->map.num_sect);
 	d->sr.sprites = (t_sprite*)ft_memalloc(sizeof(t_sprite) * d->map.num_sprites);
 	d->render.ztop = (int*)ft_memalloc(sizeof(int) * WIN_WIDTH);
 	d->render.zbottom = (int*)ft_memalloc(sizeof(int) * WIN_WIDTH);
@@ -133,7 +133,8 @@ int		game_loop(t_doom doom)
 			lose_events(&doom);
 			draw_menu(&doom);
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6);
+		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6)
+				;
 			doom.ui.currTime = SDL_GetTicks();
 			doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
 			doom.ui.fps = doom.game.dt / 1000.0;
