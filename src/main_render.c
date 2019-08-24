@@ -22,6 +22,9 @@ static void		render_sector_second_part(t_render *r, t_doom *d, int i)
 	r->mc2 = r->t2;
 	rotate_vertex_xy(&r->mc2, r->psin, -r->pcos);
 	r->mc1.x += r->p_x;
+	r->mc2.x += r->p_x;
+	r->mc1.y += r->p_y;
+	r->mc2.y += r->p_y;
 	if (r->neighbor >= 0)
 	{
 		r->ncplane = d->map.sectors[(int)r->neighbor].ceil_plane;
@@ -138,9 +141,6 @@ void			render_sector(t_render *r, t_doom *d)
 		if (r->x1 >= r->x2 || r->x2 < r->now.sx1 || r->x1 > r->now.sx2)
 			continue ;
 		render_sector_second_part(r, d, i);
-		r->mc2.x += r->p_x;
-		r->mc1.y += r->p_y;
-		r->mc2.y += r->p_y;
 		render_sector_third_part(r, d, i);
 		render_sector_fourth_part(r, d, i);
 		render_sector_start_threads(r, d);
