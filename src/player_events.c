@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_d->events.c                                    :+:      :+:    :+:   */
+/*   player_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:59 by apavlov           #+#    #+#             */
-/*   Updated: 2019/03/23 18:15:00 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:10:38 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static void	movement_keys(t_doom *d)
 	g = &d->game;
 	move.x = 0;
 	move.y = 0;
-	g->moving = keyboard_state[SDL_SCANCODE_W] || keyboard_state[SDL_SCANCODE_A] \
+	g->moving = keyboard_state[SDL_SCANCODE_W] ||
+	keyboard_state[SDL_SCANCODE_A] \
 	|| keyboard_state[SDL_SCANCODE_D] || keyboard_state[SDL_SCANCODE_S] \
 	|| keyboard_state[SDL_SCANCODE_LSHIFT];
 	if (keyboard_state[SDL_SCANCODE_W])
@@ -67,7 +68,7 @@ static void	mouse_rotation(t_doom *d)
 	t_game			*g;
 
 	g = &d->game; //should it be used? // actually yes, but NO!
-	SDL_GetRelativeMouseState(&x,&y); //pislya pauzi nabuvae yakogos znachenya mojna postaviti kostilni flag pause?
+	SDL_GetRelativeMouseState(&x, &y); //pislya pauzi nabuvae yakogos znachenya mojna postaviti kostilni flag pause?
 	d->player.angle += x * SPEED_ROTATION;
 	if (d->player.angle > 2 * M_PI)
 		d->player.angle -= 2 * M_PI;
@@ -93,106 +94,104 @@ void		player_events(t_doom *d)
 			movement_keys(d);
 			mouse_rotation(d);
 		}
-	while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
-	{
-		if (d->ev.type == SDL_KEYDOWN)
+		while (SDL_PollEvent(&d->ev) && d->game.quit != 1)
 		{
-			if (d->ev.key.keysym.sym == SDLK_ESCAPE) 
-				d->game.quit = 1;
-			else if (d->ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
+			if (d->ev.type == SDL_KEYDOWN)
 			{
-				Mix_HaltChannel(1);
-				if (d->game.ground || d->game.flying)
+				if (d->ev.key.keysym.sym == SDLK_ESCAPE)
+					d->game.quit = 1;
+				else if (d->ev.key.keysym.sym == SDLK_SPACE && !d->game.pause)
 				{
-					if ((!(Mix_Playing(0)) && d->game.flying)) 
-						Mix_PlayChannel(0, d->sound.fly, 0);
-					if (d->game.velocity.z < MAX_SPEED_UPWARD)
-						d->game.velocity.z += 0.6;
-					else
-						d->game.velocity.z = MAX_SPEED_UPWARD;	
-					d->game.falling = 1;
-					d->game.fuel -= 1;
-					if (d->game.fuel == 0)
-						d->game.flying = 0;
+					Mix_HaltChannel(1);
+					if (d->game.ground || d->game.flying)
+					{
+						if ((!(Mix_Playing(0)) && d->game.flying))
+							Mix_PlayChannel(0, d->sound.fly, 0);
+						if (d->game.velocity.z < MAX_SPEED_UPWARD)
+							d->game.velocity.z += 0.6;
+						else
+							d->game.velocity.z = MAX_SPEED_UPWARD;
+						d->game.falling = 1;
+						d->game.fuel -= 1;
+						if (d->game.fuel == 0)
+							d->game.flying = 0;
+					}
+					if (!(Mix_Playing(0)) && !d->game.flying && d->game.ground)
+						Mix_PlayChannel(0, d->sound.jump, 0);
 				}
-				if (!(Mix_Playing(0)) && !d->game.flying && d->game.ground)
-					Mix_PlayChannel(0, d->sound.jump, 0);
+				else if (d->ev.key.keysym.sym == SDLK_f && !d->game.pause)
+				{
+					printf("Fly mod\n");
+					d->game.flying = !d->game.flying;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_1)
+				{
+					Mix_HaltChannel(-1);
+					d->ui.fire = 0;
+					d->ui.gun_num = 0;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_2)
+				{
+					Mix_HaltChannel(-1);
+					d->ui.start_saw = 0;
+					d->ui.clickTime = d->ui.prevTime;
+					d->ui.fire = 0;
+					d->ui.gun_num = 1;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_3)
+				{
+					Mix_HaltChannel(-1);
+					d->ui.fire = 0;
+					d->ui.gun_num = 2;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_g)
+				{
+					d->game.hp_level -= 15;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_e)
+				{
+					d->game.click = 1;
+				}
+				else if (d->ev.key.keysym.sym == SDLK_h)
+				{
+					if (d->ui.ammo_1 + 20 <= 60)
+						d->ui.ammo_1 += 20;
+					else
+						d->ui.ammo_1 = 60;
+				}
+				else if (d->ev.key.keysym.sym == PAUSE)
+				{
+					if (d->game.pause == 0)
+						d->game.pause = 1;
+					else if (d->game.story == 1)
+						d->game.story = 0;
+					else
+						d->game.pause = 0;
+					set_mouse(d);
+				}
 			}
-			else if (d->ev.key.keysym.sym == SDLK_f && !d->game.pause)
+			else if (d->ev.type == SDL_MOUSEBUTTONUP && \
+				d->ev.button.button == SDL_BUTTON_LEFT && d->start_quit != 0 && d->game.pause == 0)
 			{
-				printf("Fly mod\n");
-				d->game.flying = !d->game.flying;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_1)
-			{
-				Mix_HaltChannel(-1);	
-				d->ui.fire = 0;
-				d->ui.gun_num = 0;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_2)
-			{
-				Mix_HaltChannel(-1);
-				d->ui.start_saw = 0;
-				d->ui.clickTime = d->ui.prevTime;
-				d->ui.fire = 0;
-				d->ui.gun_num = 1;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_3)
-			{
-				Mix_HaltChannel(-1);
-				d->ui.fire = 0;
-				d->ui.gun_num = 2;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_g)
-			{
-				d->game.hp_level -= 15;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_e)
-			{
-				d->game.click = 1;
-			}
-			else if (d->ev.key.keysym.sym == SDLK_h)
-			{
-				if (d->ui.ammo_1 + 20 <= 60)
-					d->ui.ammo_1 += 20;
-				else
-					d->ui.ammo_1 = 60;
-			}
-			else if (d->ev.key.keysym.sym == PAUSE)
-			{
-				if (d->game.pause == 0)
-					d->game.pause = 1;
-				else if (d->game.story == 1)
-					d->game.story = 0;
-				else
-					d->game.pause = 0;
-				set_mouse(d);
-			}
-		}
-		else if (d->ev.type == SDL_MOUSEBUTTONUP &&
-			d->ev.button.button == SDL_BUTTON_LEFT && d->start_quit != 0 && d->game.pause == 0)
-		{
-			if(d->ui.fire == 0)
-			{
-				d->ui.fire = 1;
-				d->game.fire = 1;
-				d->ui.clickTime = d->ui.prevTime;
-				if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
-					d->ui.ammo_1 -= 2;
-				if (d->ui.gun_num == 1)
+				if (d->ui.fire == 0)
+				{
+					d->ui.fire = 1;
+					d->game.fire = 1;
+					d->ui.clickTime = d->ui.prevTime;
+					if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
+						d->ui.ammo_1 -= 2;
+					if (d->ui.gun_num == 1)
+						Mix_HaltChannel(3);
+				}
+				else if (d->ui.fire == 1 && d->ui.gun_num == 1)
+				{
+					d->ui.fire = 0;
 					Mix_HaltChannel(3);
+				}
 			}
-			else if(d->ui.fire == 1 && d->ui.gun_num == 1)
-			{
-				d->ui.fire = 0;
-				Mix_HaltChannel(3);
-			}
+			else if (d->ev.type == SDL_QUIT)
+				d->game.quit = 1;
+			switch_music(&d->sound, d->ev);
 		}
-		else if (d->ev.type == SDL_QUIT)
-			d->game.quit = 1;
-		switch_music(&d->sound, d->ev);
-		
 	}
-	}
-
 }

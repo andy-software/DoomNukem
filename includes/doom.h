@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/23 19:47:40 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 19:26:18 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@
 // # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 // # define PR_TO_WR(a, b) a = 1; b = 1;
 # define INT_1(a) int a = -1;
+# define INT_2(a,b) int a = -1; int b = -1;
+# define INT_32(a) Uint32 a = -1;
 
 # define INTARR(a, b) int a[b] = {0};
 
@@ -137,12 +139,18 @@
 # define INIT5(a,av,b,bv,c,cv,d,dv,e,ev) a=av;b=bv;c=cv;d=dv;e=ev;
 # define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
 
+# define IVER1(a) t_vertex a;
+# define IVER2(a,b) t_vertex a,b;
+# define IVER3(a,b,c) t_vertex a,b,c;
+# define IVER4(a,b,c,d) t_vertex a,b,c,d;
+
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
 # define NUM_TEXT 18
 # define MAP_SPRT doom->map.sprites
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
+# define MAP_N_VER map->sectors[i].num_vert
 # define SECTOR doom->editor.sector
 # define IMG doom->editor.images
 # define IMGS d->editor.images
@@ -190,6 +198,8 @@
 # define TCYN  "\x1B[36m"
 # define TWHY  "\x1B[37m"
 /***/
+
+# define TXTS d->texture.sprt
 
 typedef struct s_doom		t_doom;
 
@@ -1105,6 +1115,7 @@ int			sprite_sort(t_sprite *arr_spr, int len);
 int			*copy_static_arr(int *arr, const int len);
 int			game_mod(t_doom *doom);
 void		move_mobs(t_doom *d);
+void		move_mobs_death(t_sprite *spr, t_doom *d, int m);
 int			first_own_moves(t_doom *d, t_sprite *spr);
 int			mirror_own_moves(t_doom *d, t_sprite *spr);
 int			init_moves(t_doom *d);
@@ -1153,6 +1164,7 @@ void		lose_evens(t_doom *d);
 int 		in_rect(t_menu *menu, int opt);
 void		show_story(t_doom *d);
 void		free_menu(t_doom *d);
+void		lose_events(t_doom *d);
 
 void		set_mouse(t_doom *doom);
 

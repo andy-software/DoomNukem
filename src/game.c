@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 17:56:30 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/14 19:01:15 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:53:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,16 @@ void	init_hud(t_doom *d)
 {
 	d->texture.gun1_r.x = WIN_WIDTH / 20;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
-
 	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
 	d->texture.gun21_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
-
 	d->texture.gun22_r.x = WIN_WIDTH - d->texture.gun2[14]->w * 2;
 	d->texture.gun22_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
-
 	d->texture.dude_r.x = WIN_WIDTH / 3;
 	d->texture.dude_r.y = WIN_HEIGHT - d->texture.dude[0]->h;
-
 	d->texture.ammo_r.x = WIN_WIDTH - WIN_WIDTH / 3.5;
 	d->texture.ammo_r.y = WIN_HEIGHT - WIN_HEIGHT / 6;
-
 	d->texture.hp_r.x = WIN_WIDTH / 4.5;
 	d->texture.hp_r.y = WIN_HEIGHT / 1.2;
-
 	d->texture.keys_r.x = WIN_WIDTH - d->texture.keys->w;
 	d->texture.keys_r.y = WIN_HEIGHT / 3;
 }

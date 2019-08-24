@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:40:44 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/23 18:52:18 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:39:49 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,24 @@
 
 void	load_gun1(t_texture *t, Uint32 format)
 {
-
+	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", format);
+	t->gun1[1] = load_tex("./materials/textures/ui/gun1/2.png", format);
+	t->gun1[2] = load_tex("./materials/textures/ui/gun1/2.png", format);
+	t->gun1[3] = load_tex("./materials/textures/ui/gun1/3.png", format);
+	t->gun1[4] = load_tex("./materials/textures/ui/gun1/4.png", format);
+	t->gun1[5] = load_tex("./materials/textures/ui/gun1/5.png", format);
+	t->gun1[6] = load_tex("./materials/textures/ui/gun1/6.png", format);
+	t->gun1[7] = load_tex("./materials/textures/ui/gun1/7.png", format);
+	t->gun1[8] = load_tex("./materials/textures/ui/gun1/8.png", format);
+	t->gun1[9] = load_tex("./materials/textures/ui/gun1/9.png", format);
+	t->gun1[10] = load_tex("./materials/textures/ui/gun1/10.png", format);
+	t->gun1[11] = load_tex("./materials/textures/ui/gun1/11.png", format);
+	t->gun1[12] = load_tex("./materials/textures/ui/gun1/12.png", format);
+	t->gun1[13] = load_tex("./materials/textures/ui/gun1/13.png", format);
+	t->gun1[14] = load_tex("./materials/textures/ui/gun1/14.png", format);
+	t->gun1[15] = load_tex("./materials/textures/ui/gun1/15.png", format);
+	t->gun1[16] = load_tex("./materials/textures/ui/gun1/16.png", format);
+	t->gun1[17] = load_tex("./materials/textures/ui/gun1/17.png", format);
 }
 
 void	load_gun2(t_texture *t, Uint32 format)
@@ -39,37 +56,8 @@ void	load_gun2(t_texture *t, Uint32 format)
 	t->gun2[17] = load_tex("./materials/textures/ui/gun2/2.4.png", format);
 }
 
-int		load_ui(t_texture *t, Uint32 format, t_doom *d)
+void	load_dude_win(t_texture *t, Uint32 format)
 {
-	t->gun1_l = 18;
-	t->gun2_l = 18;
-	t->dude_l = 34;
-	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", format);
-	t->start = load_tex("./materials/textures/ui/hud/start.jpg", format);
-	t->story = load_tex("./materials/textures/ui/hud/story.png", format);
-	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", format);
-	t->gun1[0] = load_tex("./materials/textures/ui/gun1/1.png", format);
-	t->gun1[1] = load_tex("./materials/textures/ui/gun1/2.png", format);
-	t->gun1[2] = load_tex("./materials/textures/ui/gun1/2.png", format);
-	t->gun1[3] = load_tex("./materials/textures/ui/gun1/3.png", format);
-	t->gun1[4] = load_tex("./materials/textures/ui/gun1/4.png", format);
-	t->gun1[5] = load_tex("./materials/textures/ui/gun1/5.png", format);
-	t->gun1[6] = load_tex("./materials/textures/ui/gun1/6.png", format);
-	t->gun1[7] = load_tex("./materials/textures/ui/gun1/7.png", format);
-	t->gun1[8] = load_tex("./materials/textures/ui/gun1/8.png", format);
-	t->gun1[9] = load_tex("./materials/textures/ui/gun1/9.png", format);
-	t->gun1[10] = load_tex("./materials/textures/ui/gun1/10.png", format);
-	t->gun1[11] = load_tex("./materials/textures/ui/gun1/11.png", format);
-	t->gun1[12] = load_tex("./materials/textures/ui/gun1/12.png", format);
-	t->gun1[13] = load_tex("./materials/textures/ui/gun1/13.png", format);
-	t->gun1[14] = load_tex("./materials/textures/ui/gun1/14.png", format);
-	t->gun1[15] = load_tex("./materials/textures/ui/gun1/15.png", format);
-	t->gun1[16] = load_tex("./materials/textures/ui/gun1/16.png", format);
-	t->gun1[17] = load_tex("./materials/textures/ui/gun1/17.png", format);
-	
-	load_gun2(t, format);
-	
-
 	t->dude[0] = load_tex("./materials/textures/ui/win/1.png", format);
 	t->dude[1] = load_tex("./materials/textures/ui/win/2.png", format);
 	t->dude[2] = load_tex("./materials/textures/ui/win/3.png", format);
@@ -88,6 +76,10 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->dude[15] = load_tex("./materials/textures/ui/win/16.png", format);
 	t->dude[16] = load_tex("./materials/textures/ui/win/17.png", format);
 	t->dude[17] = load_tex("./materials/textures/ui/win/18.png", format);
+}
+
+void	load_dude_win2(t_texture *t, Uint32 format)
+{
 	t->dude[18] = load_tex("./materials/textures/ui/win/19.png", format);
 	t->dude[19] = load_tex("./materials/textures/ui/win/20.png", format);
 	t->dude[20] = load_tex("./materials/textures/ui/win/21.png", format);
@@ -104,11 +96,25 @@ int		load_ui(t_texture *t, Uint32 format, t_doom *d)
 	t->dude[31] = load_tex("./materials/textures/ui/win/32.png", format);
 	t->dude[32] = load_tex("./materials/textures/ui/win/33.png", format);
 	t->dude[33] = load_tex("./materials/textures/ui/win/34.png", format);
-	
-	t->visor = load_tex("./materials/textures/ui/hud/visor.png", format);
-	SDL_SetColorKey(t->visor, SDL_TRUE, SDL_MapRGB(t->visor->format, 255, 255, 255));
-	t->keys = load_tex("./materials/textures/ui/hud/keys_ui.png", format);
+}
 
+int		load_ui(t_texture *t, Uint32 format, t_doom *d)
+{
+	t->gun1_l = 18;
+	t->gun2_l = 18;
+	t->dude_l = 34;
+	t->pause = load_tex("./materials/textures/ui/hud/pause.jpg", format);
+	t->start = load_tex("./materials/textures/ui/hud/start.jpg", format);
+	t->story = load_tex("./materials/textures/ui/hud/story.png", format);
+	t->lose = load_tex("./materials/textures/ui/hud/dead.jpg", format);
+	load_gun1(t, format);
+	load_gun2(t, format);
+	load_dude_win(t, format);
+	load_dude_win2(t, format);
+	t->visor = load_tex("./materials/textures/ui/hud/visor.png", format);
+	SDL_SetColorKey(t->visor, SDL_TRUE, \
+			SDL_MapRGB(t->visor->format, 255, 255, 255));
+	t->keys = load_tex("./materials/textures/ui/hud/keys_ui.png", format);
 	t->len = t->gun1_l;
 	resize_surf(WIN_WIDTH, WIN_HEIGHT / 1.1, t->gun1, d);
 	t->len = t->gun2_l;
