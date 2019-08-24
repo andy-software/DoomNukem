@@ -70,6 +70,7 @@ static void	sprite_render_cycle_2(t_sprite_render *sr, t_doom *d)
 			sr->clmp_bot = MIN(line_point(tail->zbot1, tail->zbot2, sr->percent_of_wall), sr->clmp_bot);
 			tail = tail->prev;
 		}
+		//add check if clmp top is less then clmp bot then continue
 		sr->clmp_top = MAX(sr->clmp_top, 0);
 		sr->clmp_bot = MIN(sr->clmp_bot, WIN_HEIGHT - 1);
 		draw_dot(sr->win_x, sr->clmp_top, d, 0xff0000);
