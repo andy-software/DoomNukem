@@ -20,16 +20,6 @@ int			win_spr_event(t_doom *d, t_sprite *sprite)
 	return (0);
 }
 
-void		play_phrase(Mix_Music *mus, int distance)
-{
-
-	//Mix_VolumeMusic(128);
-	// else if (Mix_PausedMusic())
-	// 	Mix_ResumeMusic();
-	// else
-	// 	Mix_PauseMusic();
-}
-
 int			talk_event(t_doom *d, t_sprite *sprite)
 {
 	if (sprite->num_of_sound > -1)
@@ -41,6 +31,7 @@ int			talk_event(t_doom *d, t_sprite *sprite)
 int			give_event(t_doom *d, t_sprite *sprite)
 {
 	static int click = 0;
+
 	if (sprite->num_of_sound > -1 && click == 0)
 	{
 		Mix_PlayChannel(4, d->sound.mobsound[3], 0);
@@ -51,9 +42,8 @@ int			give_event(t_doom *d, t_sprite *sprite)
 		d->game.picked_key[2] = 1;
 		Mix_PlayChannel(6, d->sound.pickup[2], 0);
 	}
-	else
-		if (!(Mix_Playing(4)))
-			Mix_PlayChannel(4, d->sound.mobsound[4], 0);
+	else if (!(Mix_Playing(4)))
+		Mix_PlayChannel(4, d->sound.mobsound[4], 0);
 	return (0);
 }
 
@@ -73,12 +63,10 @@ int			toxic_event(t_doom *d, t_sprite *sprite)
 
 	if (start_time < toxicity_rate)
 	{
-		
 		d->map.sprites[sprite->spr_num].changes = 1;
-
 		if (((start_time + d->game.dt) / 100) > (start_time / 100))
 			d->map.inverse_colors = !d->map.inverse_colors;
-		if (((start_time + d->game.dt) / 100) > (start_time / 100))	
+		if (((start_time + d->game.dt) / 100) > (start_time / 100))
 			d->map.fog_color = d->changes.fog_colors[i++ % 9];
 		start_time += d->game.dt;
 	}
