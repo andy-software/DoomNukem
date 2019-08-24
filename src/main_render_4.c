@@ -12,7 +12,7 @@
 
 #include "../includes/doom.h"
 
-void	render_sector_first_part(t_render *r, t_doom *d, int i)
+void		render_sector_first_part(t_render *r, int i)
 {
 	r->line = r->sect->lines[i];
 	r->t1.x = r->sect->vert[i].x - r->p_x;
@@ -31,7 +31,7 @@ void	render_sector_first_part(t_render *r, t_doom *d, int i)
 	r->t2_2_line = r->t2.y < -r->t2.x * 1.455;
 }
 
-int		render_sector_cliping_lines(t_render *r)
+int			render_sector_cliping_lines(t_render *r)
 {
 	if (r->t1.y < 0 && r->t2.y < 0)
 		return (1);
@@ -57,4 +57,50 @@ int		render_sector_cliping_lines(t_render *r)
 	r->zscale1 = VFOV / r->t1.y;
 	r->zscale2 = VFOV / r->t2.y;
 	return (0);
+}
+
+static void	fill_params_for_reversed_textline(int y1, \
+							int y2, t_render *r, t_thread *t)
+{
+	if (y1 > y2)
+	{
+		t->d_betta = -1.0 / (t->nza - t->za);
+		t->win_y = clamp(y2, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = clamp(y1 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	}
+	else
+	{
+		t->d_betta = 1.0 / (t->nza - t->za);
+		t->win_y = clamp(y1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+		t->wall_end = clamp(y2 + 1, r->ztop[t->win_x], r->zbottom[t->win_x]);
+	}
+}
+
+void		reversed_textline_draw(int y1, int y2, t_render *r, t_thread *t)
+{
+	SDL_Surface	*surr;
+
+	if (y2 == y1)
+		return ;
+	fill_params_for_reversed_textline(y1, y2, r, t);
+	surr = r->texture->wall_tex[r->line.top];
+	t->betta = (t->win_y - t->za) * t->d_betta;
+	t->float_y_text = (1 - t->betta) * t->u0_t + t->betta * t->u1_t;
+	t->d_y_text = -t->d_betta * t->u0_t + t->d_betta * t->u1_t;
+	while (t->win_y < t->wall_end)
+	{
+		t->color = pix_from_text(surr, (unsigned int)t->x_text_upper \
+			% surr->w, (unsigned int)t->float_y_text % surr->h);
+		cool_simple_function((t_int_vertex){t->win_x, t->win_y}, \
+			t->r, t->color, t->y);
+		t->win_y++;
+		t->betta += t->d_betta;
+		t->float_y_text += t->d_y_text;
+	}
+}
+
+Uint32		get_fog_color(Uint32 color, Uint32 fog_color, float y)
+{
+	color = y < 100 ? get_color_value_int(color, fog_color, y) : fog_color;
+	return (color);
 }

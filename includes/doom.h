@@ -1032,8 +1032,9 @@ void		prepare_to_rendering(t_render *r, t_doom d);
 Uint32		get_fog_color(Uint32 color, Uint32 fog_color, float y);
 void		prepare_to_render_next_sector(t_render *r);
 void		render_sprites(t_doom *d);
-void		render_sector_first_part(t_render *r, t_doom *d, int i);
+void		render_sector_first_part(t_render *r, int i);
 int			render_sector_cliping_lines(t_render *r);
+void		render_sector(t_render *r, t_doom *d);
 void		render_painting(t_doom *d);
 void		draw_line_of_sprite(t_sprite_render *sr, \
 										SDL_Surface *sprtext, t_render *render);
