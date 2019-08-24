@@ -14,18 +14,21 @@
 
 void		move_player(t_doom *d, float dx, float dy)
 {
-	float px = d->player.coord.x;
-	float py = d->player.coord.y;
-	t_sector *sect = d->map.sectors + d->player.sector;
-	t_vertex *vert = sect->vert;
-	float hole_high = get_z(sect->ceil_plane, px + dx, py + dy);
-	float hole_low = get_z(sect->floor_plane, px + dx, py + dy);
+	t_vertex	p;
+	t_sector *sect;
+	t_vertex *vert;
+	float hole_high;
+	float hole_low;
 
+	p = (t_vertex){d->player.coord.x, d->player.coord.y};
+	sect = d->map.sectors + d->player.sector;
+	vert = sect->vert;
+	hole_high = get_z(sect->ceil_plane, p.x + dx, p.y + dy);
+	hole_low = get_z(sect->floor_plane, p.x + dx, p.y + dy);
 	if (hole_high > d->player.coord.z + d->game.eye_height && hole_low < d->player.coord.z - d->game.eye_height + KNEE_HEIGHT)
 	{
 		for(unsigned s = 0; s < sect->num_vert; s++)
-			if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
-				vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
+			if(sect->neighbors[s] >= 0 && ctl(p, (t_vertex){p.x + dx, p.y + dy}, vert[s], vert[s + 1]))
 			{
 				d->player.sector = sect->neighbors[s];
 				d->game.falling = 1;
@@ -76,13 +79,13 @@ static void	move(t_player *p, t_map	m, t_game *g)
 	t_plane	floor_p = m.sectors[p->sector].floor_plane;
 	t_plane	nceil_p;
 	t_plane	nfloor_p;
-	float	next_x = p->coord.x + g->velocity.x;
-	float	next_y = p->coord.y + g->velocity.y;
+	t_vertex	next;
 	int		j;
 
 	i = -1;
+	next = (t_vertex){p->coord.x + g->velocity.x, p->coord.y + g->velocity.y};
 	while (++i < (int)sect->num_vert)
-		if (CTL(p->coord.x, p->coord.y, next_x, next_y, vert[i].x, vert[i].y, vert[i + 1].x, vert[i + 1].y))
+		if (ctl((t_vertex){p->coord.x, p->coord.y}, next, vert[i], vert[i + 1]))
 		{
 			if (sect->neighbors[i] < 0)
 			{
@@ -95,11 +98,11 @@ static void	move(t_player *p, t_map	m, t_game *g)
 			{
 				nceil_p = m.sectors[(int)sect->neighbors[i]].ceil_plane;
 				nfloor_p = m.sectors[(int)sect->neighbors[i]].floor_plane;
-				hole_low = max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
-				hole_high = min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+				hole_low = max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
+				hole_high = min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
 			}
 			if (hole_high > p->coord.z + HEAD_HEIGHT && \
-				hole_low < p->coord.z - EYE_HEIGHT + KNEE_HEIGHT)
+				hole_low < p->coord.z - g->eye_height + KNEE_HEIGHT)
 			{
 				printf("neightbor to player sector : %i\n", sect->neighbors[i]);
 				//printf("{%f, %f}\n", p->coord.x, p->coord.y);
@@ -111,18 +114,18 @@ static void	move(t_player *p, t_map	m, t_game *g)
 					vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y);
 				g->moving = 0;
 				j = -1;
-				next_x = p->coord.x + g->velocity.x;
-				next_y = p->coord.y + g->velocity.y;
+				next.x = p->coord.x + g->velocity.x;
+				next.y = p->coord.y + g->velocity.y;
 				while (++j < (int)sect->num_vert) // TODO: check only neightbors walls
 				{
-					if (j != i && CTL(p->coord.x, p->coord.y, next_x, next_y, vert[j].x, vert[j].y, vert[j + 1].x, vert[j + 1].y))
+					if (j != i && ctl((t_vertex){p->coord.x, p->coord.y}, next, vert[j], vert[j + 1]))
 					{
 						hole_low  = sect->neighbors[i] < 0 ? BIG_VALUE : \
-							max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next_x, next_y));
+							max(get_z(floor_p, p->coord.x, p->coord.y), get_z(nfloor_p, next.x, next.y));
 						hole_high = sect->neighbors[i] < 0 ? -BIG_VALUE : \
-							min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next_x, next_y));
+							min(get_z(ceil_p, p->coord.x, p->coord.y), get_z(nceil_p, next.x, next.y));
 						if (!(hole_high > p->coord.z + HEAD_HEIGHT && \
-							hole_low < p->coord.z - EYE_HEIGHT + KNEE_HEIGHT))
+							hole_low < p->coord.z - g->eye_height + KNEE_HEIGHT))
 							{
 								g->velocity = (t_vector){0, 0, g->velocity.z};
 								break ;
@@ -158,7 +161,7 @@ void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g)
 		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);
 		if (d->sr.sprites[i].draw == 0)
 			continue;
-		if (CTL(0, 0, next_step.x, next_step.y, t1.x, t1.y, t2.x, t2.y) && \
+		if (ctl((t_vertex){0, 0}, next_step, (t_vertex){t1.x, t1.y}, (t_vertex){t2.x, t2.y}) && \
 		(d->player.coord.z >= d->sr.sprites[i].coord.z + d->sr.sprites[i].start_z \
 			&& d->player.coord.z - g->eye_height <= d->sr.sprites[i].coord.z + d->sr.sprites[i].end_z))
 				{

@@ -14,18 +14,19 @@
 
 void		move_sprites(t_doom *d, float dx, float dy, t_sprite *spr)
 {
-	float px = spr->coord.x;
-	float py = spr->coord.y;
+	t_vertex	p;
 	t_sector *sect = d->map.sectors + spr->sector_no;
 	t_vertex *vert = sect->vert;
-	float hole_high = get_z(sect->ceil_plane, px + dx, py + dy);
-	float hole_low = get_z(sect->floor_plane, px + dx, py + dy);
+	t_vertex	next;
 
+	p = (t_vertex){spr->coord.x, spr->coord.y};
+	next = (t_vertex){spr->coord.x + dx, spr->coord.y + dy};
+	float hole_high = get_z(sect->ceil_plane, next.x, next.y);
+	float hole_low = get_z(sect->floor_plane, next.x, next.y);
 	if (hole_high > spr->coord.z + spr->start_z && hole_low < spr->coord.z + spr->end_z)
 	{
 		for(unsigned s = 0; s < sect->num_vert; s++)
-			if(sect->neighbors[s] >= 0 && CTL(px, py, px + dx, py + dy, \
-				vert[s].x, vert[s].y, vert[s + 1].x, vert[s + 1].y))
+			if(sect->neighbors[s] >= 0 && ctl(p, next, vert[s], vert[s + 1]))
 			{
 				spr->sector_no = sect->neighbors[s];
 			}
@@ -36,8 +37,7 @@ void		move_sprites(t_doom *d, float dx, float dy, t_sprite *spr)
 
 int			first_own_moves(t_doom *d, t_sprite *spr)
 {
-	float	next_x;
-	float	next_y;
+	t_vertex	next;
 	Uint32		i;
 	t_sector	*sect;
 	t_vertex	*vert;
@@ -50,16 +50,14 @@ int			first_own_moves(t_doom *d, t_sprite *spr)
 	spr->speed_y = spr->anglesin * spr->move_speed;
 	
 
-	next_x = spr->coord.x + spr->speed_x;
-	next_y = spr->coord.y + spr->speed_y;
-
+	next = (t_vertex){spr->coord.x + spr->speed_x, spr->coord.y + spr->speed_y};
 	i = -1;
 	moved = 0;
 	while (++i < sect->num_vert)
 	{
-		if (CTL(spr->coord.x, spr->coord.y, next_x, next_y, vert[i].x, vert[i].y, vert[i + 1].x, vert[i + 1].y))
+		if (ctl((t_vertex){spr->coord.x, spr->coord.y}, next, vert[i], vert[i + 1]))
 		{
-			vertex = intersect((t_vertex){spr->coord.x, spr->coord.y}, (t_vertex){next_x, next_y}, (t_vertex){vert[i].x, vert[i].y}, (t_vertex){vert[i + 1].x, vert[i + 1].y});
+			vertex = intersect((t_vertex){spr->coord.x, spr->coord.y}, next, vert[i], vert[i + 1]);
 			spr->coord.x = vertex.x;
 			spr->coord.y = vertex.y;
 			spr->anglecos *= -1;
@@ -71,18 +69,16 @@ int			first_own_moves(t_doom *d, t_sprite *spr)
 	}
 	if (!moved)
 	{
-		spr->coord.x = next_x;
-		spr->coord.y = next_y;
+		spr->coord.x = next.x;
+		spr->coord.y = next.y;
 	}
-
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	return (1);
 }
 
 int			mirror_own_moves(t_doom *d, t_sprite *spr)
 {
-	float	next_x;
-	float	next_y;
+	t_vertex	next;
 	Uint32		i;
 	t_sector	*sect;
 	t_vertex	*vert;
@@ -99,18 +95,15 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 	vert = sect->vert;
 	spr->speed_x = spr->anglecos * spr->move_speed;
 	spr->speed_y = spr->anglesin * spr->move_speed;
-	
-
-	next_x = spr->coord.x + spr->speed_x;
-	next_y = spr->coord.y + spr->speed_y;
+	next = (t_vertex){spr->coord.x + spr->speed_x, spr->coord.y + spr->speed_y};
 
 	i = -1;
 	moved = 0;
 	while (++i < sect->num_vert)
 	{
-		if (CTL(spr->coord.x, spr->coord.y, next_x, next_y, vert[i].x, vert[i].y, vert[i + 1].x, vert[i + 1].y))
+		if (ctl((t_vertex){spr->coord.x, spr->coord.y}, next, vert[i], vert[i + 1]))
 		{
-			vertex = intersect((t_vertex){spr->coord.x, spr->coord.y}, (t_vertex){next_x, next_y}, (t_vertex){vert[i].x, vert[i].y}, (t_vertex){vert[i + 1].x, vert[i + 1].y});
+			vertex = intersect((t_vertex){spr->coord.x, spr->coord.y}, next, vert[i], vert[i + 1]);
 			spr->coord.x = vertex.x;
 			spr->coord.y = vertex.y;
 			wall_vector = (t_vertex){vert[i + 1].x - vert[i].x, vert[i + 1].y - vert[i].y};
@@ -130,8 +123,8 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 	}
 	if (!moved)
 	{
-		spr->coord.x = next_x;
-		spr->coord.y = next_y;
+		spr->coord.x = next.x;
+		spr->coord.y = next.y;
 	}
 	spr->coord.z = get_z(sect->floor_plane, spr->coord.x, spr->coord.y);
 	return (1);

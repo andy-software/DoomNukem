@@ -53,7 +53,6 @@
 # define COUNT_OF_SPRITE_EVENTS 5
 # define COUNT_OF_PAINT_EVENTS 7
 # define MAX_RANGE_SPRITE_CLICKING 5
-# define SUR_FORMAT 372645892
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
 
@@ -66,23 +65,15 @@
 # define clamp(a, mi,ma)		min(max(a,mi),ma)
 # define vxs(x0,y0, x1,y1)		((x0)*(y1) - (x1)*(y0))
 # define dvp(x0,y0, x1,y1)		((x0)*(x1) + (y0)*(y1))
-# define Overlap(a0,a1,b0,b1)	\
-	(min(a0,a1) <= max(b0,b1) && min(b0,b1) <= max(a0,a1))
 
-# define IntersectBox(x0,y0, x1,y1, x2,y2, x3,y3) \
-	(Overlap(x0,x1,x2,x3) && Overlap(y0,y1,y2,y3))
+// # define Overlap(a0,a1,b0,b1)	(min(a0,a1) <= max(b0,b1) && min(b0,b1) <= max(a0,a1))
 
-# define PointSide(px,py, x0,y0, x1,y1) \
-	(vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
+// # define IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) (Overlap(x0,x1,x2,x3) && Overlap(y0,y1,y2,y3))
 
-#define CTL(x0, y0, x1, y1, x2, y2, x3, y3) \
-	(IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && \
-		PointSide(x1, y1, x2, y2, x3, y3) < 0)
+// # define PointSide(px,py, x0,y0, x1,y1) (vxs((x1)-(x0), (y1)-(y0), (px)-(x0), (py)-(y0)))
 
-# define Fix(a)  				((a) * (1LL<<8))
-# define UnFix(a) 				((a) / (float)(1LL<<8))
-# define FixMult(a, b) 			((((a) * (b)) >> 8))
-# define FixDiv(a, b) 			((((a) << 8) / (b)))
+// # define CTL(x0, y0, x1, y1, x2, y2, x3, y3) (IntersectBox(x0, y0, x1, y1, x2, y2, x3, y3) && PointSide(x1, y1, x2, y2, x3, y3) < 0)
+
 # define INIINSEC(a, b, c, d)	int a = -1; double b; t_vertex c; t_vertex d;
 /* EDITOR */
 # define NB_BUTTONS 17
@@ -1050,6 +1041,10 @@ void		paint_vert_cal(t_vector *t1, t_vector *t2, \
 void		sprite_vert_cal(t_vector *t1, t_vector *t2, \
 										t_sprite *sprite, t_player p);
 //some math stuff
+int			ctl(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4);
+float		pointside(t_vertex vp, t_vertex v1, t_vertex v2);
+int			intersectbox(t_vertex v1, t_vertex v2, t_vertex v3, t_vertex v4);
+int			overlap(float a0, float a1, float b0, float b1);
 float		get_z(t_plane plane, float x, float y);
 int			sign(float x);
 int			rotate_vector_xy(t_vector *a, float psin, float pcos);
