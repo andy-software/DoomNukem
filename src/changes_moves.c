@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 19:15:58 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 19:38:50 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/24 19:46:58 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		move_mobs_death(t_sprite *spr, t_doom *d, int m)
 	spr[m].death_time = d->ui.prevTime;
 }
 
-void		sprite_coordin(t_sprite *spr, t_vertex *vert, t_vertex next)
+void		sprite_coordin(t_sprite *spr, t_vertex *vert, t_vertex next, int i)
 {
 	t_vertex	vertex;
 
@@ -44,12 +44,12 @@ int			first_own_moves(t_doom *d, t_sprite *spr)
 	spr->speed_y = spr->anglesin * spr->move_speed;
 	next = (t_vertex){spr->coord.x + spr->speed_x, spr->coord.y + spr->speed_y};
 	moved = 0;
-	while (++i < sect->num_vert)
+	while (++i < (int)sect->num_vert)
 	{
 		if (ctl((t_vertex){spr->coord.x, spr->coord.y}, \
 				next, vert[i], vert[i + 1]))
 		{
-			sprite_coordin(spr, vert, next);
+			sprite_coordin(spr, vert, next, i);
 			moved = 1;
 			break ;
 		}
@@ -60,7 +60,8 @@ int			first_own_moves(t_doom *d, t_sprite *spr)
 	return (1);
 }
 
-void		spite_coord_mirror(t_sprite *spr, t_vertex *vert, t_vertex next)
+void		spite_coord_mirror(t_sprite *spr, t_vertex *vert, \
+				t_vertex next, int i)
 {
 	float		len;
 	float		prev_cos;
@@ -97,12 +98,12 @@ int			mirror_own_moves(t_doom *d, t_sprite *spr)
 	spr->speed_y = spr->anglesin * spr->move_speed;
 	next = (t_vertex){spr->coord.x + spr->speed_x, spr->coord.y + spr->speed_y};
 	moved = 0;
-	while (++i < sect->num_vert)
+	while (++i < (int)sect->num_vert)
 	{
 		if (ctl((t_vertex){spr->coord.x, spr->coord.y}, \
 				next, vert[i], vert[i + 1]))
 		{
-			spite_coord_mirror(spr, vert, next);
+			spite_coord_mirror(spr, vert, next, i);
 			moved = 1;
 			break ;
 		}
