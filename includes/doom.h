@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/26 15:19:56 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 20:38:52 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@
 # define DEFLN doom->editor.fline
 # define DEFL d->editor.fline
 # define PT doom->map.paint[pain]
+# define DT d->texture
 
 
 /** action paintings **/
@@ -1074,6 +1075,8 @@ void		draw_ui(t_doom *d);
 void		gun_anim(t_doom *d);
 void		fule_show(t_doom *d);
 void		show_keys(t_doom *d);
+void		ui_gun_num_0(t_doom *d, int i, int temp);
+void		ui_gun_num_1(t_doom *d);
 /*
 **texturelaod.c
 */
