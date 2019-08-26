@@ -183,7 +183,7 @@ void    gun_anim(t_doom *d)
 				Mix_PlayChannel(3, d->sound.win, 0);
 			SDL_BlitSurface(d->texture.dude[d->ui.gun_anim], 0, d->sdl.surface, &d->texture.dude_r);
 			d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 80);
-			if (d->ui.gun_anim > 34)
+			if (d->ui.gun_anim > 33)
 			{
 				d->ui.fire = 0;
 				d->ui.gun_anim = 0;

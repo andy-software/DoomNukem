@@ -40,26 +40,47 @@ int			sprite_render_cliping(t_sprite_render *sr)
 	return (0);
 }
 
+static void	draw_dot(int x, int y, t_doom *d, int color)
+{
+	Uint32	*pixels = (Uint32*)d->sdl.surface->pixels;
+
+	if (y >= 0 && y < WIN_HEIGHT - 1 && x >= 0 && x < WIN_WIDTH - 1)
+		pixels[y * d->sdl.surface->w + x] = color;
+}
+
 static void	sprite_render_cycle_2(t_sprite_render *sr, t_doom *d)
 {
+	t_rend_sector	*tail;
+
 	sr->za = (sr->win_x - sr->x1) * sr->d_za + sr->z1a;
 	sr->zb = (sr->win_x - sr->x1) * sr->d_zb + sr->z1b;
-	sr->percent_of_wall = fpercent(sr->tmp->sx1, sr->tmp->sx2, sr->win_x);
-	sr->d_percent_of_wall = 1.0 / ((float)sr->tmp->sx2 - sr->tmp->sx1);
+	
+	// sr->d_percent_of_wall = 1.0 / ((float)sr->tmp->sx2 - sr->tmp->sx1);
 	while (sr->win_x <= sr->end_x)
 	{
-		sr->clmp_top = line_point(sr->tmp->ztop1, \
-			sr->tmp->ztop2, sr->percent_of_wall);
-		sr->clmp_bot = line_point(sr->tmp->zbot1, \
-			sr->tmp->zbot2, sr->percent_of_wall);
+		sr->clmp_top = 0;
+		sr->clmp_bot = WIN_HEIGHT - 1;
+		tail = sr->tmp;
+		while (tail != 0)
+		{
+			sr->percent_of_wall = fpercent(tail->sx1, tail->sx2, sr->win_x);
+			if (sr->percent_of_wall < 0 || sr->percent_of_wall > 1)
+				printf("hey\n");
+			sr->clmp_top = MAX(line_point(tail->ztop1, tail->ztop2, sr->percent_of_wall), sr->clmp_top);
+			sr->clmp_bot = MIN(line_point(tail->zbot1, tail->zbot2, sr->percent_of_wall), sr->clmp_bot);
+			tail = tail->prev;
+		}
+		//add check if clmp top is less then clmp bot then continue
 		sr->clmp_top = MAX(sr->clmp_top, 0);
 		sr->clmp_bot = MIN(sr->clmp_bot, WIN_HEIGHT - 1);
+		draw_dot(sr->win_x, sr->clmp_top, d, 0xff0000);
+		draw_dot(sr->win_x, sr->clmp_bot, d, 0xff0000);
 		draw_line_of_sprite(sr, sr->surr, &d->render);
 		sr->za += sr->d_za;
 		sr->zb += sr->d_zb;
 		sr->percent += sr->d_percent;
 		sr->x_text += sr->d_x_text;
-		sr->percent_of_wall += sr->d_percent_of_wall;
+		// sr->percent_of_wall += sr->d_percent_of_wall;
 		sr->win_x++;
 	}
 }

@@ -46,11 +46,9 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 		sr->color = pix_from_text(sprtext, sr->x_text, sr->y_text);
 		if (sr->color != 0)
 		{
-			sr->color = get_color_value_int(sr->color, \
-						0x0, sr->curr_sect->light_lvl);
+			sr->color = get_color_value_int(sr->color, 0, sr->curr_sect->light_lvl);
 			if (sr->map->fog && (int)sr->y > 20)
-				sr->color = get_color_value_int(sr->color, \
-									sr->map->fog_color, (int)sr->y);
+				sr->color = get_color_value_int(sr->color, sr->map->fog_color, (int)sr->y);
 			render->pix[sr->win_y * WIN_WIDTH + (int)sr->win_x] = sr->color;
 		}
 		sr->win_y++;
@@ -60,7 +58,7 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 
 int				draw_screen(t_doom *d)
 {
-	*d->render.head = (t_rend_sector){d->player.sector, 0, \
+	*d->render.head = (t_rend_sector){d->player.sector, 0, 0, \
 					WIN_WIDTH - 1, 0, 0, WIN_HEIGHT - 1, WIN_HEIGHT - 1};
 	d->sr.begin = d->render.head;
 	if (++d->render.head == d->render.queue + MAX_SECTORS_RENDERED)
