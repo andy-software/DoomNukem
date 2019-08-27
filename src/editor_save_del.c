@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:24:27 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 19:46:49 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 16:20:07 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 {
 	if (!doom->map.num_sect || !doom->player.coord.y)
 		return (0);
-	INIT3(doom->player.coord.z, 10, doom->player.angle, 0, \
+	INIT2(doom->player.angle, 0, \
 			doom->player.angle_z, 0);
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);
@@ -28,7 +28,6 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 		if (MAP_SPRT[i].sector_no < 0)
 			exit(0);
 		INIT2(MAP_SPRT[i].live, 1, MAP_SPRT[i].draw, 1);
-		MAP_SPRT[i].own_moves = i;
 	}
 	DEDI.fl_or_ceil = 1;
 	IMG[1].im_x[1] = (doom->player.coord.x * SCL) - 48;

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 18:22:48 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:26:13 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,10 @@ void	editor_lift(t_doom *doom, const Uint8 *state)
 		}
 		if (doom->ev.key.keysym.sym == SDLK_KP_8)
 			PT.high_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
-		if (doom->ev.key.keysym.sym == SDLK_KP_9)
+		else if (doom->ev.key.keysym.sym == SDLK_KP_9)
 			PT.low_point += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
+		else if (doom->ev.key.keysym.sym == SDLK_KP_MINUS)
+			PT.speed += (state[SDL_SCANCODE_TAB]) ? -1 : 1;
 		info_lift(doom, pain);
 	}
 }

@@ -27,27 +27,14 @@ static void	cycling(t_sprite_render *sr, t_doom *d)
 	tail = sr->tmp;
 	sr->clmp_top = 0;
 	sr->clmp_bot = WIN_HEIGHT - 1;
-	while (tail != 0)
-	{
-		sr->percent_of_wall = fpercent(tail->sx1, tail->sx2, sr->win_x);
-		if (sr->percent_of_wall < 0 || sr->percent_of_wall > 1)
-			printf("hey\n");
-		sr->clmp_top = MAX(line_point(tail->ztop1, tail->ztop2, sr->percent_of_wall), sr->clmp_top);
-		sr->clmp_bot = MIN(line_point(tail->zbot1, tail->zbot2, sr->percent_of_wall), sr->clmp_bot);
-		tail = tail->prev;
-	}
+	cross_though_the_universe(sr);
 	sr->x_text = (sr->surr->w * sr->percent) / \
 		((1 - sr->percent) * sr->doomy + sr->percent);
-	sr->clmp_top = MAX(sr->clmp_top, 0);
-	sr->clmp_bot = MIN(sr->clmp_bot, WIN_HEIGHT - 1);
-draw_dot(sr->win_x, sr->clmp_top, d, 0xff0000);
-		draw_dot(sr->win_x, sr->clmp_bot, d, 0xff0000);
 	draw_line_of_sprite(sr, sr->surr, &d->render);
 	sr->y += sr->d_y;
 	sr->za += sr->d_za;
 	sr->zb += sr->d_zb;
 	sr->percent += sr->d_percent;
-	// sr->percent_of_wall += sr->d_percent_of_wall;
 }
 
 static void	pre_cycle_cal(t_sprite_render *sr, t_doom *d)

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:59 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/24 17:10:38 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:57:19 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void		player_events(t_doom *d)
 				{
 					Mix_HaltChannel(-1);
 					d->ui.start_saw = 0;
-					d->ui.clickTime = d->ui.prevTime;
+					d->ui.click_time = d->ui.prev_time;
 					d->ui.fire = 0;
 					d->ui.gun_num = 1;
 				}
@@ -177,7 +177,7 @@ void		player_events(t_doom *d)
 				{
 					d->ui.fire = 1;
 					d->game.fire = 1;
-					d->ui.clickTime = d->ui.prevTime;
+					d->ui.click_time = d->ui.prev_time;
 					if (d->ui.gun_num == 0 && d->ui.ammo_1 >= -2)
 						d->ui.ammo_1 -= 2;
 					if (d->ui.gun_num == 1)

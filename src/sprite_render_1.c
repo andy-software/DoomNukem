@@ -40,7 +40,7 @@ int			sprite_render_cliping(t_sprite_render *sr)
 	return (0);
 }
 
-static void	cross_though_the_universe(t_sprite_render *sr)
+void	cross_though_the_universe(t_sprite_render *sr)
 {
 	t_rend_sector	*tail;
 

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 21:01:19 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:25:33 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,28 @@ void			ft_render_editor(t_doom *doom)
 	ft_render_interface(doom);
 	ft_render_previous(doom);
 	ft_render_other(doom);
+}
+
+int				check_points(t_doom *doom)
+{
+	if (comp_real(MAX(MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1].x,\
+	MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1 + 1].x),\
+	MAX(MAPSEC[DEDI.k].vert[DEDI.i].x, \
+	MAPSEC[DEDI.k].vert[DEDI.i + 1].x), 1) &&
+	comp_real(MIN(MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1].x, \
+	MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1 + 1].x), \
+	MIN(MAPSEC[DEDI.k].vert[DEDI.i].x, \
+	MAPSEC[DEDI.k].vert[DEDI.i + 1].x), 1) &&
+	comp_real(MAX(MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1].y, \
+	MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1 + 1].y), \
+	MAX(MAPSEC[DEDI.k].vert[DEDI.i].y, \
+	MAPSEC[DEDI.k].vert[DEDI.i + 1].y), 1) &&
+	comp_real(MIN(MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1].y, \
+	MAPSEC[DEDI.fline.sec1].vert[DEDI.fline.num_line1 + 1].y), \
+	MIN(MAPSEC[DEDI.k].vert[DEDI.i].y, \
+	MAPSEC[DEDI.k].vert[DEDI.i + 1].y), 1))
+	{
+		return (1);
+	}
+	return (0);
 }

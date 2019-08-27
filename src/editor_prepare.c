@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 18:49:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 16:01:27 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ void	ft_prepare_read(t_doom *doom)
 		doom->map.paint[j].speed = 5;
 		doom->map.paint[j].high_point = -40;
 		doom->map.paint[j].low_point = -10;
-		doom->map.paint[j].num_sheet = 3;
+		doom->map.paint[j].num_sheet = 10;
 	}
 }
