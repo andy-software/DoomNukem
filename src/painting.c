@@ -22,9 +22,6 @@ static void	draw_dot(int x, int y, t_doom *d, int color)
 
 static void	cycling(t_sprite_render *sr, t_doom *d)
 {
-	t_rend_sector	*tail;
-
-	tail = sr->tmp;
 	sr->clmp_top = 0;
 	sr->clmp_bot = WIN_HEIGHT - 1;
 	cross_though_the_universe(sr);
