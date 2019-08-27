@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 18:09:07 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 20:32:49 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,22 @@
 # define MAX_VERT 100
 # define MAX_PAINTINGS 100
 # define SCL 5.0
+
 # define IS_DRW doom->editor.is_drawing
 # define FT_R_OTH(a, b, c)  a = 0; b = 1; c = 0;
 # define FT_LOAD(a, b, c, d)	char *a; char *b; char *c; int d = 0;
 # define BUT_PRS doom->editor.but1_press
 # define FRE_STR(a, b, c) free(a); free(b); free(c);
 # define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
+# define TPLANE2(a,b) t_plane a,b;
+# define GE_VAR0(a,b,c) t_vertex a; t_sector *b; t_vertex *c;
+# define GE_VAR_1(a,b,c) const float a = b + c;
+# define GE_VAR1(b,c,d,e) t_plane b;t_plane c;float d;float e;
+# define INITMOBS_VAR(a,b,c) t_vector a; t_vector b; t_vertex c;
+# define SPRITES_VAR(a,b,c,d) t_vector a; t_vector b; float c; int d = -1;
+
+# define UNS_0(a) unsigned a = 0;
+# define FLOAT2(a,b) float a, b;
 # define INT_1(a) int a = -1;
 # define INT_2(a,b) int a = -1; int b = -1;
 # define INT_32(a) Uint32 a = -1;
@@ -103,7 +113,6 @@
 # define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
 # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 # define PR_TO_WR(a, b) a = 1; b = 1;
-# define MAP_SPRT doom->map.sprites
 # define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
 # define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
 # define BOTTOM 1
@@ -115,23 +124,15 @@
 # define CEIL_A doom->map.sectors[doom->player.sector].ceil_plane.a
 # define CEIL_B doom->map.sectors[doom->player.sector].ceil_plane.b
 # define CEIL_H doom->map.sectors[doom->player.sector].ceil_plane.h
-# define INT1(a) int a;
-# define INT2(a,b) int a,b;
-# define INT3(a,b,c) int a,b,c;
-# define INT4(a,b,c,d) int a,b,c,d;
-# define INT5(a,b,c,d,e) int a,b,c,d,e;
-# define INIT2(a,av,b,bv) a=av;b=bv;
-# define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
-# define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
-# define INIT5(a,av,b,bv,c,cv,d,dv,e,ev) a=av;b=bv;c=cv;d=dv;e=ev;
-# define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
 # define IVER1(a) t_vertex a;
 # define IVER2(a,b) t_vertex a,b;
 # define IVER3(a,b,c) t_vertex a,b,c;
 # define IVER4(a,b,c,d) t_vertex a,b,c,d;
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 # define NUM_TEXT 18
+# define SR_SPRT doom->sr.sprites
 # define MAP_SPRT doom->map.sprites
+
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define MAP_N_VER map->sectors[i].num_vert
@@ -146,6 +147,9 @@
 # define DBRZ	doom->editor.brezen
 # define DEFLN doom->editor.fline
 # define DEFL d->editor.fline
+# define DUI doom->ui
+# define DGAME doom->game
+
 # define PT doom->map.paint[pain]
 # define DT d->texture
 # define NUM_ACT 5
@@ -191,6 +195,9 @@ typedef	struct s_painting		t_painting;
 typedef	struct s_font			t_font;
 typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
+typedef	struct s_move			t_move;
+
+/* EDITOR */
 typedef struct s_changes		t_changes;
 typedef struct s_editor			t_editor;
 typedef struct s_brezen			t_brezen;
@@ -206,11 +213,11 @@ typedef int		(*t_bots_move)(t_doom *, t_sprite *);
 typedef int		(*t_spr_event_type)(t_doom *, t_sprite *);
 typedef int		(*t_pnt_event_type)(t_doom *, t_painting *);
 
-typedef	struct	s_int_vertex
+typedef	struct		s_int_vertex
 {
 	int				x;
 	int				y;
-}				t_int_vertex;
+}					t_int_vertex;
 
 struct			s_plane
 {
@@ -430,6 +437,21 @@ struct			s_map
 	Uint32			fog_color;
 	int				editing;
 	int				inverse_colors;
+};
+
+struct			s_move
+{
+	int				i;
+	int				j;
+	t_sector		*sect;
+	t_vertex		*vert;
+	float			hole_low;
+	float			hole_high;
+	t_plane			ceil_p;
+	t_plane			floor_p;
+	t_plane			nceil_p;
+	t_plane			nfloor_p;
+	t_vertex		next;
 };
 
 struct			s_sdl
@@ -931,6 +953,9 @@ int				read_file(t_doom *doom, char *file_name);
 int				init_sdl(t_sdl *sdl);
 void			player_events(t_doom *d);
 void			game_events(t_doom *d);
+void			check_mobs_while_movement(t_player *p, t_doom *d, t_game *g);
+void			move(t_player *p, t_map m, t_game *g);
+void			check_sprite_intersection(t_doom *d);
 int				game_loop(t_doom doom);
 void			start_loop(t_doom *doom);
 int				*intset(int *b, int c, size_t len);

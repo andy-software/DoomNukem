@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_gun_fire.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 20:37:16 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/27 17:57:46 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 20:27:00 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static	void	gun_anim_3(t_doom *d, int i, int temp)
 		INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
 }
 
-static	void	gun_anim_4(t_doom *d, int i, int temp)
+static	void	gun_anim_4(t_doom *d)
 {
 	if (d->ui.ammo_1 == -2)
 	{
@@ -105,7 +105,7 @@ void			ui_gun_num_0(t_doom *d, int i, int temp)
 		if (d->ui.ammo_1 >= 0)
 			gun_anim_3(d, i, temp);
 		else
-			gun_anim_4(d, i, temp);
+			gun_anim_4(d);
 	}
 	SDL_BlitSurface(d->ui.message, NULL, d->sdl.surface, &d->texture.ammo_r);
 	SDL_FreeSurface(d->ui.message);
