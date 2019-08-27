@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 03:27:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 18:40:32 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:27:30 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static	int		point_on_y(t_doom *doom)
 	}
 	else if (DEDI.more == 1 && \
 		comp_real(CLAMP(DEDI.point.y, MIN(DEDI.v2->y, DEDI.v1->y), \
-		MAX(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001))
+		MAX(DEDI.v2->y, DEDI.v1->y)), DEDI.point.y, 0.001) \
+		&& check_points(doom))
 	{
 		if (MAPSEC[DEDI.fline.sec1].neighbors[DEDI.fline.num_line1] == -1)
 			DEDI.is_portal = 0;
@@ -73,7 +74,8 @@ static	int		point_true(t_doom *doom, int point_true)
 		return (DEDI.more == 1 && \
 	comp_real(DEDI.point.y, (DEDI.point.x * DEDI.koef + DEDI.c), 2) &&
 	(DEDI.point.x > MIN(DEDI.v1->x, DEDI.v2->x)) &&
-	(DEDI.point.x < MAX(DEDI.v1->x, DEDI.v2->x)));
+	(DEDI.point.x < MAX(DEDI.v1->x, DEDI.v2->x)) &&
+	check_points(doom));
 	}
 }
 

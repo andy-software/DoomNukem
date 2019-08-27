@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 17:29:12 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:26:13 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	editor_player_events2(t_doom *doom, const Uint8 *state)
 	{
 		doom->map.editing = 0;
 		write_sprites(doom);
-		// printf("sprite info: %d", map);
 	}
 	else if (doom->ev.key.keysym.sym == SDLK_z)
 		editor_start_z(doom, state);

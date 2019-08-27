@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 19:15:58 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 14:35:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:56:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		move_mobs_death(t_sprite *spr, t_doom *d, int m)
 {
 	spr[m].text_no = d->texture.sprt[spr[m].num_sheet].w * 4;
-	spr[m].death_time = d->ui.prevTime;
+	spr[m].death_time = d->ui.prev_time;
 }
 
 void		sprite_coordin(t_sprite *spr, t_vertex *vert, t_vertex next, int i)
