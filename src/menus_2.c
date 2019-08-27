@@ -85,7 +85,7 @@ void	pause_events(t_doom *d)
 					free_file_data(&d->map);
 					free_game_params(d);
 					free_menu(d);
-					game_mod(d);
+					game_mod(d, d->file_name);
 					exit(1);
 				}
 				else if (i == 2)
@@ -113,7 +113,7 @@ void	lose_events(t_doom *d)
 					free_file_data(&d->map);
 					free_game_params(d);
 					free_menu(d);
-					game_mod(d);
+					game_mod(d, d->file_name);
 					exit(1);
 				}
 				else if (i == 1)

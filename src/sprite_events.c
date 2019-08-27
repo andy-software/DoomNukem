@@ -31,7 +31,8 @@ int			talk_event(t_doom *d, t_sprite *sprite)
 int			give_event(t_doom *d, t_sprite *sprite)
 {
 	static int click = 0;
-
+	
+	//printf("%d %i %i %i %i\n\n", sprite->spr_num, sprite->event_num,  sprite->num_sheet, sprite->changes, sprite->key);
 	if (sprite->num_of_sound > -1 && click == 0)
 	{
 		Mix_PlayChannel(4, d->sound.mobsound[3], 0);
@@ -63,6 +64,7 @@ int			toxic_event(t_doom *d, t_sprite *sprite)
 
 	if (start_time < toxicity_rate)
 	{
+		// printf("%d %i %i %i %i\n\n", sprite->spr_num, sprite->event_num,  sprite->num_sheet, sprite->changes, sprite->key);
 		d->map.sprites[sprite->spr_num].changes = 1;
 		if (((start_time + d->game.dt) / 100) > (start_time / 100))
 			d->map.inverse_colors = !d->map.inverse_colors;

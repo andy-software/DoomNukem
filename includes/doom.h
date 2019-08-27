@@ -34,8 +34,8 @@
 # define SPEED_ROTATION_Z 0.05f
 # define MAX_Z_ANGLE 5
 # define MOVE_SPEED 0.2f
-# define SIT_EYE_HEIGHT 3
-# define EYE_HEIGHT 6
+# define SIT_EYE_HEIGHT 6
+# define EYE_HEIGHT 9
 # define HEAD_HEIGHT 1
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
@@ -50,8 +50,8 @@
 # define LESER 44 // <
 # define PAUSE 96 // §
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 5
-# define COUNT_OF_PAINT_EVENTS 7
+# define COUNT_OF_SPRITE_EVENTS 4
+# define COUNT_OF_PAINT_EVENTS 5
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
@@ -524,6 +524,7 @@ struct	s_game
 	int				hp_level;
 	int				damage;
 	int				kills;
+	int				access;
 	int				play;
 	int				story;
 	SDL_Event		event;
@@ -892,13 +893,14 @@ struct	s_sound
 	Mix_Chunk		*jump;
 	Mix_Chunk		*click;
 	Mix_Chunk		*gun1[3];
+	Mix_Chunk		*gun2[3];
+	Mix_Chunk		*lift[3];
 	Mix_Chunk		*win;
 	Mix_Chunk		*death;
 	Mix_Chunk		*mobdeath[3];
 	Mix_Chunk		*mobsound[5];
 	Mix_Chunk		*mobhurt[3];
 	Mix_Chunk		*pickup[4];
-	Mix_Chunk		*gun2[3];
 	Mix_Chunk		*hurt;
 	int				n;
 };
@@ -1113,7 +1115,7 @@ void		painting_render_cycle(t_sprite_render *sr, t_doom *d);
 int			sprite_sort(t_sprite *arr_spr, int len);
 // void		load_sprites(t_texture *texture, Uint32 format);
 int			*copy_static_arr(int *arr, const int len);
-int			game_mod(t_doom *doom);
+int			game_mod(t_doom *doom, char *file_name);
 void		move_mobs(t_doom *d);
 void		move_mobs_death(t_sprite *spr, t_doom *d, int m);
 int			first_own_moves(t_doom *d, t_sprite *spr);
@@ -1124,8 +1126,6 @@ int			lift_floor_event(t_doom *d, t_painting *paint);
 int			turn_light_event(t_doom *d, t_painting *paint);
 int			lift_ceil_event(t_doom *d, t_painting *paint);
 int			inverse_colors_event(t_doom *d, t_painting *paint);
-int			first_aid_event(t_doom *d, t_painting *paint);
-int			get_ammo_event(t_doom *d, t_painting *paint);
 int			win_spr_event(t_doom *d, t_sprite *sprite);
 int			toxic_event(t_doom *d, t_sprite *sprite);
 int			talk_event(t_doom *d, t_sprite *sprite);

@@ -46,7 +46,7 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	float floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 	float ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
 
-	g->velocity.z -= 0.02f;
+	g->velocity.z -= 0.04f;
 	if (g->velocity.z < 0 && \
 		nextz <= floor_z + g->eye_height)
 	{

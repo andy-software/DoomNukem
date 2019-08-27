@@ -56,6 +56,7 @@ int		init_game_params(t_doom *d)
 		d->ui.ammo_1 = 10 * d->difficulty;
 	}
 	d->game.fuel = 100;
+	d->game.access = 0;
 	d->game.picked_key[0] = 0;
 	d->game.picked_key[1] = 0;
 	d->game.picked_key[2] = 0;
@@ -99,6 +100,7 @@ int		game_loop(t_doom doom)
 		return (0);
 	init_moves(&doom);
 	doom.map.editing = 0;
+	printf("%d\n%d\n", doom.game.pause, doom.game.hp_level);
 	set_mouse(&doom);
 	while (doom.game.quit != 1)
 	{
@@ -145,6 +147,7 @@ void	set_mouse(t_doom *doom)
 	if (doom->game.hp_level <= 0 ||
 		doom->game.pause == 1 || doom->start_quit == 0)
 	{
+		fflush(stdout);
 		SDL_ShowCursor(SDL_ENABLE);
 		SDL_SetRelativeMouseMode(SDL_DISABLE);
 		SDL_SetWindowGrab(doom->sdl.window, 0);

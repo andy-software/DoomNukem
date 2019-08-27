@@ -419,7 +419,7 @@ int		main(int argc, char **argv)
 		map.sprites[i].changes = 0;
 		map.sprites[i].key_state = 0;
 		map.sprites[i].num_of_sound = 1;
-		map.sprites[i].event_num = 4;
+		map.sprites[i].event_num = 3;
 		map.sprites[i].hp = 0;
 		map.sprites[i].pick = 0;
 	}
