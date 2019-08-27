@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/27 18:26:29 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:26:44 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	gun_anim(t_doom *d)
 				Mix_PlayChannel(3, d->sound.win, 0);
 			SDL_BlitSurface(d->texture.dude[d->ui.gun_anim], 0, \
 				d->sdl.surface, &d->texture.dude_r);
-			d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 80);
+			d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 80);
 			if (d->ui.gun_anim > 33)
 				INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
 		}

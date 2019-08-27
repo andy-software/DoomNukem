@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 20:37:16 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/27 19:41:46 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:27:00 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static	void	gun_anim_3(t_doom *d, int i, int temp)
 	SDL_BlitSurface(DT.gun1[d->ui.gun_anim], 0, d->sdl.surface, &DT.gun1_r);
 	d->ui.message = TTF_RenderText_Solid(DT.fonts[AMMO_F].text_font, \
 					d->ui.str, DT.fonts[FPS_F].text_color);
-	d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
+	d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 50);
 	if (d->ui.gun_anim > 17)
 		INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
 }
@@ -77,7 +77,7 @@ static	void	gun_anim_4(t_doom *d)
 			&d->texture.gun1_r);
 		d->ui.message = TTF_RenderText_Solid(DT.fonts[AMMO_F].text_font, \
 			" 0 / 0", d->texture.fonts[FPS_F].text_color);
-		d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
+		d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 50);
 		if (d->ui.gun_anim > 1)
 			INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
 	}

@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 20:12:16 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:29:25 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			move_player(t_doom *d, float dx, float dy)
 	vert = sect->vert;
 	hole_high = get_z(sect->ceil_plane, p.x + dx, p.y + dy);
 	hole_low = get_z(sect->floor_plane, p.x + dx, p.y + dy);
-	if (hole_high > d->player.coord.z + d->game.eye_height && \
+	if (hole_high > d->player.coord.z && \
 		hole_low < d->player.coord.z - d->game.eye_height + KNEE_HEIGHT)
 	{
 		while (s < sect->num_vert)
@@ -49,6 +49,7 @@ static	void	fall(t_player *p, t_map m, t_game *g)
 	floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 	ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
 	g->velocity.z -= 0.02f;
+	//g->velocity.z -= m.gravity;
 	if (g->velocity.z < 0 && nextz <= floor_z + g->eye_height)
 	{
 		p->coord.z = floor_z + g->eye_height;

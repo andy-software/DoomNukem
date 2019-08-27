@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 14:04:01 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/23 16:53:43 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:56:15 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			game_loop_for_editor(t_doom *doom)
 	init_moves(doom);
 	while (doom->game.quit != 1)
 	{
-		doom->ui.prevTime = SDL_GetTicks();
+		doom->ui.prev_time = SDL_GetTicks();
 		player_events(doom);
 		if (!doom->map.editing)
 		{
@@ -83,8 +83,8 @@ int			game_loop_for_editor(t_doom *doom)
 			return (1);
 		}
 		game_pause(doom);
-		doom->ui.currTime = SDL_GetTicks();
-		doom->game.dt = doom->ui.currTime - doom->ui.prevTime;
+		doom->ui.curr_time = SDL_GetTicks();
+		doom->game.dt = doom->ui.curr_time - doom->ui.prev_time;
 		doom->ui.fps = doom->game.dt / 1000.0;
 		if (doom->game.pause == 0 && doom->game.hp_level > 0)
 			draw_fps(doom, (int)(1.0 / doom->ui.fps));
