@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:42:37 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 17:39:36 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 13:47:45 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	load_other_sprites2(t_doom *d)
 	d->texture.sprt[13].c_sprt = 1;
 	d->texture.sprt[13].sprites = \
 		split_surf(1, 1, "./materials/textures/sprites/button.png", d);
+	d->texture.sprt[14].c_sprt = 1;
+	d->texture.sprt[14].sprites = \
+		split_surf(1, 1, "./materials/textures/sprites/switcher.png", d);
 }
 
 void	load_other_sprites(t_doom *d)
@@ -97,7 +100,7 @@ void	load_other_sprites(t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 14);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 15);
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = \
 		split_surf(1, 1, "./materials/textures/sprites/dude.png", d);

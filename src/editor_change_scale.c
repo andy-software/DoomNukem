@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:14:23 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 20:05:59 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 15:53:46 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	editor_scale_y(t_doom *doom, const Uint8 *state)
 	}
 	if (doom->editor.fl_or_ceil == CEIL)
 		SECTOR_PL.y_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+	printf("ceil y: %f\n", SECTOR_PL.y_c_scale);
 	if (doom->editor.fl_or_ceil == FLOOR)
 		SECTOR_PL.y_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
 }
@@ -54,6 +55,7 @@ void	editor_scale_x(t_doom *doom, const Uint8 *state)
 	}
 	if (doom->editor.fl_or_ceil == CEIL)
 		SECTOR_PL.x_c_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
+		printf("ceil x: %f\n", SECTOR_PL.x_c_scale);
 	if (doom->editor.fl_or_ceil == FLOOR)
 		SECTOR_PL.x_f_scale += (state[SDL_SCANCODE_TAB]) ? -0.01 : 0.01;
 }
