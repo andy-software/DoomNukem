@@ -12,14 +12,6 @@
 
 #include "../includes/doom.h"
 
-static void	draw_dot(int x, int y, t_doom *d, int color)
-{
-	Uint32	*pixels = (Uint32*)d->sdl.surface->pixels;
-
-	if (y >= 0 && y < WIN_HEIGHT - 1 && x >= 0 && x < WIN_WIDTH - 1)
-		pixels[y * d->sdl.surface->w + x] = color;
-}
-
 static void	cycling(t_sprite_render *sr, t_doom *d)
 {
 	sr->clmp_top = 0;
@@ -59,7 +51,6 @@ static void	pre_cycle_cal(t_sprite_render *sr, t_doom *d)
 	sr->za = (sr->begin_x - sr->x1) * sr->d_za + sr->z1a;
 	sr->zb = (sr->begin_x - sr->x1) * sr->d_zb + sr->z1b;
 	sr->percent_of_wall = fpercent(sr->tmp->sx1, sr->tmp->sx2, sr->begin_x);
-	// sr->d_percent_of_wall = 1.0 / ((float)sr->tmp->sx2 - sr->tmp->sx1);
 	sr->d_y = (sr->t2.y - sr->t1.y) / (sr->x2 - sr->x1);
 }
 
