@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 17:56:30 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/24 17:53:26 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:55:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,7 @@ int		game_loop(t_doom doom)
 	while(SDL_PollEvent(&doom.ev));
 	while (doom.game.quit != 1)
 	{
-		doom.ui.prevTime = SDL_GetTicks();
-		printf("from loop\n");
+		doom.ui.prev_time = SDL_GetTicks();
 		player_events(&doom);
 		if (doom.game.story == 1)
 			show_story(&doom);
@@ -133,10 +132,10 @@ int		game_loop(t_doom doom)
 			lose_events(&doom);
 			draw_menu(&doom);
 		}
-		while (SDL_GetTicks() - doom.ui.prevTime < 100.0 / 6)
+		while (SDL_GetTicks() - doom.ui.prev_time < 100.0 / 6)
 				;
-			doom.ui.currTime = SDL_GetTicks();
-			doom.game.dt = doom.ui.currTime - doom.ui.prevTime;
+			doom.ui.curr_time = SDL_GetTicks();
+			doom.game.dt = doom.ui.curr_time - doom.ui.prev_time;
 			doom.ui.fps = doom.game.dt / 1000.0;
 			if (doom.game.pause == 0 &&
 				doom.game.hp_level > 0 && doom.start_quit == 1)

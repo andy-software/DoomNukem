@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 15:21:15 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 16:30:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	add_del_items(t_doom *doom, SDL_Event *event)
 {
-	if (event->button.x > (WIN_WIDTH - 400))
+	if (event->button.x > (WIN_WIDTH - 400) && (event->button.y < 100))
 	{
 		if ((event->button.y >= 20 && event->button.y <= 100)
 		&& event->button.button == SDL_BUTTON_LEFT)
@@ -55,7 +55,11 @@ void	add_items2(t_doom *doom, SDL_Event *event)
 		if (IMG[2].exist > -1)
 		{
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].coord =
-			(t_vector){event->button.x / SCL, event->button.y / SCL, 10};
+			(t_vector){event->button.x / SCL, event->button.y / SCL,
+			get_z(doom->map.sectors[is_in_sector(doom,
+			(event->button.x), (event->button.y))].floor_plane, \
+			event->button.x / SCL, \
+			event->button.y / SCL)};
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].pick = 1;
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].mob = 0;
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].num_sheet = 0;
@@ -72,8 +76,11 @@ void	player_add_items(t_doom *doom, SDL_Event *event)
 		if (IMG[1].exist == 1)
 			if (doom->editor.ind_img == 1)
 			{
-				doom->player.coord.x = event->button.x / SCL;
-				doom->player.coord.y = event->button.y / SCL;
+				doom->player.coord = \
+				(t_vector){event->button.x / SCL, event->button.y / SCL, \
+					get_z(doom->map.sectors[is_in_sector(doom, \
+					(event->button.x), (event->button.y))].floor_plane, \
+					event->button.x / SCL, event->button.y / SCL) + 10};
 			}
 		EXIST = 1;
 	}

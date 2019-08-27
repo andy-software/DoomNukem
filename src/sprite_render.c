@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 16:27:02 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/06 19:44:55 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 17:55:56 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, \
 		pos = sr->sprites[i].text_no + sr->pos % sheet->w;
 	else if (sr->sprites[i].mob && !sr->sprites[i].live)
 	{
-		pos = sr->sprites[i].text_no + MIN((d->ui.prevTime - \
+		pos = sr->sprites[i].text_no + MIN((d->ui.prev_time - \
 			sr->sprites[i].death_time) / 150, (Uint32)(sheet->w - 1));
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 		{

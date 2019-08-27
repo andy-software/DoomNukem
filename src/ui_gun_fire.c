@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_gun_fire.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 20:37:16 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/26 20:55:31 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 17:57:46 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static	void	gun_anim_3(t_doom *d, int i, int temp)
 		Mix_PlayChannel(3, d->sound.gun1[0], 0);
 	d->ui.message = TTF_RenderText_Solid(DT.fonts[AMMO_F].text_font, \
 					d->ui.str, DT.fonts[FPS_F].text_color);
-	d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
+	d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 50);
 	SDL_BlitSurface(DT.gun1[d->ui.gun_anim], 0, d->sdl.surface, &DT.gun1_r);
 	if (d->ui.gun_anim >= 17)
 		INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
@@ -75,7 +75,7 @@ static	void	gun_anim_4(t_doom *d, int i, int temp)
 			Mix_PlayChannel(3, d->sound.gun1[1], 0);
 		d->ui.message = TTF_RenderText_Solid(DT.fonts[AMMO_F].text_font, \
 			" 0 / 0", d->texture.fonts[FPS_F].text_color);
-		d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 50);
+		d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 50);
 		SDL_BlitSurface(DT.gun1[d->ui.gun_anim], 0, d->sdl.surface, \
 			&d->texture.gun1_r);
 		if (d->ui.gun_anim >= 3)

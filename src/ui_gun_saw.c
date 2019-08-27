@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_gun_saw.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 20:39:22 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/26 20:56:06 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 17:57:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void			ui_gun_num_1(t_doom *d)
 	{
 		SDL_BlitSurface(d->texture.gun2[d->ui.start_saw], 0, \
 			d->sdl.surface, &d->texture.gun21_r);
-		d->ui.start_saw = ((d->ui.prevTime - d->ui.clickTime) / 50);
+		d->ui.start_saw = ((d->ui.prev_time - d->ui.click_time) / 50);
 		if (!(Mix_Playing(3)))
 			Mix_PlayChannel(3, d->sound.gun2[0], 0);
 	}

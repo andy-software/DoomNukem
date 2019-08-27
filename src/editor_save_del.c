@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:24:27 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 19:46:49 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 16:20:07 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 {
 	if (!doom->map.num_sect || !doom->player.coord.y)
 		return (0);
-	INIT3(doom->player.coord.z, 10, doom->player.angle, 0, \
+	INIT2(doom->player.angle, 0, \
 			doom->player.angle_z, 0);
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);

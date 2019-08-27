@@ -25,7 +25,7 @@ void		move_player(t_doom *d, float dx, float dy)
 	vert = sect->vert;
 	hole_high = get_z(sect->ceil_plane, p.x + dx, p.y + dy);
 	hole_low = get_z(sect->floor_plane, p.x + dx, p.y + dy);
-	if (hole_high > d->player.coord.z + d->game.eye_height && hole_low < d->player.coord.z - d->game.eye_height + KNEE_HEIGHT)
+	if (hole_high > d->player.coord.z && hole_low < d->player.coord.z - d->game.eye_height + KNEE_HEIGHT)
 	{
 		for(unsigned s = 0; s < sect->num_vert; s++)
 			if(sect->neighbors[s] >= 0 && ctl(p, (t_vertex){p.x + dx, p.y + dy}, vert[s], vert[s + 1]))
@@ -116,7 +116,7 @@ static void	move(t_player *p, t_map	m, t_game *g)
 				j = -1;
 				next.x = p->coord.x + g->velocity.x;
 				next.y = p->coord.y + g->velocity.y;
-				while (++j < (int)sect->num_vert) // TODO: check only neightbors walls
+				while (++j < (int)sect->num_vert)
 				{
 					if (j != i && ctl((t_vertex){p->coord.x, p->coord.y}, next, vert[j], vert[j + 1]))
 					{

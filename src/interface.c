@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interface.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/26 21:05:32 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 17:57:31 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	gun_anim(t_doom *d)
 				Mix_PauseMusic();
 			if (!(Mix_Playing(3)))
 				Mix_PlayChannel(3, d->sound.win, 0);
-			d->ui.gun_anim = ((d->ui.prevTime - d->ui.clickTime) / 80);
+			d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 80);
 			SDL_BlitSurface(d->texture.dude[d->ui.gun_anim], 0, \
 				d->sdl.surface, &d->texture.dude_r);
 			if (d->ui.gun_anim >= 33)
