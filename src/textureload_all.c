@@ -114,7 +114,7 @@ void	load_sprites(t_doom *d)
 		split_surf(3, 1, "./materials/textures/sprites/keys.png", d);
 	d->texture.sprt[4].c_sprt = 1;
 	d->texture.sprt[4].sprites = \
-		split_surf(1, 1, "./materials/textures/sprites/dude1.png", d);
+		split_surf(1, 1, "./materials/textures/sprites/win.png", d);
 	d->texture.sprt[5].c_sprt = 50;
 	d->texture.sprt[5].w = 10;
 	d->texture.sprt[5].h = 5;

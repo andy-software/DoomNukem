@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/24 19:26:18 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 20:38:52 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@
 # define SPEED_ROTATION 0.01f
 # define SPEED_ROTATION_Z 0.05f
 # define MAX_Z_ANGLE 5
-# define MOVE_SPEED 0.2f
+# define MOVE_SPEED 0.5f
 # define SIT_EYE_HEIGHT 6
-# define EYE_HEIGHT 9
+# define EYE_HEIGHT 10
 # define HEAD_HEIGHT 1
 # define KNEE_HEIGHT 2
 # define BIG_VALUE 9e9
@@ -163,6 +163,7 @@
 # define DEFLN doom->editor.fline
 # define DEFL d->editor.fline
 # define PT doom->map.paint[pain]
+# define DT d->texture
 
 
 /** action paintings **/
@@ -509,6 +510,8 @@ struct	s_game
 	int				click;
 	int				rect_i;
 	int				blood;
+	int				win;
+	int				ugroza;
 	t_vector		velocity;
 	float			acceleration;
 	int				dificulty;
@@ -683,12 +686,11 @@ struct	s_render
 	char			neighbor;
 	t_texture		*texture;
 	t_map			*map;
+	t_ui			*ui;
 };
 
 struct	s_ui
 {
-	SDL_Rect		*minimap_rect;
-	SDL_Surface		*minimap_surf;
 	SDL_Surface		*message;
 	Uint32			prevTime;
 	Uint32			currTime;
@@ -1076,6 +1078,8 @@ void		draw_ui(t_doom *d);
 void		gun_anim(t_doom *d);
 void		fule_show(t_doom *d);
 void		show_keys(t_doom *d);
+void		ui_gun_num_0(t_doom *d, int i, int temp);
+void		ui_gun_num_1(t_doom *d);
 /*
 **texturelaod.c
 */

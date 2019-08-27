@@ -110,6 +110,7 @@ void	lose_events(t_doom *d)
 			{
 				if (i == 0)
 				{
+					Mix_HaltChannel(-1);
 					free_file_data(&d->map);
 					free_game_params(d);
 					free_menu(d);

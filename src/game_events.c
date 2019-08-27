@@ -46,13 +46,13 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	float floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 	float ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
 
-	g->velocity.z -= 0.04f;
+	g->velocity.z -= 0.08f;
 	if (g->velocity.z < 0 && \
 		nextz <= floor_z + g->eye_height)
 	{
 		p->coord.z = floor_z + g->eye_height;
-		if (g->velocity.z < -1.2)
-			g->hp_level += g->velocity.z * 25;
+		if (g->velocity.z < -2.2)
+			g->hp_level += g->velocity.z * 10;
 		g->velocity.z = 0;
 		g->falling = 0;
 	}
@@ -314,6 +314,12 @@ void		game_events(t_doom *d)
 		d->game.hp_level -= 1;
 		if (!(Mix_Playing(2)))
 			Mix_PlayChannel(2, d->sound.hurt, 0);
+	}
+	if (d->map.sectors[d->player.sector].num == 26 && d->game.ugroza == 0)
+	{
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.mobsound[2], 0);
+		d->game.ugroza = 1;
 	}
 	check_keys_state(d);
 	if (!d->map.editing)

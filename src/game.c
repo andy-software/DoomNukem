@@ -14,7 +14,7 @@
 
 void	init_hud(t_doom *d)
 {
-	d->texture.gun1_r.x = WIN_WIDTH / 20;
+	d->texture.gun1_r.x = WIN_WIDTH - d->texture.gun1[0]->w;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
 	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
 	d->texture.gun21_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
@@ -45,10 +45,12 @@ int		init_game_params(t_doom *d)
 	d->game.flying = 0;
 	d->game.blood = 0;
 	d->game.rect_i = 0;
+	d->game.ugroza = 0;
 	d->game.acceleration = 0.5f;
 	d->difficulty = 1;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
+	d->game.win = 0;
 	d->ui.idle = 0;
 	if (!d->map.editing)
 	{
@@ -100,11 +102,13 @@ int		game_loop(t_doom doom)
 		return (0);
 	init_moves(&doom);
 	doom.map.editing = 0;
-	printf("%d\n%d\n", doom.game.pause, doom.game.hp_level);
 	set_mouse(&doom);
+	SDL_Delay(1000);
+	while(SDL_PollEvent(&doom.ev));
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prevTime = SDL_GetTicks();
+		printf("from loop\n");
 		player_events(&doom);
 		if (doom.game.story == 1)
 			show_story(&doom);

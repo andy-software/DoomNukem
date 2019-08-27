@@ -14,9 +14,10 @@
 
 int			win_spr_event(t_doom *d, t_sprite *sprite)
 {
-	(void)d;
-	(void)sprite;
-	exit(1);
+	d->game.win = 1;
+	d->ui.gun_num = 2;
+	Mix_HaltChannel(-1);
+	Mix_PlayMusic(d->sound.music[6], 1);
 	return (0);
 }
 
@@ -32,7 +33,6 @@ int			give_event(t_doom *d, t_sprite *sprite)
 {
 	static int click = 0;
 	
-	//printf("%d %i %i %i %i\n\n", sprite->spr_num, sprite->event_num,  sprite->num_sheet, sprite->changes, sprite->key);
 	if (sprite->num_of_sound > -1 && click == 0)
 	{
 		Mix_PlayChannel(4, d->sound.mobsound[3], 0);
@@ -48,14 +48,6 @@ int			give_event(t_doom *d, t_sprite *sprite)
 	return (0);
 }
 
-int			win_pnt_event(t_doom *d, t_painting *paint)
-{
-	(void)d;
-	(void)paint;
-	exit(1);
-	return (0);
-}
-
 int			toxic_event(t_doom *d, t_sprite *sprite)
 {
 	static Uint32	start_time = 0;
@@ -64,7 +56,6 @@ int			toxic_event(t_doom *d, t_sprite *sprite)
 
 	if (start_time < toxicity_rate)
 	{
-		// printf("%d %i %i %i %i\n\n", sprite->spr_num, sprite->event_num,  sprite->num_sheet, sprite->changes, sprite->key);
 		d->map.sprites[sprite->spr_num].changes = 1;
 		if (((start_time + d->game.dt) / 100) > (start_time / 100))
 			d->map.inverse_colors = !d->map.inverse_colors;

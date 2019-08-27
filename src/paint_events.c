@@ -51,12 +51,12 @@ int		radio_event(t_doom *d, t_painting *paint)
 	if (paint->key_state)
 	{
 		if (!(Mix_PlayingMusic()))
-			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+			Mix_PlayMusic(d->sound.music[++mus_num], -1);
 		else if ((Mix_PlayingMusic() && d->game.click))
-			Mix_PlayMusic(d->sound.music[++mus_num], 1);
+			Mix_PlayMusic(d->sound.music[++mus_num], -1);
 		if (mus_num >= 6)
 		{
-			Mix_PauseMusic();
+			Mix_HaltMusic();
 			mus_num = -1;
 		}
 	}

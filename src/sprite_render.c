@@ -12,6 +12,30 @@
 
 #include "../includes/doom.h"
 
+void			drop_item(t_doom *d, int i)
+{
+	d->map.sprites[d->sr.sprites[i].spr_num].text_no = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].num_sheet = 3;
+	d->map.sprites[d->sr.sprites[i].spr_num].width = 0.5;
+	d->map.sprites[d->sr.sprites[i].spr_num].start_z = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].end_z = 2.5;
+	d->map.sprites[d->sr.sprites[i].spr_num].mob = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].angle = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].anglecos = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].anglesin = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].own_moves = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].move_speed = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].draw = 1;
+	d->map.sprites[d->sr.sprites[i].spr_num].vision_forward = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].vision_backward = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].key = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].changes = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].key_state = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].num_of_sound = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].event_num = 0;
+	d->map.sprites[d->sr.sprites[i].spr_num].pick = 1;
+}
+
 void			set_pos(t_doom *d, t_sprite_render *sr)
 {
 	sr->time_from_loop_start += d->game.dt;
@@ -34,29 +58,8 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, \
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 		{
 			d->map.sprites[sr->sprites[i].spr_num].draw = 0;
-			if (d->map.sprites[sr->sprites[i].spr_num].num_sheet == 8) //max zaberi che z vidsi
-			{
-				d->map.sprites[d->sr.sprites[i].spr_num].text_no = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].num_sheet = 3;
-				d->map.sprites[d->sr.sprites[i].spr_num].width = 0.5;
-				d->map.sprites[d->sr.sprites[i].spr_num].start_z = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].end_z = 2.5;
-				d->map.sprites[d->sr.sprites[i].spr_num].mob = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].angle = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].anglecos = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].anglesin = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].own_moves = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].move_speed = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].draw = 1;
-				d->map.sprites[d->sr.sprites[i].spr_num].vision_forward = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].vision_backward = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].key = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].changes = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].key_state = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].num_of_sound = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].event_num = 0;
-				d->map.sprites[d->sr.sprites[i].spr_num].pick = 1;
-			}
+			if (d->map.sprites[sr->sprites[i].spr_num].num_sheet == 8) //max zaberi che z vidsi //// yze zabral davno aol
+				drop_item(d, i);
 		}
 		d->map.sprites[sr->sprites[i].spr_num].end_z -= \
 				d->map.sprites[sr->sprites[i].spr_num].start_z;

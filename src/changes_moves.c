@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 19:15:58 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/24 19:38:50 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 14:35:47 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int			first_own_moves(t_doom *d, t_sprite *spr)
 	return (1);
 }
 
-void		spite_coord_mirror(t_sprite *spr, t_vertex *vert, t_vertex next, int i)
+void		spite_coord_mirror(t_sprite *spr, t_vertex *vert, \
+				t_vertex next, int i)
 {
 	float		len;
 	float		prev_cos;

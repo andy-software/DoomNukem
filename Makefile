@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
+#    By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/24 19:15:53 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/26 20:51:08 by mdanylch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		editor_txt_chg.c sprite_render_1.c painting_2.c math_vertex.c math_bits.c math2.c \
 		math_define.c \
 		menus_1.c menus_2.c threads_2.c main_render_2.c sounds_load.c textureload_all.c \
-		textureload2.c main_render_3.c main_render_4.c main_render_5.c changes_moves.c
+		textureload2.c main_render_3.c main_render_4.c main_render_5.c changes_moves.c \
+		ui_gun_fire.c ui_gun_saw.c
 
 INC = includes/doom.h
 

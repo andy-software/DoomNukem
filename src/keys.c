@@ -26,8 +26,6 @@ void		check_keys_intersection(t_doom *d)
 	while (--i >= 0)
 	{
 		ev = d->changes.spr_events[d->sr.sprites[i].event_num];
-		if (d->sr.sprites[i].text_no == 6)
-			printf("%i\n", d->sr.sprites[i].event_num);
 		if (!d->sr.sprites[i].key)
 			continue ;
 		sprite_vert_cal(&t1, &t2, d->sr.sprites + i, d->player);

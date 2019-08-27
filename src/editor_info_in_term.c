@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 19:29:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/26 15:38:50 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,7 @@ void	info_lift(t_doom *doom, int pain)
 	ft_putnbr(doom->map.paint[pain].high_point);
 	ft_putstr("  Low point: ");
 	ft_putnbr(doom->map.paint[pain].low_point);
+	ft_putstr("  Speed: ");
+	ft_putnbr(doom->map.paint[pain].speed);
 	ft_putstr(" \x1B[0m\n");
 }

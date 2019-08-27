@@ -23,7 +23,7 @@ int		write_to_file(t_map map, char *name, t_player mplayer)
 		fd = open(name, O_CREAT | O_WRONLY);
 	if (!fd)
 		return (0);
-	printf("%s %i", name, fd);
+	// printf("%s %i", name, fd);
 
 	write(fd, &map.editing, sizeof(int));
 

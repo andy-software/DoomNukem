@@ -108,7 +108,7 @@ void		player_events(t_doom *d)
 						if ((!(Mix_Playing(0)) && d->game.flying))
 							Mix_PlayChannel(0, d->sound.fly, 0);
 						if (d->game.velocity.z < MAX_SPEED_UPWARD)
-							d->game.velocity.z += 0.9;
+							d->game.velocity.z += 1.2;
 						else
 							d->game.velocity.z = MAX_SPEED_UPWARD;
 						d->game.falling = 1;
@@ -120,10 +120,7 @@ void		player_events(t_doom *d)
 						Mix_PlayChannel(0, d->sound.jump, 0);
 				}
 				else if (d->ev.key.keysym.sym == SDLK_f && !d->game.pause)
-				{
-					printf("Fly mod\n");
 					d->game.flying = !d->game.flying;
-				}
 				else if (d->ev.key.keysym.sym == SDLK_1)
 				{
 					Mix_HaltChannel(-1);
@@ -138,7 +135,7 @@ void		player_events(t_doom *d)
 					d->ui.fire = 0;
 					d->ui.gun_num = 1;
 				}
-				else if (d->ev.key.keysym.sym == SDLK_3)
+				else if (d->ev.key.keysym.sym == SDLK_3 && d->game.win == 1)
 				{
 					Mix_HaltChannel(-1);
 					d->ui.fire = 0;
@@ -175,6 +172,7 @@ void		player_events(t_doom *d)
 			{
 				if (d->ui.fire == 0)
 				{
+					printf("from events\n");
 					d->ui.fire = 1;
 					d->game.fire = 1;
 					d->ui.clickTime = d->ui.prevTime;
@@ -191,7 +189,6 @@ void		player_events(t_doom *d)
 			}
 			else if (d->ev.type == SDL_QUIT)
 				d->game.quit = 1;
-			switch_music(&d->sound, d->ev);
 		}
 	}
 }

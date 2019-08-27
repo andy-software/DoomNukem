@@ -31,6 +31,7 @@ int		init_sdl(t_sdl *sdl)
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetWindowGrab(sdl->window, 1);
 	SDL_SetRelativeMouseMode(1);
+	Mix_VolumeMusic(MIX_MAX_VOLUME);
 	return (1);
 }
 

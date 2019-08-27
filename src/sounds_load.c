@@ -27,7 +27,7 @@ void		load_sounds2(t_sound *sound)
 	sound->music[3] = load_music("./materials/sounds/mus_new1.mp3");
 	sound->music[4] = load_music("./materials/sounds/mus_new2.mp3");
 	sound->music[5] = load_music("./materials/sounds/mus_new3.mp3");
-	sound->music[6] = load_music("./materials/sounds/mus_menu1.mp3");
+	sound->music[6] = load_music("./materials/sounds/win_song.mp3");
 	sound->lift[0] = load_sound("./materials/sounds/acess.wav");
 	sound->lift[1] = load_sound("./materials/sounds/noacess.wav");
 	sound->lift[2] = load_sound("./materials/sounds/elevator.wav");
