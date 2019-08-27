@@ -96,6 +96,8 @@
 # define INT_2(a,b) int a = -1; int b = -1;
 # define INT_32(a) Uint32 a = -1;
 
+# define GC	get_color_value_int
+
 # define INTARR(a, b) int a[b] = {0};
 
 # define INT1(a) int a;

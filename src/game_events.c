@@ -116,7 +116,7 @@ static void	move(t_player *p, t_map	m, t_game *g)
 				j = -1;
 				next.x = p->coord.x + g->velocity.x;
 				next.y = p->coord.y + g->velocity.y;
-				while (++j < (int)sect->num_vert) // TODO: check only neightbors walls
+				while (++j < (int)sect->num_vert)
 				{
 					if (j != i && ctl((t_vertex){p->coord.x, p->coord.y}, next, vert[j], vert[j + 1]))
 					{
