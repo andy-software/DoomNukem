@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/26 20:38:52 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:12:54 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,29 +90,33 @@
 # define BUT_PRS doom->editor.but1_press
 # define FRE_STR(a, b, c) free(a); free(b); free(c);
 # define LIE_POINT(a, b, c, d) t_vertex a; int b; double c; double d;
+
+# define GE_VAR0(a,b,c) t_vertex a; t_sector *b; t_vertex *c;
+# define GE_VAR_1(a,b,c) const float a = b + c;
+# define GE_VAR1(b,c,d,e) t_plane b;t_plane c;float d;float e;
+# define INITMOBS_VAR(a,b,c) t_vector a; t_vector b; t_vertex c;
+# define SPRITES_VAR(a,b,c,d) t_vector a; t_vector b; float c; int d = -1;
+
 // # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 // # define PR_TO_WR(a, b) a = 1; b = 1;
 # define INT_1(a) int a = -1;
 # define INT_2(a,b) int a = -1; int b = -1;
 # define INT_32(a) Uint32 a = -1;
+# define UNS_0(a) unsigned a = 0;
 
 # define INTARR(a, b) int a[b] = {0};
 
-# define INT1(a) int a;
-# define INT2(a,b) int a,b;
-# define INT3(a,b,c) int a,b,c;
-# define INT4(a,b,c,d) int a,b,c,d;
-# define INT5(a,b,c,d,e) int a,b,c,d,e;
+# define FLOAT2(a,b) float a,b;
+# define FLOAT3(a,b,c) float a,b,c;
+# define FLOAT4(a,b,c,d) float a,b,c,d;
+# define FLOAT5(a,b,c,d,e) float a,b,c,d,e;
 
-# define INIT2(a,av,b,bv) a=av;b=bv;
-# define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
-# define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
-# define INIT5(a,av,b,bv,c,cv,d,dv,e,ev) a=av;b=bv;c=cv;d=dv;e=ev;
-# define INIT6(a,av,b,bv,c,cv,d,dv,e,ev,f,fv) a=av;b=bv;c=cv;d=dv;e=ev;f=fv;
+# define TPLANE2(a,b) t_plane a,b;
+# define TPLANE3(a,b,c) t_plane a,b,c;
+# define TPLANE4(a,b,c,d) t_plane a,b,c,d;
 
 # define PR_TO_W(a, b, c) a = 10; b = 0; c = 0;
 # define PR_TO_WR(a, b) a = 1; b = 1;
-# define MAP_SPRT doom->map.sprites
 # define FT_PR_ED(a, b, c, d) a = 1; b = 5; c = 5; d = 1;
 # define FT_PR_ED2(a, b, c, d, e) a = -1; b = -1; c = -1; d = 1; e = 1;
 
@@ -147,7 +151,9 @@
 # define SECTOR_PL doom->map.sectors[doom->player.sector]
 
 # define NUM_TEXT 18
+# define SR_SPRT doom->sr.sprites
 # define MAP_SPRT doom->map.sprites
+
 # define NUM_VERT (int)doom->map.sectors[doom->map.num_sect].num_vert
 # define NUM_VERTEX doom->map.sectors[i].num_vert
 # define MAP_N_VER map->sectors[i].num_vert
@@ -162,6 +168,9 @@
 # define DBRZ	doom->editor.brezen
 # define DEFLN doom->editor.fline
 # define DEFL d->editor.fline
+# define DUI doom->ui
+# define DGAME doom->game
+
 # define PT doom->map.paint[pain]
 # define DT d->texture
 
@@ -202,55 +211,56 @@
 
 # define TXTS d->texture.sprt
 
-typedef struct s_doom		t_doom;
+typedef struct s_doom			t_doom;
 
-typedef struct s_sdl		t_sdl;
-typedef struct s_option		t_option;
+typedef struct s_sdl			t_sdl;
+typedef struct s_option			t_option;
 
-typedef struct s_map		t_map;
-typedef struct s_vertex		t_vertex;
-typedef struct s_sector		t_sector;
-typedef struct s_player		t_player;
-typedef struct s_line		t_line;
-typedef struct s_game		t_game;
-typedef struct s_vector		t_vector;
-typedef struct s_render		t_render;
-typedef struct s_ceil_cal	t_ceil_cal;
-typedef struct s_floor_cal	t_floor_cal;
-typedef struct s_plane		t_plane;
-typedef struct s_ui			t_ui;
+typedef struct s_map			t_map;
+typedef struct s_vertex			t_vertex;
+typedef struct s_sector			t_sector;
+typedef struct s_player			t_player;
+typedef struct s_line			t_line;
+typedef struct s_game			t_game;
+typedef struct s_vector			t_vector;
+typedef struct s_render			t_render;
+typedef struct s_ceil_cal		t_ceil_cal;
+typedef struct s_floor_cal		t_floor_cal;
+typedef struct s_plane			t_plane;
+typedef struct s_ui				t_ui;
 typedef struct s_rend_sector	t_rend_sector;
 
-typedef struct s_texture	t_texture;
-typedef struct s_skybox		t_skybox;
-typedef struct s_sprite		t_sprite;
+typedef struct s_texture		t_texture;
+typedef struct s_skybox			t_skybox;
+typedef struct s_sprite			t_sprite;
 typedef struct s_sprite_render	t_sprite_render;
 typedef struct s_sprite_sheet	t_sprite_sheet;
 typedef	struct s_painting		t_painting;
 typedef	struct s_font			t_font;
 typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
+typedef	struct s_move			t_move;
 
 /* EDITOR */
-typedef struct s_editor	t_editor;
-typedef struct s_brezen	t_brezen;
-typedef struct s_interface	t_interface;
-typedef struct s_vertex_int	t_vertex_int;
-typedef struct s_images	t_images;
-typedef	struct s_buttons	t_buttons;
-typedef struct s_title	t_title;
-typedef	struct s_fline	t_fline;
-typedef	struct s_lpoint	t_lpoint;
-typedef	struct s_thread	t_thread;
+typedef struct s_editor			t_editor;
+typedef struct s_brezen			t_brezen;
+typedef struct s_interface		t_interface;
+typedef struct s_vertex_int		t_vertex_int;
+typedef struct s_images			t_images;
+typedef	struct s_buttons		t_buttons;
+typedef struct s_title			t_title;
+typedef	struct s_fline			t_fline;
+typedef	struct s_lpoint			t_lpoint;
+typedef	struct s_thread			t_thread;
 /***/
 
-typedef	struct	s_int_vertex
+typedef	struct		s_int_vertex
 {
 	int				x;
 	int				y;
-}				t_int_vertex;
+}					t_int_vertex;
 
-struct	s_plane
+struct				s_plane
 {
 	float			a;
 	float			b;
@@ -258,20 +268,20 @@ struct	s_plane
 	float			h;
 };
 
-struct	s_vector
+struct				s_vector
 {
 	float			x;
 	float			y;
 	float			z;
 };
 
-struct	s_vertex
+struct				s_vertex
 {
 	float			x;
 	float			y;
 };
 
-struct	s_player
+struct				s_player
 {
 	t_vector		coord; //earlier was t_vertex could cause some troubles
 	Uint32			sector;
@@ -281,7 +291,7 @@ struct	s_player
 	float			angle_z; // angle of player z view
 };
 
-struct	s_line
+struct				s_line
 {
 	int 			wall;
 	int				bot;
@@ -303,7 +313,7 @@ struct	s_line
 	int				y_t_shift;
 };
 
-struct	s_sector
+struct				s_sector
 {	
 	Uint32			num;
 	Uint32			num_vert;
@@ -332,75 +342,74 @@ struct	s_sector
 	int				light_lvl;
 };
 
-struct	s_sprite
+struct				s_sprite
 {
-	int			spr_num;
-	int			text_no;
-	t_vector	coord;
-	float		width;
-	float		end_z; //end_z - start_z its height of sprite
-	float		start_z; //if sprite is flying unit then its non equil to 0
-	int			sector_no;
-	int			mob;
-	int			draw;
-	int			pick;
-	int			live; //only if mob affected
-	float		anglesin;
-	float		anglecos;
-	float		angle;
+	int				spr_num;
+	int				text_no;
+	t_vector		coord;
+	float			width;
+	float			end_z; //end_z - start_z its height of sprite
+	float			start_z; //if sprite is flying unit then its non equil to 0
+	int				sector_no;
+	int				mob;
+	int				draw;
+	int				pick;
+	int				live; //only if mob affected
+	float			anglesin;
+	float			anglecos;
+	float			angle;
 
-	float		speed_x;
-	float		speed_y;
-	float		move_speed;
+	float			speed_x;
+	float			speed_y;
+	float			move_speed;
 
-	int			own_moves;
-	float		vision_forward;
-	float		vision_backward;
+	int				own_moves;
+	float			vision_forward;
+	float			vision_backward;
 
-	int			key;
-	int			key_state;
-	int			changes;
-	int			event_num;
-	int			hp;
-	// float		speed;
-	int			num_sheet;
+	int				key;
+	int				key_state;
+	int				changes;
+	int				event_num;
+	int				hp;
+	// float			speed;
+	int				num_sheet;
 
-	int			num_of_sound;
-	Uint32		death_time;
+	int				num_of_sound;
+	Uint32			death_time;
 };
 
-struct	s_painting
+struct				s_painting
 {
-	int			text_no;
-	t_vector	v1;
-	t_vector	v2;
-	int			w;
-	int			h;
-	int			sector_no;
-
-	int			key;
-	int			key_state;
-	int			changes;
-	int			event_num;
-	int			draw; //is it drawable
-	float		speed; //if its a lift
-	float		high_point;
-	float		low_point;
-	int			num_of_sect_to_lift;
-	float		charge; //if its a first aid or recharge point
-	int			click;
-	int			num_sheet;
+	int				text_no;
+	t_vector		v1;
+	t_vector		v2;
+	int				w;
+	int				h;
+	int				sector_no;
+	int				key;
+	int				key_state;
+	int				changes;
+	int				event_num;
+	int				draw; //is it drawable
+	float			speed; //if its a lift
+	float			high_point;
+	float			low_point;
+	int				num_of_sect_to_lift;
+	float			charge; //if its a first aid or recharge point
+	int				click;
+	int				num_sheet;
 };
 
-struct	s_sprite_sheet
+struct				s_sprite_sheet
 {
-	SDL_Surface				**sprites;
-	int						c_sprt; // c
-	int						w;
-	int						h;
+	SDL_Surface		**sprites;
+	int				c_sprt; // c
+	int				w;
+	int				h;
 };
 
-struct	s_sprite_render
+struct				s_sprite_render
 {
 	t_sector		*curr_sect;
 	t_rend_sector	*begin;
@@ -477,7 +486,7 @@ struct	s_sprite_render
 	float			doomy;
 };
 
-struct	s_map
+struct				s_map
 {
 	Uint32			num_sect;
 	t_sector		*sectors;
@@ -492,13 +501,28 @@ struct	s_map
 	int				inverse_colors;
 };
 
-struct	s_sdl
+struct				s_move
+{
+	int				i;
+	int				j;
+	t_sector		*sect;
+	t_vertex		*vert;
+	float			hole_low;
+	float			hole_high;
+	t_plane			ceil_p;
+	t_plane			floor_p;
+	t_plane			nceil_p;
+	t_plane			nfloor_p;
+	t_vertex		next;
+};
+
+struct				s_sdl
 {
 	SDL_Window		*window;
 	SDL_Surface		*surface;
 };
 
-struct	s_game
+struct				s_game
 {
 	float			dx;
 	float			dy;
@@ -532,14 +556,14 @@ struct	s_game
 	Uint32			dt;
 };
 
-struct	s_option
+struct				s_option
 {
 	int				difficult;
 	int				music_volume_level;
 	int				effects_volume_level;
 };
 
-struct	s_rend_sector
+struct				s_rend_sector
 {
 	Uint32			num;
 	t_rend_sector	*prev;
@@ -574,26 +598,26 @@ struct	s_ceil_cal
 	SDL_Surface		*surr;
 };
 
-struct	s_floor_cal
+struct				s_floor_cal
 {
-	Uint32		color;
-	float		map_x;
-	float		map_y;
-	float		denomi;
-	int			x_text;
-	int			y_text;
-	int			screen_y;
-	float		dummy;
-	float		doomy;
-	float		x_multi;
-	t_sector	*sect;
-	t_plane		rotated;
-	t_vector	random_vector;
-	SDL_Surface	*surr;
-	float		y;
+	Uint32			color;
+	float			map_x;
+	float			map_y;
+	float			denomi;
+	int				x_text;
+	int				y_text;
+	int				screen_y;
+	float			dummy;
+	float			doomy;
+	float			x_multi;
+	t_sector		*sect;
+	t_plane			rotated;
+	t_vector		random_vector;
+	SDL_Surface		*surr;
+	float			y;
 };
 
-struct	s_render
+struct				s_render
 {
 	float			width_slice;
 	int				count_slice;
@@ -685,7 +709,7 @@ struct	s_render
 	t_map			*map;
 };
 
-struct	s_ui
+struct				s_ui
 {
 	SDL_Rect		*minimap_rect;
 	SDL_Surface		*minimap_surf;
@@ -704,16 +728,16 @@ struct	s_ui
 	int				ammo_1;
 };
 
-struct	s_menu
+struct				s_menu
 {
-	SDL_Surface *m[4];
-	SDL_Rect pos[4];
-	SDL_Color col[2];
-	char *title[4];
-	int opt;
+	SDL_Surface		*m[4];
+	SDL_Rect		pos[4];
+	SDL_Color		col[2];
+	char			*title[4];
+	int				opt;
 };
 
-struct	s_font
+struct				s_font
 {
 	SDL_Rect		text_rect;
 	SDL_Color		text_color;
@@ -734,7 +758,7 @@ enum	mods {
 	DEAD_MOD = 3,
 };
 
-struct	s_texture
+struct				s_texture
 {
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;  // mob has sheet
@@ -769,7 +793,7 @@ struct	s_texture
 	Uint32			format;
 };
 
-struct	s_skybox
+struct				s_skybox
 {
 	t_doom			*doom;
 	int				win_x;
@@ -784,13 +808,13 @@ struct	s_skybox
 };
 
 /* EDITOR */
-struct	s_vertex_int
+struct				s_vertex_int
 {
 	int				x;
 	int				y;
 };
 
-struct	s_interface
+struct				s_interface
 {
 	int				tmp_x1;
 	int				tmp_y1;
@@ -800,7 +824,7 @@ struct	s_interface
 	int				is_drawing_interface;
 };
 
-struct	s_images
+struct				s_images
 {
 	SDL_Surface		*image;
 	double			*im_x;
@@ -808,7 +832,7 @@ struct	s_images
 	int				exist;
 };
 
-struct	s_buttons
+struct				s_buttons
 {
 	int				sec_draw;
 	int				add_buttons;
@@ -816,7 +840,7 @@ struct	s_buttons
 	int				ind_action;
 };
 
-struct	s_brezen
+struct				s_brezen
 {
 	int				x1;
 	int				x2;
@@ -833,15 +857,15 @@ struct	s_brezen
 	int				color;
 };
 
-struct	s_fline // for line
+struct				s_fline // for line
 {
-	int		num_line1; // like a number of vertex
-	int		num_line2; // like a number of vertex for second case  == -1
-	int		sec1;
-	int		sec2;  // if line only in in one sector == -1
+	int				num_line1; // like a number of vertex
+	int				num_line2; // like a number of vertex for second case  == -1
+	int				sec1;
+	int				sec2;  // if line only in in one sector == -1
 };
 
-struct s_lpoint
+struct				s_lpoint
 {
 	int				more;
 	t_vertex		point;
@@ -849,7 +873,7 @@ struct s_lpoint
 	t_vertex		*v2;
 };
 
-struct	s_editor
+struct				s_editor
 {
 	t_brezen		brezen;
 	t_interface		interface;
@@ -885,7 +909,7 @@ struct	s_editor
 	t_lpoint		lp;
 };
 /****/
-struct	s_sound
+struct				s_sound
 {
 	Mix_Music		*music[7];
 	Mix_Chunk		*steps;
@@ -904,7 +928,7 @@ struct	s_sound
 	int				n;
 };
 
-struct	s_thread
+struct			s_thread
 {
 	pthread_t	thrd;
 	Uint32		id;
@@ -962,7 +986,7 @@ typedef int	(*bots_move)(t_doom *, t_sprite *);
 typedef int	(*spr_event_type)(t_doom *, t_sprite *);
 typedef int	(*pnt_event_type)(t_doom *, t_painting *);
 
-struct	s_changes
+struct				s_changes
 {
 	bots_move		moves[COUNT_OF_MOVES];
 	spr_event_type	spr_events[COUNT_OF_SPRITE_EVENTS];
@@ -972,7 +996,7 @@ struct	s_changes
 	int				start_inversion_type;
 };
 
-struct	s_doom
+struct				s_doom
 {
 	SDL_Event		ev;
 	char			file_name[12];
@@ -1008,6 +1032,9 @@ int			init_sdl(t_sdl *sdl);
 //game loop
 void		player_events(t_doom *d);
 void		game_events(t_doom *d);
+void		check_mobs_while_movement(t_player *p, t_doom *d, t_game *g);
+void		move(t_player *p, t_map m, t_game *g);
+void		check_sprite_intersection(t_doom *d);
 int			game_loop(t_doom doom);
 void		start_loop(t_doom *doom);
 int			*intset(int *b, int c, size_t len);

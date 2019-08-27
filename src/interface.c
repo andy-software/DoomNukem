@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/26 21:05:32 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/27 18:26:29 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	draw_ui(t_doom *d)
 void	gun_anim(t_doom *d)
 {
 	INT2(i, temp);
+	i = 0;
 	temp = d->ui.ammo_1;
 	if (d->ui.gun_num == 0)
 	{
