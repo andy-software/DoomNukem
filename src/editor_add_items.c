@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 17:35:58 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 18:45:34 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ void	add_items2(t_doom *doom, SDL_Event *event)
 	{
 		if (IMG[4].exist > -1)
 		{
-			doom->map.sprites[(EXIST + IMG[4].exist) - 1].coord =
-			(t_vector){event->button.x / SCL, event->button.y / SCL, 10};
+			doom->map.sprites[(IMG[4].exist + EXIST) - 1].coord =
+			(t_vector){event->button.x / SCL, event->button.y / SCL,
+			get_z(doom->map.sectors[is_in_sector(doom,
+			(event->button.x), (event->button.y))].floor_plane, \
+			event->button.x / SCL, \
+			event->button.y / SCL)};
 			doom->map.sprites[(EXIST + IMG[4].exist) - 1].pick = 0;
 			doom->map.sprites[(EXIST + IMG[4].exist) - 1].mob = 1;
 		}

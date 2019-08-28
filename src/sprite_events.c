@@ -32,7 +32,7 @@ int			talk_event(t_doom *d, t_sprite *sprite)
 int			give_event(t_doom *d, t_sprite *sprite)
 {
 	static int click = 0;
-	
+
 	if (sprite->num_of_sound > -1 && click == 0)
 	{
 		Mix_PlayChannel(4, d->sound.mobsound[3], 0);

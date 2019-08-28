@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 17:47:00 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 18:45:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define PAUSE 96
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 4
-# define COUNT_OF_PAINT_EVENTS 5
+# define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
@@ -158,6 +158,7 @@
 # define LIFT_CEIL 2
 # define RADIO 3
 # define INV_COLORS 4
+# define N_LIFT_FLOOR 5
 # define WIN_SPRT 0
 # define TALK 1
 # define TOXIC 2
@@ -925,7 +926,7 @@ struct			s_changes
 struct			s_doom
 {
 	SDL_Event		ev;
-	char			file_name[12];
+	char			*file_name;
 	int				difficulty;
 	int				start_quit;
 	t_thread		threads[NUM_OF_THRD];
@@ -938,7 +939,7 @@ struct			s_doom
 	t_game			game;
 	t_player		player;
 	t_texture		texture;
-	t_skybox		sky[4];
+	t_skybox		sky[MAX_THREADS_IN_SKY];
 	t_editor		editor;
 	t_sound			sound;
 	t_changes		changes;
@@ -952,11 +953,17 @@ void			draw_fps(t_doom *d, int fps);
 int				read_file(t_doom *doom, char *file_name);
 int				init_sdl(t_sdl *sdl);
 void			player_events(t_doom *d);
+void			jump_event(t_doom *d);
+void			change_gun(t_doom *d);
+void			pause_event(t_doom *d);
+void			key_events(t_doom *d);
+void			mouse_events(t_doom *d);
 void			game_events(t_doom *d);
+int				is_movement_key(const Uint8 *keyboard_state);
 void			check_mobs_while_movement(t_player *p, t_doom *d, t_game *g);
 void			move(t_player *p, t_map m, t_game *g);
 void			check_sprite_intersection(t_doom *d);
-int				game_loop(t_doom doom);
+int				game_loop(t_doom *doom);
 void			start_loop(t_doom *doom);
 int				*intset(int *b, int c, size_t len);
 int				draw_screen(t_doom *d);
@@ -1020,6 +1027,7 @@ void			fule_show(t_doom *d);
 void			show_keys(t_doom *d);
 void			ui_gun_num_0(t_doom *d, int i, int temp);
 void			ui_gun_num_1(t_doom *d);
+void			ui_gun_win(t_doom *d);
 void			prepare_to_rendering(t_render *r, t_doom d);
 void			resize_surf(int w, int h, SDL_Surface **surf, t_doom *d);
 void			load_sprites(t_doom *d);
@@ -1178,6 +1186,7 @@ void			key_ceil(t_doom *doom, const Uint8 *state);
 void			key_texture_change(t_doom *doom, const Uint8 *state);
 void			key_editor_change(t_doom *doom, const Uint8 *state);
 void			lie_point(t_doom *doom, int x, int y);
+int				normalniy_l_fl_event(t_doom *d, t_painting *paint);
 void			rec_action(t_doom *doom, SDL_Event *event);
 void			write_sprites(t_doom *doom);
 void			cross_though_the_universe(t_sprite_render *sr);

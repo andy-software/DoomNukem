@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 18:42:37 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 13:06:15 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:53:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	load_walls_sky(t_texture *t, Uint32 format)
 	t->wall_tex[16] = load_tex("./materials/textures/walls/17.png", format);
 	t->wall_tex[17] = load_tex("./materials/textures/walls/18.png", format);
 	t->wall_tex[18] = load_tex("./materials/textures/walls/19.png", format);
-	t->sky_box[0] = load_tex("./materials/textures/sky/sky0.jpg", format);
-	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.jpg", format);
-	t->sky_box[2] = load_tex("./materials/textures/sky/sky2.jpg", format);
+	t->sky_box[0] = load_tex("./materials/textures/sky/sky1.jpg", format);
+	t->sky_box[1] = load_tex("./materials/textures/sky/sky2.jpg", format);
+	t->sky_box[2] = load_tex("./materials/textures/sky/sky3.jpg", format);
 	t->sky_box[3] = load_tex("./materials/textures/sky/sky4.jpg", format);
 	t->sky_box[4] = load_tex("./materials/textures/sky/sky5.jpg", format);
 }

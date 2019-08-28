@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 19:31:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 16:00:18 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 18:48:30 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	create_npc(t_doom *doom, int i)
 	doom->map.sprites[i].changes = 0;
 	doom->map.sprites[i].key_state = 0;
 	doom->map.sprites[i].num_of_sound = 1;
-	doom->map.sprites[i].event_num = 4;
+	doom->map.sprites[i].event_num = 3;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 18:04:00 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/24 19:24:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:51:06 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void		move_sprites(t_doom *d, float dx, float dy, t_sprite *spr)
 	if (hole_high > spr->coord.z + spr->start_z \
 		&& hole_low < spr->coord.z + spr->end_z)
 	{
-		while (++s < sect->num_vert)
+		while (++s < (int)sect->num_vert)
 			if (sect->neighbors[s] >= 0 && ctl(p, next, vert[s], vert[s + 1]))
 				spr->sector_no = sect->neighbors[s];
 		spr->coord.x += dx;

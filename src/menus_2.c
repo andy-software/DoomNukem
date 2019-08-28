@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 19:00:59 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/28 15:01:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 18:06:47 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,11 +141,11 @@ void	level_events(t_doom *d)
 				if (in_rect(&d->menu, i) != 0)
 				{
 					if (i == 0)
-						ft_strcpy(d->file_name, "maps/portal");
+						d->file_name = ft_strdup("maps/portal");
 					else if (i == 1)
-						ft_strcpy(d->file_name, "maps/level1");
+						d->file_name = ft_strdup("maps/level1");
 					else if (i == 2)
-						ft_strcpy(d->file_name, "maps/tower");
+						d->file_name = ft_strdup("maps/towers");
 					Mix_PlayChannel(3, d->sound.click, 0);
 				}
 	}
