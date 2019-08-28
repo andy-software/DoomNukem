@@ -1020,6 +1020,7 @@ void			fule_show(t_doom *d);
 void			show_keys(t_doom *d);
 void			ui_gun_num_0(t_doom *d, int i, int temp);
 void			ui_gun_num_1(t_doom *d);
+void			ui_gun_win(t_doom *d);
 void			prepare_to_rendering(t_render *r, t_doom d);
 void			resize_surf(int w, int h, SDL_Surface **surf, t_doom *d);
 void			load_sprites(t_doom *d);

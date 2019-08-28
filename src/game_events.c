@@ -53,7 +53,7 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 	if (d->game.velocity.z < 0 && nextz <= floor_z + d->game.eye_height)
 	{
 		p->coord.z = floor_z + d->game.eye_height;
-		if (d->game.velocity.z < -2.2)
+		if (d->game.velocity.z < -4.2)
 		{
 			if (!(Mix_Playing(2)))
 				Mix_PlayChannel(2, d->sound.hurt, 0);
