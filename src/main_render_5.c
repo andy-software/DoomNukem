@@ -46,9 +46,9 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 		sr->color = pix_from_text(sprtext, sr->x_text, sr->y_text);
 		if (sr->color != 0)
 		{
-			sr->color = get_color_value_int(sr->color, 0, sr->curr_sect->light_lvl);
+			sr->color = GC(sr->color, 0, sr->curr_sect->light_lvl);
 			if (sr->map->fog && (int)sr->y > 20)
-				sr->color = get_color_value_int(sr->color, sr->map->fog_color, (int)sr->y);
+				sr->color = GC(sr->color, sr->map->fog_color, sr->y);
 			render->pix[sr->win_y * WIN_WIDTH + (int)sr->win_x] = sr->color;
 		}
 		sr->win_y++;

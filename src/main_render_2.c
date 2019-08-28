@@ -12,14 +12,6 @@
 
 #include "../includes/doom.h"
 
-static void	draw_dot(int x, int y, Uint32 *surr_pixel, int color)
-{
-	Uint32	*pixels = (Uint32*)surr_pixel;
-
-	if (y >= 0 && y < WIN_HEIGHT - 1 && x >= 0 && x < WIN_WIDTH - 1)
-		pixels[y * WIN_WIDTH + x] = color;
-}
-
 void	prepare_to_render_next_sector(t_render *r)
 {
 	int	max1;
@@ -35,15 +27,8 @@ void	prepare_to_render_next_sector(t_render *r)
 							(r->begin_x - r->x1) * r->nkzb + r->nz1b);
 	min2 = MIN((r->end_x - r->x1) * r->kzb + r->z1b, \
 							(r->end_x - r->x1) * r->nkzb + r->nz1b);
-	*r->head = (t_rend_sector) {r->neighbor, r->tail - 1, r->begin_x, r->end_x, \
-		max1, max2, min1, min2};
-
-	// for (int x = r->begin_x; x < r->end_x; x++)
-	// {
-	// 	float	perc = (x - r->begin_x )/ (r->end_x - r->begin_x);
-	// 	draw_dot(x, line_point(min1, min2, perc), r->pix, 0x00ff00);
-	// 	draw_dot(x, line_point(max1, max2, perc), r->pix, 0x0000ff);
-	// }
+	*r->head = (t_rend_sector) {r->neighbor, r->tail - 1, r->begin_x, \
+				r->end_x, max1, max2, min1, min2};
 	if (++r->head == (r->queue + MAX_SECTORS_RENDERED))
 		r->head = r->queue;
 }

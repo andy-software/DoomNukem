@@ -14,7 +14,7 @@
 
 void	init_hud(t_doom *d)
 {
-	d->texture.gun1_r.x = WIN_WIDTH / 20;
+	d->texture.gun1_r.x = WIN_WIDTH - d->texture.gun1[0]->w;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
 	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
 	d->texture.gun21_r.y = WIN_HEIGHT - d->texture.gun2[0]->h;
@@ -45,10 +45,12 @@ int		init_game_params(t_doom *d)
 	d->game.flying = 0;
 	d->game.blood = 0;
 	d->game.rect_i = 0;
+	d->game.ugroza = 0;
 	d->game.acceleration = 0.5f;
 	d->difficulty = 1;
 	d->game.hp_level = 100;
 	d->game.dt = 0;
+	d->game.win = 0;
 	d->ui.idle = 0;
 	if (!d->map.editing)
 	{
@@ -56,6 +58,7 @@ int		init_game_params(t_doom *d)
 		d->ui.ammo_1 = 10 * d->difficulty;
 	}
 	d->game.fuel = 100;
+	d->game.access = 0;
 	d->game.picked_key[0] = 0;
 	d->game.picked_key[1] = 0;
 	d->game.picked_key[2] = 0;
@@ -100,6 +103,8 @@ int		game_loop(t_doom doom)
 	init_moves(&doom);
 	doom.map.editing = 0;
 	set_mouse(&doom);
+	SDL_Delay(1000);
+	while(SDL_PollEvent(&doom.ev));
 	while (doom.game.quit != 1)
 	{
 		doom.ui.prev_time = SDL_GetTicks();
@@ -145,6 +150,7 @@ void	set_mouse(t_doom *doom)
 	if (doom->game.hp_level <= 0 ||
 		doom->game.pause == 1 || doom->start_quit == 0)
 	{
+		fflush(stdout);
 		SDL_ShowCursor(SDL_ENABLE);
 		SDL_SetRelativeMouseMode(SDL_DISABLE);
 		SDL_SetWindowGrab(doom->sdl.window, 0);

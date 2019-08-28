@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+         #
+#    By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/09 11:40:21 by apavlov           #+#    #+#              #
-#    Updated: 2019/08/27 13:48:44 by myuliia          ###   ########.fr        #
+#    Updated: 2019/08/27 20:18:38 by mdanylch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-FLAGS =  -Wall -O3 -Wextra -g -Ofast -flto -pipe -fsanitize=address #-Werror
+FLAGS =  -Wall -O3 -Wextra -Ofast -flto -pipe #-fsanitize=address  #-Werror
 
 NAME = doom-nukem
 
@@ -32,7 +32,8 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		math_define.c \
 		menus_1.c menus_2.c threads_2.c main_render_2.c sounds_load.c textureload_all.c \
 		textureload2.c main_render_3.c main_render_4.c main_render_5.c changes_moves.c \
-		ui_gun_fire.c ui_gun_saw.c
+		ui_gun_fire.c ui_gun_saw.c \
+		game_events_mobs.c game_events_move.c game_events_sprites.c
 
 INC = includes/doom.h
 

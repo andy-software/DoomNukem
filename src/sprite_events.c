@@ -14,9 +14,10 @@
 
 int			win_spr_event(t_doom *d, t_sprite *sprite)
 {
-	(void)d;
-	(void)sprite;
-	exit(1);
+	d->game.win = 1;
+	d->ui.gun_num = 2;
+	Mix_HaltChannel(-1);
+	Mix_PlayMusic(d->sound.music[6], 1);
 	return (0);
 }
 
@@ -31,7 +32,7 @@ int			talk_event(t_doom *d, t_sprite *sprite)
 int			give_event(t_doom *d, t_sprite *sprite)
 {
 	static int click = 0;
-
+	
 	if (sprite->num_of_sound > -1 && click == 0)
 	{
 		Mix_PlayChannel(4, d->sound.mobsound[3], 0);
@@ -44,14 +45,6 @@ int			give_event(t_doom *d, t_sprite *sprite)
 	}
 	else if (!(Mix_Playing(4)))
 		Mix_PlayChannel(4, d->sound.mobsound[4], 0);
-	return (0);
-}
-
-int			win_pnt_event(t_doom *d, t_painting *paint)
-{
-	(void)d;
-	(void)paint;
-	exit(1);
 	return (0);
 }
 

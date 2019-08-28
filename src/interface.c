@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interface.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 14:58:28 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/08/27 17:57:31 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 20:26:44 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	draw_ui(t_doom *d)
 void	gun_anim(t_doom *d)
 {
 	INT2(i, temp);
+	i = 0;
 	temp = d->ui.ammo_1;
 	if (d->ui.gun_num == 0)
 	{
@@ -56,13 +57,18 @@ void	gun_anim(t_doom *d)
 			SDL_BlitSurface(DT.dude[0], 0, d->sdl.surface, &d->texture.dude_r);
 		else if (d->ui.fire > 0)
 		{
+			if (Mix_PlayingMusic())
+				Mix_PauseMusic();
 			if (!(Mix_Playing(3)))
 				Mix_PlayChannel(3, d->sound.win, 0);
+			d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 80);
 			SDL_BlitSurface(d->texture.dude[d->ui.gun_anim], 0, \
 				d->sdl.surface, &d->texture.dude_r);
-			d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 80);
-			if (d->ui.gun_anim > 33)
+			if (d->ui.gun_anim >= 33)
+			{
+				Mix_ResumeMusic();
 				INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
+			}
 		}
 	}
 }
@@ -102,10 +108,12 @@ void	show_keys(t_doom *d)
 	pos[1].x = WIN_WIDTH - d->texture.keys->w;
 	pos[1].y = WIN_HEIGHT / 3 + d->texture.keys->h / 3;
 	pos[2].x = WIN_WIDTH - d->texture.keys->w;
-	pos[2].y = WIN_HEIGHT / 3 + DT.keys->h / 3 + DT.keys->h / 3;
-	if (d->game.picked_key[0] == 0 || d->game.picked_key[1] == 0 || \
-		d->game.picked_key[2] == 0)
-		SDL_BlitSurface(DT.keys, 0, d->sdl.surface, &DT.keys_r);
+	pos[2].y = WIN_HEIGHT / 3 + d->texture.keys->h / 3 + d->texture.keys->h /3;
+	if (d->game.picked_key[0] == 0 || d->game.picked_key[1] == 0 || d->game.picked_key[2] == 0)
+		SDL_BlitSurface(d->texture.keys, 0, d->sdl.surface, &d->texture.keys_r);
+	else
+		d->game.access = 1; 
+
 	if (d->game.picked_key[0] == 1)
 		SDL_BlitSurface(DT.sprt[3].sprites[0], 0, d->sdl.surface, &pos[0]);
 	if (d->game.picked_key[1] == 1)

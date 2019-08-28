@@ -54,7 +54,7 @@ void	editor_player_events3(t_doom *doom, const Uint8 *state)
 	if (doom->ev.key.keysym.sym == SDLK_SPACE && !doom->game.pause)
 	{
 		if (doom->game.velocity.z < MAX_SPEED_UPWARD)
-			doom->game.velocity.z += 0.6;
+			doom->game.velocity.z += 1.3;
 		else
 			doom->game.velocity.z = MAX_SPEED_UPWARD;
 		doom->game.falling = 1;

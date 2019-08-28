@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 15:38:50 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 12:33:05 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ void	info_action_sprites(t_doom *doom, int sp)
 		ft_putstr("\x1B[33m          win sprite event\x1B[0m\n");
 	else if (doom->map.sprites[sp].event_num == TALK)
 		ft_putstr("\x1B[33m          talk event\x1B[0m\n");
-	else if (doom->map.sprites[sp].event_num == RADIO)
-		ft_putstr("\x1B[33m          radio event\x1B[0m\n");
 	else if (doom->map.sprites[sp].event_num == TOXIC)
 		ft_putstr("\x1B[33m          toxic event\x1B[0m\n");
-	else if (doom->map.sprites[sp].event_num == 4)
+	else if (doom->map.sprites[sp].event_num == GIVE)
 		ft_putstr("\x1B[33m          give event\x1B[0m\n");
 }
 
@@ -34,12 +32,8 @@ void	info_action(t_doom *doom, int pain)
 		ft_putstr("\x1B[33m          lift floor event\x1B[0m\n");
 	else if (doom->map.paint[pain].event_num == LIFT_CEIL)
 		ft_putstr("\x1B[33m          lift ceil event\x1B[0m\n");
-	else if (doom->map.paint[pain].event_num == FIRST_AID)
-		ft_putstr("\x1B[33m          first aid event\x1B[0m\n");
-	else if (doom->map.paint[pain].event_num == GET_AMMO)
-		ft_putstr("\x1B[33m          get ammo event\x1B[0m\n");
-	else if (doom->map.paint[pain].event_num == WIN_PNT)
-		ft_putstr("\x1B[33m          win pnt event\x1B[0m\n");
+	else if (doom->map.paint[pain].event_num == RADIO)
+		ft_putstr("\x1B[33m          radio event\x1B[0m\n");
 	else if (doom->map.paint[pain].event_num == INV_COLORS)
 		ft_putstr("\x1B[33m          inverse colors\x1B[0m\n");
 }

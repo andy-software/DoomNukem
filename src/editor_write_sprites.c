@@ -37,6 +37,7 @@ void	write_sprites(t_doom *doom)
 	{
 		if (doom->map.sprites[i].mob == 1)
 		{
+			printf("123 %i\n", doom->map.num_sprites);
 			if (doom->map.sprites[i].num_sheet == 5)
 				create_big_mob(doom, i);
 			else if (doom->map.sprites[i].num_sheet == 6)
