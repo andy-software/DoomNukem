@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 18:09:07 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 18:16:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,6 +429,8 @@ struct			s_map
 	Uint32			fog_color;
 	int				editing;
 	int				inverse_colors;
+	//int			sky_num;
+	//float			gravity;
 };
 
 struct			s_sdl

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   skybox.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmasyush <mmasyush@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 13:28:05 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/05/16 13:28:06 by mmasyush         ###   ########.fr       */
+/*   Updated: 2019/08/27 18:12:21 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	*sky_threads(void *data)
 
 	sky = *(t_skybox*)data;
 	pix = sky.doom->render.pix;
-	surr = sky.doom->texture.sky_box[0]; // dobaviti kostil cherez nazvu karti... abo acuratno perepisati
+	//surr = sky.doom->texture.sky_box[sky.doom->map.sky_num];
+	surr = sky.doom->texture.sky_box[0];
 	while (++sky.win_x < sky.end_x)
 	{
 		sky.text_x++;

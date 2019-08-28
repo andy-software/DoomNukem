@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/14 06:29:36 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/27 18:16:21 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	fall(t_player *p, t_map	m, t_game *g)
 	float ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
 
 	g->velocity.z -= 0.02f;
+	//g->velocity.z -= m.gravity;
 	if (g->velocity.z < 0 && \
 		nextz <= floor_z + g->eye_height)
 	{
