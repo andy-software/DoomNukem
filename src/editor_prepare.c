@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 16:01:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:24:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	ft_prepare_read(t_doom *doom)
 	ft_prepare_sectors(doom, -1);
 	ft_prepare_sprites(doom, -1);
 	doom->map.num_paint = 0;
+	doom->map.sky_num = 1;
 	j = -1;
 	while (++j < MAX_PAINTINGS)
 	{

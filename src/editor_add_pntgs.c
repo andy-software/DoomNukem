@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 16:41:25 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/27 16:19:15 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:46:25 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void		add_paintings2(SDL_Event *ev, t_vertex l_par, t_doom *d, int nb)
 		p->v1.y = p->v1.x * l_par.x + l_par.y;
 		p->v2.y = p->v2.x * l_par.x + l_par.y;
 	}
+	find_z_pnt(d, p);
 }
 
 t_vertex	find_dot_2(t_doom *doom)

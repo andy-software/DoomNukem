@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 12:31:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:47:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,8 +435,8 @@ struct			s_map
 	Uint32			fog_color;
 	int				editing;
 	int				inverse_colors;
-	//int			sky_num;
-	//float			gravity;
+	int				sky_num;
+	float			gravity;
 };
 
 struct			s_move
@@ -696,7 +696,7 @@ struct			s_texture
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;
 	SDL_Surface		*wall_tex[19];
-	SDL_Surface		*sky_box[2];
+	SDL_Surface		*sky_box[5];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
 	SDL_Surface		*dude[34];
@@ -1125,9 +1125,11 @@ void			editor_painitngs_texture(t_doom *doom, const Uint8 *state);
 void			editor_start_z(t_doom *doom, const Uint8 *state);
 void			editor_end_z(t_doom *doom, const Uint8 *state);
 void			editor_sp_width(t_doom *doom, const Uint8 *state);
+void			editor_sky_gravity(t_doom *doom, const Uint8 *state);
 void			editor_sprites_texture(t_doom *doom, const Uint8 *state);
 void			editor_sprites_texture2(t_doom *doom, \
 					const Uint8 *state, int sp);
+void			find_z_pnt(t_doom *d, t_painting *p);
 int				ft_map_editor(t_doom *doom, char *name);
 int				ft_create_window(t_doom *doom, char *name);
 int				ft_read_map_edit(t_doom *doom, int fd);

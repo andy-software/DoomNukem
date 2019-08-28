@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 12:21:35 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 17:14:54 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	editor_player_events(t_doom *doom)
 			key_editor_change(doom, state);
 			editor_player_events3(doom, state);
 			editor_lift(doom, state);
+			editor_sky_gravity(doom, state);
 		}
 	}
 	ft_render_editor(doom);

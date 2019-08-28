@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:41:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 13:51:38 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 12:58:09 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int			read_file(t_doom *doom, char *file_name)
 	read(fd, &map->fog, sizeof(int));
 	read(fd, &map->fog_color, sizeof(Uint32));
 	read(fd, &map->inverse_colors, sizeof(int));
+	read(fd, &doom->map.sky_num, sizeof(int));
+	read(fd, &doom->map.gravity, sizeof(float));
 	read(fd, &map->num_sect, sizeof(Uint32));
 	map->sectors = (t_sector*)malloc(sizeof(t_sector) * map->num_sect);
 	while (++i < (int)map->num_sect)

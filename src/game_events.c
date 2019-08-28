@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 12:30:23 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 13:16:49 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 	floor_p = m.sectors[p->sector].floor_plane;
 	floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 	ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
-	d->game.velocity.z -= 0.08f;
-	//d->game.velocity.z -= m.gravity;
+	d->game.velocity.z -= m.gravity;
 	if (d->game.velocity.z < 0 && nextz <= floor_z + d->game.eye_height)
 	{
 		p->coord.z = floor_z + d->game.eye_height;
