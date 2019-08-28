@@ -40,32 +40,36 @@ void			move_player(t_doom *d, float dx, float dy)
 	}
 }
 
-static	void	fall(t_player *p, t_map m, t_game *g)
+static	void	fall(t_player *p, t_map m, t_doom *d)
 {
 	GE_VAR1(ceil_p, floor_p, floor_z, ceil_z);
-	GE_VAR_1(nextz, p->coord.z, g->velocity.z);
+	GE_VAR_1(nextz, p->coord.z, d->game.velocity.z);
 	ceil_p = m.sectors[p->sector].ceil_plane;
 	floor_p = m.sectors[p->sector].floor_plane;
 	floor_z = get_z(floor_p, p->coord.x, p->coord.y);
 	ceil_z = get_z(ceil_p, p->coord.x, p->coord.y);
-	g->velocity.z -= 0.08f;
-	//g->velocity.z -= m.gravity;
-	if (g->velocity.z < 0 && nextz <= floor_z + g->eye_height)
+	d->game.velocity.z -= 0.08f;
+	//d->game.velocity.z -= m.gravity;
+	if (d->game.velocity.z < 0 && nextz <= floor_z + d->game.eye_height)
 	{
-		p->coord.z = floor_z + g->eye_height;
-		if (g->velocity.z < -1.2)
-			g->hp_level += g->velocity.z * 10;
-		INIT2(g->velocity.z, 0, g->falling, 0);
+		p->coord.z = floor_z + d->game.eye_height;
+		if (d->game.velocity.z < -2.2)
+		{
+			if (!(Mix_Playing(2)))
+				Mix_PlayChannel(2, d->sound.hurt, 0);
+			d->game.hp_level += d->game.velocity.z * 10;
+		}
+		INIT2(d->game.velocity.z, 0, d->game.falling, 0);
 	}
-	else if (g->velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
+	else if (d->game.velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
 	{
-		g->velocity.z = 0;
-		g->falling = 1;
+		d->game.velocity.z = 0;
+		d->game.falling = 1;
 	}
-	if (g->falling)
+	if (d->game.falling)
 	{
-		p->coord.z += g->velocity.z;
-		g->moving = 1;
+		p->coord.z += d->game.velocity.z;
+		d->game.moving = 1;
 	}
 }
 
@@ -120,7 +124,7 @@ void			game_events(t_doom *d)
 	g->ground = !g->falling;
 	sprite_sort_cal(d);
 	if (g->falling)
-		fall(&d->player, d->map, &d->game);
+		fall(&d->player, d->map, d);
 	if (g->ground)
 		d->player.coord.z = get_z(d->map.sectors[d->player.sector].\
 		floor_plane, d->player.coord.x, d->player.coord.y) + g->eye_height;

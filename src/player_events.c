@@ -108,7 +108,7 @@ void		player_events(t_doom *d)
 						if ((!(Mix_Playing(0)) && d->game.flying))
 							Mix_PlayChannel(0, d->sound.fly, 0);
 						if (d->game.velocity.z < MAX_SPEED_UPWARD)
-							d->game.velocity.z += 1.2;
+							d->game.velocity.z += 1.3;
 						else
 							d->game.velocity.z = MAX_SPEED_UPWARD;
 						d->game.falling = 1;

@@ -74,14 +74,16 @@ int		main(int argc, char **argv)
 	srand(time(NULL));
 	if (argc == 3 || argc == 2)
 	{
-		if (init_sdl(&doom.sdl) == 0)
-			return (error_message("Error with SDL init") + 1);
-		if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
-			return (error_message("Error with textures") + 1);
-		if (ft_strcmp(argv[1], "play") == 0)
-			return (game_mod(&doom, argv[2]));
-		else if (ft_strcmp(argv[1], "edit") == 0)
+		if (ft_strcmp(argv[1], "edit") == 0)
 			return (editor_mod(&doom, argv[2]));
+		else if (ft_strcmp(argv[1], "play") == 0)
+		{
+			if (init_sdl(&doom.sdl) == 0)
+				return (error_message("Error with SDL init") + 1);
+			if (load_all(&doom.texture, doom.sdl.surface->format->format, &doom) == 0)
+				return (error_message("Error with textures") + 1);
+			return (game_mod(&doom, argv[2]));
+		}
 		else
 			print_usage();
 	}

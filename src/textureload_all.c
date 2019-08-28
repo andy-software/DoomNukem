@@ -72,6 +72,9 @@ void	load_other_sprites2(t_doom *d)
 	d->texture.sprt[14].c_sprt = 1;
 	d->texture.sprt[14].sprites = \
 		split_surf(1, 1, "./materials/textures/sprites/switcher.png", d);
+	d->texture.sprt[15].c_sprt = 1;
+	d->texture.sprt[15].sprites = \
+		split_surf(1, 1, "./materials/textures/sprites/tree1.png", d);
 }
 
 void	load_other_sprites(t_doom *d)
@@ -100,7 +103,7 @@ void	load_other_sprites(t_doom *d)
 
 void	load_sprites(t_doom *d)
 {
-	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 15);
+	d->texture.sprt = (t_sprite_sheet*)malloc(sizeof(t_sprite_sheet) * 16);
 	d->texture.sprt[0].c_sprt = 1;
 	d->texture.sprt[0].sprites = \
 		split_surf(1, 1, "./materials/textures/sprites/dude.png", d);
