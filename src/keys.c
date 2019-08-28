@@ -14,9 +14,9 @@
 
 void		check_keys_intersection(t_doom *d)
 {
-	int				i;
-	t_vector		t1;
-	t_vector		t2;
+	int					i;
+	t_vector			t1;
+	t_vector			t2;
 	t_spr_event_type	ev;
 
 	i = -1;
@@ -68,7 +68,7 @@ void		check_painting_intersection(t_doom *d)
 
 void		check_keys_state(t_doom *d)
 {
-	int				i;
+	int					i;
 	t_pnt_event_type	pnt_ev;
 	t_spr_event_type	spr_ev;
 
