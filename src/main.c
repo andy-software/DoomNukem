@@ -20,22 +20,31 @@ int		editor_mod(t_doom *doom, char *file_name)
 
 int		game_mod(t_doom *doom, char *file_name)
 {
+	system("leaks doom-nukem");
 	if (file_name == NULL)
 		start_loop(doom);
+	else if (doom->file_name == NULL)
+	{
+		printf("dom with no name\n\n\n");
+		doom->start_quit = 1;
+		doom->file_name = ft_strdup(file_name);
+	}
 	else
 	{
+		printf("we have a nam\n\n\n");
 		doom->start_quit = 1;
-		ft_strcpy(doom->file_name, file_name);
 	}
+	system("leaks doom-nukem");
 	if (read_file(doom, doom->file_name) == 0)
 		return (error_message("Error with file") + 1);
-	if (game_loop(*doom) == 0)
+	if (game_loop(doom) == 0)
 		return (error_message("Something really sad is happened") + 1);
 	return (0);
 }
 
 void	start_loop(t_doom *doom)
 {
+	system("leaks doom-nukem");
 	doom->start_quit = 0;
 	set_mouse(doom);
 	show_start(doom);
@@ -47,9 +56,8 @@ void	start_loop(t_doom *doom)
 	}
 	free_menu(doom);
 	doom->start_quit = 0;
-	doom->file_name[0] = 0;
 	chose_level(doom);
-	while (ft_strlen(doom->file_name) == 0)
+	while (doom->file_name == NULL)
 	{
 		draw_menu(doom);
 		level_events(doom);

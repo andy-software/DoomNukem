@@ -21,6 +21,7 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);
 	doom->map.num_sprites = IMG[2].exist + IMG[4].exist;
+	doom->map.num_paint = IMG[3].exist;
 	while (++i < (int)doom->map.num_sprites)
 	{
 		MAP_SPRT[i].sector_no = is_in_sector(doom,

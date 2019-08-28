@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 20:32:49 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/28 12:31:47 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,12 @@
 # define TURN_LIG 0
 # define LIFT_FL 1
 # define LIFT_CEIL 2
-# define FIRST_AID 3
-# define GET_AMMO 4
-# define WIN_PNT 5
-# define INV_COLORS 6
+# define RADIO 3
+# define INV_COLORS 4
 # define WIN_SPRT 0
 # define TALK 1
-# define RADIO 2
-# define TOXIC 3
+# define TOXIC 2
+# define GIVE 3
 # define BDX doom->editor.brezen.dx
 # define BDY doom->editor.brezen.dy
 # define BSTARTX doom->editor.brezen.startx
@@ -437,6 +435,8 @@ struct			s_map
 	Uint32			fog_color;
 	int				editing;
 	int				inverse_colors;
+	//int			sky_num;
+	//float			gravity;
 };
 
 struct			s_move
@@ -696,7 +696,7 @@ struct			s_texture
 	t_font			fonts[4];
 	t_sprite_sheet	*sprt;
 	SDL_Surface		*wall_tex[19];
-	SDL_Surface		*sky_box[2];
+	SDL_Surface		*sky_box[5];
 	SDL_Surface		*gun1[21];
 	SDL_Surface		*gun2[18];
 	SDL_Surface		*dude[34];
@@ -925,7 +925,7 @@ struct			s_changes
 struct			s_doom
 {
 	SDL_Event		ev;
-	char			file_name[12];
+	char			*file_name;
 	int				difficulty;
 	int				start_quit;
 	t_thread		threads[NUM_OF_THRD];
@@ -938,7 +938,7 @@ struct			s_doom
 	t_game			game;
 	t_player		player;
 	t_texture		texture;
-	t_skybox		sky[4];
+	t_skybox		sky[MAX_THREADS_IN_SKY];
 	t_editor		editor;
 	t_sound			sound;
 	t_changes		changes;
@@ -956,7 +956,7 @@ void			game_events(t_doom *d);
 void			check_mobs_while_movement(t_player *p, t_doom *d, t_game *g);
 void			move(t_player *p, t_map m, t_game *g);
 void			check_sprite_intersection(t_doom *d);
-int				game_loop(t_doom doom);
+int				game_loop(t_doom *doom);
 void			start_loop(t_doom *doom);
 int				*intset(int *b, int c, size_t len);
 int				draw_screen(t_doom *d);

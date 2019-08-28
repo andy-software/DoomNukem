@@ -141,11 +141,11 @@ void	level_events(t_doom *d)
 				if (in_rect(&d->menu, i) != 0)
 				{
 					if (i == 0)
-						ft_strcpy(d->file_name, "maps/portal");
+						d->file_name = ft_strdup("maps/portal");
 					else if (i == 1)
-						ft_strcpy(d->file_name, "maps/level1");
+						d->file_name = ft_strdup("maps/level1");
 					else if (i == 2)
-						ft_strcpy(d->file_name, "maps/level2");
+						d->file_name = ft_strdup("maps/level2");
 					Mix_PlayChannel(3, d->sound.click, 0);
 				}
 	}

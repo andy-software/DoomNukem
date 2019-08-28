@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:54:32 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/27 13:49:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 12:30:36 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ int		init_moves(t_doom *d)
 	d->changes.pnt_events[2] = lift_ceil_event;
 	d->changes.pnt_events[3] = radio_event;
 	d->changes.pnt_events[4] = inverse_colors_event;
+	
 	d->changes.spr_events[0] = win_spr_event;
 	d->changes.spr_events[1] = talk_event;
 	d->changes.spr_events[2] = toxic_event;
 	d->changes.spr_events[3] = give_event;
+	
 	d->changes.fog_colors[0] = 0x00FF00;
 	d->changes.fog_colors[1] = 0xFF0000;
 	d->changes.fog_colors[2] = 0x0000FF;

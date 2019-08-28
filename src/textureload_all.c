@@ -34,7 +34,10 @@ void	load_walls_sky(t_texture *t, Uint32 format)
 	t->wall_tex[17] = load_tex("./materials/textures/walls/18.png", format);
 	t->wall_tex[18] = load_tex("./materials/textures/walls/19.png", format);
 	t->sky_box[0] = load_tex("./materials/textures/sky/sky1.jpg", format);
-	t->sky_box[1] = load_tex("./materials/textures/sky/sky1.jpg", format);
+	t->sky_box[1] = load_tex("./materials/textures/sky/sky2.jpg", format);
+	t->sky_box[2] = load_tex("./materials/textures/sky/sky3.jpg", format);
+	t->sky_box[3] = load_tex("./materials/textures/sky/sky4.jpg", format);
+	t->sky_box[4] = load_tex("./materials/textures/sky/sky5.jpg", format);
 }
 
 int		load_all(t_texture *t, Uint32 format, t_doom *d)
