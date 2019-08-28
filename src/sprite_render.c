@@ -58,7 +58,7 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, \
 		if (pos == sr->sprites[i].text_no + sheet->w - 1)
 		{
 			d->map.sprites[sr->sprites[i].spr_num].draw = 0;
-			if (d->map.sprites[sr->sprites[i].spr_num].num_sheet == 8) //max zaberi che z vidsi //// yze zabral davno aol
+			if (d->map.sprites[sr->sprites[i].spr_num].num_sheet == 8)
 				drop_item(d, i);
 		}
 		d->map.sprites[sr->sprites[i].spr_num].end_z -= \
@@ -70,7 +70,7 @@ SDL_Surface		*choose_texture_for_mob(t_sprite_sheet *sheet, \
 	return (sheet->sprites[pos]);
 }
 
-void	render_sprites(t_doom *d)
+void			render_sprites(t_doom *d)
 {
 	t_sprite_render	sr;
 	t_sprite_sheet	*sheet;
