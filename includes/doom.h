@@ -195,7 +195,6 @@ typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
 typedef	struct s_move			t_move;
 
-/* EDITOR */
 typedef struct s_changes		t_changes;
 typedef struct s_editor			t_editor;
 typedef struct s_brezen			t_brezen;
