@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_vertex.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 17:55:16 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/23 17:57:19 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/29 15:38:02 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_vertex	intersect(t_vertex d1, t_vertex d2, t_vertex d3, t_vertex d4)
 	n1 = VXS(d1.x, d1.y, d2.x, d2.y);
 	n2 = VXS(d3.x, d3.y, d4.x, d4.y);
 	lenght = VXS(d1.x - d2.x, d1.y - d2.y, d3.x - d4.x, d3.y - d4.y);
-	return ((t_vertex){VXS(n1, d1.x - d2.x, n2, d3.x - d4.x) / lenght,
+	return ((t_vertex){VXS(n1, d1.x - d2.x, n2, d3.x - d4.x) / lenght, \
 		VXS(n1, d1.y - d2.y, n2, d3.y - d4.y) / lenght});
 }
 

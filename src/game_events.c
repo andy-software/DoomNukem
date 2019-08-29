@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_events.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 12:30:23 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/29 16:05:09 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 		INIT2(d->game.velocity.z, 0, d->game.falling, 0);
 	}
 	else if (d->game.velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
-	{
-		d->game.velocity.z=0;
-		d->game.falling=1;
-	}	
+		INIT_IF2(d->game.velocity.z, 0, d->game.falling, 1);
 	if (d->game.falling)
 	{
 		p->coord.z += d->game.velocity.z;

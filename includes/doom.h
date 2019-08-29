@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 12:31:47 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/29 15:32:22 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@
 # define INT3(a,b,c) int a,b,c;
 # define INT4(a,b,c,d) int a,b,c,d;
 # define INT5(a,b,c,d,e) int a,b,c,d,e;
+# define INIT_IF2(a,av,b,bv) {a=av;b=bv;}
 # define INIT2(a,av,b,bv) a=av;b=bv;
 # define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
 # define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
