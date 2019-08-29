@@ -20,14 +20,16 @@ int		game_loop(t_doom *doom)
 	doom->map.editing = 0;
 	set_mouse(doom);
 	SDL_Delay(1000);
-	while (SDL_PollEvent(&doom->ev));
+	while (SDL_PollEvent(&doom->ev))
+		(void)doom->ev;
 	while (doom->game.quit != 1)
 	{
 		doom->ui.prev_time = SDL_GetTicks();
 		player_events(doom);
 		chose_mod(doom);
-		while (SDL_GetTicks() - doom->ui.prev_time < 100.0 / 6);
 		doom->ui.curr_time = SDL_GetTicks();
+		while (doom->ui.curr_time - doom->ui.prev_time < 100.0 / 6)
+			doom->ui.curr_time = SDL_GetTicks();
 		doom->game.dt = doom->ui.curr_time - doom->ui.prev_time;
 		doom->ui.fps = doom->game.dt / 1000.0;
 		if (doom->game.pause == 0 &&

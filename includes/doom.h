@@ -22,7 +22,6 @@
 # include "../frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h"
 # include "../frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h"
 # include <errno.h>
-# include <stdio.h>
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 800
 # define SKY_W 4096

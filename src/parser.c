@@ -19,7 +19,7 @@ static void	info_about_player(t_player *player)
 	ft_putstr("\n");
 }
 
-int			read_file2(t_map *map, int fd, int i)
+void		read_file2(t_map *map, int fd, int i)
 {
 	read(fd, &map->sectors[i].num, sizeof(Uint32));
 	read(fd, &MAP_N_VER, sizeof(Uint32));
