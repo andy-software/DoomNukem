@@ -44,6 +44,7 @@ int		init_moves(t_doom *d)
 	d->changes.pnt_events[2] = lift_ceil_event;
 	d->changes.pnt_events[3] = radio_event;
 	d->changes.pnt_events[4] = inverse_colors_event;
+	d->changes.pnt_events[5] = lift_block_event;
 	d->changes.spr_events[0] = win_spr_event;
 	d->changes.spr_events[1] = talk_event;
 	d->changes.spr_events[2] = toxic_event;

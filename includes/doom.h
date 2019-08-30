@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 14:29:31 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 18:08:21 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 # define PAUSE 96
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 4
-# define COUNT_OF_PAINT_EVENTS 5
+# define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
@@ -495,6 +495,7 @@ struct			s_game
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
+	float			speed;
 };
 
 struct			s_option
@@ -859,6 +860,7 @@ struct			s_sound
 	Mix_Chunk		*pickup[4];
 	Mix_Chunk		*hurt;
 	int				n;
+	Mix_Chunk		*run;
 };
 
 struct			s_thread
@@ -957,6 +959,7 @@ void			change_gun(t_doom *d);
 void			pause_event(t_doom *d);
 void			key_events(t_doom *d);
 void			mouse_events(t_doom *d);
+void			mouse_rotation(t_doom *d);
 void			game_events(t_doom *d);
 int				is_movement_key(const Uint8 *keyboard_state);
 void			check_mobs_while_movement(t_player *p, t_doom *d, t_game *g);
@@ -1053,6 +1056,7 @@ int				first_own_moves(t_doom *d, t_sprite *spr);
 int				mirror_own_moves(t_doom *d, t_sprite *spr);
 int				init_moves(t_doom *d);
 int				lift_floor_event(t_doom *d, t_painting *paint);
+int				lift_block_event(t_doom *d, t_painting *paint);
 void			click_paint(t_doom *d, t_painting *paint);
 int				turn_light_event(t_doom *d, t_painting *paint);
 int				lift_ceil_event(t_doom *d, t_painting *paint);

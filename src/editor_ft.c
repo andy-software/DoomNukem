@@ -60,7 +60,7 @@ void	ft_check_key(t_doom *doom, SDL_Event *event)
 		if (DEDI.fline.num_line2 != -1 && DEDI.fline.sec2 != -1)
 		{
 			MAPSEC[DEFLN.sec1].neighbors[DEFLN.num_line1] = DEFLN.sec2;
-				MAPSEC[DEFLN.sec2].neighbors[DEFLN.num_line2] = DEFLN.sec1;
+			MAPSEC[DEFLN.sec2].neighbors[DEFLN.num_line2] = DEFLN.sec1;
 			DEDI.is_portal = 2;
 		}
 	}

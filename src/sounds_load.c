@@ -31,6 +31,7 @@ void		load_sounds2(t_sound *sound)
 	sound->lift[0] = load_sound("./materials/sounds/acess.wav");
 	sound->lift[1] = load_sound("./materials/sounds/noacess.wav");
 	sound->lift[2] = load_sound("./materials/sounds/elevator.wav");
+	sound->run = load_sound("./materials/sounds/run.wav");
 }
 
 void		load_sounds(t_sound *sound)

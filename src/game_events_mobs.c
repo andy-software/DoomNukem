@@ -18,6 +18,7 @@ static	void	mobs_events_2(t_doom *d, int i, int j)
 	{
 		Mix_PlayChannel(6, d->sound.pickup[3], 0);
 		d->game.flying = 1;
+		d->game.fuel = 100;
 		d->map.sprites[d->sr.sprites[i].spr_num].draw = 0;
 	}
 	else if (j == 2)

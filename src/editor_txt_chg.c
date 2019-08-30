@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 19:31:07 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 17:50:16 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 18:11:15 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,36 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 	sp = check_what_sprite_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 	{
-		if (doom->map.sprites[sp].mob == 1)
+		doom->map.sprites[sp].changes = 0;
+		if (state[SDL_SCANCODE_TAB])
 		{
-			if (state[SDL_SCANCODE_TAB])
-			{
-				if (doom->map.sprites[sp].num_sheet == 8)
-					doom->map.sprites[sp].num_sheet = 6;
-				else if (doom->map.sprites[sp].num_sheet == 6)
-					doom->map.sprites[sp].num_sheet = 5;
-			}
-			else if (!(state[SDL_SCANCODE_TAB]))
-			{
-				if (doom->map.sprites[sp].num_sheet == 5)
-					doom->map.sprites[sp].num_sheet = 6;
-				else if (doom->map.sprites[sp].num_sheet == 6)
-					doom->map.sprites[sp].num_sheet = 8;
-			}
+			if (doom->map.sprites[sp].num_sheet == 15)
+				doom->map.sprites[sp].num_sheet = 11;
+			else if (doom->map.sprites[sp].num_sheet == 11)
+				doom->map.sprites[sp].num_sheet = 9;
+			else if (doom->map.sprites[sp].num_sheet != 0)
+				doom->map.sprites[sp].num_sheet--;
+			// if (doom->map.sprites[sp].num_sheet == 8)
+			// 	doom->map.sprites[sp].num_sheet = 6;
+			// else if (doom->map.sprites[sp].num_sheet == 6)
+			// 	doom->map.sprites[sp].num_sheet = 5;
 		}
+		else if (!(state[SDL_SCANCODE_TAB]))
+		{
+			if (doom->map.sprites[sp].num_sheet == 9)
+				doom->map.sprites[sp].num_sheet = 11;
+			else if (doom->map.sprites[sp].num_sheet == 11)
+				doom->map.sprites[sp].num_sheet = 15;
+			else if (doom->map.sprites[sp].num_sheet < 9)
+				doom->map.sprites[sp].num_sheet++;
+			// if (doom->map.sprites[sp].num_sheet == 5)
+			// 	doom->map.sprites[sp].num_sheet = 6;
+			// else if (doom->map.sprites[sp].num_sheet == 6)
+			// 	doom->map.sprites[sp].num_sheet = 8;
+		}
+		if (doom->map.sprites[sp].num_sheet == 5 || doom->map.sprites[sp].num_sheet == 6 ||
+		doom->map.sprites[sp].num_sheet == 8)
+			doom->map.sprites[sp].changes = 1;
 		// else if (doom->map.sprites[sp].mob == 0)
 		// 	editor_sprites_texture2(doom, state, sp);
 	}
