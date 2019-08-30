@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 15:13:42 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/26 17:29:59 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:24:58 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,13 @@ void	write_sprites(t_doom *doom)
 	i = -1;
 	while (++i < (int)doom->map.num_sprites)
 	{
-		if (doom->map.sprites[i].mob == 1)
-		{
-			printf("123 %i\n", doom->map.num_sprites);
-			if (doom->map.sprites[i].num_sheet == 5)
-				create_big_mob(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 6)
-				create_small_mob(doom, i);
-			else if (doom->map.sprites[i].num_sheet == 8)
-				create_boss_mob(doom, i);
-		}
-		else if (doom->map.sprites[i].mob == 0)
+		if (doom->map.sprites[i].num_sheet == 5)
+			create_big_mob(doom, i);
+		else if (doom->map.sprites[i].num_sheet == 6)
+			create_small_mob(doom, i);
+		else if (doom->map.sprites[i].num_sheet == 8)
+			create_boss_mob(doom, i);
+		else
 			write_sprites2(doom, i);
 	}
 }

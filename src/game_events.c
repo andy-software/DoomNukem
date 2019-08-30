@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 14:29:53 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 15:12:22 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void			move_player(t_doom *d, float dx, float dy)
 				(t_vertex){p.x + dx, p.y + dy}, vert[s], vert[s + 1]))
 			{
 				d->player.sector = sect->neighbors[s];
+				printf("neightbor to player sector : %i\n", sect->neighbors[s]);
 				d->game.falling = 1;
 			}
 			s++;

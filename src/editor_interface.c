@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/18 20:03:06 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:30:51 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	ft_render_prev_butt(t_doom *doom, SDL_Rect bigger, int exist)
 	it[0] = 0;
 	while (++it[0] < (NB_BUTTONS - 12))
 	{
+		if (it[0] == 2)
+			it[0]++;
 		exist = IMG[it[0]].exist;
 		bigger.x = 700 + (it[0] * 100);
 		if (doom->editor.ind_img != 0 && doom->editor.img_press == 1)

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 14:29:31 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 18:08:21 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define SPEED_ROTATION 0.01f
 # define SPEED_ROTATION_Z 0.05f
 # define MAX_Z_ANGLE 5
-# define MOVE_SPEED 0.2f
+# define MOVE_SPEED 0.5f
 # define SIT_EYE_HEIGHT 6
 # define EYE_HEIGHT 10
 # define HEAD_HEIGHT 1
@@ -473,7 +473,6 @@ struct			s_game
 	int				rect_i;
 	int				blood;
 	int				win;
-	float			speed;
 	int				ugroza;
 	t_vector		velocity;
 	float			acceleration;
@@ -496,6 +495,7 @@ struct			s_game
 	SDL_Event		event;
 	float			eye_height;
 	Uint32			dt;
+	float			speed;
 };
 
 struct			s_option
@@ -846,7 +846,6 @@ struct			s_sound
 {
 	Mix_Music		*music[7];
 	Mix_Chunk		*steps;
-	Mix_Chunk		*run;
 	Mix_Chunk		*fly;
 	Mix_Chunk		*jump;
 	Mix_Chunk		*click;
@@ -861,6 +860,7 @@ struct			s_sound
 	Mix_Chunk		*pickup[4];
 	Mix_Chunk		*hurt;
 	int				n;
+	Mix_Chunk		*run;
 };
 
 struct			s_thread
@@ -956,10 +956,9 @@ int				init_sdl(t_sdl *sdl);
 void			player_events(t_doom *d);
 void			jump_event(t_doom *d);
 void			change_gun(t_doom *d);
-void			pause_events(t_doom *d);
+void			pause_event(t_doom *d);
 void			key_events(t_doom *d);
 void			mouse_events(t_doom *d);
-void			moves_modify(const Uint8 *keyboard_state, t_doom *d);
 void			mouse_rotation(t_doom *d);
 void			game_events(t_doom *d);
 int				is_movement_key(const Uint8 *keyboard_state);
@@ -1058,7 +1057,6 @@ int				mirror_own_moves(t_doom *d, t_sprite *spr);
 int				init_moves(t_doom *d);
 int				lift_floor_event(t_doom *d, t_painting *paint);
 int				lift_block_event(t_doom *d, t_painting *paint);
-void			click_paint_lock(t_doom *d, t_painting *paint);
 void			click_paint(t_doom *d, t_painting *paint);
 int				turn_light_event(t_doom *d, t_painting *paint);
 int				lift_ceil_event(t_doom *d, t_painting *paint);

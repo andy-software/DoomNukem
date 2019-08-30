@@ -18,7 +18,7 @@ void	click_paint(t_doom *d, t_painting *paint)
 	paint->key_state = !paint->key_state;
 	paint->click = 0;
 	if (!(Mix_Playing(2)))
-		Mix_PlayChannel(2, d->sound.lift[1], 0);
+		Mix_PlayChannel(2, d->sound.lift[0], 0);
 }
 
 void	click_paint_lock(t_doom *d, t_painting *paint)
