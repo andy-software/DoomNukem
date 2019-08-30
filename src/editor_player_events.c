@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 22:53:52 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 17:46:44 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 19:01:49 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	editor_lift(t_doom *doom, const Uint8 *state)
 	pain = check_what_paint_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == PAINTINGS &&
 	(PT.event_num == LIFT_FL ||
-	PT.event_num == LIFT_CEIL || PT.event_num == N_LIFT_FLOOR) && pain != -1)
+	PT.event_num == LIFT_CEIL || PT.event_num == LIFT_BLOCK) && pain != -1)
 	{
 		if (doom->ev.key.keysym.sym == SDLK_KP_7)
 		{

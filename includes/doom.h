@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 18:08:21 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 18:17:27 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@
 # define LIFT_CEIL 2
 # define RADIO 3
 # define INV_COLORS 4
-# define N_LIFT_FLOOR 5
+# define LIFT_BLOCK 5
 # define WIN_SPRT 0
 # define TALK 1
 # define TOXIC 2
