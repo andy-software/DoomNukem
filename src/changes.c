@@ -43,9 +43,9 @@ void		mob_hit_player(t_sprite *spr, t_doom *d)
 	if (!(Mix_Playing(2)))
 		Mix_PlayChannel(2, d->sound.hurt, 0);
 	if (spr->num_sheet == 8)
-		d->game.hp_level -= 2 * d->difficulty;
+		d->game.hp_level -= 3 * d->difficulty;
 	else if (spr->num_sheet == 6)
-		d->game.hp_level -= 0.5 * d->difficulty;
+		d->game.hp_level -= 2 * d->difficulty;
 	else if (spr->num_sheet == 5)
 		d->game.hp_level -= 1 * d->difficulty;
 }

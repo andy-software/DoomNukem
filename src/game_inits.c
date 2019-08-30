@@ -17,6 +17,9 @@ void	init_hud(t_doom *d)
 	d->game.picked_key[0] = 0;
 	d->game.picked_key[1] = 0;
 	d->game.picked_key[2] = 0;
+	d->ui.gun_num = 0;
+	d->ui.gun_anim = 0;
+	d->ui.fire = 0;
 	d->texture.gun1_r.x = WIN_WIDTH - d->texture.gun1[0]->w;
 	d->texture.gun1_r.y = WIN_HEIGHT - d->texture.gun1[0]->h;
 	d->texture.gun21_r.x = WIN_WIDTH - d->texture.gun2[0]->w * 1.5;
@@ -53,9 +56,6 @@ int		init_sect(t_doom *d)
 
 void	init_else_params(t_doom *d)
 {
-	d->ui.fire = 0;
-	d->ui.gun_num = 0;
-	d->ui.gun_anim = 0;
 	d->player.anglecos = sinf(d->player.angle);
 	d->player.anglesin = cosf(d->player.angle);
 	d->render.rendered_sectors = (int*)malloc(sizeof(int) * d->map.num_sect);
@@ -73,6 +73,7 @@ void	init_else_params(t_doom *d)
 	d->sr.map = &d->map;
 	d->render.map = &d->map;
 	d->ui.idle = 0;
+	d->game.speed = MOVE_SPEED;
 	if (!d->map.editing)
 	{
 		d->game.damage = 60 / d->difficulty;
@@ -98,7 +99,7 @@ int		init_game_params(t_doom *d)
 	d->game.acceleration = 0.5f;
 	d->game.hp_level = 100;
 	d->game.win = 0;
-	d->game.fuel = 100;
+	d->game.fuel = 0;
 	d->game.access = 0;
 	init_hud(d);
 	init_else_params(d);

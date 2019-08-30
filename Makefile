@@ -35,7 +35,7 @@ SRC =	main.c output.c init.c parser.c game_events.c player_events.c\
 		ui_gun_fire.c ui_gun_saw.c \
 		game_events_mobs.c game_events_move.c game_events_sprites.c editor_gravity_sky.c \
 		keys_events.c \
-		game_inits.c 
+		game_inits.c mouse.c paint_events_2.c
 
 INC = includes/doom.h
 
