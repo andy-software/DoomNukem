@@ -44,22 +44,22 @@ void	click_paint_lock(t_doom *d, t_painting *paint)
 
 int		lift_block_event(t_doom *d, t_painting *paint)
 {
-	float		dist;
-	float		*curr;
+	float	dist;
+	float	*curr;
 
 	if (paint->click == 1)
-		click_paint_lock(d, paint);
+		click_paint(d, paint);
 	if (paint->changes)
 	{
 		if (!(Mix_Playing(2)))
 			Mix_PlayChannel(2, d->sound.lift[2], 0);
-		curr = &d->map.sectors[paint->num_of_sect_to_lift].ceil_plane.h;
+		curr = &d->map.sectors[paint->num_of_sect_to_lift].floor_plane.h;
 		dist = paint->speed * d->game.dt / 500.f * (paint->key_state - 0.5f);
 		*curr += dist;
 		paint->changes = 0;
-		if (*curr > paint->low_point)
+		if (*curr > paint->low_point && paint->key_state == 1)
 			*curr = MIN(*curr, paint->low_point);
-		else if (*curr < paint->high_point)
+		else if (*curr < paint->high_point && paint->key_state == 0)
 			*curr = MAX(*curr, paint->high_point);
 		else
 			paint->changes = 1;

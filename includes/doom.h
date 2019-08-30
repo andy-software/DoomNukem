@@ -48,7 +48,7 @@
 # define LESER 44
 # define PAUSE 96
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 4
+# define COUNT_OF_SPRITE_EVENTS 6
 # define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
@@ -1058,6 +1058,7 @@ int				init_moves(t_doom *d);
 int				lift_floor_event(t_doom *d, t_painting *paint);
 int				lift_block_event(t_doom *d, t_painting *paint);
 void			click_paint(t_doom *d, t_painting *paint);
+void			click_paint_lock(t_doom *d, t_painting *paint);
 int				turn_light_event(t_doom *d, t_painting *paint);
 int				lift_ceil_event(t_doom *d, t_painting *paint);
 int				inverse_colors_event(t_doom *d, t_painting *paint);

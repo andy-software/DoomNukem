@@ -66,7 +66,7 @@ void	editor_action(t_doom *doom, const Uint8 *state)
 			info_action(doom, pain);
 		}
 		else if (!(state[SDL_SCANCODE_TAB])
-		&& doom->map.paint[pain].event_num != COUNT_OF_PAINT_EVENTS)
+		&& doom->map.paint[pain].event_num != (COUNT_OF_PAINT_EVENTS - 1))
 		{
 			doom->map.paint[pain].event_num++;
 			info_action(doom, pain);
