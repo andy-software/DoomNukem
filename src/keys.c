@@ -87,3 +87,24 @@ void		check_keys_state(t_doom *d)
 			spr_ev(d, d->map.sprites + i);
 		}
 }
+
+void		click_paint(t_doom *d, t_painting *paint)
+{
+	static	int lift;
+
+	lift = 0;
+	if (d->game.access == 1)
+	{
+		if (!(Mix_Playing(2)))
+			Mix_PlayChannel(2, d->sound.lift[0], 0);
+		lift = 1;
+	}
+	if (lift == 1)
+	{
+		paint->changes = 1;
+		paint->key_state = !paint->key_state;
+		paint->click = 0;
+	}
+	else if (!(Mix_Playing(2)))
+		Mix_PlayChannel(2, d->sound.lift[1], 0);
+}

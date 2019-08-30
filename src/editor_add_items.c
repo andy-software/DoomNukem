@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 18:45:34 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 19:39:00 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,23 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 	}
 }
 
+void	init_img_2(t_doom *doom, SDL_Event *event)
+{
+	doom->map.sprites[(IMG[4].exist + EXIST) - 1].coord =
+	(t_vector){event->button.x / SCL, event->button.y / SCL,
+	get_z(doom->map.sectors[is_in_sector(doom, \
+	(event->button.x), (event->button.y))].floor_plane, \
+	event->button.x / SCL, event->button.y / SCL)};
+	doom->map.sprites[(EXIST + IMG[4].exist) - 1].pick = 0;
+	doom->map.sprites[(EXIST + IMG[4].exist) - 1].mob = 1;
+}
+
 void	add_items2(t_doom *doom, SDL_Event *event)
 {
 	if (doom->editor.ind_img == 2)
 	{
 		if (IMG[4].exist > -1)
-		{
-			doom->map.sprites[(IMG[4].exist + EXIST) - 1].coord =
-			(t_vector){event->button.x / SCL, event->button.y / SCL,
-			get_z(doom->map.sectors[is_in_sector(doom,
-			(event->button.x), (event->button.y))].floor_plane, \
-			event->button.x / SCL, \
-			event->button.y / SCL)};
-			doom->map.sprites[(EXIST + IMG[4].exist) - 1].pick = 0;
-			doom->map.sprites[(EXIST + IMG[4].exist) - 1].mob = 1;
-		}
+			init_img_2(doom, event);
 	}
 	else if (doom->editor.ind_img == 4)
 	{
@@ -60,9 +62,8 @@ void	add_items2(t_doom *doom, SDL_Event *event)
 		{
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].coord =
 			(t_vector){event->button.x / SCL, event->button.y / SCL,
-			get_z(doom->map.sectors[is_in_sector(doom,
-			(event->button.x), (event->button.y))].floor_plane, \
-			event->button.x / SCL, \
+			get_z(doom->map.sectors[is_in_sector(doom, (event->button.x), \
+			(event->button.y))].floor_plane, event->button.x / SCL, \
 			event->button.y / SCL)};
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].pick = 1;
 			doom->map.sprites[(IMG[2].exist + EXIST) - 1].mob = 0;

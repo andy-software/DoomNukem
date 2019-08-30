@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main_render.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apavlov <apavlov@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:06:14 by apavlov           #+#    #+#             */
-/*   Updated: 2019/04/06 13:06:15 by apavlov          ###   ########.fr       */
+/*   Updated: 2019/08/28 19:54:50 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
-static void		render_sector_second_part(t_render *r, t_doom *d, int i)
+static void		render_sector_second_part(t_render *r, t_doom *d)
 {
 	r->mc1 = r->t1;
 	rotate_vertex_xy(&r->mc1, r->psin, -r->pcos);
@@ -140,7 +140,7 @@ void			render_sector(t_render *r, t_doom *d)
 		r->neighbor = r->sect->neighbors[i];
 		r->begin_x = MAX(r->x1, r->now.sx1);
 		r->end_x = MIN(r->x2, r->now.sx2);
-		render_sector_second_part(r, d, i);
+		render_sector_second_part(r, d);
 		render_sector_third_part(r, d, i);
 		render_sector_fourth_part(r, d, i);
 		render_sector_start_threads(r, d);

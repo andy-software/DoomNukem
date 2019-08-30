@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 18:45:44 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 14:17:37 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define PAUSE 96
 # define COUNT_OF_MOVES 2
 # define COUNT_OF_SPRITE_EVENTS 4
-# define COUNT_OF_PAINT_EVENTS 6
+# define COUNT_OF_PAINT_EVENTS 5
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
 # define ATTACK_RANGE 1.5
@@ -75,8 +75,8 @@
 # define WALL 3
 # define SPRITES 4
 # define PAINTINGS 5
-# define MAX_NUM_SECTORS 50
-# define MAX_SECTORS 100
+# define MAX_NUM_SECTORS 512
+# define MAX_SECTORS 512
 # define MAX_VERT 100
 # define MAX_PAINTINGS 100
 # define SCL 5.0
@@ -196,7 +196,9 @@ typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
 typedef	struct s_move			t_move;
 
-/* EDITOR */
+/*
+** EDITOR
+*/
 typedef struct s_changes		t_changes;
 typedef struct s_editor			t_editor;
 typedef struct s_brezen			t_brezen;
@@ -212,11 +214,11 @@ typedef int		(*t_bots_move)(t_doom *, t_sprite *);
 typedef int		(*t_spr_event_type)(t_doom *, t_sprite *);
 typedef int		(*t_pnt_event_type)(t_doom *, t_painting *);
 
-typedef	struct		s_int_vertex
+typedef	struct	s_int_vertex
 {
 	int				x;
 	int				y;
-}					t_int_vertex;
+}				t_int_vertex;
 
 struct			s_plane
 {
@@ -1054,6 +1056,7 @@ int				first_own_moves(t_doom *d, t_sprite *spr);
 int				mirror_own_moves(t_doom *d, t_sprite *spr);
 int				init_moves(t_doom *d);
 int				lift_floor_event(t_doom *d, t_painting *paint);
+void			click_paint(t_doom *d, t_painting *paint);
 int				turn_light_event(t_doom *d, t_painting *paint);
 int				lift_ceil_event(t_doom *d, t_painting *paint);
 int				inverse_colors_event(t_doom *d, t_painting *paint);
@@ -1172,7 +1175,10 @@ void			ft_mouse_press_edit(t_doom *doom, SDL_Event *event);
 int				game_mod_editor(t_doom *doom);
 int				game_loop_for_editor(t_doom *doom);
 void			make_portal(t_doom *doom, SDL_Event *event);
+int				init_sect(t_doom *d);
 int				init_game_params(t_doom *d);
+void			init_else_params(t_doom *d);
+void			chose_mod(t_doom *doom);
 void			info_ceil_floor(t_doom *doom);
 void			info_action(t_doom *doom, int pain);
 void			info_action_sprites(t_doom *doom, int sp);
@@ -1186,7 +1192,6 @@ void			key_ceil(t_doom *doom, const Uint8 *state);
 void			key_texture_change(t_doom *doom, const Uint8 *state);
 void			key_editor_change(t_doom *doom, const Uint8 *state);
 void			lie_point(t_doom *doom, int x, int y);
-int				normalniy_l_fl_event(t_doom *d, t_painting *paint);
 void			rec_action(t_doom *doom, SDL_Event *event);
 void			write_sprites(t_doom *doom);
 void			cross_though_the_universe(t_sprite_render *sr);

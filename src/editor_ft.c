@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 20:56:30 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/12 16:04:13 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 21:39:14 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,14 @@ void	ft_check_key(t_doom *doom, SDL_Event *event)
 	key = event->key.keysym.sym;
 	if (ESC)
 		doom->game.quit = 1;
+	else if (key == SDLK_p)
+	{
+		printf("tyt\n");
+		if (DEDI.fline.num_line2 != -1 && DEDI.fline.sec2 != -1)
+		{
+			MAPSEC[DEFLN.sec1].neighbors[DEFLN.num_line1] = DEFLN.sec2;
+				MAPSEC[DEFLN.sec2].neighbors[DEFLN.num_line2] = DEFLN.sec1;
+			DEDI.is_portal = 2;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 13:16:49 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 21:06:03 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,7 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 		INIT2(d->game.velocity.z, 0, d->game.falling, 0);
 	}
 	else if (d->game.velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
-	{
-		d->game.velocity.z = 0;
-		d->game.falling = 1;
-	}
+		INIT2(d->game.velocity.z, 0, d->game.falling, 1);
 	if (d->game.falling)
 	{
 		p->coord.z += d->game.velocity.z;

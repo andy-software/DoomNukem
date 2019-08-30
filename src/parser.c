@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:41:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 12:58:09 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/28 21:16:48 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	info_about_player(t_player *player)
 	ft_putstr("\n");
 }
 
-int			read_file2(t_map *map, int fd, int i)
+void		read_file2(t_map *map, int fd, int i)
 {
 	read(fd, &map->sectors[i].num, sizeof(Uint32));
 	read(fd, &MAP_N_VER, sizeof(Uint32));
@@ -54,8 +54,7 @@ int			read_file(t_doom *doom, char *file_name)
 	t_player	*player;
 
 	INT_2(fd, i);
-	map = &doom->map;
-	player = &doom->player;
+	INIT2(map, &doom->map, player, &doom->player);
 	if ((fd = open(file_name, O_RDONLY)) == -1)
 		return (0);
 	read(fd, &map->editing, sizeof(int));

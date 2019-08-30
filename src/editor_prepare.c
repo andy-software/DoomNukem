@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 17:24:25 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 14:28:30 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	ft_prepare_read2(t_doom *doom, int j)
 	doom->map.sectors[j].lines = (t_line*)malloc(sizeof(t_line) * MAX_VERT);
 	while (++l < MAX_VERT)
 	{
-		doom->map.sectors[j].lines[l].wall = 1;
-		doom->map.sectors[j].lines[l].top = 1;
-		doom->map.sectors[j].lines[l].bot = 1;
+		doom->map.sectors[j].lines[l].wall = 18;
+		doom->map.sectors[j].lines[l].top = 7;
+		doom->map.sectors[j].lines[l].bot = 7;
 		doom->map.sectors[j].lines[l].x_w_scale = 2;
 		doom->map.sectors[j].lines[l].x_b_scale = 2;
 		doom->map.sectors[j].lines[l].x_t_scale = 2;
@@ -55,7 +55,7 @@ void	ft_prepare_sectors(t_doom *doom, int j)
 		doom->map.sectors[j].floor_plane.c = 1;
 		doom->map.sectors[j].floor_plane.h = -10;
 		doom->map.sectors[j].ceil_tex = 4;
-		doom->map.sectors[j].floor_tex = 4;
+		doom->map.sectors[j].floor_tex = 3;
 		doom->map.sectors[j].x_c_scale = 1;
 		doom->map.sectors[j].y_c_scale = 1;
 		doom->map.sectors[j].x_c_shift = 0;

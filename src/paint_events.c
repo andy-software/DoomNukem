@@ -67,26 +67,9 @@ int		lift_floor_event(t_doom *d, t_painting *paint)
 {
 	float	dist;
 	float	*curr;
-	static	int lift;
 
-	lift = 0;
 	if (paint->click == 1)
-	{
-		if (d->game.access == 1)
-		{
-			if (!(Mix_Playing(2)))
-				Mix_PlayChannel(2, d->sound.lift[0], 0);
-			lift = 1;
-		}
-		if (lift == 1)
-		{
-			paint->changes = 1;
-			paint->key_state = !paint->key_state;
-			paint->click = 0;
-		}
-		else if (!(Mix_Playing(2)))
-			Mix_PlayChannel(2, d->sound.lift[1], 0);
-	}
+		click_paint(d, paint);
 	if (paint->changes)
 	{
 		if (!(Mix_Playing(2)))
@@ -109,26 +92,9 @@ int		lift_ceil_event(t_doom *d, t_painting *paint)
 {
 	float		dist;
 	float		*curr;
-	static	int lift;
 
-	lift = 0;
 	if (paint->click == 1)
-	{
-		if (d->game.access == 1)
-		{
-			if (!(Mix_Playing(2)))
-				Mix_PlayChannel(2, d->sound.lift[0], 0);
-			lift = 1;
-		}
-		if (lift == 1)
-		{
-			paint->changes = 1;
-			paint->key_state = !paint->key_state;
-			paint->click = 0;
-		}
-		else if (!(Mix_Playing(2)))
-			Mix_PlayChannel(2, d->sound.lift[1], 0);
-	}
+		click_paint(d, paint);
 	if (paint->changes)
 	{
 		if (!(Mix_Playing(2)))
