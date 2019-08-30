@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:24:53 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 20:01:29 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 18:17:57 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	info_action(t_doom *doom, int pain)
 		ft_putstr("\x1B[33m          radio event\x1B[0m\n");
 	else if (doom->map.paint[pain].event_num == INV_COLORS)
 		ft_putstr("\x1B[33m          inverse colors\x1B[0m\n");
+	else if (doom->map.paint[pain].event_num == LIFT_BLOCK)
+		ft_putstr("\x1B[33m          lift block event\x1B[0m\n");
 }
 
 void	info_f_c_w_s2(t_doom *doom)
