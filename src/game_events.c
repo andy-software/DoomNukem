@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 18:14:51 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 21:06:03 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 14:29:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,14 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 	if (d->game.velocity.z < 0 && nextz <= floor_z + d->game.eye_height)
 	{
 		p->coord.z = floor_z + d->game.eye_height;
-		if (d->game.velocity.z < -4.2)
-		{
+		if (d->game.velocity.z < -4.2 && \
+				(d->game.hp_level += d->game.velocity.z * 10))
 			if (!(Mix_Playing(2)))
 				Mix_PlayChannel(2, d->sound.hurt, 0);
-			d->game.hp_level += d->game.velocity.z * 10;
-		}
 		INIT2(d->game.velocity.z, 0, d->game.falling, 0);
 	}
 	else if (d->game.velocity.z > 0 && nextz > ceil_z - HEAD_HEIGHT)
-		INIT2(d->game.velocity.z, 0, d->game.falling, 1);
+		INIT_IF2(d->game.velocity.z, 0, d->game.falling, 1);
 	if (d->game.falling)
 	{
 		p->coord.z += d->game.velocity.z;
@@ -83,11 +81,6 @@ static	int		sprite_sort_cal(t_doom *d)
 
 static	void	game_events_next(t_doom *d)
 {
-	if (d->game.fire == 1)
-	{
-		check_sprite_intersection(d);
-		d->game.fire = 0;
-	}
 	if (d->game.click == 1)
 	{
 		check_keys_intersection(d);
@@ -129,6 +122,11 @@ void			game_events(t_doom *d)
 		move(&d->player, d->map, &d->game);
 		check_mobs_while_movement(&d->player, d, &d->game);
 		move_player(d, g->dx, g->dy);
+	}
+	if (d->game.fire == 1)
+	{
+		check_sprite_intersection(d);
+		d->game.fire = 0;
 	}
 	game_events_next(d);
 }

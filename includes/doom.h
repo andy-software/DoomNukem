@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 14:17:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 14:29:31 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include "../frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h"
 # include "../frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h"
 # include <errno.h>
-# include <stdio.h>
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 800
 # define SKY_W 4096
@@ -106,6 +105,7 @@
 # define INT3(a,b,c) int a,b,c;
 # define INT4(a,b,c,d) int a,b,c,d;
 # define INT5(a,b,c,d,e) int a,b,c,d,e;
+# define INIT_IF2(a,av,b,bv) {a=av;b=bv;}
 # define INIT2(a,av,b,bv) a=av;b=bv;
 # define INIT3(a,av,b,bv,c,cv) a=av;b=bv;c=cv;
 # define INIT4(a,av,b,bv,c,cv,d,dv) a=av;b=bv;c=cv;d=dv;
@@ -196,9 +196,6 @@ typedef	struct s_sound			t_sound;
 typedef	struct s_menu			t_menu;
 typedef	struct s_move			t_move;
 
-/*
-** EDITOR
-*/
 typedef struct s_changes		t_changes;
 typedef struct s_editor			t_editor;
 typedef struct s_brezen			t_brezen;

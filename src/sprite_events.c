@@ -14,6 +14,7 @@
 
 int			win_spr_event(t_doom *d, t_sprite *sprite)
 {
+	(void)sprite;
 	d->game.win = 1;
 	d->ui.gun_num = 2;
 	Mix_HaltChannel(-1);

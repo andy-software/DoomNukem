@@ -6,7 +6,7 @@
 /*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 20:37:16 by mdanylch          #+#    #+#             */
-/*   Updated: 2019/08/27 20:27:00 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/08/29 15:41:58 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static	void	gun_anim_3(t_doom *d, int i, int temp)
 	d->ui.gun_anim = ((d->ui.prev_time - d->ui.click_time) / 50);
 	SDL_BlitSurface(DT.gun1[d->ui.gun_anim], 0, d->sdl.surface, &DT.gun1_r);
 	if (d->ui.gun_anim >= 17)
-		INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
+		INIT_IF2(d->ui.fire, 0, d->ui.gun_anim, 0);
 }
 
 static	void	gun_anim_4(t_doom *d)
@@ -79,7 +79,7 @@ static	void	gun_anim_4(t_doom *d)
 		SDL_BlitSurface(DT.gun1[d->ui.gun_anim], 0, d->sdl.surface, \
 			&d->texture.gun1_r);
 		if (d->ui.gun_anim >= 3)
-			INIT2(d->ui.fire, 0, d->ui.gun_anim, 0);
+			INIT_IF2(d->ui.fire, 0, d->ui.gun_anim, 0);
 	}
 	else if (d->ui.ammo_1 < -2)
 	{
