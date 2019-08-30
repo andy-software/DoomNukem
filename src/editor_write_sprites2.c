@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 19:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/27 17:26:26 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 16:35:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	create_boss_mob(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 1;
 	doom->map.sprites[i].hp = 20;
 	doom->map.sprites[i].death_time = 0;
-	doom->map.sprites[i].own_moves = 1;
+	doom->map.sprites[i].own_moves = 0;
 }
 
 void	create_gribok(t_doom *doom, int i)
