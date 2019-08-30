@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/27 17:25:33 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:27:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 static	void	pick_map_sprites(t_doom *doom, int i)
 {
-	if (MAP_SPRT[i].pick == 0)
-	{
-		IMG[2].exist++;
-		IMG[2].im_x[IMG[2].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;
-		IMG[2].im_y[IMG[2].exist - 1] = (MAP_SPRT[i].coord.y * SCL) - 50;
-	}
-	if (MAP_SPRT[i].pick == 1)
+	if (MAP_SPRT[i].pick == 1 || MAP_SPRT[i].pick == 0)
 	{
 		IMG[4].exist++;
 		IMG[4].im_x[IMG[4].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;
@@ -30,11 +24,14 @@ static	void	pick_map_sprites(t_doom *doom, int i)
 
 static	void	pick_buttons(t_doom *doom, int i)
 {
-	IMG[i].im_x = (double *)malloc(sizeof(double) * 100);
-	IMG[i].im_y = (double *)malloc(sizeof(double) * 100);
-	ft_null_items(doom, i, 0);
-	ft_null_items(doom, i, 1);
-	IMG[i].exist = 0;
+	if (i != 2)
+	{
+		IMG[i].im_x = (double *)malloc(sizeof(double) * 100);
+		IMG[i].im_y = (double *)malloc(sizeof(double) * 100);
+		ft_null_items(doom, i, 0);
+		ft_null_items(doom, i, 1);
+		IMG[i].exist = 0;
+	}
 }
 
 void			ft_prepare_editor(t_doom *doom, int i)
@@ -48,10 +45,10 @@ void			ft_prepare_editor(t_doom *doom, int i)
 		IMG[1].exist = 1;
 		IMG[1].im_x[1] = (doom->player.coord.x * SCL) - 50;
 		IMG[1].im_y[1] = (doom->player.coord.y * SCL) - 50;
-		INIT3(IMG[2].exist, 0, IMG[4].exist, 0, i, -1);
+		INIT2(IMG[4].exist, 0, i, -1);
 		while (++i < (int)doom->map.num_sprites)
 			pick_map_sprites(doom, i);
-		ft_null_items(doom, 2, IMG[2].exist);
+		// ft_null_items(doom, 2, IMG[2].exist);
 		ft_null_items(doom, 4, IMG[4].exist);
 		IMG[3].exist = doom->map.num_paint;
 		ft_null_items(doom, 3, doom->map.num_paint);

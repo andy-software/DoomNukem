@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 19:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 16:35:39 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:24:58 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	create_big_mob(t_doom *doom, int i)
 	doom->map.sprites[i].vision_backward = -7;
 	doom->map.sprites[i].death_time = 0;
 	doom->map.sprites[i].own_moves = 0;
+	doom->map.sprites[i].mob = 1;
+	doom->map.sprites[i].pick = 0;
 }
 
 void	create_small_mob(t_doom *doom, int i)
@@ -46,6 +48,7 @@ void	create_small_mob(t_doom *doom, int i)
 	doom->map.sprites[i].hp = 20;
 	doom->map.sprites[i].death_time = 0;
 	doom->map.sprites[i].own_moves = 1;
+	doom->map.sprites[i].pick = 0;
 }
 
 void	create_boss_mob(t_doom *doom, int i)
@@ -65,6 +68,7 @@ void	create_boss_mob(t_doom *doom, int i)
 	doom->map.sprites[i].hp = 20;
 	doom->map.sprites[i].death_time = 0;
 	doom->map.sprites[i].own_moves = 0;
+	doom->map.sprites[i].pick = 0;
 }
 
 void	create_gribok(t_doom *doom, int i)
@@ -86,6 +90,7 @@ void	create_gribok(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 2;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
+	doom->map.sprites[i].mob = 0;
 }
 
 void	create_aptechka(t_doom *doom, int i)
@@ -105,4 +110,5 @@ void	create_aptechka(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
+	doom->map.sprites[i].mob = 0;
 }

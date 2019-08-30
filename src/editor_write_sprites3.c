@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 19:31:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 18:48:30 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:24:59 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	create_get_ammo(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
+	doom->map.sprites[i].mob = 0;
 }
 
 void	create_key1(t_doom *doom, int i)
@@ -52,6 +53,7 @@ void	create_key1(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
+	doom->map.sprites[i].mob = 0;
 	doom->map.sprites[i].death_time = 0;
 }
 
@@ -73,6 +75,7 @@ void	create_jetpack(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 0;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 1;
+	doom->map.sprites[i].mob = 0;
 	doom->map.sprites[i].death_time = 0;
 }
 
@@ -95,4 +98,5 @@ void	create_npc(t_doom *doom, int i)
 	doom->map.sprites[i].event_num = 3;
 	doom->map.sprites[i].hp = 0;
 	doom->map.sprites[i].pick = 0;
+	doom->map.sprites[i].mob = 0;
 }
