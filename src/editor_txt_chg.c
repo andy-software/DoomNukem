@@ -45,7 +45,7 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 	sp = check_what_sprite_player_are_looking(doom);
 	if (doom->editor.fl_or_ceil == SPRITES && sp != -1)
 	{
-		doom->map.sprites[sp].changes = 0;
+		doom->map.sprites[sp].mob = 0;
 		if (state[SDL_SCANCODE_TAB])
 		{
 			if (doom->map.sprites[sp].num_sheet == 15)
@@ -74,7 +74,9 @@ void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 		}
 		if (doom->map.sprites[sp].num_sheet == 5 || doom->map.sprites[sp].num_sheet == 6 ||
 		doom->map.sprites[sp].num_sheet == 8)
-			doom->map.sprites[sp].changes = 1;
+			doom->map.sprites[sp].mob = 1;
+		if (doom->map.sprites[sp].num_sheet != 3)
+			doom->map.sprites[sp].text_no = 0;
 		// else if (doom->map.sprites[sp].mob == 0)
 		// 	editor_sprites_texture2(doom, state, sp);
 	}

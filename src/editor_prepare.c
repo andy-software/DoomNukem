@@ -72,22 +72,45 @@ void	ft_prepare_sprites(t_doom *doom, int j)
 {
 	while (++j < MAX_SPRITES_COUNT)
 	{
+		// doom->map.sprites[j].spr_num = j;
+		// doom->map.sprites[j].coord = (t_vector){40, 40, 0};
+		// doom->map.sprites[j].width = 8;
+		// doom->map.sprites[j].end_z = 13;
+		// doom->map.sprites[j].mob = 1;
+		// doom->map.sprites[j].draw = 1;
+		// doom->map.sprites[j].live = 1;
+		// doom->map.sprites[j].angle = M_PI / 4;
+		// doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
+		// doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
+		// doom->map.sprites[j].move_speed = 0.03;
+		// doom->map.sprites[j].own_moves = 1;
+		// doom->map.sprites[j].vision_forward = 5;
+		// doom->map.sprites[j].vision_backward = -3;
+		// doom->map.sprites[j].hp = 20;
+		// doom->map.sprites[j].num_sheet = 0;
 		doom->map.sprites[j].spr_num = j;
+		doom->map.sprites[j].text_no = 0;
+		doom->map.sprites[j].num_sheet = 0;
 		doom->map.sprites[j].coord = (t_vector){40, 40, 0};
-		doom->map.sprites[j].width = 8;
-		doom->map.sprites[j].end_z = 13;
-		doom->map.sprites[j].mob = 1;
+		doom->map.sprites[j].width = 2;
+		doom->map.sprites[j].end_z = 5;
+		doom->map.sprites[j].mob = 0;
+		doom->map.sprites[j].angle = 0;
+		doom->map.sprites[j].anglecos = 0;
+		doom->map.sprites[j].anglesin = 0;
+		doom->map.sprites[j].own_moves = 0;
+		doom->map.sprites[j].move_speed = 0;
 		doom->map.sprites[j].draw = 1;
-		doom->map.sprites[j].live = 1;
-		doom->map.sprites[j].angle = M_PI / 4;
-		doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
-		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
-		doom->map.sprites[j].move_speed = 0.03;
-		doom->map.sprites[j].own_moves = 1;
-		doom->map.sprites[j].vision_forward = 5;
-		doom->map.sprites[j].vision_backward = -3;
-		doom->map.sprites[j].hp = 20;
-		doom->map.sprites[j].num_sheet = 6;
+		doom->map.sprites[j].live = 0;
+		doom->map.sprites[j].vision_forward = 0;
+		doom->map.sprites[j].vision_backward = 0;
+		doom->map.sprites[j].key = 0;
+		doom->map.sprites[j].changes = 0;
+		doom->map.sprites[j].key_state = 0;
+		doom->map.sprites[j].num_of_sound = 0;
+		doom->map.sprites[j].event_num = 0;
+		doom->map.sprites[j].hp = 0;
+		doom->map.sprites[j].death_time = 0;
 	}
 }
 

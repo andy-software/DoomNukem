@@ -48,7 +48,7 @@ int		lift_block_event(t_doom *d, t_painting *paint)
 	float	*curr;
 
 	if (paint->click == 1)
-		click_paint(d, paint);
+		click_paint_lock(d, paint);
 	if (paint->changes)
 	{
 		if (!(Mix_Playing(2)))

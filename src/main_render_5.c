@@ -48,7 +48,8 @@ void			draw_line_of_sprite(t_sprite_render *sr, \
 		{
 			sr->color = GC(sr->color, 0, sr->curr_sect->light_lvl);
 			if (sr->map->fog && (int)sr->y > 20)
-				sr->color = GC(sr->color, sr->map->fog_color, sr->y);
+				sr->color = sr->y > 100 ? 0 : \
+				GC(sr->color, sr->map->fog_color, sr->y);
 			render->pix[sr->win_y * WIN_WIDTH + (int)sr->win_x] = sr->color;
 		}
 		sr->win_y++;

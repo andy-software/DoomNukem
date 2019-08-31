@@ -15,7 +15,6 @@
 int			print_usage(void)
 {
 	ft_putstr("usage: ./doom-nukem {edit, play} {map_name}\n");
-	ft_putstr("One day this will run with OpenCL\n");
 	return (0);
 }
 
