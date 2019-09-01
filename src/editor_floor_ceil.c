@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 20:46:39 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 17:48:09 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/31 10:58:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	info_ceil_floor2(t_doom *doom, int nb)
 void	info_ceil_floor(t_doom *doom)
 {
 	doom->editor.font.text_rect = (SDL_Rect){935, 275, 0, 0};
+	doom->editor.font.text_color = (SDL_Color){255, 255, 255, 1};
 	info_ceil_floor2(doom,
 	FLOOR_A);
 	doom->editor.font.text_rect.y += 30;
@@ -49,6 +50,9 @@ void	info_ceil_floor(t_doom *doom)
 	info_ceil_floor2(doom, doom->map.sectors[doom->player.sector].ceil_plane.c);
 	doom->editor.font.text_rect.y += 30;
 	info_ceil_floor2(doom, CEIL_H);
+	doom->editor.font.text_rect.y += 40;
+	doom->editor.font.text_color = (SDL_Color){165, 201, 129, 1};
+	info_ceil_floor2(doom, doom->player.sector);
 }
 
 void	key_floor_ceil(t_doom *doom)

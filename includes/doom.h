@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/30 18:17:27 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/31 19:41:36 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1113,6 +1113,9 @@ void			create_npc(t_doom *doom, int i);
 void			create_jetpack(t_doom *doom, int i);
 void			create_key1(t_doom *doom, int i);
 void			create_get_ammo(t_doom *doom, int i);
+void			create_win(t_doom *doom, int i);
+void			create_tree(t_doom *doom, int i);
+void			create_pickup(t_doom *doom, int i);
 void			change_floor_ceil(t_doom *doom, SDL_Event *event);
 int				convex(t_doom *doom, int j);
 t_vertex		*convex2(t_doom *doom);

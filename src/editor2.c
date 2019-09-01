@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 17:27:53 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/31 14:37:34 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static	void	pick_map_sprites(t_doom *doom, int i)
 	if (MAP_SPRT[i].pick == 1 || MAP_SPRT[i].pick == 0)
 	{
 		IMG[4].exist++;
-		IMG[4].im_x[IMG[4].exist - 1] = (MAP_SPRT[i].coord.x * SCL) - 50;
-		IMG[4].im_y[IMG[4].exist - 1] = (MAP_SPRT[i].coord.y * SCL) - 50;
+		IMG[4].im_x[i] = (MAP_SPRT[i].coord.x * SCL) - 50;
+		IMG[4].im_y[i] = (MAP_SPRT[i].coord.y * SCL) - 50;
 	}
 }
 

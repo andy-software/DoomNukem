@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 14:28:30 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/31 19:42:40 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,23 @@ void	ft_prepare_sprites(t_doom *doom, int j)
 	while (++j < MAX_SPRITES_COUNT)
 	{
 		doom->map.sprites[j].spr_num = j;
-		doom->map.sprites[j].coord = (t_vector){40, 40, 0};
+		// doom->map.sprites[j].coord = (t_vector){40, 40, 0};
 		doom->map.sprites[j].width = 8;
 		doom->map.sprites[j].end_z = 13;
-		doom->map.sprites[j].mob = 1;
-		doom->map.sprites[j].draw = 1;
-		doom->map.sprites[j].live = 1;
+		// doom->map.sprites[j].mob = 0;
+		// doom->map.sprites[j].draw = 1;
+		// doom->map.sprites[j].live = 1;
 		doom->map.sprites[j].angle = M_PI / 4;
 		doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
 		doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
-		doom->map.sprites[j].move_speed = 0.03;
-		doom->map.sprites[j].own_moves = 1;
-		doom->map.sprites[j].vision_forward = 5;
-		doom->map.sprites[j].vision_backward = -3;
-		doom->map.sprites[j].hp = 20;
-		doom->map.sprites[j].num_sheet = 6;
+		// doom->map.sprites[j].move_speed = 0.03;
+		// doom->map.sprites[j].own_moves = 1;
+		// doom->map.sprites[j].vision_forward = 5;
+		// doom->map.sprites[j].vision_backward = -3;
+		// doom->map.sprites[j].hp = 20;
+		// doom->map.sprites[j].num_sheet = 0;
+		// doom->map.sprites[j].changes = 0;
+		// doom->map.sprites[j].key = 0;
 	}
 }
 

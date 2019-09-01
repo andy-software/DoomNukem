@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "algorithm": "cpp",
-        "doom.h": "c",
-        "locale": "c",
-        "string": "c"
-    }
-}

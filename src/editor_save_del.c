@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:24:27 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 17:34:38 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/31 14:21:56 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 			doom->player.angle_z, 0);
 	doom->player.anglecos = cosf(doom->player.angle);
 	doom->player.anglesin = sinf(doom->player.angle);
-	doom->map.num_sprites = IMG[2].exist + IMG[4].exist;
+	doom->map.num_sprites = IMG[4].exist;
 	doom->map.num_paint = IMG[3].exist;
+	printf("here\n");
 	while (++i < (int)doom->map.num_sprites)
 	{
 		MAP_SPRT[i].sector_no = is_in_sector(doom,
 		(MAP_SPRT[i].coord.x * SCL), (MAP_SPRT[i].coord.y * SCL));
+		printf("i: %d\n", i);
 		if (MAP_SPRT[i].sector_no < 0)
-			exit(0);
+			error_message("sprite not in the sector\n");
 		INIT2(MAP_SPRT[i].live, 1, MAP_SPRT[i].draw, 1);
 	}
 	DEDI.fl_or_ceil = 1;
@@ -35,6 +37,8 @@ static	int	ft_prepare_to_write(t_doom *doom, int i)
 	IMG[1].im_y[1] = (doom->player.coord.y * SCL) - 48;
 	doom->player.sector = is_in_sector(doom,
 	(doom->player.coord.x * SCL), (doom->player.coord.y * SCL));
+	printf("doom->player.coord.x: %f, doom->player.coord.y: %f\n", doom->player.coord.x, doom->player.coord.y);
+	printf("doom->player.sector: %d\n",doom->player.sector);
 	if ((int)doom->player.sector < 0)
 		exit(0);
 	return (1);

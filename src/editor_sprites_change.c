@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 21:06:54 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/28 18:28:22 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/08/30 20:21:47 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	editor_action(t_doom *doom, const Uint8 *state)
 			info_action(doom, pain);
 		}
 		else if (!(state[SDL_SCANCODE_TAB])
-		&& doom->map.paint[pain].event_num != COUNT_OF_PAINT_EVENTS)
+		&& doom->map.paint[pain].event_num != (COUNT_OF_PAINT_EVENTS - 1))
 		{
 			doom->map.paint[pain].event_num++;
 			info_action(doom, pain);
