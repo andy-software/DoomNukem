@@ -37,14 +37,14 @@ void	editor_sky_gravity(t_doom *doom, const Uint8 *state)
 {
 	if (doom->ev.key.keysym.sym == SDLK_g)
 	{
-		if (doom->map.gravity > -0.1 && \
+		if (doom->map.gravity > 0.01 && \
 			(state[SDL_SCANCODE_TAB]))
 		{
 			doom->map.gravity -= 0.01;
 			info_gravity(doom);
 		}
 		else if (!(state[SDL_SCANCODE_TAB]) && \
-			doom->map.gravity < 0.1)
+			doom->map.gravity < 0.20)
 		{
 			doom->map.gravity += 0.01;
 			info_gravity(doom);

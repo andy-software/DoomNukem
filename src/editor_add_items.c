@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/31 20:16:49 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 14:07:53 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,28 @@
 void	ft_free_items(t_doom *doom, int j)
 {
 	doom->map.sprites[j].spr_num = j;
-	doom->map.sprites[j].coord = (t_vector){0, 0, 0};
-	doom->map.sprites[j].width = 8;
-	doom->map.sprites[j].end_z = 13;
+	doom->map.sprites[j].text_no = 0;
+	doom->map.sprites[j].num_sheet = 2;
+	doom->map.sprites[j].coord = (t_vector){40, 40, 0};
+	doom->map.sprites[j].width = 2;
+	doom->map.sprites[j].end_z = 5;
 	doom->map.sprites[j].mob = 0;
+	doom->map.sprites[j].angle = 0;
+	doom->map.sprites[j].anglecos = 0;
+	doom->map.sprites[j].anglesin = 0;
+	doom->map.sprites[j].own_moves = 0;
+	doom->map.sprites[j].move_speed = 0;
 	doom->map.sprites[j].draw = 1;
-	doom->map.sprites[j].live = 1;
-	doom->map.sprites[j].angle = M_PI / 4;
-	doom->map.sprites[j].anglesin = sin(doom->map.sprites[j].angle);
-	doom->map.sprites[j].anglecos = cos(doom->map.sprites[j].angle);
-	doom->map.sprites[j].move_speed = 0.03;
-	doom->map.sprites[j].own_moves = 1;
-	doom->map.sprites[j].vision_forward = 5;
-	doom->map.sprites[j].vision_backward = -3;
-	doom->map.sprites[j].hp = 20;
-	doom->map.sprites[j].num_sheet = 0;
-	doom->map.sprites[j].changes = 0;
+	doom->map.sprites[j].live = 0;
+	doom->map.sprites[j].vision_forward = 0;
+	doom->map.sprites[j].vision_backward = 0;
 	doom->map.sprites[j].key = 0;
+	doom->map.sprites[j].changes = 0;
+	doom->map.sprites[j].key_state = 0;
+	doom->map.sprites[j].num_of_sound = 0;
+	doom->map.sprites[j].event_num = 0;
+	doom->map.sprites[j].hp = 0;
+	doom->map.sprites[j].death_time = 0;
 }
 
 void	add_del_items(t_doom *doom, SDL_Event *event)
@@ -53,35 +58,18 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 		if (event->button.button == SDL_BUTTON_RIGHT)
 		{
 			doom->editor.ind_img = ((event->button.x / 100) - 7);
-			// ft_null_items(doom, doom->editor.ind_img, 0);
+			ft_null_items(doom, doom->editor.ind_img, 0);
 			if (EXIST != 0)
 			{	
 				ft_free_items(doom, EXIST - 1);
 				EXIST--;
-				printf("EXSIST WHEN DELETE: %d, ind_img: %d\n", EXIST, doom->editor.ind_img);
 			}
 		}
 	}
 }
 
-// void	init_img_2(t_doom *doom, SDL_Event *event)
-// {
-// 	doom->map.sprites[(IMG[4].exist + EXIST) - 1].coord =
-// 	(t_vector){event->button.x / SCL, event->button.y / SCL,
-// 	get_z(doom->map.sectors[is_in_sector(doom, \
-// 	(event->button.x), (event->button.y))].floor_plane, \
-// 	event->button.x / SCL, event->button.y / SCL)};
-// 	doom->map.sprites[(EXIST + IMG[4].exist) - 1].pick = 0;
-// 	doom->map.sprites[(EXIST + IMG[4].exist) - 1].mob = 1;
-// }
-
 void	add_items2(t_doom *doom, SDL_Event *event)
 {
-	// if (doom->editor.ind_img == 2)
-	// {
-	// 	if (IMG[4].exist > -1)
-	// 		init_img_2(doom, event);
-	// }
 	if (doom->editor.ind_img == 4)
 	{
 		doom->map.sprites[EXIST - 1].coord =
@@ -93,7 +81,6 @@ void	add_items2(t_doom *doom, SDL_Event *event)
 		doom->map.sprites[EXIST - 1].mob = 0;
 		doom->map.sprites[EXIST - 1].draw = 1;
 		doom->map.sprites[EXIST - 1].num_sheet = 0;
-		printf("EXSIST WHEN ADD: %d, ind_img: %d\n", EXIST, doom->editor.ind_img);
 	}
 }
 

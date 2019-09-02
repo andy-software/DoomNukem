@@ -31,6 +31,7 @@ void			move_player(t_doom *d, float dx, float dy)
 				(t_vertex){p.x + dx, p.y + dy}, vert[s], vert[s + 1]))
 			{
 				d->player.sector = sect->neighbors[s];
+				printf("neightbor to player sector : %i\n", sect->neighbors[s]);
 				d->game.falling = 1;
 			}
 			s++;
@@ -52,7 +53,7 @@ static	void	fall(t_player *p, t_map m, t_doom *d)
 	if (d->game.velocity.z < 0 && nextz <= floor_z + d->game.eye_height)
 	{
 		p->coord.z = floor_z + d->game.eye_height;
-		if (d->game.velocity.z < -4.2 && \
+		if (d->game.velocity.z < -3.2 && \
 				(d->game.hp_level += d->game.velocity.z * 10))
 			if (!(Mix_Playing(2)))
 				Mix_PlayChannel(2, d->sound.hurt, 0);

@@ -51,7 +51,7 @@ void		moves_modify(const Uint8 *keyboard_state, t_doom *d)
 		d->game.ducking = 1;
 	else
 		d->game.ducking = 0;
-	if (keyboard_state[SDL_SCANCODE_LSHIFT] &&
+	if (keyboard_state[SDL_SCANCODE_LSHIFT] && d->game.ground &&
 		!keyboard_state[SDL_SCANCODE_LCTRL])
 		d->game.speed = 0.5f;
 	else

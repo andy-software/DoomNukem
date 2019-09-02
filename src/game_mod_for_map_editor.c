@@ -78,7 +78,6 @@ int			game_loop_for_editor(t_doom *doom)
 		player_events(doom);
 		if (!doom->map.editing)
 		{
-			printf("im here\n");
 			free_game_param(doom);
 			return (1);
 		}

@@ -60,6 +60,7 @@ void	chose_mod(t_doom *doom)
 	}
 	else if (doom->game.hp_level <= 0)
 	{
+		Mix_HaltMusic();
 		set_mouse(doom);
 		show_lose(doom);
 		lose_events(doom);

@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 15:54:32 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 20:01:02 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/01 18:08:29 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		init_sdl(t_sdl *sdl)
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetWindowGrab(sdl->window, 1);
 	SDL_SetRelativeMouseMode(1);
-	Mix_VolumeMusic(MIX_MAX_VOLUME);
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 1.5);
 	return (1);
 }
 

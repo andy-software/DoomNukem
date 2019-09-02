@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 15:18:31 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/31 14:37:34 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 14:08:57 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,9 @@
 
 static	void	pick_map_sprites(t_doom *doom, int i)
 {
-	if (MAP_SPRT[i].pick == 1 || MAP_SPRT[i].pick == 0)
-	{
-		IMG[4].exist++;
-		IMG[4].im_x[i] = (MAP_SPRT[i].coord.x * SCL) - 50;
-		IMG[4].im_y[i] = (MAP_SPRT[i].coord.y * SCL) - 50;
-	}
+	IMG[4].exist++;
+	IMG[4].im_x[i] = (MAP_SPRT[i].coord.x * SCL) - 50;
+	IMG[4].im_y[i] = (MAP_SPRT[i].coord.y * SCL) - 50;
 }
 
 static	void	pick_buttons(t_doom *doom, int i)
@@ -48,7 +45,6 @@ void			ft_prepare_editor(t_doom *doom, int i)
 		INIT2(IMG[4].exist, 0, i, -1);
 		while (++i < (int)doom->map.num_sprites)
 			pick_map_sprites(doom, i);
-		// ft_null_items(doom, 2, IMG[2].exist);
 		ft_null_items(doom, 4, IMG[4].exist);
 		IMG[3].exist = doom->map.num_paint;
 		ft_null_items(doom, 3, doom->map.num_paint);

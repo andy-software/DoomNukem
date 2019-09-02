@@ -26,7 +26,10 @@ void		jump_event(t_doom *d)
 		d->game.falling = 1;
 		d->game.fuel -= 1;
 		if (d->game.fuel == 0)
+		{
+			Mix_HaltChannel(0);
 			d->game.flying = 0;
+		}
 	}
 	if (!(Mix_Playing(0)) && !d->game.flying && d->game.ground)
 		Mix_PlayChannel(0, d->sound.jump, 0);

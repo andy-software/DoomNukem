@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/31 19:41:36 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/01 18:21:32 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 # define LESER 44
 # define PAUSE 96
 # define COUNT_OF_MOVES 2
-# define COUNT_OF_SPRITE_EVENTS 4
+# define COUNT_OF_SPRITE_EVENTS 6
 # define COUNT_OF_PAINT_EVENTS 6
 # define MAX_RANGE_SPRITE_CLICKING 5
 # define MAX_SPRITES_COUNT	128
@@ -1058,6 +1058,7 @@ int				init_moves(t_doom *d);
 int				lift_floor_event(t_doom *d, t_painting *paint);
 int				lift_block_event(t_doom *d, t_painting *paint);
 void			click_paint(t_doom *d, t_painting *paint);
+void			click_paint_lock(t_doom *d, t_painting *paint);
 int				turn_light_event(t_doom *d, t_painting *paint);
 int				lift_ceil_event(t_doom *d, t_painting *paint);
 int				inverse_colors_event(t_doom *d, t_painting *paint);
@@ -1108,9 +1109,10 @@ void			create_big_mob(t_doom *doom, int i);
 void			create_small_mob(t_doom *doom, int i);
 void			create_boss_mob(t_doom *doom, int i);
 void			create_gribok(t_doom *doom, int i);
-void			create_aptechka(t_doom *doom, int i);
+void			create_pickup(t_doom *doom, int i);
+void			create_tree(t_doom *doom, int i);
+void			create_win(t_doom *doom, int i);
 void			create_npc(t_doom *doom, int i);
-void			create_jetpack(t_doom *doom, int i);
 void			create_key1(t_doom *doom, int i);
 void			create_get_ammo(t_doom *doom, int i);
 void			create_win(t_doom *doom, int i);

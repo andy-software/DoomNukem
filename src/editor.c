@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 11:26:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/31 18:35:54 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 14:07:26 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,6 @@ int				ft_map_editor(t_doom *doom, char *name)
 	{
 		fd = open(doom->editor.name_m, O_RDONLY);
 		ft_read_map_edit(doom, fd);
-		printf("doom->map.num_sprites: %d\n", doom->map.num_sprites);
-		printf("doom->map.num_paint: %d\n", doom->map.num_paint);
-		for (size_t j = 0; j < doom->map.num_sprites; j++)
-		{
-			printf("numb: %zu, sheet: %d\n", j, doom->map.sprites[j].num_sheet);
-		}
-		
 		close(fd);
 		fd = open(doom->editor.name_m, O_WRONLY);
 	}

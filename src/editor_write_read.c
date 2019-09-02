@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:17:49 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/31 20:05:37 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 14:08:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int		ft_read_map_edit(t_doom *doom, int fd)
 	printf("in read text_no 0: %d\n", doom->map.sprites[0].text_no);
 	printf("in read width 0: %f\n", doom->map.sprites[0].width);
 	printf("in read end_z 0: %f\n", doom->map.sprites[0].end_z);
+	printf("READ_FILE (0) -- MAP_SPRT[i].coord.x: %f, MAP_SPRT[i].coord.y: %f\n", MAP_SPRT[0].coord.x, MAP_SPRT[0].coord.y);
 	close(fd);
 	return (0);
 }
@@ -96,9 +97,6 @@ int		ft_write_changes_to_file(t_doom *doom, int fd)
 {
 	int		i;
 
-	printf("doom->map.num_sprites:%d\n", doom->map.num_sprites);
-	for (size_t j = 0; j < doom->map.num_sprites; j++)
-		{printf("numb: %zu, sheet: %d\n", j, doom->map.sprites[j].num_sheet);}
 	fd = open(doom->editor.name_m, O_WRONLY);
 	write(fd, &doom->map.editing, sizeof(int));
 	write(fd, &doom->map.fog, sizeof(int));
