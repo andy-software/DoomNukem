@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/09/02 14:07:53 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 19:55:54 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 			ft_null_items(doom, doom->editor.ind_img, 0);
 			if (EXIST != 0)
 			{	
-				ft_free_items(doom, EXIST - 1);
+				if (doom->editor.ind_img == 4)
+					ft_free_items(doom, EXIST - 1);
 				EXIST--;
 			}
 		}

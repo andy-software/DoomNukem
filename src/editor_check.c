@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/04 18:06:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/27 17:24:17 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/02 19:37:13 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int			convex(t_doom *doom, int j)
 		product = ab.x * bc.y - bc.x * ab.y;
 		if (product < 0 && (doom->editor.is_sector = 2))
 		{
-			printf("%i %f\n", j, product);
 			ft_putstr("\033[1;31m SECTOR ISN'T CONVEX\033[0m\n");
 			free(polig);
 			return (0);
