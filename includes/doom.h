@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/09/01 18:21:32 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 15:15:46 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 # define SKY_H 2048
 # define WALL_TEXT_W 256
 # define WALL_TEXT_H 512
-# define SPEED_ROTATION 0.01f
-# define SPEED_ROTATION_Z 0.05f
+# define SPEED_ROTATION 0.005f
+# define SPEED_ROTATION_Z 0.02f
 # define MAX_Z_ANGLE 5
-# define MOVE_SPEED 0.5f
+# define MOVE_SPEED 0.8f
 # define SIT_EYE_HEIGHT 6
 # define EYE_HEIGHT 10
 # define HEAD_HEIGHT 1

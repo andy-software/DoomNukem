@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 15:40:13 by mmasyush          #+#    #+#             */
-/*   Updated: 2019/09/01 18:05:50 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 15:16:41 by mdanylch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	mouse_rotation(t_doom *d)
 		d->player.angle -= 2 * M_PI;
 	else if (d->player.angle < 0)
 		d->player.angle += 2 * M_PI;
-	d->player.angle_z = CLAMP(d->player.angle_z - y *
+	d->player.angle_z = CLAMP(d->player.angle_z + y *
 		SPEED_ROTATION_Z, -MAX_Z_ANGLE, MAX_Z_ANGLE);
 	d->player.anglesin = sinf(d->player.angle);
 	d->player.anglecos = cosf(d->player.angle);
