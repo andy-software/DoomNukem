@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:08:35 by myuliia           #+#    #+#             */
-/*   Updated: 2019/09/02 19:36:12 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 17:49:44 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	ft_prepare_sprites(t_doom *doom, int j)
 		doom->map.sprites[j].changes = 0;
 		doom->map.sprites[j].key_state = 0;
 		doom->map.sprites[j].num_of_sound = 0;
-		doom->map.sprites[j].event_num = 0;
 		doom->map.sprites[j].hp = 0;
 		doom->map.sprites[j].death_time = 0;
 	}

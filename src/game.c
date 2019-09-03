@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 17:56:30 by apavlov           #+#    #+#             */
-/*   Updated: 2019/08/28 19:30:41 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 16:59:40 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	set_mouse(t_doom *doom)
 	if (doom->game.hp_level <= 0 ||
 		doom->game.pause == 1 || doom->start_quit == 0)
 	{
-		fflush(stdout);
 		SDL_ShowCursor(SDL_ENABLE);
 		SDL_SetRelativeMouseMode(SDL_DISABLE);
 		SDL_SetWindowGrab(doom->sdl.window, 0);

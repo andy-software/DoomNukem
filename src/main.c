@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 13:51:28 by apavlov           #+#    #+#             */
-/*   Updated: 2019/09/02 20:07:54 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 16:35:20 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int			main(int argc, char **argv)
 {
 	t_doom	doom;
 
+	ft_bzero(&doom, sizeof(t_doom));
 	srand(time(NULL));
 	if (argc == 3 || argc == 2)
 	{

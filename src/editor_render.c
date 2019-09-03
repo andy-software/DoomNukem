@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 21:33:50 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/22 20:13:11 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 16:11:58 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ void	ft_render_pr_lines(t_doom *doom, int it, int i)
 		DBRZ.color = 0x66ff8a;
 		if (doom->map.sectors[i].neighbors[it] != -1)
 			DBRZ.color = 0xFF0001;
-		ft_draw_pixel(doom, DBRZ.x1, DBRZ.y1, 0xFF0000);
-		ft_draw_pixel(doom, DBRZ.x1 + 1, DBRZ.y1, 0xFF0000);
-		ft_draw_pixel(doom, DBRZ.x1 + 2, DBRZ.y1, 0xFF0000);
-		ft_draw_pixel(doom, DBRZ.x1 + 3, DBRZ.y1, 0xFF0000);
-		ft_draw_pixel(doom, DBRZ.x1 + 4, DBRZ.y1, 0xFF0000);
-		ft_draw_pixel(doom, DBRZ.x1 + 5, DBRZ.y1, 0xFF0000);
 		ft_line(doom);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdanylch <mdanylch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/09/03 15:15:46 by mdanylch         ###   ########.fr       */
+/*   Updated: 2019/09/03 18:29:09 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 # define MAX_VERT 100
 # define MAX_PAINTINGS 100
 # define SCL 5.0
+# define INV -1
 
 # define IS_DRW doom->editor.is_drawing
 # define FT_R_OTH(a, b, c)  a = 0; b = 1; c = 0;
@@ -149,6 +150,10 @@
 # define DEFL d->editor.fline
 # define DUI doom->ui
 # define DGAME doom->game
+# define EVX event->button.x
+# define EVY event->button.y
+# define EVBB event->button.button
+# define P_SHE doom->map.paint[pain].num_sheet
 
 # define PT doom->map.paint[pain]
 # define DT d->texture
@@ -1131,6 +1136,7 @@ void			editor_events_texture(t_doom *doom, const Uint8 *state);
 void			editor_movement_keys(t_doom *d);
 void			editor_fc_texture(t_doom *doom, const Uint8 *state);
 void			editor_wall_texture(t_doom *doom, const Uint8 *state);
+void			editor_pnt_txt(t_doom *doom, int pain);
 void			editor_scale_x(t_doom *doom, const Uint8 *state);
 void			editor_scale_y(t_doom *doom, const Uint8 *state);
 void			editor_shift_x(t_doom *doom, const Uint8 *state);

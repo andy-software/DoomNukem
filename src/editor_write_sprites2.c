@@ -6,14 +6,14 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 19:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/09/01 12:44:43 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 17:41:38 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/doom.h"
 
 void	create_big_mob(t_doom *doom, int i)
-{	
+{
 	doom->map.sprites[i].spr_num = i;
 	doom->map.sprites[i].text_no = 0;
 	doom->map.sprites[i].mob = 1;

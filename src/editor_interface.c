@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 12:23:08 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/30 17:30:51 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 18:02:39 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ void	ft_render_interface2(t_doom *doom, SDL_Rect bigger)
 
 void	ft_render_prev_butt(t_doom *doom, SDL_Rect bigger, int exist)
 {
-	int			color;
-	int			it[3];
-
+	INT2(color, it[3]);
 	it[0] = 0;
 	while (++it[0] < (NB_BUTTONS - 12))
 	{

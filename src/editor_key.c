@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 11:23:05 by myuliia           #+#    #+#             */
-/*   Updated: 2019/08/31 17:48:58 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 18:30:48 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,7 @@ void	editor_painitngs_texture(t_doom *doom, const Uint8 *state)
 				doom->map.paint[pain].num_sheet = 14;
 		}
 		else if (!(state[SDL_SCANCODE_TAB]))
-		{
-			if (doom->map.paint[pain].num_sheet == 10)
-				doom->map.paint[pain].num_sheet = 12;
-			else if (doom->map.paint[pain].num_sheet == 12)
-				doom->map.paint[pain].num_sheet = 13;
-			else if (doom->map.paint[pain].num_sheet == 13)
-				doom->map.paint[pain].num_sheet = 14;
-			else if (doom->map.paint[pain].num_sheet == 14)
-				doom->map.paint[pain].num_sheet = 16;
-		}
+			editor_pnt_txt(doom, pain);
 	}
 }
 
