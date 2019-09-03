@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 06:27:18 by myuliia           #+#    #+#             */
-/*   Updated: 2019/09/03 18:10:31 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 18:50:52 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 		{
 			doom->editor.img_press = 1;
 			doom->editor.ind_img = ((EVX / 100) - 7);
+			if (EXIST > 50)
+			{
+				doom->editor.img_press = 0;
+				return ;
+			}
 			EXIST++;
 			if (doom->editor.ind_img == 1 && EXIST == 2)
 			{
@@ -55,16 +60,7 @@ void	add_del_items(t_doom *doom, SDL_Event *event)
 			}
 		}
 		if (EVBB == SDL_BUTTON_RIGHT)
-		{
-			doom->editor.ind_img = ((EVX / 100) - 7);
-			ft_null_items(doom, doom->editor.ind_img, 0);
-			if (EXIST != 0)
-			{
-				if (doom->editor.ind_img == 4)
-					ft_free_items(doom, EXIST - 1);
-				EXIST--;
-			}
-		}
+			editor_but_left(doom, event);
 	}
 }
 

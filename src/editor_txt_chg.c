@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 19:31:07 by myuliia           #+#    #+#             */
-/*   Updated: 2019/09/03 18:28:25 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 18:40:16 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ void	editor_pnt_txt(t_doom *doom, int pain)
 		doom->map.paint[pain].num_sheet = 16;
 }
 
+void	editor_but_left(t_doom *doom, SDL_Event *event)
+{
+	doom->editor.ind_img = ((EVX / 100) - 7);
+	ft_null_items(doom, doom->editor.ind_img, 0);
+	if (EXIST != 0)
+	{
+		if (doom->editor.ind_img == 4)
+			ft_free_items(doom, EXIST - 1);
+		EXIST--;
+	}
+}
 
 void	editor_sprites_texture(t_doom *doom, const Uint8 *state)
 {

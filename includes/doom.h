@@ -6,7 +6,7 @@
 /*   By: myuliia <myuliia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 16:26:42 by apavlov           #+#    #+#             */
-/*   Updated: 2019/09/03 18:29:09 by myuliia          ###   ########.fr       */
+/*   Updated: 2019/09/03 18:43:24 by myuliia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1132,6 +1132,7 @@ void			editor_player_events(t_doom *doom);
 void			editor_player_events2(t_doom *doom, const Uint8 *state);
 void			editor_player_events3(t_doom *doom, const Uint8 *state);
 void			editor_events_down_up(t_doom *doom);
+void			ft_free_items(t_doom *doom, int j);
 void			editor_events_texture(t_doom *doom, const Uint8 *state);
 void			editor_movement_keys(t_doom *d);
 void			editor_fc_texture(t_doom *doom, const Uint8 *state);
@@ -1139,6 +1140,7 @@ void			editor_wall_texture(t_doom *doom, const Uint8 *state);
 void			editor_pnt_txt(t_doom *doom, int pain);
 void			editor_scale_x(t_doom *doom, const Uint8 *state);
 void			editor_scale_y(t_doom *doom, const Uint8 *state);
+void			editor_but_left(t_doom *doom, SDL_Event *event);
 void			editor_shift_x(t_doom *doom, const Uint8 *state);
 void			editor_shift_y(t_doom *doom, const Uint8 *state);
 void			editor_action(t_doom *doom, const Uint8 *state);
