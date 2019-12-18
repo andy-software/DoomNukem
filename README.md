@@ -6,6 +6,7 @@ Final project from graphics development branch of  school  42
 
 <div align="center">
   <img src="https://github.com/nikdany/unit_factory/blob/master/images/doom_1.gif" width="60%" />
+  <img src="https://github.com/nikdany/unit_factory/blob/master/images/doom_2.gif" width="60%" />
 </div>
 ## Resources I used:
 raycasting technique, SDL, multithreading, and the power of C language
